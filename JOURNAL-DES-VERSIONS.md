@@ -15,6 +15,11 @@ programme (`dmd/`), puis reconstruire l'installateur (`bash outils/installateur/
 
 ---
 
+## 1.0.2 — 11 novembre 2026
+
+- Page web : bouton « Soutenir sur Ko-fi » en bas de toutes les pages (simple lien, aucun script
+  extérieur chargé par le panneau).
+
 ## 1.0.1 — 11 novembre 2026
 
 - Page web : lien « OrbitDMD sur GitHub » en bas de toutes les pages, et lien vers les nouvelles

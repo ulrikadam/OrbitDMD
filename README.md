@@ -10,6 +10,7 @@
 <p align="center">
   <a href="https://github.com/ulrikadam/OrbitDMD/releases/latest"><img alt="Télécharger" src="https://img.shields.io/github/v/release/ulrikadam/OrbitDMD?label=T%C3%A9l%C3%A9charger&style=for-the-badge&color=0156d1"></a>
   <a href="https://github.com/ulrikadam/OrbitDMD/discussions"><img alt="Idées et questions" src="https://img.shields.io/badge/Id%C3%A9es%20%26%20questions-Discussions-01a7c5?style=for-the-badge"></a>
+  <a href="https://ko-fi.com/H1U12A50RN"><img alt="Soutenir sur Ko-fi" src="https://img.shields.io/badge/Soutenir-Ko--fi-72a4f2?style=for-the-badge&logo=kofi&logoColor=white"></a>
   <a href="LICENSE"><img alt="Licence GPL v3" src="https://img.shields.io/badge/licence-GPL%20v3-fcb92b?style=for-the-badge"></a>
 </p>
 
@@ -98,6 +99,12 @@ Vos retours font avancer OrbitDMD :
 
 Les nouveautés de chaque version sont dans le [journal des versions](JOURNAL-DES-VERSIONS.md).
 
+## Soutenir le projet
+
+OrbitDMD est gratuit. Si vous l'aimez et voulez soutenir son développement, vous pouvez offrir un café :
+
+<p align="center"><a href="https://ko-fi.com/H1U12A50RN"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Soutenir sur Ko-fi"></a></p>
+
 ## Licence
 
 OrbitDMD est un logiciel libre sous licence **GNU GPL v3** (voir [LICENSE](LICENSE)), comme
@@ -119,6 +126,7 @@ Download the Windows installer from [Releases](https://github.com/ulrikadam/Orbi
 it asks for your Wi-Fi, panel layout and password, then prepares the micro-SD card. The interface is in
 French. Ideas and bug reports are welcome in [Discussions](https://github.com/ulrikadam/OrbitDMD/discussions)
 and [Issues](https://github.com/ulrikadam/OrbitDMD/issues). License: GPL v3.
+Like it? [Support me on Ko-fi](https://ko-fi.com/H1U12A50RN).
 </details>
 
 <p align="center"><sub>Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be">www.nexadam.be</a></sub></p>
