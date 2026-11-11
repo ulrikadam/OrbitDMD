@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "../gifanim.h"
 #include "../canvas.h"
 #include "../testpattern.h"
@@ -20,8 +21,11 @@
 #include "../clockstyle.h"
 #include "../clockrender.h"
 #include "../weatherdata.h"
+#include "../gifmarks.h"
+#include "../messages.h"
 
 static const unsigned W = 128, H = 32;
+#define CHECK(x) do { boolean b_ = (x); if (!b_) nFailed++; printf ("%s %s\n", b_ ? "ok    " : "ECHEC ", #x); } while (0)
 
 static unsigned char *ReadFile (const char *pPath, unsigned *pSize)
 {
@@ -263,6 +267,7 @@ int main (int argc, char **argv)
 		TDateTime Time = {2026, 11, 10, 9, 5, 7};
 		CClockRenderer Renderer (W, H);
 		CCanvas Canvas (W, H);
+		CClockRenderer::PickRandom (&Style, (u32) rand () * 2654435761U ^ (u32) time (0));
 		Renderer.Prepare (Style);
 		Renderer.Render (Style, Time, 0, TRUE, bDate, &Canvas);
 
@@ -328,6 +333,229 @@ int main (int argc, char **argv)
 		CCanvas Canvas (W, H);
 		Renderer.PrepareWeather (Style);
 		Renderer.RenderWeather (Style, Data, nMillis, &Canvas);
+		FILE *f = fopen (argv[2], "wb");
+		if (!f) return 3;
+		fwrite (Canvas.GetData (), 1, W * H * 3, f);
+		fclose (f);
+		return 0;
+	}
+
+	// hosttest marques : GIF favorites et exclues (gifmarks.cpp)
+	if (strcmp (argv[1], "marques") == 0)
+	{
+		unsigned nFailed = 0;
+		unsigned nRead = CGifMarks::Import ("+Arcade/sf2.gif\r\n-XXX_Mature/a.gif\nmauvaise ligne\n+sans_categorie.gif\n"
+						    "-Arcade/sf2.gif\n+Noel/Sapin.GIF\n", FALSE);
+		CHECK (nRead == 4);
+		CHECK (CGifMarks::Get ("Arcade", "sf2.gif") == GifMarkExcluded);	// la derniere ligne gagne
+		CHECK (CGifMarks::Get ("arcade", "SF2.GIF") == GifMarkExcluded);	// majuscules ignorees
+		CHECK (CGifMarks::Get ("Noel", "sapin.gif") == GifMarkFavorite);
+		CHECK (CGifMarks::Get ("Noel", "autre.gif") == GifMarkNone);
+		CHECK (CGifMarks::Set ("Arcade", "pacman.gif", GifMarkFavorite));
+		CHECK (CGifMarks::Set ("Arcade", "sf2.gif", GifMarkNone));
+		CHECK (CGifMarks::Get ("Arcade", "sf2.gif") == GifMarkNone);
+		CHECK (!CGifMarks::Set ("Ar/cade", "x.gif", GifMarkFavorite));
+		CGifMarks::ForgetCategory ("XXX_Mature");
+		CHECK (CGifMarks::GetCount (GifMarkExcluded) == 0);
+		CString Text;
+		CGifMarks::Export (&Text);
+		printf ("%s", (const char *) Text);
+		CHECK (strcmp (Text, "+Arcade/pacman.gif\n+Noel/Sapin.GIF\n") == 0);
+		printf ("%u echec(s)\n", nFailed);
+		return nFailed == 0 ? 0 : 1;
+	}
+
+	// hosttest liste : fichier messages.txt (messages.cpp) lu puis reecrit
+	if (strcmp (argv[1], "liste") == 0)
+	{
+		unsigned nFailed = 0;
+		unsigned nItems = CMessages::Parse (
+			"[texte]\nTexte_Message=Joyeux anniversaire L\xC3\xA9" "a !\nTexte_Effet=pluie\nTexte_Font_Pattern=Arc-en-ciel\n"
+			"Texte_Active=0\n[compte]\nCompte_Date=2027-03-14 20:00\nCompte_Titre=ANNIV DANS\n"
+			"[texte]\nTexte_Message=Partie \xC3\xA0 20 h\nTexte_Effet=inconnu\nTexte_Vitesse=99\n"
+			"[autre]\nTexte_Message=ignore\n");
+		CHECK (nItems == 3);
+		CHECK (CMessages::s_nTexts == 2 && CMessages::s_nCountdowns == 1);
+		CHECK (CMessages::s_Texts[0].Effect == EffectRain && !CMessages::s_Texts[0].bActive);
+		CHECK (strcmp (CMessages::s_Texts[0].Style.Pattern, CLOCK_RAINBOW) == 0);
+		CHECK (CMessages::s_Texts[1].Effect == EffectScroll && CMessages::s_Texts[1].nSpeed == 4);
+		CHECK (CMessages::s_Texts[1].bActive && strcmp (CMessages::s_Texts[1].Text, "Partie \xC3\xA0" " 20 h") == 0);
+		CHECK (strcmp (CMessages::s_Countdowns[0].Target, "2027-03-14 20:00") == 0);
+		CHECK (CMessages::CountActiveTexts () == 1 && CMessages::CountActiveCountdowns () == 1);
+		CString Text, Again;
+		CMessages::Export (&Text);
+		CMessages::Parse (Text);
+		CMessages::Export (&Again);
+		CHECK (strcmp (Text, Again) == 0);		// relu a l'identique
+		CString JSON;
+		CMessages::BuildJSON (&JSON);
+		printf ("%s", (const char *) JSON);
+		printf ("%u echec(s)\n", nFailed);
+		return nFailed == 0 ? 0 : 1;
+	}
+
+	// hosttest messages : verifications du compte a rebours et des textes (page Messages)
+	if (strcmp (argv[1], "messages") == 0)
+	{
+		struct { TDateTime Now; const char *pTarget; TCountdownState State; const char *pValue; } Cases[] =
+		{
+			{{2026, 12, 13, 10, 0, 0},  "noel",             CountdownRunning, "11 JOURS"},
+			{{2026, 11, 11, 18, 0, 0},  "noel",             CountdownRunning, "43 JOURS"},
+			{{2026, 12, 24, 23, 59, 30}, "noel",            CountdownRunning, "00:00:30"},
+			{{2026, 12, 25, 15, 0, 0},  "noel",             CountdownReached, ""},
+			{{2026, 12, 26, 0, 0, 1},   "noel",             CountdownRunning, "363 JOURS"},
+			{{2026, 12, 31, 21, 45, 27}, "nouvel-an",       CountdownRunning, "02:14:33"},
+			{{2027, 1, 1, 0, 30, 0},    "nouvel-an",        CountdownReached, ""},
+			{{2026, 11, 11, 18, 0, 0},  "2026-11-20 20:00", CountdownRunning, "9 J 2 H"},
+			{{2026, 11, 21, 19, 0, 0},  "2026-11-20 20:00", CountdownReached, ""},
+			{{2026, 11, 21, 20, 0, 0},  "2026-11-20 20:00", CountdownNone,    ""},
+			{{2026, 11, 11, 18, 0, 0},  "2026-02-31 20:00", CountdownNone,    ""},
+			{{2026, 11, 11, 18, 0, 0},  "demain",           CountdownNone,    ""},
+		};
+		unsigned nFailed = 0;
+		for (unsigned i = 0; i < sizeof Cases / sizeof Cases[0]; i++)
+		{
+			char Value[32];
+			TCountdownState State = FormatCountdown (Cases[i].pTarget, Cases[i].Now, Value, sizeof Value);
+			boolean bOK = State == Cases[i].State && strcmp (Value, Cases[i].pValue) == 0;
+			if (!bOK) nFailed++;
+			printf ("%s %-16s -> %d \"%s\"\n", bOK ? "ok    " : "ECHEC ", Cases[i].pTarget, State, Value);
+		}
+
+		struct { const char *pIn; boolean bAscii; const char *pOut; } Texts[] =
+		{
+			{"Joyeux anniversaire !", FALSE, "Joyeux anniversaire !"},
+			{"No\xC3\xABl \xC3\xA0 20 h", FALSE, "No\xEBl \xE0 20 h"},
+			{"No\xC3\xABl \xC3\xA0 20 h", TRUE, "Noel a 20 h"},
+			{"\xC3\x89t\xC3\xA9 7\xC2\xB0", TRUE, "Ete 7\xB0"},
+			{"Prix 5 \xE2\x82\xAC \xF0\x9F\x98\x80!", FALSE, "Prix 5 ? ?!"},
+		};
+		for (unsigned i = 0; i < sizeof Texts / sizeof Texts[0]; i++)
+		{
+			char Out[64];
+			TextToLatin1 (Texts[i].pIn, Out, sizeof Out, Texts[i].bAscii);
+			boolean bOK = strcmp (Out, Texts[i].pOut) == 0;
+			if (!bOK) nFailed++;
+			printf ("%s texte %u\n", bOK ? "ok    " : "ECHEC ", i);
+		}
+
+		boolean bChecks[] =
+		{
+			IsValidBannerText ("Partie \xC3\xA0 20 h !"),
+			!IsValidBannerText ("guillemet \" interdit"),
+			!IsValidBannerText ("ligne\nsuivante"),
+			IsValidCountdownTarget ("2027-01-01 00:00"),
+			!IsValidCountdownTarget ("2027-13-01 00:00"),
+			!IsValidCountdownTarget ("2027-1-1 0:0"),
+		};
+		for (unsigned i = 0; i < sizeof bChecks / sizeof bChecks[0]; i++)
+		{
+			if (!bChecks[i]) nFailed++;
+			printf ("%s verification %u\n", bChecks[i] ? "ok    " : "ECHEC ", i);
+		}
+
+		printf ("%u echec(s)\n", nFailed);
+		return nFailed == 0 ? 0 : 1;
+	}
+
+	// hosttest texte <sortie.rgb> <decalage> [Texte_X=valeur]... : une image du texte defilant
+	// hosttest compte <sortie.rgb> <AAAA-MM-JJ HH:MM:SS> [Compte_X=valeur]... : compte a rebours
+	if ((strcmp (argv[1], "texte") == 0 || strcmp (argv[1], "compte") == 0) && argc >= 4)
+	{
+		boolean bBanner = strcmp (argv[1], "texte") == 0;
+		TBannerStyle Banner;
+		TCountdownStyle Count;
+		BannerStyleDefaults (&Banner);
+		CountdownStyleDefaults (&Count);
+		// options "Cle=valeur", ou "@fichier" : une option par ligne, en UTF-8
+		static char Lines[64][256];
+		const char *Options[64];
+		unsigned nOptions = 0;
+		for (int i = 4; i < argc && nOptions < 64; i++)
+		{
+			if (argv[i][0] != '@')
+			{
+				Options[nOptions++] = argv[i];
+				continue;
+			}
+			FILE *pFile = fopen (argv[i] + 1, "rb");
+			if (!pFile) return 3;
+			while (nOptions < 64 && fgets (Lines[nOptions], sizeof Lines[0], pFile))
+			{
+				Lines[nOptions][strcspn (Lines[nOptions], "\r\n")] = '\0';
+				if (Lines[nOptions][0] != '\0')
+				{
+					Options[nOptions] = Lines[nOptions];
+					nOptions++;
+				}
+			}
+			fclose (pFile);
+		}
+		for (unsigned i = 0; i < nOptions; i++)
+		{
+			char Key[64];
+			const char *pEqual = strchr (Options[i], '=');
+			if (pEqual == 0 || pEqual - Options[i] >= (int) sizeof Key) return 2;
+			memcpy (Key, Options[i], pEqual - Options[i]);
+			Key[pEqual - Options[i]] = '\0';
+			if (!SetBannerStyleValue (&Banner, Key, pEqual + 1) && !SetCountdownStyleValue (&Count, Key, pEqual + 1))
+			{
+				fprintf (stderr, "cle inconnue : %s\n", Key);
+				return 2;
+			}
+		}
+
+		CClockRenderer Renderer (W, H);
+		CCanvas Canvas (W, H);
+		if (bBanner)
+		{
+			boolean bPixel = _stricmp (Banner.Style.Font, CLOCK_FONT_PIXEL) == 0;
+			char Text[BANNER_TEXT_LEN];
+			TextToLatin1 (Banner.Text, Text, sizeof Text, bPixel);
+			Renderer.PrepareText (Banner.Style);
+			int nWidth = Renderer.GetTextWidth (Banner.Style, Text);
+			// <decalage> pour le defilement, ou "in:500", "hold:0", "out:300" (phase:avancement)
+			const char *pColon = strchr (argv[3], ':');
+			if (pColon != 0)
+			{
+				char Pages[20][BANNER_TEXT_LEN];
+				Renderer.FitPages (&Banner.Style, Text);
+				unsigned nPages = Renderer.SplitPages (Banner.Style, Text, Pages, 20);
+				for (unsigned i = 0; i < nPages; i++) printf ("page %u \"%s\"\n", i, Pages[i]);
+				unsigned nPhase =   strncmp (argv[3], "in", 2) == 0 ? CClockRenderer::PageIn
+						  : strncmp (argv[3], "out", 3) == 0 ? CClockRenderer::PageOut : CClockRenderer::PageHold;
+				Renderer.RenderPage (Banner.Style, nPages > 0 ? Pages[0] : "", Banner.Effect, nPhase,
+						     (unsigned) atoi (pColon + 1), 1000, &Canvas);
+			}
+			else
+			{
+				int nOffset = atoi (argv[3]);
+				int x = Banner.Effect == EffectReverse ? nOffset - nWidth : (int) W - nOffset;
+				Renderer.RenderScroll (Banner.Style, Text, x, 1000, &Canvas);
+			}
+			printf ("largeur %d, %u pixels/s, effet %s\n", nWidth, BannerPixelsPerSecond (Banner.nSpeed),
+				BannerEffectName (Banner.Effect));
+		}
+		else
+		{
+			TDateTime Now = {2026, 11, 11, 18, 0, 0};
+			boolean bDone = strcmp (argv[3], "fin") == 0;	// apercu du jour J
+			if (!bDone && sscanf (argv[3], "%u-%u-%u %u:%u:%u", &Now.Year, &Now.Month, &Now.Day,
+					      &Now.Hour, &Now.Minute, &Now.Second) != 6) return 2;
+			char Value[32], Latin[32], Title[COUNTDOWN_TITLE_LEN], Done[COUNTDOWN_TITLE_LEN];
+			boolean bPixel = _stricmp (Count.Style.Font, CLOCK_FONT_PIXEL) == 0;
+			TCountdownState State = FormatCountdown (Count.Target, Now, Value, sizeof Value);
+			if (bDone) State = CountdownReached;
+			if (State == CountdownNone) strcpy (Value, "DATE PASSEE");
+			TextToLatin1 (Count.Title, Title, sizeof Title, TRUE);
+			TextToLatin1 (Count.Done, Done, sizeof Done, bPixel);
+			TextToLatin1 (Value, Latin, sizeof Latin, bPixel);
+			Renderer.PrepareText (Count.Style);
+			if (State == CountdownReached)	Renderer.RenderCountdown (Count, "", Done, 0, &Canvas);
+			else				Renderer.RenderCountdown (Count, Title, Latin, 0, &Canvas);
+			printf ("etat %d \"%s\"\n", State, Value);
+		}
+
 		FILE *f = fopen (argv[2], "wb");
 		if (!f) return 3;
 		fwrite (Canvas.GetData (), 1, W * H * 3, f);

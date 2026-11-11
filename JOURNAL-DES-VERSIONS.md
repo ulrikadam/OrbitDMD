@@ -15,6 +15,45 @@ programme (`dmd/`), puis reconstruire l'installateur (`bash outils/installateur/
 
 ---
 
+## 1.2.0 — 11 novembre 2026
+
+**Nouveautés**
+- Page **Messages**, avec deux listes (10 éléments chacune), chaque élément activé ou non et avec son
+  propre style ; les éléments activés passent à tour de rôle entre les GIF :
+  - **textes défilants** (200 caractères, accents compris) : police, taille, couleur ou **arc-en-ciel
+    animé**, vitesse, nombre de passages, et **arrivée du texte** : défile vers la gauche ou vers la
+    droite, monte, descend, lettre par lettre, pluie de lettres, fondu (un texte long est coupé en pages) ;
+  - **comptes à rebours** jusqu'à Noël, au Nouvel an ou à une date choisie (« 43 JOURS », « 3 J 14 H »,
+    puis « 02:14:33 » le dernier jour), avec un message pour le jour J ;
+  - bouton « Afficher maintenant » pour chaque élément.
+- Arc-en-ciel animé aussi possible pour l'heure et la météo.
+- Page Horloge : couleur ou motif **au hasard** et fond **au hasard**, tirés à chaque affichage de l'heure,
+  et arc-en-ciel animé.
+- GIF fournies : mention du pack de GIF gratuit de base de la RpiTeaM (intégré avec l'accord d'eLLuiGi)
+  et liens vers leur pack de 11 000 animations.
+- GIF **favorites** (passent 3 fois plus souvent) et GIF **hors rotation** (gardées sur la carte), depuis
+  la page GIF ; **ordre de lecture** au hasard ou dans l'ordre (Réglages → Affichage).
+- **Sauvegarde des réglages** (page Système) : un fichier avec tous les réglages, les messages et les
+  GIF favorites et exclues, à remettre après une réinstallation.
+- **Nouvelle version disponible** : le tableau de bord et la page Système le signalent, avec un lien vers
+  `kernel8.img` (le navigateur consulte GitHub au plus toutes les 6 heures).
+- Menu sur deux lignes sur les écrans moyens.
+
+## 1.1.0 — 11 novembre 2026
+
+**Nouveautés**
+- Prise réseau (Ethernet) du Raspberry Pi 3 B et B+ : réglage « Connexion » (automatique : câble s'il est
+  branché au démarrage, sinon Wi-Fi ; ou Wi-Fi seulement ; ou câble seulement).
+- Adresse IP sur le panneau : « WIFI CONNECTE » (ou « CABLE CONNECTE »), nom `.local` et adresse,
+  affichés au démarrage et de nouveau si la connexion revient ou si l'adresse change ; durée réglable
+  (Réglages → Affichage, 0 = jamais).
+- Ajout de GIF en masse (page GIF) : dossiers entiers et fichiers `.zip`, un sous-dossier devient une
+  catégorie, récapitulatif avant l'envoi, barre de progression, arrêt et reprise (les GIF déjà présentes
+  sont sautées).
+
+**Corrections**
+- Les réglages à choix acceptent les valeurs en minuscules.
+
 ## 1.0.2 — 11 novembre 2026
 
 - Page web : bouton « Soutenir sur Ko-fi » en bas de toutes les pages (simple lien, aucun script

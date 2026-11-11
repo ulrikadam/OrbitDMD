@@ -37,6 +37,8 @@ public:
 	// derniere categorie affichee) ; la categorie est aussi retiree des categories actives
 	static boolean DeleteCategory (CConfig *pConfig, const char *pCategory, CString *pReply);
 	static boolean PlayGif (const char *pCategory, const char *pName, CString *pReply);
+	// favori, exclue (de la rotation) ou aucune : voir gifmarks.h
+	static boolean SetMark (const char *pCategory, const char *pName, const char *pMark, CString *pReply);
 	static boolean SetActiveCategories (CConfig *pConfig, const char *pList, CString *pReply);
 
 private:

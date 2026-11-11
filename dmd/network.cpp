@@ -10,6 +10,8 @@
 #include <circle/net/ntpdaemon.h>
 #include <circle/net/ntpclient.h>
 #include <circle/net/dnsclient.h>
+#include <circle/sched/scheduler.h>
+#include <circle/interrupt.h>
 #include <circle/timer.h>
 #include <circle/logger.h>
 #include <circle/util.h>
@@ -20,12 +22,16 @@ static const char From[] = "reseau";
 #define FIRMWARE_PATH		DRIVE "/firmware/"
 #define SUPPLICANT_CONFIG	DRIVE "/wpa_supplicant.conf"
 #define NTP_SERVER		"pool.ntp.org"
+#define ETHERNET_WAIT_MS	4000	// attente du cable reseau au demarrage (Reseau=auto)
 
 CNetwork *CNetwork::s_pThis = 0;
 
 CNetwork::CNetwork (CConfig *pConfig)
 :	m_pConfig (pConfig),
 	m_pWLAN (0),
+	m_pUSB (0),
+	m_pDevice (0),
+	m_bEthernet (FALSE),
 	m_pNet (0),
 	m_pSupplicant (0),
 	m_pPublisher (0),
@@ -35,7 +41,9 @@ CNetwork::CNetwork (CConfig *pConfig)
 	m_bAttempted (FALSE),
 	m_bStaticIP (FALSE),
 	m_bTimeoutReported (FALSE),
-	m_nStartTime (0)
+	m_nStartTime (0),
+	m_bLinkUp (FALSE),
+	m_nLastCheck (0)
 {
 	s_pThis = this;
 }
@@ -48,26 +56,33 @@ boolean CNetwork::Initialize (void)
 {
 	CLogger *pLogger = CLogger::Get ();
 
-	if (m_pConfig->WifiSSID[0] == '\0')
+	// cable reseau (Ethernet) : choisi au demarrage, Circle ne gere qu'un reseau a la fois
+	m_bEthernet = UseEthernet ();
+
+	if (!m_bEthernet && m_pConfig->WifiSSID[0] == '\0')
 	{
-		pLogger->Write (From, LogWarning, "Wi-Fi non configure (Wifi_ssid vide)");
+		pLogger->Write (From, LogWarning, "Wi-Fi non configure (Wifi_ssid vide) et pas de cable reseau");
 		return FALSE;
 	}
 
 	m_bAttempted = TRUE;
 	m_nStartTime = CTimer::Get ()->GetUptime ();
 
-	if (!WriteSupplicantConfig ())
+	if (!m_bEthernet)
 	{
-		return FALSE;
-	}
+		if (!WriteSupplicantConfig ())
+		{
+			return FALSE;
+		}
 
-	m_pWLAN = new CBcm4343Device (FIRMWARE_PATH);
-	if (!m_pWLAN->Initialize ())
-	{
-		pLogger->Write (From, LogError, "Puce Wi-Fi non demarree (firmware dans %s ?)",
-				FIRMWARE_PATH);
-		return FALSE;
+		m_pWLAN = new CBcm4343Device (FIRMWARE_PATH);
+		if (!m_pWLAN->Initialize ())
+		{
+			pLogger->Write (From, LogError, "Puce Wi-Fi non demarree (firmware dans %s ?)",
+					FIRMWARE_PATH);
+			return FALSE;
+		}
+		m_pDevice = m_pWLAN;
 	}
 
 	// adresse fixe si elle est complete et coherente, sinon adresse donnee par la box
@@ -94,14 +109,21 @@ boolean CNetwork::Initialize (void)
 		}
 	}
 
+	const TNetDeviceType Type = m_bEthernet ? NetDeviceTypeEthernet : NetDeviceTypeWLAN;
 	m_pNet = m_bStaticIP
-	       ? new CNetSubSystem (IP, Mask, Gateway, DNS, m_pConfig->NetworkName, NetDeviceTypeWLAN)
-	       : new CNetSubSystem (0, 0, 0, 0, m_pConfig->NetworkName, NetDeviceTypeWLAN);
+	       ? new CNetSubSystem (IP, Mask, Gateway, DNS, m_pConfig->NetworkName, Type)
+	       : new CNetSubSystem (0, 0, 0, 0, m_pConfig->NetworkName, Type);
 	if (!m_pNet->Initialize (FALSE))
 	{
 		pLogger->Write (From, LogError, "Reseau non demarre");
 		m_pNet = 0;
 		return FALSE;
+	}
+
+	if (m_bEthernet)
+	{
+		pLogger->Write (From, LogNotice, "Connexion par le cable reseau ...");
+		return TRUE;
 	}
 
 	m_pSupplicant = new CWPASupplicant (SUPPLICANT_CONFIG);
@@ -132,10 +154,57 @@ void CNetwork::GetCurrentConfig (CString *pIP, CString *pMask, CString *pGateway
 	const u8 *pMaskBytes = pConfig->GetNetMask ();
 	pMask->Format ("%u.%u.%u.%u", pMaskBytes[0], pMaskBytes[1], pMaskBytes[2], pMaskBytes[3]);
 
-	if (m_pWLAN != 0)
+	if (m_pDevice != 0)
 	{
-		m_pWLAN->GetMACAddress ()->Format (pMAC);
+		m_pDevice->GetMACAddress ()->Format (pMAC);
 	}
+}
+
+// Ethernet ou Wi-Fi ? Reseau=wifi : Wi-Fi sans demarrer l'USB ; Reseau=ethernet : cable
+// (s'il existe) ; Reseau=auto (par defaut) : cable s'il est branche, sinon Wi-Fi
+boolean CNetwork::UseEthernet (void)
+{
+	CLogger *pLogger = CLogger::Get ();
+	const char *pMode = m_pConfig->NetMode;
+
+	if (strcasecmp (pMode, "wifi") == 0)
+	{
+		return FALSE;
+	}
+
+	// la carte reseau du Pi 3 est branchee sur son USB interne
+	m_pUSB = new CUSBHCIDevice (CInterruptSystem::Get (), CTimer::Get ());
+	CNetDevice *pEthernet = 0;
+	if (m_pUSB->Initialize ())
+	{
+		pEthernet = CNetDevice::GetNetDevice (NetDeviceTypeEthernet);
+	}
+	if (pEthernet == 0)
+	{
+		pLogger->Write (From, LogWarning, "Pas de prise reseau (Ethernet) : Wi-Fi");
+		return FALSE;
+	}
+
+	if (strcasecmp (pMode, "ethernet") != 0)
+	{
+		// le cable met 2 a 3 s a s'annoncer apres la mise sous tension de la puce
+		unsigned nStart = CTimer::Get ()->GetClockTicks ();
+		while (   !pEthernet->IsLinkUp ()
+		       && CTimer::Get ()->GetClockTicks () - nStart < ETHERNET_WAIT_MS * 1000)
+		{
+			CScheduler::Get ()->MsSleep (100);
+		}
+
+		if (!pEthernet->IsLinkUp ())
+		{
+			pLogger->Write (From, LogNotice, "Pas de cable reseau branche : Wi-Fi");
+			return FALSE;
+		}
+	}
+
+	pLogger->Write (From, LogNotice, "Cable reseau (Ethernet) utilise");
+	m_pDevice = pEthernet;
+	return TRUE;
 }
 
 boolean CNetwork::TakeTimeoutEvent (void)
@@ -149,26 +218,39 @@ boolean CNetwork::TakeTimeoutEvent (void)
 	}
 
 	m_bTimeoutReported = TRUE;
-	CLogger::Get ()->Write (From, LogWarning, "Wi-Fi toujours pas connecte apres 60 s "
-				"(verifier Wifi_ssid / Wifi_psk, reseau WPA2)");
+	if (m_bEthernet)
+	{
+		CLogger::Get ()->Write (From, LogWarning, "Cable reseau : pas d'adresse apres 60 s "
+					"(cable, box ou adresse fixe ?)");
+	}
+	else
+	{
+		CLogger::Get ()->Write (From, LogWarning, "Wi-Fi toujours pas connecte apres 60 s "
+					"(verifier Wifi_ssid / Wifi_psk, reseau WPA2)");
+	}
 
 	return TRUE;
 }
 
 void CNetwork::Process (void)
 {
+	if (m_pNet != 0 && m_bServicesStarted)
+	{
+		CheckAddress ();
+		return;
+	}
+
 	// en adresse fixe, IsRunning () est vrai tout de suite : attendre aussi la liaison Wi-Fi
 	if (   m_pNet == 0
-	    || m_bServicesStarted
 	    || !m_pNet->IsRunning ()
-	    || !m_pWLAN->IsLinkUp ())
+	    || !m_pDevice->IsLinkUp ())
 	{
 		return;
 	}
 
 	m_pNet->GetConfig ()->GetIPAddress ()->Format (&m_IPAddress);
-	CLogger::Get ()->Write (From, LogNotice, "Wi-Fi connecte : http://%s.local/ ou http://%s/",
-				m_pConfig->NetworkName, (const char *) m_IPAddress);
+	CLogger::Get ()->Write (From, LogNotice, "%s connecte : http://%s.local/ ou http://%s/",
+				GetInterfaceName (), m_pConfig->NetworkName, (const char *) m_IPAddress);
 
 	new CNTPDaemon (NTP_SERVER, m_pNet);
 
@@ -181,7 +263,48 @@ void CNetwork::Process (void)
 	new CWeather (m_pNet, m_pConfig);	// meteo du lieu choisi (page Meteo)
 
 	m_bServicesStarted = TRUE;
+	m_bLinkUp = TRUE;
 	m_bConnectedEvent = TRUE;
+}
+
+// apres la premiere connexion : Wi-Fi perdu puis retrouve, ou nouvelle adresse donnee par la
+// box -> l'adresse est de nouveau affichee sur le panneau (une verification par seconde)
+void CNetwork::CheckAddress (void)
+{
+	unsigned nNow = CTimer::Get ()->GetUptime ();
+	if (nNow == m_nLastCheck)
+	{
+		return;
+	}
+	m_nLastCheck = nNow;
+
+	CLogger *pLogger = CLogger::Get ();
+
+	if (!m_pDevice->IsLinkUp () || !m_pNet->IsRunning ())
+	{
+		if (m_bLinkUp)
+		{
+			pLogger->Write (From, LogWarning, "%s perdu", GetInterfaceName ());
+			m_bLinkUp = FALSE;
+		}
+		return;
+	}
+
+	CString IP;
+	m_pNet->GetConfig ()->GetIPAddress ()->Format (&IP);
+	if (strcmp (IP, "0.0.0.0") == 0)
+	{
+		return;
+	}
+
+	if (!m_bLinkUp || strcmp (IP, m_IPAddress) != 0)
+	{
+		pLogger->Write (From, LogNotice, "%s %s : http://%s/", GetInterfaceName (),
+				m_bLinkUp ? "nouvelle adresse" : "retrouve", (const char *) IP);
+		m_IPAddress = IP;
+		m_bLinkUp = TRUE;
+		m_bConnectedEvent = TRUE;
+	}
 }
 
 boolean CNetwork::SyncTime (int *pDiff)

@@ -44,11 +44,19 @@ private:
 	void RunTestPattern (void);
 	void ShowMessage (const char *pLine1, const char *pLine2, u8 r, u8 g, u8 b);
 	void CheckConnectedEvent (void);
+	void ShowAddress (void);
+	void ShowMessages (boolean bEveryTime);
+	void ShowBanner (const TBannerStyle &rItem);
+	boolean ShowCountdown (const TCountdownStyle &rItem, unsigned nDuration);
+	void ShowMessageNow (const char *pRequest);
+	boolean RunPagePhase (const TBannerStyle &rItem, const char *pPage, unsigned nPhase,
+			      unsigned nDuration, u64 nStart);
 	void PlayRequestedGifs (void);
 
 	void BuildPlaylist (void);
 	void AddFolder (const char *pPath, boolean bRecurse);
 	void Shuffle (void);
+	void SortPlaylist (void);
 	boolean PlayGif (const char *pPath);
 	boolean LoadGif (const char *pPath);
 	// joue l'animation chargee au moins nMinDuration ms (boucles completes) ; avec
@@ -101,6 +109,11 @@ private:
 	boolean m_bInRemoteRequest;
 	boolean m_bWifiTrial;		// nouveau Wi-Fi en essai
 	unsigned m_nGifsSinceWeather;	// GIF montrees depuis la derniere meteo
+	unsigned m_nExcluded;		// GIF exclues (gifmarks.h) a la derniere construction
+	unsigned m_nGifsSinceBanner;	// ... depuis le dernier texte defilant
+	unsigned m_nGifsSinceCountdown;	// ... depuis le dernier compte a rebours
+	unsigned m_nNextText;		// prochain texte de la liste (rotation)
+	unsigned m_nNextCountdown;	// prochain compte a rebours de la liste
 	u64 m_nRateTicks;
 	unsigned m_nRateCount;
 };

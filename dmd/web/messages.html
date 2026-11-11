@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrbitDMD · Messages</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top"><div class="top-in">
+	<a class="brand" href="/" aria-label="OrbitDMD"><picture>
+		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
+		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
+	</picture></a>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/messages" class="on">Messages</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
+	<div class="status">
+		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
+		<button class="btn sm" id="lock"></button>
+	</div>
+</div></header>
+
+<main>
+	<div class="head">
+		<div>
+			<h1>Messages</h1>
+			<p class="sub">Des textes qui défilent et des comptes à rebours, chacun avec son style. Ceux qui sont activés passent à tour de rôle entre les GIF.</p>
+		</div>
+		<div class="row">
+			<button class="btn" id="undo" disabled>Annuler</button>
+			<button class="btn primary" id="save" disabled>Enregistrer</button>
+		</div>
+	</div>
+
+	<div class="stack">
+		<!-- textes -->
+		<section class="card" id="card-texte">
+			<div class="row" style="margin-bottom:6px">
+				<h2 style="margin:0">Textes défilants</h2>
+				<span class="spacer"></span>
+				<button class="btn" data-add="texte"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Ajouter un texte</button>
+			</div>
+			<div class="form-row"><label for="Texte_Every">Entre les GIF<span class="hint">Un texte activé à la fois, à tour de rôle</span></label>
+				<span class="with-suffix">toutes les <input class="input num" type="number" id="Texte_Every" min="1" max="20" step="1"> GIF</span></div>
+			<div class="msg-list" id="list-texte"></div>
+			<div class="editor" id="ed-texte" hidden>
+				<div class="clock-preview"><div class="panel"><div class="led"><img id="prev-texte" alt="Aperçu du texte"><div class="none" id="none-texte">Chargement de l'aperçu…</div></div></div></div>
+				<p class="small muted" style="text-align:center;margin:8px 0 0" id="prev-note-texte"></p>
+				<div class="form-row"><label for="f-Texte_Message">Texte<span class="hint" id="count-texte"></span></label>
+					<input class="input" type="text" id="f-Texte_Message" maxlength="200" placeholder="Joyeux anniversaire !" style="width:100%;max-width:520px"></div>
+				<div class="form-row"><label for="f-Texte_Effet">Arrivée du texte</label>
+					<select class="input" id="f-Texte_Effet"></select></div>
+				<div class="form-row"><label for="f-Texte_Font">Police</label>
+					<select class="input" id="f-Texte_Font"></select></div>
+				<div class="form-row"><label for="f-Texte_Font_Size">Taille</label>
+					<select class="input" id="f-Texte_Font_Size"></select></div>
+				<div class="form-row"><span class="lbl">Couleur</span>
+					<span class="swatches" data-color="Texte_Color" data-pattern="Texte_Font_Pattern"></span></div>
+				<div class="form-row"><label for="f-Texte_Vitesse">Vitesse<span class="hint" id="speed-texte"></span></label>
+					<input type="range" id="f-Texte_Vitesse" min="1" max="10" step="1" style="width:220px"></div>
+				<div class="form-row"><label for="f-Texte_Passages">Nombre de passages</label>
+					<input class="input num" type="number" id="f-Texte_Passages" min="1" max="10" step="1"></div>
+			</div>
+		</section>
+
+		<!-- comptes a rebours -->
+		<section class="card" id="card-compte">
+			<div class="row" style="margin-bottom:6px">
+				<h2 style="margin:0">Comptes à rebours</h2>
+				<span class="spacer"></span>
+				<button class="btn" data-add="compte"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Ajouter un compte à rebours</button>
+			</div>
+			<div class="form-row"><label for="Compte_Every">Entre les GIF<span class="hint">Un compte activé à la fois, à tour de rôle</span></label>
+				<span class="with-suffix">toutes les <input class="input num" type="number" id="Compte_Every" min="1" max="20" step="1"> GIF</span></div>
+			<div class="msg-list" id="list-compte"></div>
+			<div class="editor" id="ed-compte" hidden>
+				<div class="clock-preview"><div class="panel"><div class="led"><img id="prev-compte" alt="Aperçu du compte à rebours"><div class="none" id="none-compte">Chargement de l'aperçu…</div></div></div></div>
+				<div class="row" style="justify-content:center;margin-top:10px">
+					<div class="seg" role="group" aria-label="Aperçu">
+						<button class="on" data-fin="0">Avant</button><button data-fin="1">Le jour J</button>
+					</div>
+				</div>
+				<div class="form-row"><label for="cible">Jusqu'à</label>
+					<span class="row" style="gap:8px">
+						<select class="input" id="cible">
+							<option value="noel">Noël (25 décembre)</option>
+							<option value="nouvel-an">Nouvel an (1er janvier)</option>
+							<option value="date">Une date choisie</option>
+						</select>
+						<input class="input" type="datetime-local" id="cible-date" hidden>
+					</span></div>
+				<div class="form-row"><label for="f-Compte_Titre">Titre<span class="hint">Au-dessus du temps restant</span></label>
+					<input class="input" type="text" id="f-Compte_Titre" maxlength="40" placeholder="NOËL DANS"></div>
+				<div class="form-row"><label for="f-Compte_Fin">Message du jour J<span class="hint">Montré pendant 24 h à partir de l'heure choisie</span></label>
+					<input class="input" type="text" id="f-Compte_Fin" maxlength="40" placeholder="JOYEUX NOËL !"></div>
+				<div class="form-row"><label for="f-Compte_Font">Police</label>
+					<select class="input" id="f-Compte_Font"></select></div>
+				<div class="form-row"><label for="f-Compte_Font_Size">Taille</label>
+					<select class="input" id="f-Compte_Font_Size"></select></div>
+				<div class="form-row"><span class="lbl">Couleur du temps restant</span>
+					<span class="swatches" data-color="Compte_Color" data-pattern="Compte_Font_Pattern"></span></div>
+				<div class="form-row"><span class="lbl">Couleur du titre</span>
+					<span class="swatches" data-color="Compte_Titre_Color"></span></div>
+				<div class="form-row"><label for="f-Compte_Display_Time">Durée</label>
+					<span class="with-suffix"><input class="input num" type="number" id="f-Compte_Display_Time" min="1" max="60" step="1" data-ms> s</span></div>
+			</div>
+		</section>
+	</div>
+</main>
+
+<footer class="credit">Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be" target="_blank" rel="noopener">www.nexadam.be</a> · <a href="https://github.com/ulrikadam/OrbitDMD" target="_blank" rel="noopener">OrbitDMD sur GitHub</a><br><a class="kofi" href="https://ko-fi.com/H1U12A50RN" target="_blank" rel="noopener">☕ Soutenir sur Ko-fi</a></footer>
+
+<script src="/app.js"></script>
+<script>
+"use strict";
+const FIELDS = {
+	texte: ["Texte_Active", "Texte_Message", "Texte_Effet", "Texte_Vitesse", "Texte_Passages", "Texte_Font",
+		"Texte_Font_Size", "Texte_Color", "Texte_Font_Pattern"],
+	compte: ["Compte_Active", "Compte_Date", "Compte_Titre", "Compte_Fin", "Compte_Display_Time", "Compte_Font",
+		"Compte_Font_Size", "Compte_Color", "Compte_Titre_Color", "Compte_Font_Pattern"]
+};
+const NEW = {
+	texte: () => ({ Texte_Active: 1, Texte_Message: "", Texte_Effet: "defile", Texte_Vitesse: 4, Texte_Passages: 1,
+		Texte_Font: "Pixel", Texte_Font_Size: 0, Texte_Color: "01A7C5", Texte_Font_Pattern: "None" }),
+	compte: () => {
+		const t = new Date(Date.now() + 14 * 86400000);
+		t.setHours(20, 0, 0, 0);
+		const d = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16).replace("T", " ");
+		return { Compte_Active: 1, Compte_Date: d, Compte_Titre: "ANNIVERSAIRE DANS", Compte_Fin: "JOYEUX ANNIVERSAIRE !",
+			Compte_Display_Time: 5000, Compte_Font: "Pixel", Compte_Font_Size: 0, Compte_Color: "FFAA00",
+			Compte_Titre_Color: "FFFFFF", Compte_Font_Pattern: "None" };
+	}
+};
+const EFFECTS = [["defile", "Défile vers la gauche"], ["inverse", "Défile vers la droite"], ["monte", "Monte (du bas vers le haut)"],
+	["descend", "Descend (du haut vers le bas)"], ["lettres", "Lettre par lettre"], ["pluie", "Pluie de lettres"], ["fondu", "Fondu"]];
+const COLORS = [["01A7C5", "Turquoise"], ["FFFFFF", "Blanc"], ["FFAA00", "Ambre"], ["FF2020", "Rouge"], ["E53935", "Rouge Noël"],
+	["FF7A00", "Orange"], ["FFE000", "Jaune"], ["20E040", "Vert"], ["2060FF", "Bleu"], ["A040FF", "Violet"], ["FF40A0", "Rose"]];
+const SIZES = [0, 8, 10, 12, 14, 16, 18, 20, 24, 28, 32];
+const RAINBOW = "Arc-en-ciel";
+const LIMIT = { texte: 10, compte: 10 };
+
+let lists = { texte: [], compte: [] }, every = {}, saved = "", sel = { texte: -1, compte: -1 }, loaded = false, fin = false;
+const el = id => document.getElementById(id);
+const state = () => JSON.stringify([lists, every]);
+const dirty = () => loaded && state() !== saved;
+
+function fontName (f) {
+	if (f === "Pixel") return "Pixel (intégrée)";
+	const base = f.replace(/^.*\//, "").replace(/\.(ttf|otf)$/i, "");
+	const noms = { goudysto: "Goudy Stout", pressstart2p: "Press Start 2P", vt323: "VT323", blackopsone: "Black Ops One",
+		russoone: "Russo One", mountainsofchristmas: "Mountains of Christmas", "orbitdmd-led": "OrbitDMD LED",
+		"orbitdmd-gras": "OrbitDMD Gras", "orbitdmd-segments": "OrbitDMD 7 segments" };
+	return noms[base.toLowerCase()] || base.replace(/^HALLOWEEN_/i, "Halloween · ").replace(/_/g, " ");
+}
+/* le panneau refuse guillemets et barres obliques inverses : remplaces */
+const clean = s => s.replace(/"/g, "”").replace(/\\/g, "/").replace(/[\r\n]+/g, " ");
+const targetLabel = d => d === "noel" ? "Noël" : d === "nouvel-an" ? "Nouvel an" :
+	new Date(d.replace(" ", "T")).toLocaleString("fr-BE", { dateStyle: "long", timeStyle: "short" });
+
+/* --- listes --- */
+function renderList (g) {
+	const box = el("list-" + g);
+	box.textContent = "";
+	if (!lists[g].length) {
+		const p = document.createElement("div");
+		p.className = "empty small";
+		p.textContent = g === "texte" ? "Aucun texte : cliquez sur « Ajouter un texte »." : "Aucun compte à rebours.";
+		box.appendChild(p);
+	}
+	lists[g].forEach((it, i) => {
+		const row = document.createElement("div");
+		row.className = "msg-row" + (i === sel[g] ? " sel" : "") + (+it[g === "texte" ? "Texte_Active" : "Compte_Active"] ? "" : " off");
+		const sw = document.createElement("label");
+		sw.className = "switch";
+		sw.title = "Activé : passe entre les GIF";
+		const cb = document.createElement("input");
+		cb.type = "checkbox";
+		cb.checked = !!+it[g === "texte" ? "Texte_Active" : "Compte_Active"];
+		cb.setAttribute("aria-label", "Activer");
+		cb.onchange = () => { it[g === "texte" ? "Texte_Active" : "Compte_Active"] = cb.checked ? 1 : 0; renderList(g); update(); };
+		sw.appendChild(cb);
+
+		const dot = document.createElement("span");
+		dot.className = "msg-dot";
+		const pat = it[g === "texte" ? "Texte_Font_Pattern" : "Compte_Font_Pattern"];
+		dot.style.background = pat === RAINBOW ? "conic-gradient(red, yellow, lime, cyan, blue, magenta, red)" : "#" + it[g === "texte" ? "Texte_Color" : "Compte_Color"];
+
+		const txt = document.createElement("button");
+		txt.className = "msg-text";
+		txt.type = "button";
+		const main = document.createElement("b");
+		const sub = document.createElement("span");
+		if (g === "texte") {
+			main.textContent = it.Texte_Message || "(texte vide)";
+			sub.textContent = (EFFECTS.find(e => e[0] === it.Texte_Effet) || EFFECTS[0])[1] + " · " + fontName(it.Texte_Font);
+		} else {
+			main.textContent = (it.Compte_Titre || "Compte à rebours") + " → " + targetLabel(it.Compte_Date);
+			sub.textContent = fontName(it.Compte_Font) + " · " + (+it.Compte_Display_Time / 1000) + " s";
+		}
+		txt.append(main, sub);
+		txt.onclick = () => select(g, i === sel[g] ? -1 : i);
+
+		const show = document.createElement("button");
+		show.className = "btn sm";
+		show.textContent = g === "texte" ? "Afficher" : "Voir";
+		show.title = "Enregistre, puis montre sur le panneau tout de suite";
+		show.onclick = () => showNow(g, i);
+		const up = document.createElement("button");
+		up.className = "btn sm icon";
+		up.innerHTML = '<svg class="i" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>';
+		up.title = "Monter";
+		up.disabled = i === 0;
+		up.onclick = () => move(g, i, -1);
+		const del = document.createElement("button");
+		del.className = "btn sm icon danger";
+		del.innerHTML = '<svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>';
+		del.title = "Supprimer";
+		del.onclick = () => {
+			if (!confirm("Supprimer « " + main.textContent + " » ?")) return;
+			lists[g].splice(i, 1);
+			sel[g] = -1;
+			renderList(g); fillEditor(g); update();
+		};
+		row.append(sw, dot, txt, show, up, del);
+		box.appendChild(row);
+	});
+	document.querySelector('[data-add="' + g + '"]').disabled = lists[g].length >= LIMIT[g];
+}
+function move (g, i, d) {
+	const l = lists[g], j = i + d;
+	if (j < 0 || j >= l.length) return;
+	[l[i], l[j]] = [l[j], l[i]];
+	if (sel[g] === i) sel[g] = j; else if (sel[g] === j) sel[g] = i;
+	renderList(g); update();
+}
+function select (g, i) {
+	sel[g] = i;
+	renderList(g);
+	fillEditor(g);
+	if (i >= 0) el("ed-" + g).scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+const item = g => lists[g][sel[g]];
+
+/* --- editeur de l'element choisi --- */
+function fillEditor (g) {
+	const it = item(g);
+	el("ed-" + g).hidden = !it;
+	if (!it) return;
+	for (const k of FIELDS[g]) {
+		const input = el("f-" + k);
+		if (!input) continue;
+		if (input.dataset.ms !== undefined) input.value = +it[k] / 1000;
+		else input.value = it[k];
+	}
+	if (g === "compte") {
+		const d = it.Compte_Date;
+		el("cible").value = d === "noel" || d === "nouvel-an" ? d : "date";
+		el("cible-date").hidden = el("cible").value !== "date";
+		if (el("cible").value === "date") el("cible-date").value = d.replace(" ", "T");
+	}
+	for (const s of el("ed-" + g).querySelectorAll(".swatches")) s.mark();
+	updateHints();
+	refreshPreview(g);
+}
+function setField (g, k, v) {
+	const it = item(g);
+	if (!it) return;
+	it[k] = v;
+	updateHints();
+	renderList(g);
+	update();
+	schedulePreview(g);
+}
+function updateHints () {
+	const t = item("texte");
+	if (t) {
+		el("count-texte").textContent = new TextEncoder().encode(t.Texte_Message || "").length + " / 200 octets (une lettre accentuée compte pour 2)";
+		el("speed-texte").textContent = ["", "très lente", "lente", "lente", "moyenne", "moyenne", "rapide", "rapide", "très rapide", "très rapide", "maximale"][+t.Texte_Vitesse] || "";
+		el("prev-note-texte").textContent = t.Texte_Effet === "defile" || t.Texte_Effet === "inverse"
+			? "Aperçu du début du texte. Sur le panneau, il défile." : "Aperçu de la première page, une fois arrivée. Un texte long est coupé en pages.";
+	}
+}
+
+/* --- pastilles de couleur (avec arc-en-ciel) --- */
+function setupSwatches (box, g) {
+	const ck = box.dataset.color, pk = box.dataset.pattern;
+	const add = (value, label, bg) => {
+		const b = document.createElement("button");
+		b.type = "button";
+		b.className = "swatch";
+		b.title = label;
+		b.setAttribute("aria-label", label);
+		b.style.background = bg;
+		b.dataset.value = value;
+		b.onclick = () => {
+			if (value === RAINBOW) setField(g, pk, RAINBOW);
+			else { if (pk) item(g)[pk] = "None"; setField(g, ck, value); }
+			box.mark();
+		};
+		box.appendChild(b);
+	};
+	for (const [hex, label] of COLORS) add(hex, label, "#" + hex);
+	if (pk) add(RAINBOW, "Arc-en-ciel (animé)", "conic-gradient(red, yellow, lime, cyan, blue, magenta, red)");
+	const other = document.createElement("input");
+	other.type = "color";
+	other.className = "input color";
+	other.title = "Autre couleur";
+	other.setAttribute("aria-label", "Autre couleur");
+	other.oninput = () => { if (pk) item(g)[pk] = "None"; setField(g, ck, other.value.slice(1).toUpperCase()); box.mark(); };
+	box.appendChild(other);
+	box.mark = () => {
+		const it = item(g);
+		if (!it) return;
+		const rainbow = pk && it[pk] === RAINBOW;
+		for (const b of box.querySelectorAll(".swatch"))
+			b.classList.toggle("sel", rainbow ? b.dataset.value === RAINBOW : b.dataset.value === String(it[ck]).toUpperCase());
+		other.value = "#" + String(it[ck] || "FFFFFF").toLowerCase();
+	};
+}
+
+/* --- apercus dessines par le panneau --- */
+const prev = { texte: { busy: false, again: false, timer: 0 }, compte: { busy: false, again: false, timer: 0 } };
+function refreshPreview (g) {
+	const it = item(g);
+	if (!loaded || !it) return;
+	const st = prev[g];
+	if (st.busy) { st.again = true; return; }
+	st.busy = true;
+	const p = new URLSearchParams();
+	for (const k of FIELDS[g]) if (!/_Active$|Display_Time|Vitesse|Passages/.test(k)) p.set(k, it[k]);
+	p.set("ecran", g);
+	if (g === "compte" && fin) p.set("fin", "1");
+	p.set("t", Date.now());
+	const img = el("prev-" + g), none = el("none-" + g);
+	const done = () => { st.busy = false; if (st.again) { st.again = false; refreshPreview(g); } };
+	img.onload = () => { none.hidden = true; done(); };
+	img.onerror = () => { none.hidden = false; none.textContent = "Aperçu indisponible"; done(); };
+	img.src = "/api/horloge/apercu?" + p.toString();
+}
+function schedulePreview (g) { clearTimeout(prev[g].timer); prev[g].timer = setTimeout(() => refreshPreview(g), 250); }
+
+/* --- chargement --- */
+async function load () {
+	try {
+		const [m, s, a] = await Promise.all([OD.getJSON("/api/messages", 15000), OD.getJSON("/api/reglages", 15000),
+			OD.getJSON("/api/horloge/fichiers", 15000)]);
+		const fonts = ["Pixel", ...(a.polices || [])];
+		for (const id of ["f-Texte_Font", "f-Compte_Font"]) for (const f of fonts) el(id).add(new Option(fontName(f), f));
+		for (const id of ["f-Texte_Font_Size", "f-Compte_Font_Size"]) for (const n of SIZES) el(id).add(new Option(n ? n + " px" : "Automatique", n));
+		for (const [v, l] of EFFECTS) el("f-Texte_Effet").add(new Option(l, v));
+		lists = { texte: m.textes || [], compte: m.comptes || [] };
+		LIMIT.texte = m.max_textes || 10;
+		LIMIT.compte = m.max_comptes || 10;
+		every = { Texte_Every: s.Texte_Every, Compte_Every: s.Compte_Every };
+		el("Texte_Every").value = every.Texte_Every;
+		el("Compte_Every").value = every.Compte_Every;
+		for (const g of ["texte", "compte"]) for (const box of el("ed-" + g).querySelectorAll(".swatches")) setupSwatches(box, g);
+		saved = state();
+		loaded = true;
+		for (const g of ["texte", "compte"]) { if (lists[g].length) sel[g] = 0; renderList(g); fillEditor(g); }
+		update();
+	} catch (e) {
+		OD.toast("Panneau injoignable", false);
+	}
+}
+function update () {
+	const d = dirty();
+	el("save").disabled = !d;
+	el("undo").disabled = !d;
+}
+
+/* --- champs --- */
+for (const g of ["texte", "compte"]) for (const k of FIELDS[g]) {
+	const input = el("f-" + k);
+	if (!input) continue;
+	const read = () => {
+		if (input.dataset.ms !== undefined) return Math.round(+input.value * 1000);
+		if (input.type === "number" || input.type === "range" || input.tagName === "SELECT" && /Size/.test(k)) return +input.value;
+		return input.type === "text" ? clean(input.value) : input.value;
+	};
+	input.addEventListener(input.type === "text" || input.type === "range" ? "input" : "change", () => setField(g, k, read()));
+}
+for (const k of ["Texte_Every", "Compte_Every"]) el(k).onchange = () => { every[k] = Math.min(20, Math.max(1, +el(k).value || 1)); update(); };
+function setTarget () {
+	const c = el("cible").value;
+	el("cible-date").hidden = c !== "date";
+	if (c !== "date") { setField("compte", "Compte_Date", c); return; }
+	if (!el("cible-date").value) el("cible-date").value = NEW.compte().Compte_Date.replace(" ", "T");
+	setField("compte", "Compte_Date", el("cible-date").value.replace("T", " ").slice(0, 16));
+}
+el("cible").onchange = setTarget;
+el("cible-date").onchange = setTarget;
+for (const b of document.querySelectorAll("[data-fin]")) b.onclick = () => {
+	fin = b.dataset.fin === "1";
+	for (const x of document.querySelectorAll("[data-fin]")) x.classList.toggle("on", x === b);
+	refreshPreview("compte");
+};
+for (const b of document.querySelectorAll("[data-add]")) b.onclick = () => {
+	const g = b.dataset.add;
+	if (lists[g].length >= LIMIT[g]) return;
+	lists[g].push(NEW[g]());
+	select(g, lists[g].length - 1);
+	update();
+	if (g === "texte") el("f-Texte_Message").focus();
+};
+
+/* --- enregistrer : fichier messages.txt complet, puis la frequence --- */
+function serialize () {
+	let t = "";
+	for (const g of ["texte", "compte"]) for (const it of lists[g]) {
+		t += "[" + g + "]\n";
+		for (const k of FIELDS[g]) t += k + "=" + it[k] + "\n";
+	}
+	return t;
+}
+async function save () {
+	if (!dirty()) return true;
+	if (lists.texte.some(it => !String(it.Texte_Message).trim())) { OD.toast("Un texte est vide : écrivez-le ou supprimez-le", false); return false; }
+	el("save").disabled = true;
+	let r = await OD.action("/api/messages", {}, new File([serialize()], "messages.txt", { type: "text/plain" }));
+	if (r.cancelled) { update(); return false; }
+	if (r.ok) r = await OD.action("/api/reglages", { Texte_Every: every.Texte_Every, Compte_Every: every.Compte_Every });
+	if (r.ok) {
+		/* relire : le panneau a pu corriger des valeurs */
+		const m = await OD.getJSON("/api/messages", 15000).catch(() => null);
+		if (m) { lists = { texte: m.textes, compte: m.comptes }; for (const g of ["texte", "compte"]) { if (sel[g] >= lists[g].length) sel[g] = -1; renderList(g); fillEditor(g); } }
+		saved = state();
+		OD.toast("Messages enregistrés");
+	} else OD.toast(r.text, false);
+	update();
+	return r.ok;
+}
+el("save").onclick = save;
+el("undo").onclick = () => {
+	[lists, every] = JSON.parse(saved);
+	el("Texte_Every").value = every.Texte_Every;
+	el("Compte_Every").value = every.Compte_Every;
+	for (const g of ["texte", "compte"]) { if (sel[g] >= lists[g].length) sel[g] = lists[g].length ? 0 : -1; renderList(g); fillEditor(g); }
+	update();
+};
+async function showNow (g, i) {
+	if (!(await save())) return;
+	const r = await OD.action(g === "texte" ? "/api/texte/montrer" : "/api/compte/montrer", { numero: i });
+	if (!r.cancelled) OD.toast(r.ok ? (g === "texte" ? "Le texte s'affiche sur le panneau" : "Le compte à rebours s'affiche 15 secondes") : r.text, r.ok);
+}
+window.addEventListener("beforeunload", e => { if (dirty()) { e.preventDefault(); e.returnValue = ""; } });
+
+load();
+</script>
+</body>
+</html>

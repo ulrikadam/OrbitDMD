@@ -15,6 +15,10 @@
 #define CLOCK_FONT_DIR		"SD:/fonts"
 #define CLOCK_FONT_PIXEL	"Pixel"		// police 5x7 integree au programme
 #define CLOCK_NONE		"None"		// pas de motif / pas de fond
+#define CLOCK_RAINBOW		"Arc-en-ciel"	// motif dessine : arc-en-ciel anime
+#define CLOCK_RANDOM		"Random"	// motif ou fond tire au hasard a chaque affichage
+					// (meme valeur que l'ancien RPI2DMD pour le fond)
+boolean IsRandomChoice (const char *pValue);	// "Random" ou "Hasard"
 #define CLOCK_NAME_LEN		80
 #define CLOCK_FORMAT_LEN	40
 #define CLOCK_MAX_SIZE		48		// taille de police maximale (pixels)
@@ -79,6 +83,78 @@ struct TWeatherStyle
 
 void WeatherStyleDefaults (TWeatherStyle *pStyle);
 boolean SetWeatherStyleValue (TWeatherStyle *pStyle, const char *pKey, const char *pValue);
+
+// --- texte defilant (page Messages) : cles Texte_* ---
+
+#define BANNER_TEXT_LEN		201		// texte UTF-8 (200 octets au plus)
+#define BANNER_SPEED_MAX	10
+
+enum TBannerEffect		// arrivee du texte (Texte_Effet)
+{
+	EffectScroll,		// "defile" : de droite a gauche
+	EffectReverse,		// "inverse" : de gauche a droite
+	EffectUp,		// "monte" : du bas vers le haut, page par page
+	EffectDown,		// "descend" : du haut vers le bas
+	EffectTyping,		// "lettres" : lettre par lettre
+	EffectRain,		// "pluie" : les lettres tombent
+	EffectFade,		// "fondu" : apparition en fondu
+	EffectCount
+};
+
+const char *BannerEffectName (unsigned nEffect);	// "defile"...
+boolean IsPagedEffect (unsigned nEffect);		// le texte est coupe en pages qui tiennent
+
+struct TBannerStyle
+{
+	boolean	   bActive;			// Texte_Active : dans la rotation, toutes les N GIF
+	unsigned   Effect;			// Texte_Effet (TBannerEffect)
+	unsigned   nEvery;			// Texte_Every (1 a 20)
+	unsigned   nPasses;			// Texte_Passages : nombre de passages (1 a 10)
+	unsigned   nSpeed;			// Texte_Vitesse (1 a 10)
+	char	   Text[BANNER_TEXT_LEN];	// Texte_Message
+	TTextStyle Style;			// Texte_Font, Texte_Font_Size, Texte_Font_Pattern, Texte_Color
+};
+
+void BannerStyleDefaults (TBannerStyle *pStyle);
+boolean SetBannerStyleValue (TBannerStyle *pStyle, const char *pKey, const char *pValue);
+boolean IsValidBannerText (const char *pText);	// UTF-8, sans retour a la ligne ni guillemet
+unsigned BannerPixelsPerSecond (unsigned nSpeed);
+
+// --- compte a rebours (page Messages) : cles Compte_* ---
+
+#define COUNTDOWN_XMAS		"noel"		// 25 decembre 00:00, chaque annee
+#define COUNTDOWN_NEW_YEAR	"nouvel-an"	// 1er janvier 00:00, chaque annee
+#define COUNTDOWN_TITLE_LEN	48
+
+struct TCountdownStyle
+{
+	boolean	   bActive;			// Compte_Active : dans la rotation, toutes les N GIF
+	unsigned   nEvery;			// Compte_Every (1 a 20)
+	unsigned   nDisplayTime;		// Compte_Display_Time (ms)
+	char	   Target[20];			// Compte_Date : "noel", "nouvel-an" ou "AAAA-MM-JJ HH:MM"
+	char	   Title[COUNTDOWN_TITLE_LEN];	// Compte_Titre ("NOEL DANS")
+	char	   Done[COUNTDOWN_TITLE_LEN];	// Compte_Fin : montre le jour J ("JOYEUX NOEL !")
+	TTextStyle Style;			// valeur : Compte_Font, Compte_Font_Size, Compte_Font_Pattern, Compte_Color
+	u8	   TitleColor[3];		// Compte_Titre_Color
+};
+
+void CountdownStyleDefaults (TCountdownStyle *pStyle);
+boolean SetCountdownStyleValue (TCountdownStyle *pStyle, const char *pKey, const char *pValue);
+boolean IsValidCountdownTarget (const char *pTarget);
+
+enum TCountdownState
+{
+	CountdownNone,		// date passee depuis plus d'un jour (date choisie) ou invalide
+	CountdownRunning,	// *pValue : "12 JOURS", "3 J 14 H" ou "14:02:33"
+	CountdownReached	// jour J (24 h apres l'heure choisie) : montrer Compte_Fin
+};
+
+// heure locale -> etat et texte a afficher
+TCountdownState FormatCountdown (const char *pTarget, const TDateTime &rNow, char *pValue, unsigned nSize);
+
+// texte UTF-8 -> Latin-1 (un octet par caractere, comme les polices) ; bAscii : lettres
+// accentuees remplacees par la lettre simple (police Pixel), autres caracteres par '?'
+void TextToLatin1 (const char *pUTF8, char *pOut, unsigned nOutSize, boolean bAscii);
 
 // latitude ou longitude "49.9214" (4 decimales au plus) ; FALSE si invalide
 boolean NormalizeCoordinate (const char *pText, boolean bLatitude, char *pOut, unsigned nOutSize);

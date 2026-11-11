@@ -57,11 +57,13 @@ for cat in sorted(set(origine) | set(actuel), key=str.lower):
 texte = """GIF fournies avec OrbitDMD
 ==========================
 
-La plupart de ces animations viennent du projet RPI2DMD : son systeme pour
-Raspberry Pi en comptait 600, en "pixel perfect" pour panneaux 128x32
-(RpiTe@m ; beaucoup de GIF signees RattenJager dans leur nom).
-Merci a leurs auteurs. Plus de GIF de la meme communaute (BIGDLC) :
-http://www.neo-arcadia.com/forum/viewtopic.php?f=14&t=67065
+OrbitDMD integre le pack de GIF animees gratuit de base de la RpiTeaM
+(projet RPI2DMD : 600 GIF "pixel perfect" pour panneaux 128x32, pixel art
+d'eLLuiGi, RattenJager et d'autres), avec l'accord d'eLLuiGi. Merci a eux !
+
+Pour ceux qui le souhaitent, un pack de 11 000 animations est disponible :
+  https://www.neo-arcadia.com/forum/viewtopic.php?t=67065
+  https://rpiteam.carrd.co/
 
 Les GIF au nom de RPI2DMD ou de la RpiTe@m (logos du projet) ont ete retirees.
 

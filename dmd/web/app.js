@@ -129,6 +129,7 @@ const OD = {
 			if (dot) dot.className = "dot on";
 			if (label) label.textContent = "En ligne";
 			document.dispatchEvent(new CustomEvent("etat", { detail: this.status }));
+			this.checkUpdate(this.status.version);
 		} catch (e) {
 			this.status = null;
 			if (dot) dot.className = "dot off";
@@ -137,6 +138,57 @@ const OD = {
 		}
 		this.polling = false;
 		if (!document.hidden) this.pollTimer = setTimeout(() => this.poll(), 3000);
+	},
+
+	/* --- nouvelle version sur GitHub (tableau de bord et page Systeme : element #update-banner)
+	       Le navigateur interroge GitHub (le panneau ne sait pas faire de https), au plus
+	       toutes les 6 heures ; "Plus tard" cache l'annonce de cette version. --- */
+	newer (a, b) {
+		const pa = String(a).replace(/^v/, "").split(".").map(Number), pb = String(b).replace(/^v/, "").split(".").map(Number);
+		for (let i = 0; i < 3; i++) if ((pa[i] || 0) !== (pb[i] || 0)) return (pa[i] || 0) > (pb[i] || 0);
+		return false;
+	},
+	async checkUpdate (current) {
+		const box = $("#update-banner");
+		if (!box || !current || this.updateChecked) return;
+		this.updateChecked = true;
+		let rel = null;
+		try {
+			const c = JSON.parse(localStorage.getItem("orbitdmd_maj") || "null");
+			if (c && Date.now() - c.t < 6 * 3600 * 1000) rel = c.rel;
+		} catch (e) {}
+		if (!rel) {
+			try {
+				const ctl = new AbortController();
+				setTimeout(() => ctl.abort(), 8000);
+				const j = await (await fetch("https://api.github.com/repos/ulrikadam/OrbitDMD/releases/latest", { signal: ctl.signal })).json();
+				const kernel = (j.assets || []).find(a => a.name === "kernel8.img");
+				rel = { version: String(j.tag_name || "").replace(/^v/, ""), url: j.html_url, kernel: kernel ? kernel.browser_download_url : "" };
+				try { localStorage.setItem("orbitdmd_maj", JSON.stringify({ t: Date.now(), rel })); } catch (e) {}
+			} catch (e) {		/* pas d'Internet sur ce PC, ou GitHub injoignable : nouvel essai dans 10 min */
+				setTimeout(() => { this.updateChecked = false; }, 600000);
+				return;
+			}
+		}
+		let hidden = "";
+		try { hidden = localStorage.getItem("orbitdmd_maj_cachee") || ""; } catch (e) {}
+		if (!rel.version || !this.newer(rel.version, current) || hidden === rel.version) return;
+		box.className = "banner";
+		box.innerHTML = '<span>🎉 <b>OrbitDMD <span data-v></span> est disponible</b> (ce panneau a la <span data-c></span>).</span>' +
+			'<a class="btn sm" data-notes target="_blank" rel="noopener">Voir les nouveautés</a>' +
+			'<a class="btn sm primary" data-kernel>Télécharger kernel8.img</a>' +
+			'<span class="small muted" style="flex-basis:100%">Puis installez-le dans <a href="/systeme">Système</a> → Nouveau programme. Vos réglages et vos GIF sont gardés.</span>' +
+			'<button class="btn sm" data-later style="margin-left:auto">Plus tard</button>';
+		box.querySelector("[data-v]").textContent = rel.version;
+		box.querySelector("[data-c]").textContent = current;
+		box.querySelector("[data-notes]").href = rel.url;
+		const k = box.querySelector("[data-kernel]");
+		if (rel.kernel) k.href = rel.kernel; else k.remove();
+		box.querySelector("[data-later]").onclick = () => {
+			try { localStorage.setItem("orbitdmd_maj_cachee", rel.version); } catch (e) {}
+			box.hidden = true;
+		};
+		box.hidden = false;
 	},
 
 	/* --- mise a l'heure depuis Internet (tableau de bord et page Horloge) --- */

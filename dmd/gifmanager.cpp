@@ -2,6 +2,7 @@
 // gifmanager.cpp
 //
 #include "gifmanager.h"
+#include "gifmarks.h"
 #include "common.h"
 #include "fileutil.h"
 #include "remote.h"
@@ -249,7 +250,9 @@ void CGifManager::ListFiles (const char *pCategory, CString *pJSON)
 				pJSON->Append (bFirst ? "{\"nom\":" : ",{\"nom\":");
 				AppendJSONString (pJSON, Info.fname);
 				CString Size;
-				Size.Format (",\"taille\":%u}", (unsigned) Info.fsize);
+				TGifMark Mark = CGifMarks::Get (pCategory, Info.fname);
+				Size.Format (",\"taille\":%u,\"marque\":\"%s\"}", (unsigned) Info.fsize,
+					     Mark == GifMarkFavorite ? "favori" : Mark == GifMarkExcluded ? "exclue" : "");
 				pJSON->Append (Size);
 				bFirst = FALSE;
 			}
@@ -372,6 +375,7 @@ boolean CGifManager::DeleteGif (CConfig *pConfig, const char *pCategory, const c
 		f_unlink (Folder);		// echoue sans rien faire si le dossier n'est pas vide
 	}
 
+	CGifMarks::Set (pCategory, pName, GifMarkNone);	// plus de favorite ou d'exclusion
 	pReply->Format ("OK : %s supprimee\n", pName);
 	CRemoteControl::Get ()->RequestReload ();
 
@@ -443,6 +447,7 @@ boolean CGifManager::DeleteCategory (CConfig *pConfig, const char *pCategory, CS
 
 	CLogger::Get ()->Write (From, bOK ? LogNotice : LogError, "Categorie %s supprimee : %u fichier(s)%s",
 				pCategory, nFiles, bOK ? "" : ", suppression incomplete");
+	CGifMarks::ForgetCategory (pCategory);
 	CRemoteControl::Get ()->RequestReload ();
 
 	if (!bOK)
@@ -536,6 +541,38 @@ boolean CGifManager::DeleteTree (const char *pPath, unsigned nDepth, unsigned *p
 	delete [] pBatch;
 
 	return bOK && f_unlink (pPath) == FR_OK;
+}
+
+boolean CGifManager::SetMark (const char *pCategory, const char *pName, const char *pMark,
+			       CString *pReply)
+{
+	if (!IsValidCategory (pCategory) || !IsValidFileName (pName))
+	{
+		*pReply = "ERREUR : GIF invalide\n";
+		return FALSE;
+	}
+
+	TGifMark Mark;
+	if      (strcmp (pMark, "favori") == 0)	Mark = GifMarkFavorite;
+	else if (strcmp (pMark, "exclue") == 0)	Mark = GifMarkExcluded;
+	else if (strcmp (pMark, "aucune") == 0)	Mark = GifMarkNone;
+	else
+	{
+		*pReply = "ERREUR : marque inconnue (favori, exclue ou aucune)\n";
+		return FALSE;
+	}
+
+	if (!CGifMarks::Set (pCategory, pName, Mark))
+	{
+		pReply->Format ("ERREUR : enregistrement impossible (%u GIF marquees au plus)\n", CGifMarks::MaxMarks);
+		return FALSE;
+	}
+
+	pReply->Format ("OK : %s %s\n", pName, Mark == GifMarkFavorite ? "en favori"
+			: Mark == GifMarkExcluded ? "retiree de la rotation" : "remise normale");
+	CRemoteControl::Get ()->RequestReload ();
+
+	return TRUE;
 }
 
 boolean CGifManager::PlayGif (const char *pCategory, const char *pName, CString *pReply)

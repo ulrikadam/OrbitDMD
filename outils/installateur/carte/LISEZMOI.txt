@@ -25,5 +25,6 @@ Fichiers de la carte
 Si le Wi-Fi ne se connecte pas : retirez la carte, ouvrez Config/config.txt
 avec le Bloc-notes et corrigez Wifi_ssid et Wifi_psk.
 
-GIF fournies : projet RPI2DMD et creations OrbitDMD (voir gif/A_PROPOS_DES_GIF.txt).
+GIF fournies : pack de GIF gratuit de base de la RpiTeaM (projet RPI2DMD) et creations
+OrbitDMD (voir gif/A_PROPOS_DES_GIF.txt). Pack de 11 000 animations : https://rpiteam.carrd.co/
 Licences : voir LICENCES.txt.

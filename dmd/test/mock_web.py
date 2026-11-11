@@ -19,6 +19,36 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 WEB = os.path.join(ROOT, 'dmd', 'web')
 CARTE = os.environ.get('ORBITDMD_CARTE', os.path.join(ROOT, 'carte-sd'))	# carte simulee (dossier)
 GIF_DIR = os.path.join(CARTE, 'gif')
+MARKS = os.path.join(CARTE, 'Config', 'gif-marques.txt')
+MESSAGES = os.path.join(CARTE, 'Config', 'messages.txt')
+MSG_NUMBERS = {'Texte_Active', 'Texte_Vitesse', 'Texte_Passages', 'Texte_Font_Size', 'Compte_Active',
+               'Compte_Display_Time', 'Compte_Font_Size'}
+
+
+def read_messages():
+    """messages.txt -> {'textes': [...], 'comptes': [...]} (meme format que le panneau)"""
+    out = {'textes': [], 'comptes': [], 'max_textes': 10, 'max_comptes': 10}
+    cur = None
+    if os.path.exists(MESSAGES):
+        for l in open(MESSAGES, encoding='utf-8'):
+            l = l.rstrip('\r\n')
+            if l in ('[texte]', '[compte]'):
+                cur = {}
+                out['textes' if l == '[texte]' else 'comptes'].append(cur)
+            elif '=' in l and cur is not None:
+                k, v = l.split('=', 1)
+                cur[k] = int(v) if k in MSG_NUMBERS else v
+    return out
+
+
+def read_marks(keep_case=False):
+    out = {}
+    if os.path.exists(MARKS):
+        for l in open(MARKS, encoding='utf-8'):
+            l = l.strip()
+            if l[:1] in '+-' and '/' in l:
+                out[l[1:] if keep_case else l[1:].lower()] = l[0]
+    return out
 CONFIG = os.path.join(CARTE, 'Config', 'config.txt')
 NAME_RE = re.compile(r'^[A-Za-z0-9_-]{1,32}$')
 START = time.time()
@@ -30,6 +60,15 @@ CLOCK_DEFAULTS = {'Clock_Format': '%H:%M:%S', 'Clock_Font': 'Pixel', 'Clock_Font
                   'Date_Active': '0', 'Date_Display_Time': '2500', 'Date_Format': '%a %d %b', 'Date_Font': 'Pixel',
                   'Date_Font_Size': '0', 'Date_Color': '01A7C5', 'Date_Font_Pattern': 'None'}
 CLOCK_NUMBERS = {'Clock_Font_Size', 'Clock_Blink', 'Clock_Smooth', 'Date_Active', 'Date_Display_Time', 'Date_Font_Size'}
+MESSAGE_DEFAULTS = {'Texte_Message': '', 'Texte_Font': 'Pixel', 'Texte_Font_Size': '0', 'Texte_Color': '01A7C5',
+                    'Texte_Vitesse': '4', 'Texte_Passages': '1', 'Texte_Active': '0', 'Texte_Every': '3',
+                    'Compte_Date': 'noel', 'Compte_Titre': 'NO\u00cbL DANS', 'Compte_Fin': 'JOYEUX NO\u00cbL !',
+                    'Compte_Font': 'Pixel', 'Compte_Font_Size': '0', 'Compte_Color': 'E53935',
+                    'Compte_Titre_Color': 'FFFFFF', 'Compte_Display_Time': '5000', 'Compte_Active': '0', 'Compte_Every': '3',
+                    'Gif_Ordre': 'hasard', 'Texte_Effet': 'defile', 'Texte_Font_Pattern': 'None',
+                    'Compte_Font_Pattern': 'None'}
+MESSAGE_NUMBERS = {'Texte_Font_Size', 'Texte_Vitesse', 'Texte_Passages', 'Texte_Active', 'Texte_Every',
+                   'Compte_Font_Size', 'Compte_Display_Time', 'Compte_Active', 'Compte_Every'}
 WEATHER_DEFAULTS = {'Weather_Active': '1', 'Weather_Display_Time': '5000', 'Weather_Every': '2', 'Weather_Place': '',
                     'Weather_Latitude': '', 'Weather_Longitude': '', 'Weather_Font': 'Pixel', 'Weather_Font_Size': '0',
                     'Weather_Font_Pattern': 'None', 'Weather_Text_color': 'FFAA00', 'Weather_Info': '1',
@@ -111,7 +150,7 @@ class Handler(BaseHTTPRequestHandler):
                     'heure': time.strftime('%Y-%m-%d %H:%M:%S'), 'source_heure': 'Internet',
                     'rafraichissement_hz': random.choice([172, 173, 175]), 'luminosite': 60,
                     'nb_gif': len(GIFS), 'memoire_libre_mo': 852, 'carte_libre_mo': 15071,
-                    'version': '1.0.0', 'temperature_c': 52, 'latence_ms': 6, 'latence_max_ms': 31, 'nom': 'OrbitDMD', 'wifi': 'Box-Maison', 'gif': gif,
+                    'version': '1.0.0', 'temperature_c': 52, 'latence_ms': 6, 'latence_max_ms': 31, 'nom': 'OrbitDMD', 'reseau': os.environ.get('ORBITDMD_RESEAU', 'wifi'), 'wifi': 'Box-Maison', 'gif': gif,
                     'pause': STATE['pause'], 'ecran_eteint': STATE['ecran_eteint'],
                     'synchro_s': int(time.time() - STATE['synchro']),
                     'meteo_temp': int(WEATHER['temp'] * 10), 'meteo_code': WEATHER['code'], 'meteo_jour': WEATHER['jour'],
@@ -123,21 +162,21 @@ class Handler(BaseHTTPRequestHandler):
             num = lambda k, d: int(kv.get(k, d))
             body = {'luminosite': [num('Panel_Brightness_%d' % h, 60) for h in range(24)],
                     'heure_actuelle': time.localtime().tm_hour,
-                    'Gif_Active': num('Gif_Active', 1), 'Gif_Min_Duration': num('Gif_Min_Duration', 4000),
+                    'Gif_Active': num('Gif_Active', 1), 'Gif_Min_Duration': num('Gif_Min_Duration', 4000), 'IP_Ecran': num('IP_Ecran', 10000),
                     'Clock_Active': num('Clock_Active', 1), 'Clock_Display_Time': num('Clock_Display_Time', 3000),
                     'Clock_TZ': kv.get('Clock_TZ', 'Europe/Paris'), 'Test_Pattern': num('Test_Pattern', 1),
                     'Panel_XSize': num('Panel_XSize', 64), 'Panel_YSize': num('Panel_YSize', 32),
                     'Panel_XNumber': num('Panel_XNumber', 2), 'Panel_YNumber': num('Panel_YNumber', 1),
                     'GPIO_Slowdown': num('GPIO_Slowdown', 2), 'RGB_Order': kv.get('RGB_Order', 'RGB'),
                     'PWM_Bits': num('PWM_Bits', 11), 'PWM_LSB_Nanoseconds': num('PWM_LSB_Nanoseconds', 130),
-                    'Network_name': kv.get('Network_name', 'OrbitDMD'), 'Wifi_ssid': 'Box-Maison',
+                    'Network_name': kv.get('Network_name', 'OrbitDMD'), 'Reseau': kv.get('Reseau', 'auto'), 'Wifi_ssid': 'Box-Maison',
                     'Wifi_country': kv.get('Wifi_country', 'FR'), 'wifi_psk_defini': True,
                     'redemarrage_en_attente': False,
                     'IP_Fixe': kv.get('IP_Fixe', ''), 'IP_Masque': kv.get('IP_Masque', ''),
                     'IP_Passerelle': kv.get('IP_Passerelle', ''), 'IP_DNS': kv.get('IP_DNS', ''),
                     'reseau_actuel': {'ip': '192.168.0.151', 'masque': '255.255.255.0',
                                       'passerelle': '192.168.0.1', 'dns': '192.168.0.1',
-                                      'mac': 'b8:27:eb:12:34:56', 'fixe': False},
+                                      'mac': 'b8:27:eb:12:34:56', 'fixe': False, 'cable': os.environ.get('ORBITDMD_RESEAU') == 'ethernet'},
                     'fuseaux': ['Europe/Paris', 'Europe/Brussels', 'Europe/London', 'UTC']}
             for k, d in CLOCK_DEFAULTS.items():
                 v = kv.get(k, d)
@@ -145,7 +184,14 @@ class Handler(BaseHTTPRequestHandler):
             for k, d in WEATHER_DEFAULTS.items():
                 v = kv.get(k, d)
                 body[k] = int(v) if k in WEATHER_NUMBERS else hexcolor(v) if 'olor' in k else v
+            utf8 = open(CONFIG, encoding='utf-8', errors='replace').read()
+            kvu = dict(re.findall(r'^([A-Za-z_0-9]+)=(.*?)\s*$', utf8, re.M))
+            for k, d in MESSAGE_DEFAULTS.items():
+                v = kvu.get(k, d)
+                body[k] = int(v) if k in MESSAGE_NUMBERS else v
             self.send(200, json.dumps(body).encode(), 'application/json')
+        elif url.path == '/api/messages':
+            self.send(200, json.dumps(read_messages()).encode(), 'application/json')
         elif url.path == '/api/meteo':
             self.send(200, json.dumps(WEATHER).encode(), 'application/json')
         elif url.path == '/api/ecran':
@@ -190,7 +236,22 @@ class Handler(BaseHTTPRequestHandler):
         elif url.path == '/api/horloge/apercu':
             # meme dessin que le panneau : banc de test PC (hosttest clock)
             raw = os.path.join(ROOT, 'dmd', 'test', 'out', 'apercu-%d.rgb' % threading.get_ident())
-            if q.get('ecran', [''])[0] == 'meteo':
+            ecran = q.get('ecran', [''])[0]
+            if ecran in ('texte', 'compte'):
+                # arguments dans un fichier UTF-8 (les accents passent mal en ligne de commande)
+                opts = raw + '.txt'
+                with open(opts, 'w', encoding='utf-8') as f:
+                    for k in MESSAGE_DEFAULTS:
+                        if k in q:
+                            f.write('%s=%s\n' % (k, q[k][0]))
+                when = 'fin' if 'fin' in q else time.strftime('%Y-%m-%d %H:%M:%S')
+                args = ['0' if ecran == 'texte' else when, '@' + opts]
+                if ecran == 'texte':
+                    args[0] = '126'		# debut du texte, 2 pixels apres le bord (128 - 126)
+                    if q.get('Texte_Effet', ['defile'])[0] not in ('defile', 'inverse'):
+                        args[0] = 'hold:1000'	# premiere page, arrivee
+                mode = ecran
+            elif q.get('ecran', [''])[0] == 'meteo':
                 args = ['%s=%s' % (k, q[k][0]) for k in WEATHER_DEFAULTS if k in q]
                 args += ['code=%s' % q.get('code', [WEATHER['code']])[0],
                          'jour=%s' % q.get('jour', ['1' if WEATHER['jour'] else '0'])[0],
@@ -236,9 +297,15 @@ class Handler(BaseHTTPRequestHandler):
             p = os.path.join(GIF_DIR, c)
             fl = []
             if NAME_RE.match(c) and os.path.isdir(p):
-                fl = [{'nom': f, 'taille': os.path.getsize(os.path.join(p, f))}
+                marks = read_marks()
+                fl = [{'nom': f, 'taille': os.path.getsize(os.path.join(p, f)),
+                       'marque': {'+': 'favori', '-': 'exclue'}.get(marks.get((c + '/' + f).lower()), '')}
                       for f in os.listdir(p) if f.lower().endswith('.gif')]
             self.send(200, json.dumps({'categorie': c, 'fichiers': fl}).encode(), 'application/json')
+        elif url.path.startswith('/essai/') and 'ORBITDMD_ESSAI' in os.environ:
+            # fichiers de test (dossier ORBITDMD_ESSAI), pour les essais automatiques
+            p = os.path.join(os.environ['ORBITDMD_ESSAI'], os.path.basename(urllib.parse.unquote(url.path)))
+            self.send(200 if os.path.isfile(p) else 404, open(p, 'rb').read() if os.path.isfile(p) else b'', 'application/octet-stream')
         elif url.path == '/gif/voir':
             c, f = q.get('c', [''])[0], q.get('f', [''])[0]
             p = os.path.join(GIF_DIR, c, f)
@@ -266,6 +333,58 @@ class Handler(BaseHTTPRequestHandler):
             elif act in ('eteindre', 'allumer'):
                 STATE['ecran_eteint'] = act == 'eteindre'
             reply = 'OK : (simulation) %s' % act
+        elif self.path == '/api/gif/ajouter' and 'ORBITDMD_CARTE' in os.environ:
+            # enregistre vraiment, seulement sur une carte d'essai (jamais carte-sd)
+            cat = field('categorie')
+            m = re.search(r'name="fichier"; filename="(.*?)"\r\n[^\r]*\r\n\r\n(.*)\r\n--', body, re.S)
+            name = re.sub(r'[^A-Za-z0-9_.-]', '_', re.sub(r'(?i)\.gif$', '', m.group(1)))[:96] + '.gif' if m else ''
+            dest = os.path.join(GIF_DIR, cat, name)
+            if not NAME_RE.match(cat) or not m:
+                reply = 'ERREUR : requete invalide'
+            elif not m.group(2).startswith(('GIF87a', 'GIF89a')):
+                reply = "ERREUR : %s n'est pas un fichier GIF" % name
+            elif os.path.exists(dest):
+                reply = 'ERREUR : %s existe deja dans %s' % (name, cat)
+            else:
+                os.makedirs(os.path.dirname(dest), exist_ok=True)
+                open(dest, 'wb').write(m.group(2).encode('latin-1'))
+                reply = 'OK : %s ajoutee dans %s' % (name, cat)
+        elif self.path == '/api/gif/marquer' and 'ORBITDMD_CARTE' in os.environ:
+            cat, nom, marque = field('categorie'), field('nom'), field('marque')
+            marks = read_marks(keep_case=True)
+            key = cat + '/' + nom
+            for k in [k for k in marks if k.lower() == key.lower()]:
+                del marks[k]
+            if marque in ('favori', 'exclue'):
+                marks[key] = '+' if marque == 'favori' else '-'
+            with open(MARKS, 'w', encoding='utf-8') as f:
+                for k in sorted(marks, key=str.lower):
+                    f.write(marks[k] + k + '\n')
+            reply = 'OK : %s %s' % (nom, marque)
+        elif self.path == '/api/messages' and 'ORBITDMD_CARTE' in os.environ:
+            m = re.search(r'name="fichier"; filename="[^"]*"\r\n[^\r]*\r\n\r\n(.*?)\r\n--', body, re.S)
+            text = m.group(1).encode('latin-1').decode('utf-8', 'replace') if m else ''
+            with open(MESSAGES, 'w', encoding='utf-8') as f:
+                f.write(text)
+            n = read_messages()
+            reply = 'OK : %d texte(s), %d compte(s) a rebours' % (len(n['textes']), len(n['comptes']))
+        elif self.path == '/api/sauvegarde':
+            text = open(CONFIG, encoding='utf-8', errors='replace').read()
+            if os.path.exists(MARKS):
+                text += '\n# ===== OrbitDMD : GIF favorites (+) et exclues (-) =====\n'
+                text += ''.join('#' + l for l in open(MARKS, encoding='utf-8'))
+            if os.path.exists(MESSAGES):
+                text += '\n# ===== OrbitDMD : messages =====\n'
+                text += ''.join('#' + l for l in open(MESSAGES, encoding='utf-8'))
+            self.send(200, text.encode('utf-8'), 'text/plain; charset=utf-8')
+            return
+        elif self.path == '/api/gif/marques/restaurer' and 'ORBITDMD_CARTE' in os.environ:
+            m = re.search(r'name="fichier"; filename="[^"]*"\r\n[^\r]*\r\n\r\n(.*?)\r\n--', body, re.S)
+            text = m.group(1).encode('latin-1').decode('utf-8', 'replace') if m else ''
+            lines = [l.strip() for l in text.split('\n') if l[:1] in '+-' and '/' in l]
+            with open(MARKS, 'w', encoding='utf-8') as f:
+                f.write(''.join(l + '\n' for l in lines))
+            reply = 'OK : %d GIF marquee(s)' % len(lines)
         elif self.path == '/api/heure/synchroniser':
             STATE['synchro'] = time.time()
             reply = 'OK : ecart=3'

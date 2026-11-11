@@ -13,7 +13,7 @@
 		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
 		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
 	</picture></a>
-	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/reglages" class="on">Réglages</a><a href="/systeme">Système</a></nav>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/messages">Messages</a><a href="/reglages" class="on">Réglages</a><a href="/systeme">Système</a></nav>
 	<div class="status">
 		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
 		<button class="btn sm" id="lock"></button>
@@ -71,6 +71,10 @@
 					<span class="with-suffix"><input class="input num" type="number" id="Gif_Min_Duration" min="1" max="60" step="1" data-ms> s</span></div>
 				<div class="form-row"><span class="lbl">Heure et date<span class="hint">Police, couleurs, fuseau horaire…</span></span>
 					<a class="btn sm" href="/horloge">Page Horloge</a></div>
+				<div class="form-row"><label for="Gif_Ordre">Ordre des GIF<span class="hint">Les favorites passent plus souvent au hasard</span></label>
+					<select class="input" id="Gif_Ordre"><option value="hasard">Au hasard</option><option value="ordre">Dans l'ordre (catégorie, puis nom)</option></select></div>
+				<div class="form-row"><label for="IP_Ecran">Adresse IP sur le panneau<span class="hint">Au démarrage et si elle change · 0 = jamais</span></label>
+					<span class="with-suffix"><input class="input num" type="number" id="IP_Ecran" min="0" max="60" step="1" data-ms> s</span></div>
 				<div class="form-row"><label for="Test_Pattern">Mire de test au démarrage</label>
 					<span class="switch"><input type="checkbox" id="Test_Pattern"></span></div>
 				<div class="card-foot"><button class="btn primary" data-save="card-display">Enregistrer</button></div>
@@ -81,6 +85,12 @@
 				<h2>Réseau</h2>
 				<div class="form-row"><label for="Network_name">Nom sur le réseau<span class="hint">Adresse de cette page</span></label>
 					<span class="with-suffix"><input class="input" type="text" id="Network_name" maxlength="31" style="width:130px">.local</span></div>
+				<div class="form-row"><label for="Reseau">Connexion<span class="hint" id="net-now"></span></label>
+					<select class="input" id="Reseau" style="min-width:170px">
+						<option value="auto">Automatique</option>
+						<option value="wifi">Wi-Fi</option>
+						<option value="ethernet">Câble réseau</option>
+					</select></div>
 				<div class="form-row"><label for="Wifi_ssid">Réseau Wi-Fi</label>
 					<input class="input" type="text" id="Wifi_ssid" maxlength="32" autocomplete="off"></div>
 				<div class="form-row"><label for="Wifi_psk">Mot de passe Wi-Fi<span class="hint">Laissez vide pour le garder</span></label>
@@ -101,7 +111,8 @@
 					<p class="note" style="margin:8px 0 0">Conseil : dans votre box, réservez cette adresse pour le panneau
 						(adresse MAC <b id="mac">—</b>), pour qu'elle ne soit jamais donnée à un autre appareil.</p>
 				</div>
-				<p class="note" style="margin:8px 0 0">Après un changement de Wi-Fi ou d'adresse, le panneau redémarre. S'il n'est pas joignable en 2 min 30, il revient tout seul aux anciens réglages.</p>
+				<p class="note" style="margin:8px 0 0">Le câble est choisi au démarrage : après l'avoir branché ou débranché, redémarrez le panneau.
+					Après un changement de connexion, de Wi-Fi ou d'adresse, le panneau redémarre. S'il n'est pas joignable en 2 min 30, il revient tout seul aux anciens réglages.</p>
 				<div class="card-foot"><button class="btn primary" data-save="card-network">Enregistrer</button></div>
 			</section>
 
@@ -179,6 +190,7 @@ async function load () {
 	const net = settings.reseau_actuel || {};
 	$("#ip-now").textContent = net.ip ? "Actuellement " + net.ip + (net.fixe ? " (fixe)" : " (donnée par la box)") : "Wi-Fi non connecté";
 	$("#mac").textContent = net.mac || "—";
+	$("#net-now").textContent = "Automatique : câble s'il est branché, sinon Wi-Fi" + (net.ip ? (net.cable ? " · actuellement par câble" : " · actuellement en Wi-Fi") : "");
 	$("#ip-mode").value = settings.IP_Fixe ? "fixe" : "auto";
 	showIPFields();
 	$("#pending").hidden = !settings.redemarrage_en_attente;

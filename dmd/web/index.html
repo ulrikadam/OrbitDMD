@@ -13,7 +13,7 @@
 		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
 		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
 	</picture></a>
-	<nav class="tabs"><a href="/" class="on">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
+	<nav class="tabs"><a href="/" class="on">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/messages">Messages</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
 	<div class="status">
 		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
 		<button class="btn sm" id="lock"></button>
@@ -27,6 +27,7 @@
 			<p class="sub">Ce qui se passe sur le panneau, en direct.</p>
 		</div>
 	</div>
+	<div id="update-banner" hidden></div>
 
 	<div class="stack">
 		<section class="card now">
@@ -89,7 +90,7 @@
 				<div class="big" style="font-size:22px" id="host">—</div>
 				<dl class="kv">
 					<dt>Adresse IP</dt><dd id="ip">—</dd>
-					<dt>Wi-Fi</dt><dd id="wifi">—</dd>
+					<dt id="wifi-lbl">Wi-Fi</dt><dd id="wifi">—</dd>
 				</dl>
 			</section>
 
@@ -258,7 +259,9 @@ document.addEventListener("etat", e => {
 	uptimeBase = s.uptime_s; uptimeAt = Date.now();
 	set("host", s.nom + ".local");
 	set("ip", s.ip);
-	set("wifi", s.wifi || "—");
+	const cable = s.reseau === "ethernet";
+	set("wifi-lbl", cable ? "Connexion" : "Wi-Fi");
+	set("wifi", cable ? "Câble réseau" : s.wifi || "—");
 	set("version", s.programme);
 	if (s.version) { set("numero", s.version); set("numero2", s.version); }
 	tick();

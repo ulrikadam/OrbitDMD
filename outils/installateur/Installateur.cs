@@ -46,6 +46,7 @@ namespace OrbitDMD
 		public int Largeur = 64, Hauteur = 32, Chaine = 2, Parallele = 1, Ralentissement = 2;
 		public string OrdreCouleurs = "RGB";
 		public int LumJour = 60, LumNuit = 20, NuitDebut = 23, NuitFin = 7;
+		public string Connexion = "auto";		// auto (cable s'il est branche, sinon Wi-Fi), wifi ou ethernet
 		public string Ssid = "", Psk = "", Pays = "FR";
 		public bool IpFixe = false;
 		public string Ip = "", Masque = "", Passerelle = "", Dns = "";
@@ -86,6 +87,13 @@ namespace OrbitDMD
 		public static string Ssid (string s) =>
 			s.Length >= 1 && s.Length <= 32 && Imprimable (s) && s.Trim () == s ? null
 			: "Nom du réseau Wi-Fi : 1 à 32 caractères, sans accent ni guillemet.";
+
+		public static string Wifi (string connexion, string ssid, string psk)
+		{
+			if (connexion != "auto" && connexion != "wifi" && connexion != "ethernet") return "Connexion : auto, wifi ou ethernet.";
+			if (connexion == "ethernet" && psk.Length == 0) return null;	// pas de Wi-Fi de secours
+			return Ssid (ssid) ?? Psk (psk);
+		}
 
 		public static string Psk (string s) =>
 			s.Length >= 8 && s.Length <= 63 && Imprimable (s) && s.Trim () == s ? null
@@ -167,6 +175,7 @@ namespace OrbitDMD
 			L ("");
 			L ("# Reseau (le mot de passe Wi-Fi n'est enregistre que sur cette carte)");
 			L ("Network_name=" + r.Nom);
+			L ("Reseau=" + r.Connexion);
 			L ("Wifi_ssid=" + r.Ssid);
 			L ("Wifi_psk=" + r.Psk);
 			L ("Wifi_country=" + r.Pays);
@@ -181,6 +190,7 @@ namespace OrbitDMD
 			L ("# GIF (une categorie = un dossier de gif/)");
 			L ("Gif_Active=1");
 			L ("Gif_Min_Duration=4000");
+			L ("IP_Ecran=10000");
 			for (int i = 0; i < categories.Count && i < 20; i++) L ("Gif_Cat_" + (i + 1) + "=" + categories[i]);
 			L ("");
 			L ("# Horloge");
@@ -535,7 +545,7 @@ namespace OrbitDMD
 		readonly string m_DossierEssai;		// /dossier: : ecrire dans ce dossier au lieu d'une carte
 		readonly Reponses R = new Reponses ();
 		readonly List<Panel> m_Pages = new List<Panel> ();
-		readonly string[] m_Titres = { "Bienvenue", "Les panneaux", "Le Wi-Fi", "Accès, heure et météo", "La carte SD", "Création de la carte" };
+		readonly string[] m_Titres = { "Bienvenue", "Les panneaux", "La connexion", "Accès, heure et météo", "La carte SD", "Création de la carte" };
 		int m_Page;
 
 		Label m_Etape, m_TitrePage;
@@ -546,7 +556,7 @@ namespace OrbitDMD
 		TextBox tNom, tPsk, tMdp1, tMdp2, tIp, tMasque, tPasserelle, tDns, tVille, tDossierGif;
 		ComboBox cPreset, cLargeur, cHauteur, cOrdre, cSsid, cPays, cFuseau, cDisque;
 		NumericUpDown nChaine, nParallele, nRalenti, nLumJour, nLumNuit, nNuitDebut, nNuitFin;
-		RadioButton rAuto, rFixe;
+		RadioButton rAuto, rFixe, rConnAuto, rConnWifi, rConnCable;
 		ListBox lVilles;
 		Label lLieu, lGif, lDisqueInfo, lAdresse;
 		CheckBox kEffacer;
@@ -697,7 +707,7 @@ namespace OrbitDMD
 				"OrbitDMD affiche vos GIF, l'heure et la météo, et se règle depuis une page web, sans Linux."));
 			Large (t, Texte ("Il vous faut :\n" +
 				"  •  une carte micro-SD (32 Go ou moins conseillé) et un lecteur de carte ;\n" +
-				"  •  le nom et le mot de passe de votre Wi-Fi ;\n" +
+				"  •  le nom et le mot de passe de votre Wi-Fi, ou un câble réseau ;\n" +
 				"  •  un Raspberry Pi 3 avec une carte adaptatrice HUB75 (brochage « regular »)."));
 			Large (t, Texte ("Attention : tout le contenu de la carte choisie sera effacé.", gris: false));
 			if (m_DossierEssai != null)
@@ -779,8 +789,15 @@ namespace OrbitDMD
 		Panel PageWifi ()
 		{
 			var t = Grille ();
-			Large (t, Texte ("Le panneau se connecte à votre Wi-Fi (2,4 GHz : le Raspberry Pi 3 ne voit pas le 5 GHz). " +
-				"Le mot de passe n'est enregistré que sur la carte.", gris: true));
+			Large (t, Texte ("Le panneau se connecte par câble réseau ou par Wi-Fi (2,4 GHz : le Raspberry Pi 3 ne voit pas le 5 GHz). " +
+				"Le mot de passe Wi-Fi n'est enregistré que sur la carte.", gris: true));
+
+			rConnAuto = new RadioButton { Text = "Automatique : câble s'il est branché au démarrage, sinon Wi-Fi — conseillé", AutoSize = true, Checked = true };
+			rConnWifi = new RadioButton { Text = "Wi-Fi seulement (démarrage un peu plus rapide)", AutoSize = true };
+			rConnCable = new RadioButton { Text = "Câble réseau seulement (Wi-Fi facultatif)", AutoSize = true };
+			var fConn = new FlowLayoutPanel { AutoSize = true, FlowDirection = FlowDirection.TopDown, Margin = new Padding (0), WrapContents = false };
+			fConn.Controls.AddRange (new Control[] { rConnAuto, rConnWifi, rConnCable });
+			Ligne (t, "Connexion", fConn);
 
 			cSsid = Liste (260, true);
 			cSsid.Items.AddRange (Systeme.ReseauxWifi ().Cast<object> ().ToArray ());
@@ -919,8 +936,9 @@ namespace OrbitDMD
 			}
 			var fFournies = new FlowLayoutPanel { AutoSize = true, FlowDirection = FlowDirection.TopDown, WrapContents = false, Margin = new Padding (0) };
 			fFournies.Controls.Add (kFournies);
-			fFournies.Controls.Add (new Label { Text = "Animations du projet RPI2DMD (RpiTe@m, pixel art de RattenJager et d'autres) et créations OrbitDMD. " +
-				"Détails sur la carte : gif/A_PROPOS_DES_GIF.txt. Les catégories cochées sont copiées et affichées.",
+			fFournies.Controls.Add (new Label { Text = "Pack de GIF animées gratuit de base de la RpiTeaM (projet RPI2DMD), intégré avec l'accord d'eLLuiGi, " +
+				"et créations OrbitDMD. Les catégories cochées sont copiées et affichées. " +
+				"Pack de 11 000 animations : rpiteam.carrd.co ou le forum Neo-Arcadia.",
 				AutoSize = true, MaximumSize = Z (380, 0), ForeColor = Gris, Font = new Font ("Segoe UI", 8.5f) });
 			Ligne (t, "GIF fournies", fFournies);
 
@@ -1048,7 +1066,9 @@ namespace OrbitDMD
 
 			case 2:
 				string ssid = cSsid.Text, psk = tPsk.Text;
-				if ((e = Regles.Ssid (ssid)) != null || (e = Regles.Psk (psk)) != null) return e;
+				R.Connexion = rConnCable.Checked ? "ethernet" : rConnWifi.Checked ? "wifi" : "auto";
+				if ((e = Regles.Wifi (R.Connexion, ssid, psk)) != null) return e;
+				if (R.Connexion == "ethernet" && psk.Length == 0) ssid = "";	// cable seul, sans Wi-Fi
 				R.Ssid = ssid;
 				R.Psk = psk;
 				R.Pays = Carte.Pays[cPays.SelectedIndex][0];
@@ -1191,7 +1211,7 @@ namespace OrbitDMD
 				return;
 			}
 			Journal ("1. Éjectez la carte (bouton ci-dessous) et mettez-la dans le Raspberry Pi 3.");
-			Journal ("2. Branchez l'alimentation : l'écran de démarrage s'affiche pendant la connexion au Wi-Fi.");
+			Journal ("2. Branchez l'alimentation : l'écran de démarrage s'affiche pendant la connexion au réseau.");
 			Journal ("3. Après une trentaine de secondes, ouvrez http://" + R.Nom.ToLowerInvariant () + ".local/");
 			Journal ("   (sinon, cherchez l'adresse du panneau dans la page de votre box).");
 			bEjecter.Visible = bOuvrir.Visible = true;
@@ -1309,7 +1329,7 @@ namespace OrbitDMD
 				try
 				{
 					Reponses r = Reponses.Lire (auto);
-					string e = Regles.Nom (r.Nom) ?? Regles.Ssid (r.Ssid) ?? Regles.Psk (r.Psk) ?? Regles.MotDePasse (r.MotDePasse)
+					string e = Regles.Nom (r.Nom) ?? Regles.Wifi (r.Connexion, r.Ssid, r.Psk) ?? Regles.MotDePasse (r.MotDePasse)
 						?? (r.IpFixe ? Regles.AdresseFixe (r.Ip, r.Masque, r.Passerelle, r.Dns) : null);
 					if (e != null) throw new Exception (e);
 					Directory.CreateDirectory (dossier);

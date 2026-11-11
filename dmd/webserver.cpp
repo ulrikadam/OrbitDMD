@@ -6,6 +6,8 @@
 #include "clock.h"
 #include "fileutil.h"
 #include "gifmanager.h"
+#include "gifmarks.h"
+#include "messages.h"
 #include "settings.h"
 #include "webfiles.h"		// s_WebFiles, genere depuis web/ par outils/web2h.py
 #include "latency.h"
@@ -107,6 +109,33 @@ static boolean HasNonEmptyKey (const u8 *pData, unsigned nLength, const char *pK
 			i++;
 		}
 		i++;
+	}
+
+	return FALSE;
+}
+
+// une ligne "Cle=valeur" (valeur sans tenir compte des majuscules) est-elle dans le texte ?
+static boolean HasValue (const u8 *pData, unsigned nLength, const char *pKey, const char *pValue)
+{
+	size_t nKeyLength = strlen (pKey), nValueLength = strlen (pValue);
+	unsigned i = 0;
+	while (i < nLength)
+	{
+		unsigned nEnd = i;
+		while (nEnd < nLength && pData[nEnd] != '\n')
+		{
+			nEnd++;
+		}
+		unsigned nLine = nEnd > i && pData[nEnd - 1] == '\r' ? nEnd - 1 - i : nEnd - i;
+
+		if (   nLine == nKeyLength + nValueLength
+		    && memcmp (pData + i, pKey, nKeyLength) == 0
+		    && strncasecmp ((const char *) pData + i + nKeyLength, pValue, nValueLength) == 0)
+		{
+			return TRUE;
+		}
+
+		i = nEnd + 1;
 	}
 
 	return FALSE;
@@ -271,6 +300,14 @@ THTTPStatus CWebServer::GetContent (const char  *pPath,
 		{
 			delete pForm;
 			CSettings::BuildJSON (m_pConfig, &Content);
+			*ppContentType = "application/json";
+		}
+		// GET /api/messages : listes de la page Messages, sans mot de passe
+		else if (   strcmp (pPath, "/api/messages") == 0
+			 && pForm->pPassword == 0 && pForm->pFile == 0 && pForm->nFields == 0)
+		{
+			delete pForm;
+			CMessages::BuildJSON (&Content);
 			*ppContentType = "application/json";
 		}
 		else if (!CheckPassword (pForm->pPassword, pForm->nPasswordLength))
@@ -454,6 +491,80 @@ THTTPStatus CWebServer::HandlePost (const char *pPath, const TForm &rForm,
 	{
 		CGifManager::SetActiveCategories (m_pConfig, rForm.Active, pReply);
 	}
+	// sauvegarde des reglages (page Systeme) : config.txt, puis les GIF marquees en commentaires
+	// (le fichier reste un config.txt valable) ; contient les mots de passe : protege
+	else if (strcmp (pPath, "/api/sauvegarde") == 0)
+	{
+		char *pConfig = new char[MAX_CONFIG_SIZE + 1];
+		unsigned nLength = MAX_CONFIG_SIZE;
+		if (pConfig == 0 || !ReadWholeFile (CONFIG_FILE, pConfig, &nLength))
+		{
+			delete [] pConfig;
+			*pReply = "ERREUR : lecture de config.txt impossible\n";
+			return HTTPOK;
+		}
+		pConfig[nLength] = '\0';
+		*pReply = pConfig;
+		delete [] pConfig;
+
+		CString Marks;
+		CGifMarks::Export (&Marks);
+		if (Marks.GetLength () > 0)
+		{
+			pReply->Append ("\n" BACKUP_MARKS_HEADER "\n");
+			for (const char *p = Marks; *p != '\0'; p++)
+			{
+				if (p == (const char *) Marks || p[-1] == '\n')
+				{
+					pReply->Append ('#');
+				}
+				pReply->Append (*p);
+			}
+		}
+		CString Messages;
+		CMessages::Export (&Messages);
+		if (Messages.GetLength () > 0)
+		{
+			pReply->Append ("\n" BACKUP_MESSAGES_HEADER "\n");
+			for (const char *p = Messages; *p != '\0'; p++)
+			{
+				if (p == (const char *) Messages || p[-1] == '\n')
+				{
+					pReply->Append ('#');
+				}
+				pReply->Append (*p);
+			}
+		}
+		CLogger::Get ()->Write (From, LogNotice, "Sauvegarde des reglages telechargee");
+	}
+	// restauration (page Systeme) : GIF favorites et exclues, lignes "+Cat/nom.gif" / "-Cat/nom.gif"
+	else if (strcmp (pPath, "/api/gif/marques/restaurer") == 0)
+	{
+		if (rForm.pFile == 0 || rForm.nFileLength > CGifMarks::MaxMarks * 140)
+		{
+			*pReply = "ERREUR : liste absente ou trop longue\n";
+			return HTTPOK;
+		}
+		char *pText = new char[rForm.nFileLength + 1];
+		memcpy (pText, rForm.pFile, rForm.nFileLength);
+		pText[rForm.nFileLength] = '\0';
+		unsigned nRead = CGifMarks::Import (pText, TRUE);
+		delete [] pText;
+		CRemoteControl::Get ()->RequestReload ();
+		pReply->Format ("OK : %u GIF marquee(s)\n", nRead);
+	}
+	else if (strcmp (pPath, "/api/gif/marquer") == 0)
+	{
+		const char *pMark = "";
+		for (unsigned i = 0; i < rForm.nFields; i++)
+		{
+			if (strcmp (rForm.FieldName[i], "marque") == 0)
+			{
+				pMark = rForm.FieldValue[i];
+			}
+		}
+		CGifManager::SetMark (rForm.Category, rForm.Name, pMark, pReply);
+	}
 	else if (strcmp (pPath, "/api/gif/categorie/supprimer") == 0)
 	{
 		CGifManager::DeleteCategory (m_pConfig, rForm.Category, pReply);
@@ -493,6 +604,52 @@ THTTPStatus CWebServer::HandlePost (const char *pPath, const TForm &rForm,
 	{
 		CRemoteControl::Get ()->RequestPlay (CLOCK_PLAY_REQUEST);
 		*pReply = "OK : l'heure s'affiche sur le panneau\n";
+	}
+	else if (   strcmp (pPath, "/api/texte/montrer") == 0
+		 || strcmp (pPath, "/api/compte/montrer") == 0)
+	{
+		boolean bText = strcmp (pPath, "/api/texte/montrer") == 0;
+		unsigned nIndex = 0;
+		for (unsigned i = 0; i < rForm.nFields; i++)
+		{
+			if (strcmp (rForm.FieldName[i], "numero") == 0)
+			{
+				nIndex = (unsigned) atoi (rForm.FieldValue[i]);
+			}
+		}
+		if (nIndex >= (bText ? CMessages::s_nTexts : CMessages::s_nCountdowns))
+		{
+			*pReply = "ERREUR : enregistrez d'abord la liste\n";
+		}
+		else
+		{
+			CString Request;
+			Request.Format ("%s:%u", bText ? BANNER_PLAY_REQUEST : COUNTDOWN_PLAY_REQUEST, nIndex);
+			CRemoteControl::Get ()->RequestPlay (Request);
+			*pReply = bText ? "OK : le texte s'affiche sur le panneau\n"
+					: "OK : le compte a rebours s'affiche sur le panneau\n";
+		}
+	}
+	// listes de la page Messages : fichier messages.txt complet (voir messages.h)
+	else if (strcmp (pPath, "/api/messages") == 0)
+	{
+		if (rForm.pFile == 0 || rForm.nFileLength > MESSAGES_MAX_SIZE)
+		{
+			*pReply = "ERREUR : liste absente ou trop longue\n";
+			return HTTPOK;
+		}
+		char *pText = new char[rForm.nFileLength + 1];
+		memcpy (pText, rForm.pFile, rForm.nFileLength);
+		pText[rForm.nFileLength] = '\0';
+		CMessages::Parse (pText);
+		delete [] pText;
+		if (!CMessages::Save ())
+		{
+			*pReply = "ERREUR : ecriture sur la carte impossible\n";
+			return HTTPOK;
+		}
+		pReply->Format ("OK : %u texte(s), %u compte(s) a rebours\n",
+				CMessages::s_nTexts, CMessages::s_nCountdowns);
 	}
 	else if (strcmp (pPath, "/api/horloge/ajouter") == 0)
 	{
@@ -545,9 +702,11 @@ THTTPStatus CWebServer::HandlePost (const char *pPath, const TForm &rForm,
 			}
 			// sans ces deux reglages, le panneau ne serait plus joignable a distance
 			if (   !HasNonEmptyKey (pFile, nFileLength, "Web_Password=")
-			    || !HasNonEmptyKey (pFile, nFileLength, "Wifi_ssid="))
+			    || (   !HasNonEmptyKey (pFile, nFileLength, "Wifi_ssid=")
+				&& !HasValue (pFile, nFileLength, "Reseau=", "ethernet")))
 			{
-				*pReply = "ERREUR : config.txt doit contenir Wifi_ssid et Web_Password\n";
+				*pReply = "ERREUR : config.txt doit contenir Web_Password et Wifi_ssid "
+					  "(ou Reseau=ethernet)\n";
 				return HTTPOK;
 			}
 			Request = RemoteConfig;
@@ -767,6 +926,13 @@ boolean CWebServer::RenderClockPreview (const char *pParams, u8 *pBuffer, unsign
 		"Weather_Font", "Weather_Font_Size", "Weather_Font_Pattern", "Weather_Text_color",
 		"Weather_Info", "Weather_Info_Color", "Weather_Icon", "Weather_Animate"
 	};
+	static const char *MessageKeys[] =
+	{
+		"Texte_Message", "Texte_Font", "Texte_Font_Size", "Texte_Color", "Texte_Font_Pattern",
+		"Texte_Effet", "Compte_Font_Pattern", "Compte_Date",
+		"Compte_Titre", "Compte_Fin", "Compte_Font", "Compte_Font_Size", "Compte_Color",
+		"Compte_Titre_Color"
+	};
 	static CClockRenderer *s_pRenderer = 0;		// un seul, garde (polices en memoire)
 	static CCanvas *s_pCanvas = 0;
 	static boolean s_bBusy = FALSE;
@@ -792,6 +958,24 @@ boolean CWebServer::RenderClockPreview (const char *pParams, u8 *pBuffer, unsign
 	boolean bScreen = GetParam (pParams, "ecran", Screen, sizeof Screen);
 	boolean bDateScreen = bScreen && strcmp (Screen, "date") == 0;
 	boolean bWeatherScreen = bScreen && strcmp (Screen, "meteo") == 0;
+	boolean bBannerScreen = bScreen && strcmp (Screen, "texte") == 0;
+	boolean bCountdownScreen = bScreen && strcmp (Screen, "compte") == 0;
+
+	// page Messages : reglages en cours de la page
+	TBannerStyle Banner = m_pConfig->Banner;
+	TCountdownStyle Countdown = m_pConfig->Countdown;
+	if (bBannerScreen || bCountdownScreen)
+	{
+		for (unsigned i = 0; i < sizeof MessageKeys / sizeof MessageKeys[0]; i++)
+		{
+			char Value[BANNER_TEXT_LEN];
+			if (GetParam (pParams, MessageKeys[i], Value, sizeof Value))
+			{
+				SetBannerStyleValue (&Banner, MessageKeys[i], Value);
+				SetCountdownStyleValue (&Countdown, MessageKeys[i], Value);
+			}
+		}
+	}
 
 	// meteo : reglages de la page, et meteo actuelle (ou exemple : &code=61&jour=0)
 	TWeatherStyle WeatherStyle = m_pConfig->WeatherStyle;
@@ -848,8 +1032,49 @@ boolean CWebServer::RenderClockPreview (const char *pParams, u8 *pBuffer, unsign
 		s_pRenderer->PrepareWeather (WeatherStyle);
 		s_pRenderer->RenderWeather (WeatherStyle, Weather, nMillis, s_pCanvas);
 	}
+	else if (bBannerScreen)
+	{
+		// debut du texte, deux pixels apres le bord gauche
+		boolean bPixel = strcasecmp (Banner.Style.Font, CLOCK_FONT_PIXEL) == 0;
+		char Text[BANNER_TEXT_LEN];
+		TextToLatin1 (Banner.Text[0] != '\0' ? Banner.Text : "Votre texte ici", Text, sizeof Text, bPixel);
+		s_pRenderer->PrepareText (Banner.Style);
+		if (IsPagedEffect (Banner.Effect))
+		{
+			char Pages[2][BANNER_TEXT_LEN];			// la premiere page, au repos
+			s_pRenderer->FitPages (&Banner.Style, Text);
+			if (s_pRenderer->SplitPages (Banner.Style, Text, Pages, 2) == 0)
+			{
+				Pages[0][0] = '\0';
+			}
+			s_pRenderer->RenderPage (Banner.Style, Pages[0], Banner.Effect,
+						 CClockRenderer::PageHold, 1000, nMillis, s_pCanvas);
+		}
+		else
+		{
+			s_pRenderer->RenderScroll (Banner.Style, Text, 2, nMillis, s_pCanvas);
+		}
+	}
+	else if (bCountdownScreen)
+	{
+		boolean bPixel = strcasecmp (Countdown.Style.Font, CLOCK_FONT_PIXEL) == 0;
+		char Value[32], Latin[32], Title[COUNTDOWN_TITLE_LEN], Done[COUNTDOWN_TITLE_LEN];
+		TCountdownState State = FormatCountdown (Countdown.Target, Time, Value, sizeof Value);
+		char Fin[4];
+		if (GetParam (pParams, "fin", Fin, sizeof Fin))
+		{
+			State = CountdownReached;		// apercu du jour J
+		}
+		TextToLatin1 (Countdown.Title, Title, sizeof Title, TRUE);
+		TextToLatin1 (Countdown.Done, Done, sizeof Done, bPixel);
+		TextToLatin1 (State == CountdownRunning ? Value : "DATE PASSEE", Latin, sizeof Latin, bPixel);
+		s_pRenderer->PrepareText (Countdown.Style);
+		if (State == CountdownReached)	s_pRenderer->RenderCountdown (Countdown, "", Done, nMillis, s_pCanvas);
+		else				s_pRenderer->RenderCountdown (Countdown, Title, Latin, nMillis, s_pCanvas);
+	}
 	else
 	{
+		CClockRenderer::PickRandom (&Style, (u32) CTimer::GetClockTicks64 () * 2654435761U);
 		s_pRenderer->Prepare (Style);
 		s_pRenderer->Render (Style, Time, nMillis, TRUE, bDateScreen, s_pCanvas);
 	}
@@ -1197,6 +1422,8 @@ void CWebServer::BuildStatusJSON (CString *pJSON)
 
 	pJSON->Append ("\"nom\":\"");
 	AppendEscaped (pJSON, m_pConfig->NetworkName, TRUE);
+	CNetwork *pNetwork = CNetwork::Get ();
+	pJSON->Append (pNetwork != 0 && pNetwork->IsEthernet () ? "\",\"reseau\":\"ethernet" : "\",\"reseau\":\"wifi");
 	pJSON->Append ("\",\"wifi\":\"");
 	AppendEscaped (pJSON, m_pConfig->WifiSSID, TRUE);
 	pJSON->Append ("\",\"gif\":\"");

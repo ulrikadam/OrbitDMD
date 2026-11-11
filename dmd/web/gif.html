@@ -13,7 +13,7 @@
 		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
 		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
 	</picture></a>
-	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif" class="on">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif" class="on">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/messages">Messages</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
 	<div class="status">
 		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
 		<button class="btn sm" id="lock"></button>
@@ -37,8 +37,11 @@
 				<input class="input" id="newcat" placeholder="Nouvelle catégorie" maxlength="32" aria-label="Nom de la nouvelle catégorie">
 				<button class="btn" type="submit">Créer</button>
 			</form>
-			<p class="small muted" style="margin:14px 2px 0">Les GIF fournies avec OrbitDMD viennent pour la plupart du projet RPI2DMD
-				(RpiTe@m, pixel art de RattenJager et d'autres). Merci à leurs auteurs.</p>
+			<p class="small muted" style="margin:14px 2px 0">OrbitDMD intègre le pack de GIF animées gratuit de base de la
+				<b>RpiTeaM</b> (projet RPI2DMD), avec l'accord d'eLLuiGi. Merci à eux !
+				Un pack de <b>11 000 animations</b> est disponible
+				<a href="https://www.neo-arcadia.com/forum/viewtopic.php?t=67065" target="_blank" rel="noopener">sur Neo-Arcadia</a> ou sur
+				<a href="https://rpiteam.carrd.co/" target="_blank" rel="noopener">rpiteam.carrd.co</a>.</p>
 		</aside>
 
 		<section>
@@ -58,10 +61,38 @@
 						<button class="btn danger" id="delcat" title="Supprimer cette catégorie et toutes ses GIF"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Supprimer la catégorie</button>
 					</div>
 					<label class="drop" id="drop" style="margin-top:14px">
-						<input type="file" id="files" accept=".gif,image/gif" multiple>
+						<input type="file" id="files" accept=".gif,image/gif,.zip,application/zip" multiple>
 						<svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-						<span><b>Ajouter des GIF</b> : glissez-les ici ou cliquez (128×32 idéalement)</span>
+						<span><b>Ajouter des GIF</b> : glissez ici des GIF, un dossier entier ou un fichier .zip, ou cliquez (128×32 idéalement)</span>
 					</label>
+					<div class="row small muted" style="margin-top:8px">
+						<span>Beaucoup de GIF dans des sous-dossiers ?</span>
+						<label class="btn sm" for="folder">Choisir un dossier</label>
+						<input type="file" id="folder" webkitdirectory multiple hidden>
+					</div>
+					<div class="bulk" id="bulk" hidden>
+						<div id="bulk-plan">
+							<div class="bulk-title" id="bulk-sum"></div>
+							<div class="row small" id="bulk-mode-row" style="gap:16px;margin:8px 0">
+								<label class="row" style="gap:6px"><input type="radio" name="bulk-mode" value="dossiers" checked>Un dossier = une catégorie</label>
+								<label class="row" style="gap:6px"><input type="radio" name="bulk-mode" value="ici">Tout dans <b id="bulk-cur"></b></label>
+							</div>
+							<ul class="bulk-list small" id="bulk-list"></ul>
+							<div class="small muted" id="bulk-warn"></div>
+							<div class="row" style="justify-content:flex-end;margin-top:10px">
+								<button class="btn" id="bulk-cancel">Annuler</button>
+								<button class="btn primary" id="bulk-go">Envoyer</button>
+							</div>
+						</div>
+						<div id="bulk-run" hidden>
+							<div class="bulk-title" id="bulk-state"></div>
+							<div class="bar"><span id="bulk-bar"></span></div>
+							<div class="row small muted" style="margin-top:6px">
+								<span id="bulk-detail"></span><span class="spacer"></span>
+								<button class="btn sm" id="bulk-stop">Arrêter</button>
+							</div>
+						</div>
+					</div>
 					<div class="note" id="splash-note" hidden>
 						<b>Écrans d'accueil.</b> Une GIF dont le nom contient « demarrage » tourne pendant la connexion Wi-Fi ;
 						« noel » ne sert qu'en décembre, « halloween » qu'en octobre ; les autres sont tirées au hasard.
@@ -82,6 +113,8 @@
 "use strict";
 let cats = [], cur = null, files = [];
 const ICON_PLAY = '<svg class="i" viewBox="0 0 24 24"><path d="M7 5v14l11-7z" fill="currentColor"/></svg>';
+const ICON_STAR = '<svg class="i" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>';
+const ICON_HIDE = '<svg class="i" viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.5"/><path d="M4 4l16 16"/></svg>';
 const ICON_DEL = '<svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>';
 
 function byName (a, b) { return a.nom.localeCompare(b.nom, "fr", { sensitivity: "base" }); }
@@ -269,14 +302,16 @@ async function openCat (name) {
 function renderFiles () {
 	const q = $("#filter").value.toLowerCase();
 	const list = files.filter(x => x.nom.toLowerCase().includes(q));
-	$("#dcount").textContent = files.length + " GIF" + (q ? " · " + list.length + " affichée(s)" : "");
+	const nFav = files.filter(x => x.marque === "favori").length, nOut = files.filter(x => x.marque === "exclue").length;
+	$("#dcount").textContent = files.length + " GIF" + (nFav ? " · " + nFav + " favorite(s)" : "") +
+		(nOut ? " · " + nOut + " hors rotation" : "") + (q ? " · " + list.length + " affichée(s)" : "");
 	$("#noresult").hidden = list.length > 0;
 	const g = $("#grid");
 	g.textContent = "";
 	thumbReset();
 	for (const x of list) {
 		const card = document.createElement("div");
-		card.className = "thumb";
+		card.className = "thumb" + (x.marque === "exclue" ? " out" : "") + (x.marque === "favori" ? " fav" : "");
 
 		const led = document.createElement("div");
 		led.className = "led small";
@@ -310,11 +345,36 @@ function renderFiles () {
 		del.title = "Supprimer de la carte SD";
 		del.setAttribute("aria-label", "Supprimer " + x.nom);
 		del.onclick = () => removeGif(x);
-		row.append(size, play, del);
+		const fav = document.createElement("button");
+		fav.className = "btn sm icon" + (x.marque === "favori" ? " on-fav" : "");
+		fav.innerHTML = ICON_STAR;
+		fav.title = x.marque === "favori" ? "Favorite : passe plus souvent (cliquer pour enlever)" : "Mettre en favori : passe plus souvent";
+		fav.setAttribute("aria-label", fav.title);
+		fav.setAttribute("aria-pressed", x.marque === "favori");
+		fav.onclick = () => markGif(x, x.marque === "favori" ? "aucune" : "favori");
+		const hide = document.createElement("button");
+		hide.className = "btn sm icon" + (x.marque === "exclue" ? " on-out" : "");
+		hide.innerHTML = ICON_HIDE;
+		hide.title = x.marque === "exclue" ? "Hors rotation (cliquer pour la remettre)" : "Retirer de la rotation sans la supprimer";
+		hide.setAttribute("aria-label", hide.title);
+		hide.setAttribute("aria-pressed", x.marque === "exclue");
+		hide.onclick = () => markGif(x, x.marque === "exclue" ? "aucune" : "exclue");
+		row.append(size, fav, hide, play, del);
 
 		card.append(led, name, row);
 		g.appendChild(card);
 	}
+}
+
+async function markGif (x, marque) {
+	const r = await OD.action("/api/gif/marquer", { categorie: cur, nom: x.nom, marque });
+	if (r.cancelled) return;
+	if (!r.ok) { OD.toast(r.text, false); return; }
+	x.marque = marque === "aucune" ? "" : marque;
+	OD.toast(marque === "favori" ? OD.pretty(x.nom) + " passera plus souvent"
+		: marque === "exclue" ? OD.pretty(x.nom) + " ne passera plus (toujours sur la carte)"
+		: OD.pretty(x.nom) + " passe normalement", true);
+	renderFiles();
 }
 
 async function removeGif (x) {
@@ -325,32 +385,246 @@ async function removeGif (x) {
 	if (r.ok) { files = files.filter(y => y !== x); renderFiles(); loadCats(); }
 }
 
-async function upload (list) {
-	list = Array.from(list).filter(f => /\.gif$/i.test(f.name) || f.type === "image/gif");
-	if (!cur || list.length === 0) return;
-	const drop = $("#drop"), label = drop.querySelector("span");
-	const saved = label.innerHTML;
-	let ok = 0, last = "";
-	for (let i = 0; i < list.length; i++) {
-		label.textContent = "Envoi " + (i + 1) + " / " + list.length + " : " + list[i].name;
-		const r = await OD.action("/api/gif/ajouter", { categorie: cur }, list[i]);
-		if (r.cancelled) break;
-		if (r.ok) ok++; else last = list[i].name + " : " + r.text;
+/* ===== ajout de GIF : fichiers, dossiers (sous-dossiers = categories) et fichiers .zip ===== */
+
+/* meme nettoyage que le panneau (CGifManager::SanitizeFileName) : sert a reperer les doublons */
+function cleanName (n) {
+	n = n.replace(/^.*[\/\\]/, "").replace(/\.gif$/i, "");
+	let o = "";
+	for (const c of n.slice(0, 96)) o += /[A-Za-z0-9_-]/.test(c) || (c === "." && o) ? c : "_";
+	return (o || "gif") + ".gif";
+}
+function cleanCat (n) {
+	const o = n.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9_-]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 32);
+	return o || "Divers";
+}
+const isGif = n => /\.gif$/i.test(n);
+const isJunk = path => path.split("/").some(p => p === "__MACOSX" || p.startsWith("."));
+const sizeText = b => b >= 1e9 ? (b / 1e9).toFixed(1).replace(".", ",") + " Go" : Math.max(1, Math.round(b / 1e6)) + " Mo";
+
+/* fichier .zip lu dans le navigateur (le panneau ne recoit que des GIF) */
+async function readZip (zip) {
+	const tailLen = Math.min(zip.size, 65557);
+	const tail = new DataView(await zip.slice(zip.size - tailLen).arrayBuffer());
+	let e = -1;
+	for (let i = tailLen - 22; i >= 0; i--) if (tail.getUint32(i, true) === 0x06054b50) { e = i; break; }
+	if (e < 0) throw new Error(zip.name + " n'est pas un fichier .zip lisible");
+	const count = tail.getUint16(e + 10, true), cdSize = tail.getUint32(e + 12, true), cdOff = tail.getUint32(e + 16, true);
+	if (count === 0xffff || cdOff === 0xffffffff) throw new Error(zip.name + " est trop gros pour être lu ici : décompressez-le, puis glissez le dossier");
+	const cd = new DataView(await zip.slice(cdOff, cdOff + cdSize).arrayBuffer());
+	const utf8 = new TextDecoder("utf-8"), latin = new TextDecoder("windows-1252");
+	const out = [];
+	let skipped = 0;
+	for (let p = 0, n = 0; n < count && p + 46 <= cd.byteLength; n++) {
+		if (cd.getUint32(p, true) !== 0x02014b50) break;
+		const flags = cd.getUint16(p + 8, true), method = cd.getUint16(p + 10, true);
+		const csize = cd.getUint32(p + 20, true), usize = cd.getUint32(p + 24, true);
+		const nlen = cd.getUint16(p + 28, true), xlen = cd.getUint16(p + 30, true), clen = cd.getUint16(p + 32, true);
+		const lho = cd.getUint32(p + 42, true);
+		const bytes = new Uint8Array(cd.buffer, cd.byteOffset + p + 46, nlen);
+		const path = ((flags & 0x800) ? utf8 : latin).decode(bytes).replace(/\\/g, "/");
+		p += 46 + nlen + xlen + clen;
+		if (path.endsWith("/") || !isGif(path) || isJunk(path)) continue;
+		if ((flags & 1) || (method !== 0 && method !== 8)) { skipped++; continue; }
+		out.push({
+			path, size: usize,
+			async get () {
+				const h = new DataView(await zip.slice(lho, lho + 30).arrayBuffer());
+				const start = lho + 30 + h.getUint16(26, true) + h.getUint16(28, true);
+				let blob = zip.slice(start, start + csize);
+				if (method === 8) blob = await new Response(blob.stream().pipeThrough(new DecompressionStream("deflate-raw"))).blob();
+				return new File([blob], path.replace(/^.*\//, ""), { type: "image/gif" });
+			}
+		});
 	}
-	label.innerHTML = saved;
-	$("#files").value = "";
-	if (ok > 0 || last) OD.toast(ok + " / " + list.length + " GIF ajoutée(s)" + (last ? " — " + last : ""), ok === list.length);
-	const c = cats.find(c => c.nom === cur);
-	if (c && ok > 0) delete c.local;
+	if (out.length && typeof DecompressionStream === "undefined") throw new Error("Ce navigateur ne sait pas ouvrir les .zip : décompressez-le, puis glissez le dossier");
+	return { items: out, skipped };
+}
+
+/* dossier glisse : parcours de tous les sous-dossiers */
+async function readEntry (entry, out) {
+	if (entry.isFile) {
+		const f = await new Promise((ok, ko) => entry.file(ok, ko));
+		out.push({ file: f, path: entry.fullPath.replace(/^\//, "") });
+	} else if (entry.isDirectory) {
+		const reader = entry.createReader();
+		for (;;) {
+			const batch = await new Promise((ok, ko) => reader.readEntries(ok, ko));
+			if (!batch.length) break;
+			for (const e of batch) await readEntry(e, out);
+		}
+	}
+}
+
+/* liste de {path, size, get()} a partir de fichiers et dossiers */
+async function collect (raw) {
+	const items = [];
+	let zipSkipped = 0;
+	for (const r of raw) {
+		const path = r.path || r.file.webkitRelativePath || r.file.name;
+		if (isJunk(path)) continue;
+		if (/\.zip$/i.test(r.file.name)) {
+			const z = await readZip(r.file);
+			zipSkipped += z.skipped;
+			items.push(...z.items);		/* GIF a la racine du zip : categorie ouverte */
+		} else if (isGif(r.file.name) || r.file.type === "image/gif") {
+			const f = r.file;
+			items.push({ path, size: f.size, get: async () => f });
+		}
+	}
+	return { items, zipSkipped };
+}
+
+let bulk = null;		/* envoi prepare ou en cours */
+
+function targetOf (x, mode) {
+	const parts = x.path.split("/");
+	return mode === "ici" || parts.length < 2 ? cur : cleanCat(parts[parts.length - 2]);
+}
+
+const knownCat = c => cats.some(k => k.nom.toLowerCase() === c.toLowerCase());
+
+function renderPlan () {
+	const mode = document.querySelector("input[name=bulk-mode]:checked").value;
+	const by = new Map();
+	let bytes = 0;
+	for (const x of bulk.items) {
+		const c = targetOf(x, mode);
+		by.set(c, (by.get(c) || 0) + 1);
+		bytes += x.size;
+	}
+	bulk.mode = mode;
+	$("#bulk-mode-row").hidden = !bulk.items.some(x => x.path.includes("/"));
+	$("#bulk-cur").textContent = "« " + cur + " »";
+	$("#bulk-sum").textContent = bulk.items.length + " GIF (" + sizeText(bytes) + ") à envoyer dans " + by.size + " catégorie" + (by.size > 1 ? "s" : "");
+	const list = $("#bulk-list");
+	list.innerHTML = "";
+	const sorted = [...by].sort((a, b) => a[0].localeCompare(b[0], "fr", { sensitivity: "base" }));
+	for (const [c, n] of sorted.slice(0, 40)) {
+		const li = document.createElement("li");
+		const b = document.createElement("b");
+		b.textContent = c;
+		li.append(b, " : " + n + " GIF" + (knownCat(c) ? "" : " · nouvelle catégorie"));
+		list.appendChild(li);
+	}
+	if (sorted.length > 40) {
+		const li = document.createElement("li");
+		li.textContent = "… et " + (sorted.length - 40) + " autres";
+		list.appendChild(li);
+	}
+	const warn = [];
+	if (bulk.zipSkipped) warn.push(bulk.zipSkipped + " GIF du .zip ignorée(s) (protégées par mot de passe ou format inconnu).");
+	if (bulk.free !== null && bytes > bulk.free) warn.push("⚠️ Pas assez de place sur la carte SD : " + sizeText(bulk.free) + " libres.");
+	if (bulk.items.length > 50) warn.push("Durée estimée : environ " + Math.max(1, Math.round(bytes / 700000 / 60)) + " min en Wi-Fi. Laissez cette page ouverte. Les GIF déjà présentes sont sautées : vous pourrez reprendre plus tard.");
+	if (sorted.some(([c]) => !knownCat(c))) warn.push("Les nouvelles catégories ne s'affichent sur le panneau qu'une fois cochées à gauche.");
+	$("#bulk-warn").innerHTML = "";
+	for (const w of warn) { const d = document.createElement("div"); d.textContent = w; $("#bulk-warn").appendChild(d); }
+}
+
+async function prepare (raw) {
+	if (!cur || (bulk && bulk.running)) return;
+	$("#bulk").hidden = false;
+	$("#bulk-plan").hidden = false;
+	$("#bulk-run").hidden = true;
+	$("#bulk-sum").textContent = "Lecture des fichiers…";
+	$("#bulk-list").innerHTML = "";
+	$("#bulk-warn").textContent = "";
+	$("#bulk-mode-row").hidden = true;
+	$("#bulk-go").disabled = true;
+	let c;
+	try { c = await collect(raw); }
+	catch (e) { $("#bulk-sum").textContent = e.message; return; }
+	if (!c.items.length) { $("#bulk-sum").textContent = "Aucune GIF trouvée."; return; }
+	const etat = await OD.getJSON("/api/etat").catch(() => null);
+	bulk = { items: c.items, zipSkipped: c.zipSkipped, free: etat && etat.carte_libre_mo ? etat.carte_libre_mo * 1e6 : null, running: false, stop: false };
+	/* un seul dossier glisse avec des GIF dedans : par defaut dans la categorie ouverte */
+	const folders = new Set(c.items.map(x => x.path.split("/").slice(0, -1).join("/")));
+	const ici = folders.size === 1 && !c.items[0].path.split("/").slice(-2, -1).some(n => knownCat(cleanCat(n))) && c.items.length < 200;
+	document.querySelector("input[name=bulk-mode][value=" + (ici ? "ici" : "dossiers") + "]").checked = true;
+	$("#bulk-go").disabled = false;
+	renderPlan();
+}
+
+async function runBulk () {
+	if (!bulk || bulk.running) return;
+	if (!OD.getPw() && !(await OD.askPassword())) return;
+	bulk.running = true;
+	bulk.stop = false;
+	$("#bulk-plan").hidden = true;
+	$("#bulk-run").hidden = false;
+	$("#bulk-bar").style.width = "0";
+	$("#bulk-detail").textContent = "";
+	window.onbeforeunload = () => "Envoi en cours";
+
+	/* noms deja presents dans chaque categorie de destination : sautes */
+	const present = new Map();
+	for (const c of new Set(bulk.items.map(x => targetOf(x, bulk.mode)))) {
+		$("#bulk-state").textContent = "Vérification de « " + c + " »…";
+		const j = knownCat(c) ? await OD.getJSON("/api/gif/liste?c=" + encodeURIComponent(c), 30000).catch(() => null) : null;
+		present.set(c.toLowerCase(), new Set(j && j.fichiers ? j.fichiers.map(f => f.nom.toLowerCase()) : []));
+	}
+
+	let ok = 0, skip = 0, err = 0, done = 0, sent = 0, lastErr = "";
+	const t0 = Date.now(), total = bulk.items.length;
+	for (const x of bulk.items) {
+		if (bulk.stop) break;
+		const c = targetOf(x, bulk.mode), seen = present.get(c.toLowerCase());
+		const name = cleanName(x.path);
+		done++;
+		if (seen.has(name.toLowerCase())) { skip++; continue; }
+		$("#bulk-state").textContent = "Envoi " + done + " / " + total + " : " + c + " / " + name;
+		let r;
+		try { r = await OD.action("/api/gif/ajouter", { categorie: c }, await x.get()); }
+		catch (e) { r = { ok: false, text: x.path + " : " + e.message }; }
+		if (r.cancelled) { done--; break; }
+		if (r.ok) { ok++; seen.add(name.toLowerCase()); sent += x.size; }
+		else if (/existe deja/i.test(r.text)) skip++;
+		else { err++; lastErr = r.text; if (/injoignable|carte pleine/i.test(r.text) && err >= 3) break; }
+		$("#bulk-bar").style.width = Math.round(done * 100 / total) + "%";
+		const rate = sent / Math.max((Date.now() - t0) / 1000, 1);
+		let left = 0;
+		if (rate > 0) for (let i = done; i < total; i++) left += bulk.items[i].size / rate;
+		$("#bulk-detail").textContent = ok + " ajoutée(s) · " + skip + " déjà là · " + err + " erreur(s)" +
+			(left > 90 ? " · reste environ " + Math.round(left / 60) + " min" : "");
+	}
+	window.onbeforeunload = null;
+	bulk.running = false;
+	const finished = done >= total && !bulk.stop;
+	if (finished) $("#bulk-bar").style.width = "100%";
+	$("#bulk-state").textContent = (finished ? "Terminé : " : "Envoi arrêté : ") + ok + " GIF ajoutée(s), " + skip + " déjà présente(s), " + err + " erreur(s)";
+	$("#bulk-detail").textContent = lastErr ? "Dernière erreur : " + lastErr : (finished ? "" : "Relancez le même envoi plus tard : les GIF déjà envoyées seront sautées.");
+	$("#bulk-stop").textContent = "Fermer";
+	$("#bulk-stop").onclick = closeBulk;
+	OD.toast(ok + " GIF ajoutée(s)" + (err ? ", " + err + " erreur(s)" : ""), err === 0);
+	const k = cats.find(k => k.nom === cur);
+	if (k && ok > 0) delete k.local;
 	await loadCats();
 	await openCat(cur);
 }
 
-$("#files").onchange = e => upload(e.target.files);
+function stopBulk () { if (bulk) bulk.stop = true; $("#bulk-state").textContent = "Arrêt après la GIF en cours…"; }
+function closeBulk () { bulk = null; $("#bulk").hidden = true; $("#bulk-stop").textContent = "Arrêter"; $("#bulk-stop").onclick = stopBulk; }
+
+$("#bulk-go").onclick = runBulk;
+$("#bulk-cancel").onclick = closeBulk;
+$("#bulk-stop").onclick = stopBulk;
+for (const r of document.querySelectorAll("input[name=bulk-mode]")) r.onchange = renderPlan;
+
+$("#files").onchange = e => { prepare(Array.from(e.target.files, f => ({ file: f }))); e.target.value = ""; };
+$("#folder").onchange = e => { prepare(Array.from(e.target.files, f => ({ file: f }))); e.target.value = ""; };
 const drop = $("#drop");
 drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
 drop.ondragleave = () => drop.classList.remove("over");
-drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); upload(e.dataTransfer.files); };
+drop.ondrop = async e => {
+	e.preventDefault();
+	drop.classList.remove("over");
+	const entries = Array.from(e.dataTransfer.items || [], i => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean);
+	if (entries.length) {
+		const raw = [];
+		for (const en of entries) await readEntry(en, raw);
+		prepare(raw);
+	} else prepare(Array.from(e.dataTransfer.files, f => ({ file: f })));
+};
 
 $("#newcat-form").onsubmit = e => {
 	e.preventDefault();

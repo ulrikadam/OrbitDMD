@@ -41,13 +41,40 @@ public:
 	void Render (const TClockStyle &rStyle, const TDateTime &rTime, unsigned nMillis,
 		     boolean bColonOn, boolean bDateScreen, CCanvas *pCanvas);
 
+	// texte defilant (page Messages) : texte en Latin-1 (TextToLatin1)
+	void PrepareText (const TTextStyle &rStyle);
+	int GetTextWidth (const TTextStyle &rStyle, const char *pText);	// pixels
+	void RenderScroll (const TTextStyle &rStyle, const char *pText, int x, unsigned nMillis,
+			   CCanvas *pCanvas);
+
+	// texte fixe et centre, avec un effet d'arrivee (PageIn), d'attente (PageHold) ou de
+	// depart (PageOut) ; nProgress : avancement de la phase, de 0 a 1000
+	enum TPagePhase { PageIn, PageHold, PageOut };
+	void RenderPage (const TTextStyle &rStyle, const char *pText, unsigned nEffect, unsigned nPhase,
+			 unsigned nProgress, unsigned nMillis, CCanvas *pCanvas);
+	// coupe un texte en pages qui tiennent dans la largeur (mot par mot) ; nombre de pages
+	unsigned SplitPages (const TTextStyle &rStyle, const char *pText, char (*pPages)[BANNER_TEXT_LEN],
+			     unsigned nMaxPages);
+	// taille automatique pour les effets de page : la plus grande qui donne au plus 3 pages
+	// sans mot coupe (sinon la plus grande sans mot coupe) ; une taille choisie est gardee
+	void FitPages (TTextStyle *pStyle, const char *pText);
+
+	// compte a rebours : titre en police Pixel au-dessus (peut etre vide), valeur dessous
+	void RenderCountdown (const TCountdownStyle &rStyle, const char *pTitle, const char *pValue,
+			      unsigned nMillis, CCanvas *pCanvas);
+
+	// remplace les choix "Random" (motif de l'heure et de la date, fond) par un tirage :
+	// motif parmi les couleurs unies, l'arc-en-ciel et les images de SD:/fonts ; fond parmi
+	// les images Background_*. nRandom : nombre au hasard
+	static void PickRandom (TClockStyle *pStyle, u32 nRandom);
+
 	// ecran meteo : icone, temperature, une ligne d'information (Pixel)
 	void PrepareWeather (const TWeatherStyle &rStyle);
 	void RenderWeather (const TWeatherStyle &rStyle, const TWeatherData &rData, unsigned nMillis,
 			    CCanvas *pCanvas);
 
 private:
-	enum { SlotTime, SlotDate, SlotWeather, SlotCount };
+	enum { SlotTime, SlotDate, SlotWeather, SlotText, SlotCount };
 
 	struct TFont
 	{
@@ -111,7 +138,10 @@ private:
 	void Composite (const u8 *pMask, const TTextStyle &rText, const TImage &rPattern,
 			unsigned nMillis, u8 *pOut);
 
+	unsigned LineSize (const TTextStyle &rStyle, int nMaxHeight, TMetrics *pMetrics);
+
 	static unsigned FrameAt (const CGifAnimation *pAnim, unsigned nMillis);
+	static void HueToRGB (unsigned nHue, u8 *pRGB);
 	static unsigned PixelScale (unsigned nSize);
 
 private:
@@ -125,6 +155,7 @@ private:
 	TDigits m_Digits;
 	TFitCache m_Fit[SlotCount];
 	TFitCache m_FitInfo;		// deuxieme ligne de la meteo
+	TFitCache m_FitTitle;		// titre du compte a rebours
 	TFont m_Pixel;			// police Pixel (ligne d'information de la meteo)
 	TImage m_NoImage;		// pas de motif
 

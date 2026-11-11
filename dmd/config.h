@@ -40,6 +40,7 @@ public:
 	unsigned nCategories;		// categories actives (Gif_Cat_N sauf "disabled")
 	char	 Categories[CONFIG_MAX_CATEGORIES][CONFIG_NAME_LEN];
 	unsigned GifMinDuration;	// Gif_Min_Duration en ms (nouveau)
+	unsigned IPScreenTime;		// IP_Ecran en ms : adresse IP sur le panneau (0 = jamais)
 
 	// Horloge
 	boolean	 ClockActive;		// Clock_Active
@@ -50,11 +51,17 @@ public:
 	// Meteo (Weather_*)
 	TWeatherStyle WeatherStyle;
 
+	// Messages (Texte_*, Compte_*) et ordre de lecture des GIF
+	TBannerStyle Banner;
+	TCountdownStyle Countdown;
+	boolean	 GifInOrder;		// Gif_Ordre : "ordre" (alphabetique) ou "hasard"
+
 	// Demarrage
 	boolean	 TestPattern;		// Test_Pattern (nouveau)
 	boolean	 LogToScreen;		// Journal_Ecran (nouveau) : journal aussi sur l'ecran HDMI
 
 	// Reseau
+	char	 NetMode[16];			// Reseau : auto (cable si branche), wifi ou ethernet
 	char	 WifiSSID[CONFIG_NAME_LEN];	// Wifi_ssid
 	char	 WifiPSK[CONFIG_NAME_LEN];	// Wifi_psk (jamais ecrit dans le journal)
 	char	 WifiCountry[8];		// Wifi_country

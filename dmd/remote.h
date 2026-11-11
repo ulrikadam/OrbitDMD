@@ -13,6 +13,8 @@
 #define CLOCK_PLAY_REQUEST	":horloge"	// RequestPlay : montrer l'heure (page Horloge)
 #define CLOCK_DEMO_MS		15000		// pendant 15 s
 #define WEATHER_PLAY_REQUEST	":meteo"	// RequestPlay : montrer la meteo (page Meteo)
+#define BANNER_PLAY_REQUEST	":texte"	// RequestPlay : texte defilant (page Messages)
+#define COUNTDOWN_PLAY_REQUEST	":compte"	// RequestPlay : compte a rebours (page Messages)
 
 enum TRemoteRequest
 {

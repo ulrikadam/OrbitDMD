@@ -80,8 +80,11 @@ version sur [Releases](https://github.com/ulrikadam/OrbitDMD/releases/latest), p
   Silkscreen, Creepster, Mountains of Christmas (libres, [Google Fonts](https://fonts.google.com/)) et
   3 polices pixel OrbitDMD (LED, Gras, 7 segments). Vos propres polices TTF s'ajoutent depuis la page Horloge.
 - **Fonds animés et motifs** : créés pour OrbitDMD (étoiles, neige, pluie, Matrix, feu, aurore, synthwave…).
-- **GIF** : la plupart viennent du projet **RPI2DMD** (RpiTe@m, pixel art de RattenJager et d'autres) — merci
-  à leurs auteurs ; les écrans de démarrage et une partie des GIF de Noël sont des créations OrbitDMD.
+- **GIF** : OrbitDMD intègre le **pack de GIF animées gratuit de base de la RpiTeaM** (projet RPI2DMD,
+  pixel art d'eLLuiGi, RattenJager et d'autres), avec l'accord d'eLLuiGi — merci à eux !
+  Pour ceux qui le souhaitent, **un pack de 11 000 animations** est disponible
+  [sur Neo-Arcadia](https://www.neo-arcadia.com/forum/viewtopic.php?t=67065) ou sur [rpiteam.carrd.co](https://rpiteam.carrd.co/).
+  Les écrans de démarrage et une partie des GIF de Noël sont des créations OrbitDMD.
   Les personnages de jeux vidéo restent la propriété de leurs ayants droit.
 
 ## Proposer une idée, signaler un problème

@@ -44,6 +44,7 @@ CConfig::CConfig (void)
 	GifActive (TRUE),
 	nCategories (0),
 	GifMinDuration (4000),
+	IPScreenTime (10000),
 	ClockActive (TRUE),
 	ClockDisplayTime (3000),
 	TestPattern (TRUE),
@@ -51,6 +52,7 @@ CConfig::CConfig (void)
 {
 	CopyString (RGBOrder, "RGB", sizeof RGBOrder);
 	CopyString (TimeZone, "Europe/Paris", sizeof TimeZone);
+	CopyString (NetMode, "auto", sizeof NetMode);
 	WifiSSID[0] = '\0';
 	WifiPSK[0] = '\0';
 	CopyString (WifiCountry, "FR", sizeof WifiCountry);
@@ -74,6 +76,9 @@ CConfig::CConfig (void)
 
 	ClockStyleDefaults (&ClockStyle);
 	WeatherStyleDefaults (&WeatherStyle);
+	BannerStyleDefaults (&Banner);
+	CountdownStyleDefaults (&Countdown);
+	GifInOrder = FALSE;
 }
 
 boolean CConfig::Load (const char *pFileName)
@@ -105,6 +110,9 @@ boolean CConfig::Load (const char *pFileName)
 	}
 	ClockStyleDefaults (&ClockStyle);
 	WeatherStyleDefaults (&WeatherStyle);
+	BannerStyleDefaults (&Banner);
+	CountdownStyleDefaults (&Countdown);
+	GifInOrder = FALSE;
 
 	char *pLine = pBuffer;
 	while (pLine != 0 && *pLine != '\0')
@@ -159,11 +167,13 @@ void CConfig::SetValue (const char *pKey, const char *pValue)
 	else if (strcasecmp (pKey, "RGB_Order") == 0)		CopyString (RGBOrder, pValue, sizeof RGBOrder);
 	else if (strcasecmp (pKey, "Gif_Active") == 0)		GifActive = nValue != 0;
 	else if (strcasecmp (pKey, "Gif_Min_Duration") == 0)	GifMinDuration = nValue;
+	else if (strcasecmp (pKey, "IP_Ecran") == 0)		IPScreenTime = nValue;
 	else if (strcasecmp (pKey, "Clock_Active") == 0)	ClockActive = nValue != 0;
 	else if (strcasecmp (pKey, "Clock_Display_Time") == 0)	ClockDisplayTime = nValue;
 	else if (strcasecmp (pKey, "Clock_TZ") == 0)		CopyString (TimeZone, pValue, sizeof TimeZone);
 	else if (strcasecmp (pKey, "Test_Pattern") == 0)	TestPattern = nValue != 0;
 	else if (strcasecmp (pKey, "Journal_Ecran") == 0)	LogToScreen = nValue != 0;
+	else if (strcasecmp (pKey, "Reseau") == 0)		CopyString (NetMode, pValue, sizeof NetMode);
 	else if (strcasecmp (pKey, "Wifi_ssid") == 0)		CopyString (WifiSSID, pValue, sizeof WifiSSID);
 	else if (strcasecmp (pKey, "Wifi_psk") == 0)		CopyString (WifiPSK, pValue, sizeof WifiPSK);
 	else if (strcasecmp (pKey, "Wifi_country") == 0)	CopyString (WifiCountry, pValue, sizeof WifiCountry);
@@ -201,6 +211,16 @@ void CConfig::SetValue (const char *pKey, const char *pValue)
 	}
 	else if (SetWeatherStyleValue (&WeatherStyle, pKey, pValue))
 	{
+	}
+	else if (SetBannerStyleValue (&Banner, pKey, pValue))
+	{
+	}
+	else if (SetCountdownStyleValue (&Countdown, pKey, pValue))
+	{
+	}
+	else if (strcasecmp (pKey, "Gif_Ordre") == 0)
+	{
+		GifInOrder = strcasecmp (pValue, "ordre") == 0;
 	}
 	// les autres reglages (meteo...) seront geres plus tard
 }

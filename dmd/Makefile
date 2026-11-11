@@ -6,12 +6,14 @@ CIRCLEHOME = ../circle
 
 OBJS	= main.o kernel.o config.o matrix.o canvas.o font5x7.o gifanim.o \
 	  rtc.o localtime.o clock.o testpattern.o remote.o network.o webserver.o \
-	  fileutil.o gifmanager.o configedit.o netutil.o settings.o version.o latency.o stbimpl.o clockstyle.o clockrender.o weatherdata.o weathericons.o weather.o dmdapp.o
+	  fileutil.o gifmanager.o configedit.o netutil.o settings.o version.o latency.o stbimpl.o clockstyle.o clockrender.o weatherdata.o weathericons.o weather.o gifmarks.o messages.o dmdapp.o
 
 LIBS	= $(CIRCLEHOME)/addon/wlan/hostap/wpa_supplicant/libwpa_supplicant.a \
 	  $(CIRCLEHOME)/addon/wlan/libwlan.a \
 	  $(CIRCLEHOME)/addon/fatfs/libfatfs.a \
 	  $(CIRCLEHOME)/addon/SDCard/libsdcard.a \
+	  $(CIRCLEHOME)/lib/usb/libusb.a \
+	  $(CIRCLEHOME)/lib/input/libinput.a \
 	  $(CIRCLEHOME)/lib/net/libnet.a \
 	  $(CIRCLEHOME)/lib/sched/libsched.a \
 	  $(CIRCLEHOME)/lib/fs/libfs.a \

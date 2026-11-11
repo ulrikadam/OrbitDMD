@@ -178,6 +178,12 @@ dialog .err-line { color: var(--err); font-size: 13px; min-height: 20px; margin:
 .drop:hover, .drop.over { border-color: var(--blue); background: var(--blue-soft); color: var(--blue); }
 .drop input { display: none; }
 .drop b { color: var(--text); }
+.bulk { margin-top: 14px; padding: 14px 16px; border: 1px solid var(--line-2); border-radius: 12px; background: var(--surface-2); }
+.bulk-title { font-weight: 600; }
+.bulk-list { margin: 6px 0 0; padding-left: 18px; max-height: 180px; overflow: auto; color: var(--muted); }
+.bulk-list b { color: var(--text); font-weight: 600; }
+.bulk .bar { height: 10px; border-radius: 99px; background: var(--line); overflow: hidden; margin-top: 10px; }
+.bulk .bar span { display: block; height: 100%; width: 0; background: var(--blue); transition: width .3s; }
 
 /* journal */
 .log {
@@ -209,6 +215,12 @@ dialog .err-line { color: var(--err); font-size: 13px; min-height: 20px; margin:
 .thumb .t-name { font-weight: 600; font-size: 13.5px; line-height: 1.3; overflow-wrap: anywhere; }
 .thumb .t-row { display: flex; align-items: center; gap: 6px; }
 .thumb .t-row .muted { flex: 1; font-size: 12.5px; }
+.thumb.out .led { opacity: .35; filter: grayscale(1); }
+.thumb.out .t-name { color: var(--muted); text-decoration: line-through; }
+.thumb.fav { border-color: var(--amber); }
+.btn.on-fav { color: var(--amber-ink); background: var(--amber-soft); border-color: var(--amber); }
+.btn.on-fav svg { fill: currentColor; }
+.btn.on-out { color: var(--err); background: var(--err-soft); border-color: var(--err); }
 .empty { text-align: center; color: var(--muted); padding: 48px 16px; }
 .note { background: var(--amber-soft); color: var(--text); border-radius: 10px; padding: 10px 14px; font-size: 13.5px; margin-top: 14px; }
 
@@ -307,6 +319,12 @@ main > .card + .card, .clock-grid + .card { margin-top: 16px; }
 .credit a.kofi { display: inline-block; margin-top: 10px; padding: 7px 16px; border-radius: 999px; background: #72a4f2; color: #fff; text-decoration: none; }
 .credit a.kofi:hover { background: #5b91e8; text-decoration: none; }
 
+/* 7 onglets : sur les ecrans moyens, les onglets passent sous le logo */
+@media (max-width: 1040px) {
+	.top-in { flex-wrap: wrap; gap: 10px; }
+	.tabs { order: 3; flex-basis: 100%; flex-wrap: wrap; row-gap: 4px; }
+	.status { margin-left: auto; }
+}
 @media (max-width: 860px) {
 	.split { grid-template-columns: 1fr; }
 	.cats { position: static; }
@@ -326,3 +344,21 @@ main > .card + .card, .clock-grid + .card { margin-top: 16px; }
 	.form-row { flex-wrap: wrap; }
 	.form-row .input { width: 100%; }
 }
+
+/* page Messages : listes de textes et de comptes a rebours */
+.msg-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0 4px; }
+.msg-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); }
+.msg-row.sel { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue) inset; }
+.msg-row.off .msg-text, .msg-row.off .msg-dot { opacity: .45; }
+.msg-dot { width: 16px; height: 16px; border-radius: 50%; flex: none; border: 1px solid var(--line-2); }
+.msg-text { flex: 1; min-width: 0; text-align: left; background: none; border: 0; padding: 2px 0; cursor: pointer; color: var(--text); font: inherit; display: flex; flex-direction: column; }
+.msg-text b, .msg-text span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.msg-text span { font-size: 12.5px; color: var(--muted); }
+.editor { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 16px; }
+@media (max-width: 640px) { .msg-row { flex-wrap: wrap; } .msg-text { flex-basis: calc(100% - 80px); } }
+
+/* page Horloge : tuiles arc-en-ciel anime et "au hasard" */
+.plain.rainbow { background: linear-gradient(90deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00) !important; background-size: 200% 100% !important; animation: od-rainbow 3s linear infinite; }
+@keyframes od-rainbow { from { background-position: 0 0; } to { background-position: 200% 0; } }
+.random-tile { position: absolute; inset: 0; display: grid; place-items: center; font: 700 28px/1 system-ui, sans-serif; color: #fff;
+	background: linear-gradient(135deg, #ffaa00 0 20%, #01a7c5 20% 40%, #a040ff 40% 60%, #20e040 60% 80%, #ff2020 80%); }

@@ -35,7 +35,9 @@ enum TKind
 	KindColor,	// couleur RRGGBB
 	KindFormat,	// format d'heure ou de date (%H:%M...)
 	KindCoord,	// latitude ou longitude (vide autorise : pas de lieu)
-	KindText	// nom de lieu (UTF-8, sans guillemet)
+	KindText,	// nom de lieu (UTF-8, sans guillemet)
+	KindMessage,	// texte defilant ou titre (UTF-8, sans guillemet, longueur nMax)
+	KindTarget	// date du compte a rebours ("noel", "nouvel-an", "AAAA-MM-JJ HH:MM")
 };
 
 enum TApply
@@ -61,6 +63,7 @@ static const TSetting s_Settings[] =
 {
 	{"Gif_Active",		"GIF affichees",	KindBool,	0, 1,	  0,			ApplyLive},
 	{"Gif_Min_Duration",	"Duree minimale",	KindNumber,	1000, 60000, 0,			ApplyLive},
+	{"IP_Ecran",		"Adresse IP sur le panneau", KindNumber, 0, 60000, 0,			ApplyLive},
 	{"Clock_Active",	"Horloge",		KindBool,	0, 1,	  0,			ApplyLive},
 	{"Clock_Display_Time",	"Duree de l'horloge",	KindNumber,	1000, 60000, 0,			ApplyLive},
 	{"Clock_TZ",		"Fuseau horaire",	KindZone,	0, 0,	  0,			ApplyLive},
@@ -92,6 +95,9 @@ static const TSetting s_Settings[] =
 	{"Weather_Info",	"Deuxieme ligne",	KindNumber,	0, WEATHER_INFO_MAX, 0,		ApplyLive},
 	{"Weather_Info_Color",	"Couleur de la deuxieme ligne", KindColor, 0, 0, 0,			ApplyLive},
 	{"Weather_Icon",	"Icone meteo",		KindBool,	0, 1,	  0,			ApplyLive},
+	{"Gif_Ordre",		"Ordre de lecture",	KindChoice,	0, 0,	  "hasard,ordre",	ApplyLive},
+	{"Texte_Every",		"Frequence du texte",	KindNumber,	1, 20,	  0,			ApplyLive},
+	{"Compte_Every",	"Frequence du compte",	KindNumber,	1, 20,	  0,			ApplyLive},
 	{"Weather_Animate",	"Icone animee",		KindBool,	0, 1,	  0,			ApplyLive},
 	{"Test_Pattern",	"Mire de test",		KindBool,	0, 1,	  0,			ApplyNextBoot},
 	{"Journal_Ecran",	"Journal sur l'ecran",	KindBool,	0, 1,	  0,			ApplyNextBoot},
@@ -104,6 +110,7 @@ static const TSetting s_Settings[] =
 	{"PWM_Bits",		"Bits de couleur",	KindNumber,	1, 11,	  0,			ApplyReboot},
 	{"PWM_LSB_Nanoseconds",	"Duree LSB",		KindNumber,	50, 3000, 0,			ApplyReboot},
 	{"Network_name",	"Nom reseau",		KindHostname,	0, 0,	  0,			ApplyReboot},
+	{"Reseau",		"Connexion",		KindChoice,	0, 0,	  "auto,wifi,ethernet",	ApplyWifi},
 	{"Wifi_ssid",		"Reseau Wi-Fi",		KindSSID,	0, 0,	  0,			ApplyWifi},
 	{"Wifi_psk",		"Mot de passe Wi-Fi",	KindPSK,	0, 0,	  0,			ApplyWifi},
 	{"Wifi_country",	"Pays Wi-Fi",		KindCountry,	0, 0,	  0,			ApplyWifi},
@@ -169,7 +176,8 @@ static boolean ParseInt (const char *pValue, int *pResult)
 	return TRUE;
 }
 
-static boolean InList (const char *pList, const char *pValue)
+// sans tenir compte des majuscules ; pValue recoit l'ecriture de la liste ("ethernet", "RGB")
+static boolean InList (const char *pList, char *pValue)
 {
 	size_t nLength = strlen (pValue);
 	const char *p = pList;
@@ -177,8 +185,9 @@ static boolean InList (const char *pList, const char *pValue)
 	{
 		const char *pComma = strchr (p, ',');
 		size_t nItem = pComma != 0 ? (size_t) (pComma - p) : strlen (p);
-		if (nItem == nLength && strncmp (p, pValue, nLength) == 0)
+		if (nItem == nLength && strncasecmp (p, pValue, nLength) == 0)
 		{
+			memcpy (pValue, p, nLength);
 			return TRUE;
 		}
 		p += nItem;
@@ -234,6 +243,7 @@ static void GetCurrent (CConfig *pConfig, const char *pKey, CString *pValue)
 
 	if      (strcasecmp (pKey, "Gif_Active") == 0)		n = pConfig->GifActive ? 1 : 0;
 	else if (strcasecmp (pKey, "Gif_Min_Duration") == 0)	n = pConfig->GifMinDuration;
+	else if (strcasecmp (pKey, "IP_Ecran") == 0)		n = pConfig->IPScreenTime;
 	else if (strcasecmp (pKey, "Clock_Active") == 0)	n = pConfig->ClockActive ? 1 : 0;
 	else if (strcasecmp (pKey, "Clock_Display_Time") == 0)	n = pConfig->ClockDisplayTime;
 	else if (strcasecmp (pKey, "Clock_TZ") == 0)		pText = pConfig->TimeZone;
@@ -287,6 +297,36 @@ static void GetCurrent (CConfig *pConfig, const char *pKey, CString *pValue)
 			return;
 		}
 	}
+	else if (strcasecmp (pKey, "Gif_Ordre") == 0)		pText = pConfig->GifInOrder ? "ordre" : "hasard";
+	else if (strncasecmp (pKey, "Texte_", 6) == 0 || strncasecmp (pKey, "Compte_", 7) == 0)
+	{
+		boolean bBanner = strncasecmp (pKey, "Texte_", 6) == 0;
+		const TBannerStyle &B = pConfig->Banner;
+		const TCountdownStyle &C = pConfig->Countdown;
+		const TTextStyle &T = bBanner ? B.Style : C.Style;
+		const char *pName = pKey + (bBanner ? 6 : 7);
+		const u8 *pColor = 0;
+
+		if      (strcasecmp (pName, "Active") == 0)		n = (bBanner ? B.bActive : C.bActive) ? 1 : 0;
+		else if (strcasecmp (pName, "Every") == 0)		n = bBanner ? B.nEvery : C.nEvery;
+		else if (strcasecmp (pName, "Passages") == 0)		n = B.nPasses;
+		else if (strcasecmp (pName, "Vitesse") == 0)		n = B.nSpeed;
+		else if (strcasecmp (pName, "Message") == 0)		pText = B.Text;
+		else if (strcasecmp (pName, "Display_Time") == 0)	n = C.nDisplayTime;
+		else if (strcasecmp (pName, "Date") == 0)		pText = C.Target;
+		else if (strcasecmp (pName, "Titre") == 0)		pText = C.Title;
+		else if (strcasecmp (pName, "Fin") == 0)		pText = C.Done;
+		else if (strcasecmp (pName, "Font") == 0)		pText = T.Font;
+		else if (strcasecmp (pName, "Font_Size") == 0)		n = T.nSize;
+		else if (strcasecmp (pName, "Color") == 0)		pColor = T.Color;
+		else if (strcasecmp (pName, "Titre_Color") == 0)	pColor = C.TitleColor;
+
+		if (pColor != 0)
+		{
+			pValue->Format ("%02X%02X%02X", pColor[0], pColor[1], pColor[2]);
+			return;
+		}
+	}
 	else if (strcasecmp (pKey, "Test_Pattern") == 0)	n = pConfig->TestPattern ? 1 : 0;
 	else if (strcasecmp (pKey, "Journal_Ecran") == 0)	n = pConfig->LogToScreen ? 1 : 0;
 	else if (strcasecmp (pKey, "Panel_XSize") == 0)		n = pConfig->PanelCols;
@@ -298,6 +338,7 @@ static void GetCurrent (CConfig *pConfig, const char *pKey, CString *pValue)
 	else if (strcasecmp (pKey, "PWM_Bits") == 0)		n = pConfig->PWMBits;
 	else if (strcasecmp (pKey, "PWM_LSB_Nanoseconds") == 0)	n = pConfig->PWMLSBNanos;
 	else if (strcasecmp (pKey, "Network_name") == 0)	pText = pConfig->NetworkName;
+	else if (strcasecmp (pKey, "Reseau") == 0)		pText = pConfig->NetMode;
 	else if (strcasecmp (pKey, "Wifi_ssid") == 0)		pText = pConfig->WifiSSID;
 	else if (strcasecmp (pKey, "Wifi_psk") == 0)		pText = pConfig->WifiPSK;
 	else if (strcasecmp (pKey, "Wifi_country") == 0)	pText = pConfig->WifiCountry;
@@ -462,6 +503,16 @@ static boolean Normalize (const TSetting *pSetting, const char *pIn, CString *pO
 			*pOut = CLOCK_NONE;
 			return TRUE;
 		}
+		if (!bFont && strcasecmp (pIn, CLOCK_RAINBOW) == 0)
+		{
+			*pOut = CLOCK_RAINBOW;		// motif dessine par le programme
+			return TRUE;
+		}
+		if (!bFont && IsRandomChoice (pIn))
+		{
+			*pOut = CLOCK_RANDOM;		// tire au hasard a chaque affichage
+			return TRUE;
+		}
 		if (!IsValidAssetName (pIn, bFont ? "ttf,otf" : "png,gif"))
 		{
 			return FALSE;
@@ -510,6 +561,22 @@ static boolean Normalize (const TSetting *pSetting, const char *pIn, CString *pO
 
 	case KindText:
 		if (!IsValidPlaceName (pIn))
+		{
+			return FALSE;
+		}
+		*pOut = pIn;
+		return TRUE;
+
+	case KindMessage:
+		if (nLength > (size_t) pSetting->nMax || !IsValidBannerText (pIn))
+		{
+			return FALSE;
+		}
+		*pOut = pIn;
+		return TRUE;
+
+	case KindTarget:
+		if (!IsValidCountdownTarget (pIn))
 		{
 			return FALSE;
 		}
@@ -611,7 +678,8 @@ void CSettings::BuildJSON (CConfig *pConfig, CString *pJSON)
 	AppendJSONString (pJSON, DNS);
 	pJSON->Append (",\"mac\":");
 	AppendJSONString (pJSON, MAC);
-	Value.Format (",\"fixe\":%s}", pNetwork != 0 && pNetwork->IsStaticIP () ? "true" : "false");
+	Value.Format (",\"fixe\":%s,\"cable\":%s}", pNetwork != 0 && pNetwork->IsStaticIP () ? "true" : "false",
+		      pNetwork != 0 && pNetwork->IsEthernet () ? "true" : "false");
 	pJSON->Append (Value);
 
 	Value.Format (",\"wifi_psk_defini\":%s,\"redemarrage_en_attente\":%s,\"fuseaux\":[",

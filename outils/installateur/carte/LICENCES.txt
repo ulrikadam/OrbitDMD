@@ -40,7 +40,9 @@ Polices (fonts/*.ttf) - libres, depuis Google Fonts (https://fonts.google.com/) 
 Fonds animes (fonts/Background_*.gif), motifs (fonts/Pattern_*.png), ecrans de
 demarrage (gif/Accueil) : crees pour OrbitDMD.
 
-GIF (gif/) : la plupart viennent du projet RPI2DMD (RpiTe@m, pixel art de
-RattenJager et d'autres) ; les GIF de Noel au nom en minuscules sont des creations
-OrbitDMD. Detail : gif/A_PROPOS_DES_GIF.txt. Les personnages et scenes de jeux video
+GIF (gif/) : pack de GIF animees gratuit de base de la RpiTeaM (projet RPI2DMD,
+pixel art d'eLLuiGi, RattenJager et d'autres), integre avec l'accord d'eLLuiGi.
+Pack de 11 000 animations : https://rpiteam.carrd.co/
+ou https://www.neo-arcadia.com/forum/viewtopic.php?t=67065
+Les GIF de Noel au nom en minuscules sont des creations OrbitDMD. Detail : gif/A_PROPOS_DES_GIF.txt. Les personnages et scenes de jeux video
 restent la propriete de leurs ayants droit.

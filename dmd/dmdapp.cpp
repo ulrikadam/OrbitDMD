@@ -2,6 +2,8 @@
 // dmdapp.cpp
 //
 #include "dmdapp.h"
+#include "gifmarks.h"
+#include "messages.h"
 #include "common.h"
 #include "testpattern.h"
 #include "clock.h"
@@ -36,6 +38,11 @@ CDmdApp::CDmdApp (CMemorySystem *pMemorySystem, CMatrix *pMatrix, CConfig *pConf
 	m_bInRemoteRequest (FALSE),
 	m_bWifiTrial (FALSE),
 	m_nGifsSinceWeather (0),
+	m_nExcluded (0),
+	m_nGifsSinceBanner (0),
+	m_nGifsSinceCountdown (0),
+	m_nNextText (0),
+	m_nNextCountdown (0),
 	m_nRateTicks (0),
 	m_nRateCount (0)
 {
@@ -61,6 +68,12 @@ boolean CDmdApp::Prepare (boolean bFileSystemOK)
 	m_ppFiles = new CString *[MaxFiles];
 
 	CGifAnimation::SetYieldHandler (YieldHandler);
+
+	if (m_bFileSystemOK)
+	{
+		CGifMarks::Load ();		// GIF favorites et exclues
+		CMessages::Load (m_pConfig);	// textes et comptes a rebours
+	}
 
 	if (m_pBlack != 0)
 	{
@@ -133,7 +146,14 @@ void CDmdApp::MainLoop (void)
 	{
 		if (m_pConfig->GifActive && m_nFiles > 0)
 		{
-			Shuffle ();
+			if (m_pConfig->GifInOrder)
+			{
+				SortPlaylist ();
+			}
+			else
+			{
+				Shuffle ();
+			}
 
 			for (unsigned i = 0; i < m_nFiles; i++)
 			{
@@ -162,6 +182,8 @@ void CDmdApp::MainLoop (void)
 					m_nGifsSinceWeather = 0;
 					ShowWeather (m_pConfig->WeatherStyle.nDisplayTime);
 				}
+
+				ShowMessages (FALSE);
 			}
 		}
 		else
@@ -180,6 +202,7 @@ void CDmdApp::MainLoop (void)
 			{
 				ShowWeather (m_pConfig->WeatherStyle.nDisplayTime);
 			}
+			ShowMessages (TRUE);
 		}
 	}
 }
@@ -197,6 +220,11 @@ void CDmdApp::PlayRequestedGifs (void)
 		else if (strcmp (Path, WEATHER_PLAY_REQUEST) == 0)
 		{
 			ShowWeather (CLOCK_DEMO_MS);	// "Voir sur le panneau" de la page Meteo
+		}
+		else if (   strncmp (Path, BANNER_PLAY_REQUEST ":", strlen (BANNER_PLAY_REQUEST) + 1) == 0
+			 || strncmp (Path, COUNTDOWN_PLAY_REQUEST ":", strlen (COUNTDOWN_PLAY_REQUEST) + 1) == 0)
+		{
+			ShowMessageNow (Path);		// "Afficher maintenant" de la page Messages
 		}
 		else
 		{
@@ -276,16 +304,58 @@ void CDmdApp::ShowMessage (const char *pLine1, const char *pLine2, u8 r, u8 g, u
 	CLogger::Get ()->Write (From, LogNotice, "Panneau : %s %s", pLine1, pLine2);
 }
 
+// adresse de la page web : "WIFI CONNECTE" (ou "CABLE CONNECTE"), <nom>.local et l'adresse IP (reglage IP_Ecran)
+void CDmdApp::ShowAddress (void)
+{
+	const char *pIP = m_pNetwork->GetIPAddress ();
+	const char *pTitle = m_pNetwork->IsEthernet () ? "CABLE CONNECTE" : "WIFI CONNECTE";
+	CString Name;
+	Name.Format ("%s.local", m_pConfig->NetworkName);
+
+	CLogger::Get ()->Write (From, LogNotice, "Panneau : adresse %s / %s",
+				(const char *) Name, pIP);
+
+	unsigned nTime = m_pConfig->IPScreenTime;
+	if (nTime == 0)
+	{
+		return;
+	}
+	if (nTime < 2000)
+	{
+		nTime = 2000;
+	}
+
+	CRemoteControl::Get ()->Status.pScreen = "message";
+	CCanvas &C = *m_pCanvas;
+	const int W = (int) C.GetWidth ();
+	const int H = (int) C.GetHeight ();
+
+	C.Clear ();
+	if (H >= 26 && CCanvas::GetTextWidth (Name) <= W)
+	{
+		C.DrawTextCentered (0, W, H / 2 - 13, pTitle, 0, 255, 0);
+		C.DrawTextCentered (0, W, H / 2 - 4, Name, 255, 255, 255);
+		C.DrawTextCentered (0, W, H / 2 + 5, pIP, 0, 220, 255);
+	}
+	else
+	{
+		C.DrawTextCentered (0, W, H / 2 - 9, pTitle, 0, 255, 0);
+		C.DrawTextCentered (0, W, H / 2 + 2, pIP, 0, 220, 255);
+	}
+	m_pMatrix->Show (C.GetData ());
+
+	Wait (nTime);
+}
+
 void CDmdApp::CheckConnectedEvent (void)
 {
 	if (m_pNetwork->TakeConnectedEvent ())
 	{
-		ShowMessage ("WIFI CONNECTE", m_pNetwork->GetIPAddress (), 0, 255, 0);
-		Wait (5000);
+		ShowAddress ();
 	}
 	else if (m_pNetwork->TakeTimeoutEvent ())
 	{
-		ShowMessage ("WIFI", "NON CONNECTE", 255, 0, 0);
+		ShowMessage (m_pNetwork->IsEthernet () ? "CABLE RESEAU" : "WIFI", "NON CONNECTE", 255, 0, 0);
 		Wait (5000);
 	}
 }
@@ -297,6 +367,7 @@ void CDmdApp::BuildPlaylist (void)
 		delete m_ppFiles[i];
 	}
 	m_nFiles = 0;
+	m_nExcluded = 0;
 
 	if (m_pConfig->nCategories > 0)
 	{
@@ -313,11 +384,22 @@ void CDmdApp::BuildPlaylist (void)
 	}
 
 	CRemoteControl::Get ()->Status.nGifCount = m_nFiles;
-	CLogger::Get ()->Write (From, LogNotice, "%u GIF dans la liste de lecture", m_nFiles);
+	CLogger::Get ()->Write (From, LogNotice, "%u GIF dans la liste de lecture (%s)%s", m_nFiles,
+				m_pConfig->GifInOrder ? "dans l'ordre" : "au hasard",
+				m_nExcluded > 0 ? ", GIF exclues retirees" : "");
 }
 
 void CDmdApp::AddFolder (const char *pPath, boolean bRecurse)
 {
+	const char *pCategory = pPath;			// "SD:/gif/Arcade" -> "Arcade"
+	for (const char *p = pPath; *p != '\0'; p++)
+	{
+		if (*p == '/')
+		{
+			pCategory = p + 1;
+		}
+	}
+
 	DIR Directory;
 	if (f_opendir (&Directory, pPath) != FR_OK)
 	{
@@ -356,10 +438,45 @@ void CDmdApp::AddFolder (const char *pPath, boolean bRecurse)
 			continue;
 		}
 
-		m_ppFiles[m_nFiles++] = new CString ((const char *) Path);
+		// GIF exclue : pas dans la rotation ; favorite : plusieurs fois (lecture au hasard)
+		TGifMark Mark = CGifMarks::Get (pCategory, Info.fname);
+		if (Mark == GifMarkExcluded)
+		{
+			m_nExcluded++;
+			continue;
+		}
+		unsigned nCopies = Mark == GifMarkFavorite && !m_pConfig->GifInOrder ? GIF_FAVORITE_WEIGHT : 1;
+		for (unsigned i = 0; i < nCopies && m_nFiles < MaxFiles; i++)
+		{
+			m_ppFiles[m_nFiles++] = new CString ((const char *) Path);
+		}
 	}
 
 	f_closedir (&Directory);
+}
+
+// lecture dans l'ordre : par categorie puis par nom (sans tenir compte des majuscules) ;
+// tri de Shell (Circle n'a pas de qsort), rapide pour 20000 noms
+void CDmdApp::SortPlaylist (void)
+{
+	static const unsigned Gaps[] = {13776, 4592, 1968, 861, 336, 112, 48, 21, 7, 3, 1};
+
+	for (unsigned g = 0; g < sizeof Gaps / sizeof Gaps[0]; g++)
+	{
+		unsigned nGap = Gaps[g];
+		for (unsigned i = nGap; i < m_nFiles; i++)
+		{
+			CString *pItem = m_ppFiles[i];
+			unsigned j = i;
+			while (j >= nGap && strcasecmp (*m_ppFiles[j - nGap], *pItem) > 0)
+			{
+				m_ppFiles[j] = m_ppFiles[j - nGap];
+				j -= nGap;
+			}
+			m_ppFiles[j] = pItem;
+		}
+		YieldToNetwork ();
+	}
 }
 
 void CDmdApp::Shuffle (void)
@@ -671,6 +788,8 @@ void CDmdApp::ShowClockScreen (unsigned nDuration, boolean bDateScreen)
 	u64 nEnd = nStart + (u64) nDuration * 1000;
 	u64 nSecondStart = nStart;		// debut de la seconde en cours (deux-points clignotants)
 	CRemoteControl::Get ()->Status.pScreen = bDateScreen ? "date" : "heure";
+	TClockStyle Picked = m_pConfig->ClockStyle;		// motif et fond "au hasard" : un tirage
+	CClockRenderer::PickRandom (&Picked, m_pRandom->GetNumber ());
 	unsigned nLastSecond = Time.Second;
 	u32 nLastKey = 0;
 	boolean bRedraw = TRUE;
@@ -697,8 +816,23 @@ void CDmdApp::ShowClockScreen (unsigned nDuration, boolean bDateScreen)
 			nSecondStart = nNow;
 		}
 
-		// copie : les reglages peuvent changer depuis la page web pendant un chargement
+		// copie : les reglages peuvent changer depuis la page web pendant un chargement ;
+		// choix "au hasard" : ceux tires au debut de cet ecran
 		TClockStyle Style = m_pConfig->ClockStyle;
+		if (strcmp (Style.Time.Pattern, CLOCK_RANDOM) == 0)
+		{
+			strcpy (Style.Time.Pattern, Picked.Time.Pattern);
+			memcpy (Style.Time.Color, Picked.Time.Color, 3);
+		}
+		if (strcmp (Style.Date.Pattern, CLOCK_RANDOM) == 0)
+		{
+			strcpy (Style.Date.Pattern, Picked.Date.Pattern);
+			memcpy (Style.Date.Color, Picked.Date.Color, 3);
+		}
+		if (strcmp (Style.Background, CLOCK_RANDOM) == 0)
+		{
+			strcpy (Style.Background, Picked.Background);
+		}
 		m_pClock->Prepare (Style);
 
 		unsigned nMillis = (unsigned) ((nNow - nStart) / 1000);
@@ -746,7 +880,8 @@ void CDmdApp::ShowWeather (unsigned nDuration)
 		m_pClock->PrepareWeather (Style);
 
 		unsigned nMillis = (unsigned) ((CTimer::GetClockTicks64 () - nStart) / 1000);
-		u32 nKey = Style.bAnimate ? nMillis / 40 : nMillis / 1000;
+		boolean bFast = Style.bAnimate || strcmp (Style.Text.Pattern, CLOCK_RAINBOW) == 0;
+		u32 nKey = bFast ? nMillis / 40 : nMillis / 1000;
 		if (bRedraw || nKey != nLastKey)
 		{
 			pWeather->GetData (&Data);		// mise a jour arrivee entre-temps ?
@@ -758,6 +893,271 @@ void CDmdApp::ShowWeather (unsigned nDuration)
 
 		Wait (Style.bAnimate ? 10 : 40);
 	}
+}
+
+// texte defilant et compte a rebours de la rotation (toutes les N GIF, ou a chaque tour sans GIF) :
+// l'element actif suivant de chaque liste (messages.h)
+void CDmdApp::ShowMessages (boolean bEveryTime)
+{
+	CRemoteControl *pRemote = CRemoteControl::Get ();
+
+	if (   CMessages::CountActiveTexts () > 0
+	    && (bEveryTime || ++m_nGifsSinceBanner >= m_pConfig->Banner.nEvery)
+	    && !pRemote->IsPlayRequested ())
+	{
+		m_nGifsSinceBanner = 0;
+		for (unsigned n = 0; n < CMessages::s_nTexts; n++)
+		{
+			unsigned i = m_nNextText++ % CMessages::s_nTexts;
+			const TBannerStyle &T = CMessages::s_Texts[i];
+			if (T.bActive && T.Text[0] != '\0')
+			{
+				ShowBanner (T);
+				break;
+			}
+		}
+	}
+
+	if (   CMessages::CountActiveCountdowns () > 0
+	    && (bEveryTime || ++m_nGifsSinceCountdown >= m_pConfig->Countdown.nEvery)
+	    && !pRemote->IsPlayRequested ())
+	{
+		m_nGifsSinceCountdown = 0;
+		for (unsigned n = 0; n < CMessages::s_nCountdowns; n++)
+		{
+			unsigned i = m_nNextCountdown++ % CMessages::s_nCountdowns;
+			const TCountdownStyle &C = CMessages::s_Countdowns[i];
+			if (C.bActive && ShowCountdown (C, C.nDisplayTime))
+			{
+				break;			// sinon (date passee) : le suivant
+			}
+		}
+	}
+}
+
+// "Afficher maintenant" de la page Messages : ":texte:N" ou ":compte:N"
+void CDmdApp::ShowMessageNow (const char *pRequest)
+{
+	boolean bText = strncmp (pRequest, BANNER_PLAY_REQUEST ":", strlen (BANNER_PLAY_REQUEST) + 1) == 0;
+	const char *pNumber = pRequest + strlen (bText ? BANNER_PLAY_REQUEST : COUNTDOWN_PLAY_REQUEST) + 1;
+	unsigned nIndex = 0;
+	while ('0' <= *pNumber && *pNumber <= '9')
+	{
+		nIndex = nIndex * 10 + (*pNumber++ - '0');
+	}
+
+	if (bText && nIndex < CMessages::s_nTexts)
+	{
+		TBannerStyle T = CMessages::s_Texts[nIndex];
+		ShowBanner (T);
+	}
+	else if (!bText && nIndex < CMessages::s_nCountdowns)
+	{
+		TCountdownStyle C = CMessages::s_Countdowns[nIndex];
+		ShowCountdown (C, CLOCK_DEMO_MS);
+	}
+}
+
+// une phase d'un effet de page ; FALSE si interrompue (GIF demandee depuis la page web)
+boolean CDmdApp::RunPagePhase (const TBannerStyle &rItem, const char *pPage, unsigned nPhase,
+			       unsigned nDuration, u64 nStart)
+{
+	u64 nPhaseStart = CTimer::GetClockTicks64 ();
+	unsigned nLastKey = 0xFFFFFFFF;
+	boolean bRainbow = strcmp (rItem.Style.Pattern, CLOCK_RAINBOW) == 0;
+
+	for (;;)
+	{
+		if (CRemoteControl::Get ()->IsPlayRequested ())
+		{
+			return FALSE;
+		}
+
+		u64 nHeld = HoldWhileStopped (m_pCanvas->GetData ());
+		nPhaseStart += nHeld;
+
+		u64 nNow = CTimer::GetClockTicks64 ();
+		unsigned nElapsed = (unsigned) ((nNow - nPhaseStart) / 1000);
+		unsigned nProgress = nDuration > 0 ? nElapsed * 1000 / nDuration : 1000;
+		unsigned nMillis = (unsigned) ((nNow - nStart) / 1000);
+
+		// redessiner quand l'image change : avancement, ou arc-en-ciel / motif anime
+		unsigned nKey = nPhase == CClockRenderer::PageHold ? 0 : nProgress;
+		if (bRainbow || strcmp (rItem.Style.Pattern, CLOCK_NONE) != 0)
+		{
+			nKey = nKey * 4099 + nMillis / 30;
+		}
+		if (nKey != nLastKey || nHeld != 0)
+		{
+			m_pClock->RenderPage (rItem.Style, pPage, rItem.Effect, nPhase,
+					      nProgress > 1000 ? 1000 : nProgress, nMillis, m_pCanvas);
+			m_pMatrix->Show (m_pCanvas->GetData ());
+			nLastKey = nKey;
+		}
+
+		if (nElapsed >= nDuration)
+		{
+			return TRUE;
+		}
+
+		Wait (8);
+	}
+}
+
+void CDmdApp::ShowBanner (const TBannerStyle &rItem)
+{
+	TBannerStyle Banner = rItem;	// copie : la liste peut changer depuis la page web
+	if (Banner.Text[0] == '\0')
+	{
+		return;
+	}
+
+	boolean bPixel = strcasecmp (Banner.Style.Font, CLOCK_FONT_PIXEL) == 0;
+	char Text[BANNER_TEXT_LEN];
+	TextToLatin1 (Banner.Text, Text, sizeof Text, bPixel);
+
+	m_pClock->PrepareText (Banner.Style);
+	CRemoteControl::Get ()->Status.pScreen = "texte";
+	const int W = (int) m_pCanvas->GetWidth ();
+	u64 nStart = CTimer::GetClockTicks64 ();
+
+	// effets de page : le texte est coupe en pages qui tiennent sur le panneau
+	if (IsPagedEffect (Banner.Effect))
+	{
+		static char Pages[20][BANNER_TEXT_LEN];
+		m_pClock->FitPages (&Banner.Style, Text);
+		unsigned nPages = m_pClock->SplitPages (Banner.Style, Text, Pages, 20);
+		unsigned s = Banner.nSpeed;		// 1 (lent) a 10 (rapide)
+
+		for (unsigned nPass = 0; nPass < Banner.nPasses; nPass++)
+		{
+			for (unsigned i = 0; i < nPages; i++)
+			{
+				unsigned nLength = strlen (Pages[i]);
+				unsigned nIn = 1300 - s * 90;				// 1,2 s a 0,4 s
+				if (Banner.Effect == EffectTyping)	nIn = nLength * (200 - s * 15);
+				if (Banner.Effect == EffectRain)	nIn = 600 + nLength * (130 - s * 9);
+				unsigned nHold = 1200 + nLength * 60;
+				if (nHold > 5000)	nHold = 5000;
+				unsigned nOut = Banner.Effect == EffectTyping ? nIn / 3 : nIn;
+
+				if (   !RunPagePhase (Banner, Pages[i], CClockRenderer::PageIn, nIn, nStart)
+				    || !RunPagePhase (Banner, Pages[i], CClockRenderer::PageHold, nHold, nStart)
+				    || !RunPagePhase (Banner, Pages[i], CClockRenderer::PageOut, nOut, nStart))
+				{
+					return;
+				}
+			}
+		}
+
+		return;
+	}
+
+	// defilement : de droite a gauche, ou de gauche a droite (inverse)
+	int nTextWidth = m_pClock->GetTextWidth (Banner.Style, Text);
+	int nDistance = W + nTextWidth;		// un passage complet
+	unsigned nSpeed = BannerPixelsPerSecond (Banner.nSpeed);
+	boolean bReverse = Banner.Effect == EffectReverse;
+	boolean bAnimated = strcmp (Banner.Style.Pattern, CLOCK_NONE) != 0;
+	int nLastOffset = -1;
+	unsigned nLastMillis = 0;
+
+	while (!CRemoteControl::Get ()->IsPlayRequested ())
+	{
+		u64 nHeld = HoldWhileStopped (m_pCanvas->GetData ());
+		nStart += nHeld;
+		if (nHeld != 0)
+		{
+			nLastOffset = -1;
+		}
+
+		unsigned nMillis = (unsigned) ((CTimer::GetClockTicks64 () - nStart) / 1000);
+		u64 nTravel = (u64) nMillis * nSpeed / 1000;
+		if (nTravel >= (u64) nDistance * Banner.nPasses)
+		{
+			break;
+		}
+
+		int nOffset = (int) (nTravel % nDistance);
+		if (nOffset != nLastOffset || (bAnimated && nMillis - nLastMillis >= 30))
+		{
+			int x = bReverse ? nOffset - nTextWidth : W - nOffset;
+			m_pClock->RenderScroll (Banner.Style, Text, x, nMillis, m_pCanvas);
+			m_pMatrix->Show (m_pCanvas->GetData ());
+			nLastOffset = nOffset;
+			nLastMillis = nMillis;
+		}
+
+		Wait (5);
+	}
+}
+
+// FALSE si rien n'a ete montre (date passee, heure inconnue)
+boolean CDmdApp::ShowCountdown (const TCountdownStyle &rItem, unsigned nDuration)
+{
+	TDateTime Time;
+	if (!CClock::Get ()->GetLocalTime (&Time))
+	{
+		return FALSE;			// heure pas encore connue
+	}
+
+	TCountdownStyle Style = rItem;
+	char Value[32];
+	TCountdownState State = FormatCountdown (Style.Target, Time, Value, sizeof Value);
+	if (State == CountdownNone)
+	{
+		return FALSE;			// date passee
+	}
+
+	boolean bPixel = strcasecmp (Style.Style.Font, CLOCK_FONT_PIXEL) == 0;
+	char Title[COUNTDOWN_TITLE_LEN], Done[COUNTDOWN_TITLE_LEN];
+	TextToLatin1 (Style.Title, Title, sizeof Title, TRUE);		// titre en police Pixel
+	TextToLatin1 (Style.Done, Done, sizeof Done, bPixel);
+
+	m_pClock->PrepareText (Style.Style);
+	CRemoteControl::Get ()->Status.pScreen = "compte";
+	u64 nStart = CTimer::GetClockTicks64 ();
+	u64 nEnd = nStart + (u64) nDuration * 1000;
+	unsigned nLastSecond = 99;
+
+	while (   CTimer::GetClockTicks64 () < nEnd
+	       && !CRemoteControl::Get ()->IsPlayRequested ())
+	{
+		u64 nHeld = HoldWhileStopped (m_pCanvas->GetData ());
+		nEnd += nHeld;
+		if (nHeld != 0)
+		{
+			nLastSecond = 99;
+		}
+
+		if (!CClock::Get ()->GetLocalTime (&Time))
+		{
+			break;
+		}
+
+		unsigned nMillis = (unsigned) ((CTimer::GetClockTicks64 () - nStart) / 1000);
+		boolean bAnimated = strcasecmp (Style.Style.Pattern, CLOCK_NONE) != 0;
+		if (Time.Second != nLastSecond || bAnimated)
+		{
+			State = FormatCountdown (Style.Target, Time, Value, sizeof Value);
+			if (State == CountdownReached)
+			{
+				m_pClock->RenderCountdown (Style, "", Done, nMillis, m_pCanvas);
+			}
+			else
+			{
+				char Latin[32];
+				TextToLatin1 (Value, Latin, sizeof Latin, bPixel);
+				m_pClock->RenderCountdown (Style, Title, Latin, nMillis, m_pCanvas);
+			}
+			m_pMatrix->Show (m_pCanvas->GetData ());
+			nLastSecond = Time.Second;
+		}
+
+		Wait (bAnimated ? 10 : 40);
+	}
+
+	return TRUE;
 }
 
 u64 CDmdApp::HoldWhileStopped (const u8 *pFrame)

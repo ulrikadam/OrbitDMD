@@ -13,7 +13,7 @@
 		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
 		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
 	</picture></a>
-	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge" class="on">Horloge</a><a href="/meteo">Météo</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge" class="on">Horloge</a><a href="/meteo">Météo</a><a href="/messages">Messages</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
 	<div class="status">
 		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
 		<button class="btn sm" id="lock"></button>
@@ -312,7 +312,7 @@ function markAll () {
 	for (const s of el("swatches").querySelectorAll(".swatch"))
 		s.classList.toggle("sel", cur.Clock_Font_Pattern === "None" && s.dataset.value === cur.Clock_Color);
 	const plain = el("patterns").querySelector(".plain");
-	if (plain) plain.style.background = "#" + cur.Clock_Color;
+	if (plain && !plain.classList.contains("rainbow")) plain.style.background = "#" + cur.Clock_Color;
 	el("Clock_Color").value = "#" + cur.Clock_Color.toLowerCase();
 }
 
@@ -352,6 +352,13 @@ function renderPatterns () {
 	const none = tile("Clock_Font_Pattern", "None", "Couleur unie");
 	none.firstChild.innerHTML = '<div class="plain"></div>';
 	box.appendChild(none);
+	const rainbow = tile("Clock_Font_Pattern", "Arc-en-ciel", "Arc-en-ciel animé");
+	rainbow.firstChild.innerHTML = '<div class="plain rainbow"></div>';
+	box.appendChild(rainbow);
+	const random = tile("Clock_Font_Pattern", "Random", "Au hasard");
+	random.firstChild.innerHTML = '<div class="random-tile">?</div>';
+	random.title = "Une couleur, l'arc-en-ciel ou un motif, tiré au hasard à chaque affichage de l'heure";
+	box.appendChild(random);
 	for (const f of assets.motifs) {
 		const t = tile("Clock_Font_Pattern", f, imageName(f));
 		const img = document.createElement("img");
@@ -366,6 +373,10 @@ function renderBackgrounds () {
 	const box = el("backgrounds");
 	box.textContent = "";
 	box.appendChild(tile("Clock_Background", "None", "Aucun (noir)"));
+	const random = tile("Clock_Background", "Random", "Au hasard");
+	random.firstChild.innerHTML = '<div class="random-tile">?</div>';
+	random.title = "Un fond tiré au hasard à chaque affichage de l'heure";
+	box.appendChild(random);
 	for (const f of assets.fonds) {
 		const t = tile("Clock_Background", f, imageName(f));
 		const img = document.createElement("img");
@@ -383,6 +394,8 @@ function renderDateSelects () {
 	font.value = cur.Date_Font;
 	pat.textContent = "";
 	pat.add(new Option("Couleur unie", "None"));
+	pat.add(new Option("Arc-en-ciel animé", "Arc-en-ciel"));
+	pat.add(new Option("Au hasard", "Random"));
 	for (const f of assets.motifs) pat.add(new Option("Motif " + imageName(f), f));
 	pat.value = cur.Date_Font_Pattern;
 }

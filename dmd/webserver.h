@@ -69,7 +69,7 @@ private:
 		// tous les champs texte (pour /api/reglages)
 		unsigned  nFields;
 		char	  FieldName[MaxFields][40];
-		char	  FieldValue[MaxFields][96];
+		char	  FieldValue[MaxFields][256];	// texte defilant : 200 octets
 	};
 
 	void CollectForm (TForm *pForm);

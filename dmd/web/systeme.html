@@ -13,7 +13,7 @@
 		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
 		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
 	</picture></a>
-	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/reglages">Réglages</a><a href="/systeme" class="on">Système</a></nav>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/messages">Messages</a><a href="/reglages">Réglages</a><a href="/systeme" class="on">Système</a></nav>
 	<div class="status">
 		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
 		<button class="btn sm" id="lock"></button>
@@ -28,6 +28,7 @@
 		</div>
 		<span class="chip" id="version">—</span>
 	</div>
+	<div id="update-banner" hidden></div>
 
 	<div class="stack">
 		<section class="card">
@@ -50,10 +51,12 @@
 			</section>
 
 			<section class="card">
-				<h2>Réglages complets</h2>
-				<p class="small muted" style="margin:-4px 0 12px">Fichier <b>config.txt</b> (Wi-Fi, panneaux, luminosité…). L'ancien est gardé en config.bak.</p>
-				<label class="drop" id="drop-config"><input type="file" accept=".txt"><span><b>Choisir config.txt</b> ou le glisser ici</span></label>
-				<div class="row" style="margin-top:12px"><span class="small muted" id="config-info"></span><span class="spacer"></span><button class="btn primary" id="config-go" disabled>Envoyer</button></div>
+				<h2>Sauvegarde des réglages</h2>
+				<p class="small muted" style="margin:-4px 0 12px">Tous les réglages (Wi-Fi, panneaux, horloge, météo…), vos textes et comptes à rebours, et vos GIF favorites et exclues,
+					dans un seul fichier. À garder pour soi : il contient vos mots de passe.</p>
+				<div class="row" style="margin-bottom:12px"><button class="btn" id="backup-go"><svg class="i" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Télécharger la sauvegarde</button></div>
+				<label class="drop" id="drop-config"><input type="file" accept=".txt"><span><b>Restaurer</b> : choisir la sauvegarde (ou un config.txt) ou la glisser ici</span></label>
+				<div class="row" style="margin-top:12px"><span class="small muted" id="config-info"></span><span class="spacer"></span><button class="btn primary" id="config-go" disabled>Restaurer</button></div>
 			</section>
 
 			<section class="card">
@@ -156,7 +159,54 @@ let kernelFile = null, configFile = null;
 dropZone("#drop-kernel", ".img", f => { kernelFile = f; $("#kernel-info").textContent = f.name + " · " + OD.size(f.size); $("#kernel-go").disabled = false; });
 dropZone("#drop-config", ".txt", f => { configFile = f; $("#config-info").textContent = f.name + " · " + OD.size(f.size); $("#config-go").disabled = false; });
 $("#kernel-go").onclick = () => sendAndRestart("/maj", kernelFile, $("#kernel-info"), $("#kernel-go"), "Programme reçu, installation…");
-$("#config-go").onclick = () => sendAndRestart("/config", configFile, $("#config-info"), $("#config-go"), "Réglages reçus, redémarrage…");
+/* sauvegarde : config.txt, puis "# ===== OrbitDMD : GIF favorites..." et les GIF marquees en commentaires */
+const MARKS_HEADER = "# ===== OrbitDMD : GIF favorites (+) et exclues (-) =====";
+const MESSAGES_HEADER = "# ===== OrbitDMD : messages =====";
+$("#backup-go").onclick = async () => {
+	if (!OD.getPw() && !(await OD.askPassword())) return;
+	const fd = new FormData();
+	fd.append("password", OD.getPw());
+	let text;
+	try { text = await (await fetch("/api/sauvegarde", { method: "POST", body: fd })).text(); }
+	catch (e) { OD.toast("Panneau injoignable", false); return; }
+	if (text.startsWith("ERREUR")) { OD.toast(text.replace(/^ERREUR : /, ""), false); return; }
+	const s = OD.status || {};
+	const day = new Date().toISOString().slice(0, 10);
+	const a = document.createElement("a");
+	a.href = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
+	a.download = "orbitdmd-sauvegarde-" + (s.nom || "panneau") + "-" + day + ".txt";
+	document.body.appendChild(a);
+	a.click();
+	a.remove();
+	setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+	OD.toast("Sauvegarde téléchargée : gardez-la pour vous (mots de passe)");
+};
+$("#config-go").onclick = async () => {
+	if (!configFile) return;
+	const text = await configFile.text();
+	/* sections de la sauvegarde, en commentaires apres config.txt */
+	const heads = [MARKS_HEADER, MESSAGES_HEADER].map(h => [h, text.indexOf(h)]).filter(x => x[1] >= 0).sort((x, y) => x[1] - y[1]);
+	const section = h => {
+		const i = heads.findIndex(x => x[0] === h);
+		if (i < 0) return null;
+		const start = heads[i][1] + h.length, end = i + 1 < heads.length ? heads[i + 1][1] : text.length;
+		return text.slice(start, end).split(/\r?\n/).map(l => l.replace(/^#/, ""));
+	};
+	const send = async (url, lines, name) => {
+		const r = await OD.action(url, {}, new File([lines.join("\n") + "\n"], name, { type: "text/plain" }));
+		if (!r.ok && !r.cancelled) OD.toast(r.text, false);
+		return r.ok;
+	};
+	/* d'abord les GIF marquees et les messages (le panneau redemarre ensuite avec les reglages) */
+	const marks = section(MARKS_HEADER);
+	if (marks && !(await send("/api/gif/marques/restaurer", marks.filter(l => /^[+-][^/]+\/./.test(l)), "marques.txt"))) return;
+	const messages = section(MESSAGES_HEADER);
+	if (messages && !(await send("/api/messages", messages.filter(l => l.trim()), "messages.txt"))) return;
+	const config = heads.length
+		? new File([text.slice(0, heads[0][1]).replace(/\s+$/, "") + "\n"], "config.txt", { type: "text/plain" })
+		: configFile;
+	sendAndRestart("/config", config, $("#config-info"), $("#config-go"), "Réglages restaurés, redémarrage…");
+};
 $("#reboot").onclick = () => { if (confirm("Redémarrer le panneau maintenant ?")) sendAndRestart("/redemarrer", null, $("#reboot-info"), $("#reboot"), "Redémarrage demandé"); };
 
 document.addEventListener("etat", e => { if (e.detail) $("#version").textContent = "OrbitDMD " + (e.detail.version || "") + " · programme du " + e.detail.programme; });
