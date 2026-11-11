@@ -88,6 +88,8 @@ Vos retours font avancer OrbitDMD :
 
 - 💡 **Une idée, une amélioration ?** Ouvrez une [discussion](https://github.com/ulrikadam/OrbitDMD/discussions)
   ou une [proposition](https://github.com/ulrikadam/OrbitDMD/issues/new/choose).
+- 💬 **Envie d'en parler en français ?** Rejoignez la discussion sur le forum
+  [Neo-Arcadia](https://www.neo-arcadia.com/forum/viewtopic.php?t=84762).
 - 🐞 **Un problème ?** [Signalez-le](https://github.com/ulrikadam/OrbitDMD/issues/new/choose) en indiquant la
   version (affichée sur le tableau de bord) et, si possible, le journal de la page Système.
 - 🛠️ **Envie de contribuer au code ?** Lisez [CONTRIBUTING.md](CONTRIBUTING.md) et
