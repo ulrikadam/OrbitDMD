@@ -30,3 +30,6 @@ outils/installateur/dist/
 __pycache__/
 Thumbs.db
 desktop.ini
+
+# --- brouillons personnels (messages de forum...) ---
+brouillons/
