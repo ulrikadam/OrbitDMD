@@ -50,7 +50,7 @@ de type « DMD » de flipper ou de borne d'arcade :
 
 ## Installation
 
-1. **Téléchargez** `OrbitDMD-Installateur-1.0.0.exe` depuis la page
+1. **Téléchargez** `OrbitDMD-Installateur-<version>.exe` depuis la page
    [Releases](https://github.com/ulrikadam/OrbitDMD/releases/latest) (Windows 10 ou 11, rien d'autre à installer).
 2. **Lancez-le.** L'exécutable n'est pas signé : si Windows affiche « Windows a protégé votre ordinateur »,
    cliquez sur *Informations complémentaires* puis *Exécuter quand même*.
@@ -67,7 +67,8 @@ de type « DMD » de flipper ou de borne d'arcade :
 </p>
 
 Ensuite, tout se règle depuis la page web : GIF (ajout par glisser-déposer), horloge, météo, Wi-Fi, adresse IP fixe,
-mot de passe, et même la mise à jour du programme.
+mot de passe, et même la mise à jour du programme : téléchargez `kernel8.img` dans la dernière
+version sur [Releases](https://github.com/ulrikadam/OrbitDMD/releases/latest), puis **Système → Nouveau programme**.
 
 ## Polices, fonds et GIF fournis
 
