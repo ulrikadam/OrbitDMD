@@ -90,7 +90,7 @@ Vos retours font avancer OrbitDMD :
   ou une [proposition](https://github.com/ulrikadam/OrbitDMD/issues/new/choose).
 - 🐞 **Un problème ?** [Signalez-le](https://github.com/ulrikadam/OrbitDMD/issues/new/choose) en indiquant la
   version (affichée sur le tableau de bord) et, si possible, le journal de la page Système.
-- 🛠️ **Envie de contribuer au code ?** Lisez [CONTRIBUER.md](CONTRIBUER.md) et
+- 🛠️ **Envie de contribuer au code ?** Lisez [CONTRIBUTING.md](CONTRIBUTING.md) et
   [docs/CONSTRUIRE.md](docs/CONSTRUIRE.md).
 
 Les nouveautés de chaque version sont dans le [journal des versions](JOURNAL-DES-VERSIONS.md).
