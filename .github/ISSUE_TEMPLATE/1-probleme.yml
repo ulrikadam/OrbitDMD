@@ -1,0 +1,61 @@
+name: 🐞 Signaler un problème
+description: Quelque chose ne fonctionne pas (panneau, page web, installateur).
+title: "[Problème] "
+labels: ["problème"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler ce problème !
+        ⚠️ **Ne collez jamais votre mot de passe Wi-Fi ni celui de la page web** (par exemple le contenu de `Config/config.txt`).
+  - type: textarea
+    id: description
+    attributes:
+      label: Que se passe-t-il ?
+      description: Décrivez le problème et ce que vous attendiez à la place.
+    validations:
+      required: true
+  - type: textarea
+    id: etapes
+    attributes:
+      label: Comment le reproduire ?
+      placeholder: |
+        1. Aller sur la page …
+        2. Cliquer sur …
+        3. Le panneau …
+  - type: input
+    id: version
+    attributes:
+      label: Version d'OrbitDMD
+      description: Affichée sur le tableau de bord (carte « Programme ») ou dans le nom de l'installateur.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: partie
+    attributes:
+      label: Partie concernée
+      options:
+        - Panneau LED (affichage, GIF, horloge, météo)
+        - Page web
+        - Wi-Fi / réseau
+        - Installateur Windows
+        - Autre
+    validations:
+      required: true
+  - type: input
+    id: materiel
+    attributes:
+      label: Matériel
+      placeholder: "Raspberry Pi 3 B+, 2 panneaux 64×32, carte adaptatrice …"
+  - type: textarea
+    id: journal
+    attributes:
+      label: Journal
+      description: Copiez le journal de la page Système (ou de l'installateur) s'il y en a un.
+      render: text
+  - type: textarea
+    id: images
+    attributes:
+      label: Photos, vidéos ou captures
+      description: Glissez-les ici si elles aident à comprendre.

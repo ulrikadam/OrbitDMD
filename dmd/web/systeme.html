@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrbitDMD · Système</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top"><div class="top-in">
+	<a class="brand" href="/" aria-label="OrbitDMD"><picture>
+		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
+		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
+	</picture></a>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/reglages">Réglages</a><a href="/systeme" class="on">Système</a></nav>
+	<div class="status">
+		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
+		<button class="btn sm" id="lock"></button>
+	</div>
+</div></header>
+
+<main>
+	<div class="head">
+		<div>
+			<h1>Système</h1>
+			<p class="sub">Journal du panneau, mises à jour et redémarrage.</p>
+		</div>
+		<span class="chip" id="version">—</span>
+	</div>
+
+	<div class="stack">
+		<section class="card">
+			<div class="row" style="margin-bottom:12px">
+				<h2 style="margin:0">Journal</h2>
+				<span class="spacer"></span>
+				<input class="input" type="search" id="filter" placeholder="Filtrer" aria-label="Filtrer le journal" style="width:180px">
+				<label class="row small muted" style="gap:8px"><span class="switch"><input type="checkbox" id="auto" checked></span>Suivi en direct</label>
+				<button class="btn sm" id="copy">Copier</button>
+			</div>
+			<pre class="log" id="log">Chargement…</pre>
+		</section>
+
+		<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+			<section class="card">
+				<h2>Nouveau programme</h2>
+				<p class="small muted" style="margin:-4px 0 12px">Fichier <b>kernel8.img</b>. L'ancien est gardé en kernel8.bak, puis le panneau redémarre.</p>
+				<label class="drop" id="drop-kernel"><input type="file" accept=".img"><span><b>Choisir kernel8.img</b> ou le glisser ici</span></label>
+				<div class="row" style="margin-top:12px"><span class="small muted" id="kernel-info"></span><span class="spacer"></span><button class="btn primary" id="kernel-go" disabled>Installer</button></div>
+			</section>
+
+			<section class="card">
+				<h2>Réglages complets</h2>
+				<p class="small muted" style="margin:-4px 0 12px">Fichier <b>config.txt</b> (Wi-Fi, panneaux, luminosité…). L'ancien est gardé en config.bak.</p>
+				<label class="drop" id="drop-config"><input type="file" accept=".txt"><span><b>Choisir config.txt</b> ou le glisser ici</span></label>
+				<div class="row" style="margin-top:12px"><span class="small muted" id="config-info"></span><span class="spacer"></span><button class="btn primary" id="config-go" disabled>Envoyer</button></div>
+			</section>
+
+			<section class="card">
+				<h2>Redémarrer</h2>
+				<p class="small muted" style="margin:-4px 0 12px">Le panneau s'éteint quelques secondes puis reprend avec l'écran de démarrage.</p>
+				<div class="row"><span class="small muted" id="reboot-info"></span><span class="spacer"></span><button class="btn danger" id="reboot">Redémarrer le panneau</button></div>
+			</section>
+		</div>
+	</div>
+</main>
+
+<footer class="credit">Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be" target="_blank" rel="noopener">www.nexadam.be</a></footer>
+
+<script src="/app.js"></script>
+<script>
+"use strict";
+let logText = "", busy = false;
+
+/* --- journal --- */
+function classify (line) {
+	if (/erreur|error|echec|impossible|panic|invalide|refuse/i.test(line)) return "e";
+	if (/warn|attention|introuvable|non connecte|absent/i.test(line)) return "w";
+	if (/Wi-Fi connecte|installe|Heure Internet|OrbitDMD, compile/i.test(line)) return "n";
+	return "";
+}
+function renderLog () {
+	const box = $("#log"), q = $("#filter").value.toLowerCase();
+	const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
+	box.textContent = "";
+	for (const line of logText.split("\n")) {
+		if (!line || (q && !line.toLowerCase().includes(q))) continue;
+		/* horodatage : "00:00:01.87" ou "Nov 10 17:39:31.88" */
+		const m = /^((?:[A-Z][a-z]{2} +\d+ )?\d\d:\d\d:\d\d\.\d\d) /.exec(line);
+		const row = document.createElement("div");
+		const cls = classify(line);
+		if (cls) row.className = cls;
+		if (m) {
+			const t = document.createElement("span"); t.className = "t"; t.textContent = m[1] + " ";
+			row.append(t, line.slice(m[1].length + 1));
+		} else {
+			row.textContent = line;
+		}
+		box.appendChild(row);
+	}
+	if (atBottom) box.scrollTop = box.scrollHeight;
+}
+async function loadLog () {
+	if ($("#auto").checked || !logText) {
+		try {
+			const t = await (await fetch("/journal", { cache: "no-store" })).text();
+			if (t !== logText) { logText = t; renderLog(); }
+		} catch (e) { /* hors ligne */ }
+	}
+	setTimeout(loadLog, 3000);
+}
+$("#filter").oninput = renderLog;
+$("#copy").onclick = () => {
+	const ta = document.createElement("textarea");
+	ta.value = logText; document.body.appendChild(ta); ta.select();
+	let ok = false;
+	try { ok = document.execCommand("copy"); } catch (e) {}
+	ta.remove();
+	OD.toast(ok ? "Journal copié" : "Copie impossible : sélectionnez le texte à la main", ok);
+};
+
+/* --- envoi d'un fichier puis attente du redemarrage --- */
+function dropZone (id, ext, onFile) {
+	const zone = $(id), input = $("input", zone);
+	input.onchange = () => input.files[0] && onFile(input.files[0]);
+	zone.ondragover = e => { e.preventDefault(); zone.classList.add("over"); };
+	zone.ondragleave = () => zone.classList.remove("over");
+	zone.ondrop = e => {
+		e.preventDefault(); zone.classList.remove("over");
+		const f = e.dataTransfer.files[0];
+		if (f && f.name.toLowerCase().endsWith(ext)) onFile(f); else OD.toast("Il faut un fichier " + ext, false);
+	};
+}
+async function sendAndRestart (url, file, info, button, label) {
+	if (busy) return;
+	const s = OD.status || {};
+	busy = true; button.disabled = true;
+	info.textContent = "Envoi…";
+	const r = await OD.action(url, {}, file);
+	if (!r.ok) {
+		busy = false; button.disabled = !file && url !== "/redemarrer";
+		info.textContent = "";
+		if (!r.cancelled) OD.toast(r.text, false);
+		return;
+	}
+	info.textContent = "Redémarrage du panneau…";
+	OD.toast(label);
+	const back = await OD.waitRestart(s.programme, s.uptime_s || 1e9);
+	busy = false;
+	if (back) { info.textContent = ""; OD.toast("Panneau de retour (programme du " + back.programme + ")"); }
+	else { info.textContent = "Le panneau ne répond pas"; OD.toast("Le panneau ne répond pas après 8 minutes : vérifiez son écran", false); }
+	button.disabled = url !== "/redemarrer";
+}
+
+let kernelFile = null, configFile = null;
+dropZone("#drop-kernel", ".img", f => { kernelFile = f; $("#kernel-info").textContent = f.name + " · " + OD.size(f.size); $("#kernel-go").disabled = false; });
+dropZone("#drop-config", ".txt", f => { configFile = f; $("#config-info").textContent = f.name + " · " + OD.size(f.size); $("#config-go").disabled = false; });
+$("#kernel-go").onclick = () => sendAndRestart("/maj", kernelFile, $("#kernel-info"), $("#kernel-go"), "Programme reçu, installation…");
+$("#config-go").onclick = () => sendAndRestart("/config", configFile, $("#config-info"), $("#config-go"), "Réglages reçus, redémarrage…");
+$("#reboot").onclick = () => { if (confirm("Redémarrer le panneau maintenant ?")) sendAndRestart("/redemarrer", null, $("#reboot-info"), $("#reboot"), "Redémarrage demandé"); };
+
+document.addEventListener("etat", e => { if (e.detail) $("#version").textContent = "OrbitDMD " + (e.detail.version || "") + " · programme du " + e.detail.programme; });
+loadLog();
+</script>
+</body>
+</html>

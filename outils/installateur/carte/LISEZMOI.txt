@@ -1,0 +1,29 @@
+OrbitDMD - panneaux LED HUB75 sur Raspberry Pi 3
+=================================================
+
+Cette carte a ete preparee par l'installateur OrbitDMD.
+
+1. Mettez la carte dans le Raspberry Pi 3 (relie aux panneaux par une carte
+   adaptatrice HUB75 "regular"), puis branchez l'alimentation.
+2. Le panneau affiche son ecran de demarrage pendant la connexion au Wi-Fi.
+3. Apres une trentaine de secondes, ouvrez dans un navigateur :
+      http://<nom du panneau>.local/
+   (ou l'adresse IP du panneau, visible dans la page de votre box).
+
+Tout se regle ensuite depuis cette page : GIF, horloge, meteo, luminosite,
+Wi-Fi, mises a jour du programme...
+
+Fichiers de la carte
+--------------------
+  Config/config.txt   reglages (modifies par la page web)
+  gif/<categorie>/    animations GIF, une categorie par dossier
+  gif/Accueil/        ecrans de demarrage
+  fonts/              polices (TTF, OTF), motifs et fonds de l'horloge (PNG, GIF)
+  kernel8.img         programme OrbitDMD
+  bootcode.bin, start.elf, fixup.dat, firmware/   fichiers du Raspberry Pi
+
+Si le Wi-Fi ne se connecte pas : retirez la carte, ouvrez Config/config.txt
+avec le Bloc-notes et corrigez Wifi_ssid et Wifi_psk.
+
+GIF fournies : projet RPI2DMD et creations OrbitDMD (voir gif/A_PROPOS_DES_GIF.txt).
+Licences : voir LICENCES.txt.

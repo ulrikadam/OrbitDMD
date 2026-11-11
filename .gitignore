@@ -1,0 +1,32 @@
+# --- donnees privees : ne jamais publier (mots de passe Wi-Fi et web, sauvegardes) ---
+carte-sd/
+sauvegarde-carte/
+sauvegarde-config/
+rootfs.img
+*.img.bak
+.claude/
+
+# --- outils de l'ancienne migration RPI2DMD (inutiles pour OrbitDMD) ---
+extraire-rootfs.ps1
+outils/ext4r.py
+outils/preparer-sd.ps1
+outils/preparer-carte.sh
+
+# --- fichiers produits par la compilation ---
+build-circle.log
+*.o
+*.d
+*.obj
+*.elf
+*.lst
+*.map
+dmd/kernel8.img
+dmd/webfiles.h
+dmd/test/out/
+outils/installateur/build/
+outils/installateur/dist/
+
+# --- Python, Windows ---
+__pycache__/
+Thumbs.db
+desktop.ini

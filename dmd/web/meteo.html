@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrbitDMD · Météo</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top"><div class="top-in">
+	<a class="brand" href="/" aria-label="OrbitDMD"><picture>
+		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
+		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
+	</picture></a>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo" class="on">Météo</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
+	<div class="status">
+		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
+		<button class="btn sm" id="lock"></button>
+	</div>
+</div></header>
+
+<main>
+	<div class="head">
+		<div>
+			<h1>Météo</h1>
+			<p class="sub">Le temps qu'il fait, affiché entre les GIF. Mise à jour toutes les 15 minutes.</p>
+		</div>
+	</div>
+
+	<!-- apercu -->
+	<section class="card clock-preview">
+		<div class="panel"><div class="led"><img id="prev" alt="Aperçu de l'écran météo"><div class="none" id="prev-none">Chargement de l'aperçu…</div></div></div>
+		<div class="row" style="margin-top:14px">
+			<span class="small muted" id="state"></span>
+			<span class="spacer"></span>
+			<button class="btn" id="undo" disabled>Annuler</button>
+			<button class="btn" id="show" title="Enregistre puis montre la météo 15 secondes sur le panneau">Voir sur le panneau</button>
+			<button class="btn primary" id="save" disabled>Enregistrer</button>
+		</div>
+	</section>
+
+	<div class="grid clock-grid">
+		<!-- lieu -->
+		<section class="card">
+			<h2>Lieu</h2>
+			<div class="form-row"><span class="lbl">Lieu choisi<span class="hint" id="coords"></span></span>
+				<b id="place">—</b></div>
+			<form class="row" id="search-form" style="margin-top:12px;flex-wrap:nowrap">
+				<input class="input" type="search" id="search" placeholder="Ville ou code postal" aria-label="Chercher une ville" style="flex:1;min-width:0">
+				<button class="btn" type="submit">Chercher</button>
+			</form>
+			<div class="places" id="results"></div>
+			<p class="small muted" style="margin:10px 0 0">La recherche passe par votre navigateur ; le panneau ne garde que la position choisie.</p>
+		</section>
+
+		<!-- meteo actuelle -->
+		<section class="card">
+			<h2>En ce moment</h2>
+			<div class="wx-now" id="now">
+				<div class="big" id="w-temp">—</div>
+				<div class="wx-desc" id="w-desc"></div>
+			</div>
+			<dl class="kv" id="w-list">
+				<dt>Ressenti</dt><dd id="w-feels">—</dd>
+				<dt>Humidité</dt><dd id="w-hum">—</dd>
+				<dt>Vent</dt><dd id="w-wind">—</dd>
+				<dt>Aujourd'hui</dt><dd id="w-today">—</dd>
+				<dt>Demain</dt><dd id="w-tomorrow">—</dd>
+			</dl>
+			<div class="row" style="margin-top:12px"><span class="small muted" id="w-age"></span><span class="spacer"></span>
+				<button class="btn sm" id="refresh"><svg class="i" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>Actualiser</button></div>
+			<p class="small muted" style="margin:10px 0 0">Données météo : <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0).</p>
+		</section>
+	</div>
+
+	<div class="grid clock-grid">
+		<!-- affichage -->
+		<section class="card">
+			<h2>Affichage</h2>
+			<div class="form-row"><label for="Weather_Active">Afficher la météo<span class="hint">Entre deux GIF</span></label>
+				<span class="switch"><input type="checkbox" id="Weather_Active"></span></div>
+			<div class="form-row"><label for="Weather_Every">Fréquence</label>
+				<select class="input" id="Weather_Every">
+					<option value="1">Après chaque GIF</option><option value="2">Toutes les 2 GIF</option>
+					<option value="3">Toutes les 3 GIF</option><option value="5">Toutes les 5 GIF</option>
+					<option value="10">Toutes les 10 GIF</option><option value="20">Toutes les 20 GIF</option>
+				</select></div>
+			<div class="form-row"><label for="Weather_Display_Time">Durée</label>
+				<span class="with-suffix"><input class="input num" type="number" id="Weather_Display_Time" min="1" max="60" step="0.5" data-ms> s</span></div>
+			<div class="form-row"><label for="Weather_Info">Deuxième ligne</label>
+				<select class="input" id="Weather_Info">
+					<option value="1">Description (PLUIE…)</option><option value="2">Minimum / maximum</option>
+					<option value="3">Température ressentie</option><option value="4">Humidité</option>
+					<option value="5">Vent</option><option value="6">Demain</option><option value="0">Rien</option>
+				</select></div>
+			<div class="form-row"><label for="Weather_Icon">Icône</label>
+				<span class="switch"><input type="checkbox" id="Weather_Icon"></span></div>
+			<div class="form-row"><label for="Weather_Animate">Icône animée<span class="hint">Pluie qui tombe, soleil qui brille…</span></label>
+				<span class="switch"><input type="checkbox" id="Weather_Animate"></span></div>
+		</section>
+
+		<!-- texte -->
+		<section class="card">
+			<h2>Texte</h2>
+			<div class="form-row"><label for="Weather_Font">Police de la température</label>
+				<select class="input" id="Weather_Font"></select></div>
+			<div class="form-row"><span class="lbl">Taille</span>
+				<span class="size" data-key="Weather_Font_Size"></span></div>
+			<div class="form-row"><label for="Weather_Font_Pattern">Remplissage</label>
+				<span class="row" style="gap:8px;flex-wrap:nowrap">
+					<input class="input color" type="color" id="Weather_Text_color" aria-label="Couleur de la température">
+					<select class="input" id="Weather_Font_Pattern" style="width:150px"></select>
+				</span></div>
+			<div class="swatches" id="swatches" style="padding:10px 0"></div>
+			<div class="form-row" style="border:0"><label for="Weather_Info_Color">Couleur de la deuxième ligne</label>
+				<input class="input color" type="color" id="Weather_Info_Color"></div>
+		</section>
+	</div>
+
+	<section class="card">
+		<details class="adv" id="icons-box">
+			<summary>Voir toutes les icônes</summary>
+			<div class="tiles" id="icons" style="margin-top:12px"></div>
+		</details>
+	</section>
+</main>
+
+<footer class="credit">Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be" target="_blank" rel="noopener">www.nexadam.be</a></footer>
+
+<script src="/app.js"></script>
+<script>
+"use strict";
+const KEYS = ["Weather_Active", "Weather_Display_Time", "Weather_Every", "Weather_Place", "Weather_Latitude",
+	"Weather_Longitude", "Weather_Font", "Weather_Font_Size", "Weather_Font_Pattern", "Weather_Text_color",
+	"Weather_Info", "Weather_Info_Color", "Weather_Icon", "Weather_Animate"];
+const PREVIEW_KEYS = ["Weather_Font", "Weather_Font_Size", "Weather_Font_Pattern", "Weather_Text_color",
+	"Weather_Info", "Weather_Info_Color", "Weather_Icon", "Weather_Animate"];
+const COLORS = [["FFAA00", "Ambre"], ["FFFFFF", "Blanc"], ["FFFF00", "Jaune"], ["FF7A00", "Orange"], ["FF2020", "Rouge"],
+	["20E040", "Vert"], ["01A7C5", "Turquoise"], ["2060FF", "Bleu"], ["A040FF", "Violet"], ["FF40A0", "Rose"]];
+const ICONS = [[0, 1, "Soleil"], [0, 0, "Nuit claire"], [2, 1, "Peu nuageux"], [2, 0, "Nuit nuageuse"], [3, 1, "Couvert"],
+	[45, 1, "Brouillard"], [53, 1, "Bruine"], [63, 1, "Pluie"], [73, 1, "Neige"], [95, 1, "Orage"]];
+
+let cur = {}, saved = {}, assets = { polices: [], motifs: [] }, loaded = false;
+const el = id => document.getElementById(id);
+const dirty = () => KEYS.filter(k => String(cur[k]) !== String(saved[k]));
+const deg = v => Math.round(v) + "°";
+function fontName (f) {
+	if (f === "Pixel") return "Pixel (intégrée)";
+	const base = f.replace(/^.*\//, "").replace(/\.(ttf|otf)$/i, "");
+	const noms = { goudysto: "Goudy Stout", pressstart2p: "Press Start 2P", vt323: "VT323", blackopsone: "Black Ops One",
+		russoone: "Russo One", mountainsofchristmas: "Mountains of Christmas", "orbitdmd-led": "OrbitDMD LED",
+		"orbitdmd-gras": "OrbitDMD Gras", "orbitdmd-segments": "OrbitDMD 7 segments" };
+	if (noms[base.toLowerCase()]) return noms[base.toLowerCase()];
+	return base.replace(/^HALLOWEEN_/i, "Halloween · ").replace(/_/g, " ");
+}
+function imageName (f) { return f.replace(/^.*\//, "").replace(/\.(png|gif)$/i, "").replace(/^(Pattern|COLOR|Motif)_?/i, "").replace(/_/g, " ") || f; }
+
+/* --- apercu dessine par le panneau --- */
+function previewUrl (extra = {}) {
+	const p = new URLSearchParams({ ecran: "meteo" });
+	for (const k of PREVIEW_KEYS) p.set(k, cur[k]);
+	for (const k in extra) p.set(k, extra[k]);
+	return "/api/horloge/apercu?" + p.toString();
+}
+let prevBusy = false, prevAgain = false, prevTimer = 0;
+function refreshPreview () {
+	if (!loaded) return;
+	if (prevBusy) { prevAgain = true; return; }
+	prevBusy = true;
+	const img = el("prev");
+	const done = () => { prevBusy = false; if (prevAgain) { prevAgain = false; refreshPreview(); } };
+	img.onload = () => { el("prev-none").hidden = true; done(); };
+	img.onerror = () => { el("prev-none").hidden = false; el("prev-none").textContent = "Aperçu indisponible"; done(); };
+	img.src = previewUrl({ t: Date.now() });
+}
+function schedulePreview () { clearTimeout(prevTimer); prevTimer = setTimeout(refreshPreview, 200); }
+setInterval(() => { if (!document.hidden && !prevBusy) refreshPreview(); }, 2000);	/* icones animees */
+
+function changed () {
+	const d = dirty();
+	el("save").disabled = el("undo").disabled = d.length === 0;
+	el("state").textContent = d.length ? "Modifications non enregistrées" : "";
+	el("place").textContent = cur.Weather_Place || (cur.Weather_Latitude ? "Position choisie" : "Pas encore choisi");
+	el("coords").textContent = cur.Weather_Latitude ? cur.Weather_Latitude + ", " + cur.Weather_Longitude : "Cherchez votre ville ci-dessous";
+	for (const s of el("swatches").children) s.classList.toggle("sel", cur.Weather_Font_Pattern === "None" && s.dataset.value === cur.Weather_Text_color);
+	schedulePreview();
+}
+
+/* --- controles --- */
+function bindSimple () {
+	for (const k of KEYS) {
+		const input = el(k);
+		if (!input) continue;
+		const read = () => input.type === "checkbox" ? (input.checked ? "1" : "0")
+			: input.dataset.ms !== undefined ? String(Math.round(+input.value * 1000))
+			: input.type === "color" ? input.value.slice(1).toUpperCase() : input.value;
+		input.addEventListener(input.type === "color" ? "input" : "change", () => {
+			if (input.type === "number" && (!input.value || +input.value <= 0)) return;
+			cur[k] = read();
+			if (k === "Weather_Text_color") { cur.Weather_Font_Pattern = "None"; el("Weather_Font_Pattern").value = "None"; }
+			changed();
+		});
+	}
+}
+function fillSimple () {
+	for (const k of KEYS) {
+		const input = el(k);
+		if (!input) continue;
+		const v = cur[k];
+		if (input.type === "checkbox") input.checked = v === "1";
+		else if (input.dataset.ms !== undefined) input.value = +v / 1000;
+		else if (input.type === "color") input.value = "#" + v.toLowerCase();
+		else if (input.tagName === "SELECT" && ![...input.options].some(o => o.value === v)) input.add(new Option(v, v));
+		if (input.type !== "checkbox" && input.dataset.ms === undefined && input.type !== "color") input.value = v;
+	}
+}
+function setupSize (box) {
+	const key = box.dataset.key;
+	box.innerHTML = '<label class="row" style="gap:6px;font-weight:400"><span class="switch"><input type="checkbox"></span>Auto</label>' +
+		'<input type="range" min="6" max="48" step="1" aria-label="Taille en pixels"><output class="small muted"></output>';
+	const auto = box.querySelector("input[type=checkbox]"), range = box.querySelector("input[type=range]"), out = box.querySelector("output");
+	box.show = () => {
+		const v = +cur[key];
+		auto.checked = v === 0;
+		range.disabled = v === 0;
+		if (v) range.value = v;
+		out.textContent = v ? v + " px" : "";
+	};
+	auto.onchange = () => { cur[key] = String(auto.checked ? 0 : (+range.value || 20)); box.show(); changed(); };
+	range.oninput = () => { cur[key] = String(range.value); box.show(); changed(); };
+	box.show();
+}
+function renderSelects () {
+	const font = el("Weather_Font"), pat = el("Weather_Font_Pattern");
+	font.textContent = "";
+	for (const f of ["Pixel"].concat(assets.polices)) font.add(new Option(fontName(f), f));
+	pat.textContent = "";
+	pat.add(new Option("Couleur unie", "None"));
+	for (const f of assets.motifs) pat.add(new Option("Motif " + imageName(f), f));
+	const sw = el("swatches");
+	sw.textContent = "";
+	for (const [hex, name] of COLORS) {
+		const s = document.createElement("button");
+		s.type = "button";
+		s.className = "swatch";
+		s.dataset.value = hex;
+		s.style.background = "#" + hex;
+		s.title = s.ariaLabel = name;
+		s.onclick = () => { cur.Weather_Text_color = hex; cur.Weather_Font_Pattern = "None"; fillSimple(); changed(); };
+		sw.appendChild(s);
+	}
+}
+function renderAll () {
+	fillSimple();
+	for (const box of document.querySelectorAll(".size")) box.show ? box.show() : setupSize(box);
+	changed();
+}
+
+/* --- meteo actuelle --- */
+async function loadWeather () {
+	let w;
+	try { w = await OD.getJSON("/api/meteo"); } catch (e) { return; }
+	const set = (id, t) => { el(id).textContent = t; };
+	if (!w.valide) {
+		set("w-temp", "—");
+		set("w-desc", w.lieu_choisi ? (w.erreur ? "Pas de météo : " + w.erreur : "Météo en cours de chargement…") : "Choisissez d'abord un lieu");
+		for (const id of ["w-feels", "w-hum", "w-wind", "w-today", "w-tomorrow"]) set(id, "—");
+		set("w-age", "");
+		return;
+	}
+	set("w-temp", w.temp.toFixed(1).replace(".", ",") + " °C");
+	set("w-desc", w.description.charAt(0) + w.description.slice(1).toLowerCase());
+	set("w-feels", deg(w.ressenti));
+	set("w-hum", w.humidite + " %");
+	set("w-wind", Math.round(w.vent) + " km/h");
+	set("w-today", deg(w.min) + " / " + deg(w.max));
+	set("w-tomorrow", w.demain_min !== undefined ? deg(w.demain_min) + " / " + deg(w.demain_max) + " · " +
+		w.demain_description.charAt(0) + w.demain_description.slice(1).toLowerCase() : "—");
+	set("w-age", "Mise à jour " + OD.syncAge(w.maj_s) + (w.erreur ? " (dernier essai : " + w.erreur + ")" : ""));
+}
+setInterval(() => { if (!document.hidden) loadWeather(); }, 30000);
+
+/* --- recherche du lieu (dans le navigateur, service de geocodage d'Open-Meteo) --- */
+function shorten (text, maxBytes) {
+	const enc = new TextEncoder();
+	while (enc.encode(text).length > maxBytes) text = text.slice(0, -1);
+	return text.replace(/["\\]/g, "");
+}
+el("search-form").onsubmit = async e => {
+	e.preventDefault();
+	const q = el("search").value.trim();
+	const box = el("results");
+	if (q.length < 2) return;
+	box.textContent = "Recherche…";
+	try {
+		const r = await fetch("https://geocoding-api.open-meteo.com/v1/search?count=8&language=fr&format=json&name=" + encodeURIComponent(q));
+		const j = await r.json();
+		box.textContent = "";
+		if (!j.results || !j.results.length) { box.textContent = "Aucun lieu trouvé."; return; }
+		for (const p of j.results) {
+			const b = document.createElement("button");
+			b.type = "button";
+			b.className = "place";
+			const name = document.createElement("b");
+			name.textContent = p.name;
+			const where = document.createElement("span");
+			where.className = "small muted";
+			where.textContent = [p.admin2 && p.admin2 !== p.name ? p.admin2 : "", p.admin1, p.country].filter(Boolean).join(", ");
+			b.append(name, where);
+			b.onclick = () => {
+				cur.Weather_Place = shorten(p.name + (p.country_code ? " (" + p.country_code + ")" : ""), 47);
+				cur.Weather_Latitude = (+p.latitude).toFixed(4);
+				cur.Weather_Longitude = (+p.longitude).toFixed(4);
+				box.textContent = "";
+				el("search").value = "";
+				changed();
+				OD.toast("Lieu choisi : enregistrez pour l'utiliser");
+			};
+			box.appendChild(b);
+		}
+	} catch (err) {
+		box.textContent = "Recherche impossible (pas d'accès Internet depuis ce navigateur ?)";
+	}
+};
+
+/* --- galerie des icones (apercus a la demande) --- */
+el("icons-box").addEventListener("toggle", () => {
+	const box = el("icons");
+	if (!el("icons-box").open || box.children.length) return;
+	let busy = 0;
+	const queue = [];
+	const next = () => {
+		while (busy < 2 && queue.length) {
+			const [img, url] = queue.shift();
+			busy++;
+			img.onload = img.onerror = () => { busy--; next(); };
+			img.src = url;
+		}
+	};
+	for (const [code, day, label] of ICONS) {
+		const t = document.createElement("div");
+		t.className = "tile";
+		t.style.cursor = "default";
+		t.innerHTML = '<div class="led small"><img alt=""></div><span></span>';
+		t.lastChild.textContent = label;
+		box.appendChild(t);
+		queue.push([t.querySelector("img"), previewUrl({ code, jour: day, Weather_Animate: 0 })]);
+	}
+	next();
+});
+
+/* --- chargement, enregistrement --- */
+async function load () {
+	try {
+		const [s, a] = await Promise.all([OD.getJSON("/api/reglages", 15000), OD.getJSON("/api/horloge/fichiers", 15000)]);
+		assets = a;
+		for (const k of KEYS) cur[k] = String(s[k] ?? "");
+		saved = { ...cur };
+		loaded = true;
+		renderSelects();
+		bindSimple();
+		renderAll();
+		refreshPreview();
+		loadWeather();
+	} catch (e) {
+		el("prev-none").textContent = "Panneau injoignable";
+		OD.toast("Panneau injoignable", false);
+	}
+}
+async function save () {
+	const fields = {};
+	for (const k of dirty()) fields[k] = cur[k];
+	if (!Object.keys(fields).length) return true;
+	el("save").disabled = true;
+	const r = await OD.action("/api/reglages", fields);
+	if (r.cancelled) { changed(); return false; }
+	if (r.ok) {
+		saved = { ...cur };
+		OD.toast("Météo enregistrée");
+		if ("Weather_Latitude" in fields) setTimeout(() => { loadWeather(); refreshPreview(); }, 4000);
+	} else OD.toast(r.text, false);
+	changed();
+	return r.ok;
+}
+el("save").onclick = save;
+el("undo").onclick = () => { cur = { ...saved }; renderAll(); };
+el("show").onclick = async () => {
+	if (!(await save())) return;
+	const r = await OD.action("/api/meteo/montrer");
+	if (!r.cancelled) OD.toast(r.ok ? "La météo s'affiche 15 secondes sur le panneau" : r.text, r.ok);
+};
+el("refresh").onclick = async () => {
+	const b = el("refresh");
+	b.disabled = true;
+	const r = await OD.action("/api/meteo/actualiser");
+	if (!r.cancelled && !r.ok) OD.toast(r.text, false);
+	setTimeout(() => { b.disabled = false; loadWeather(); refreshPreview(); }, 3000);
+};
+window.addEventListener("beforeunload", e => { if (loaded && dirty().length) { e.preventDefault(); e.returnValue = ""; } });
+
+load();
+</script>
+</body>
+</html>

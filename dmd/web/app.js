@@ -1,0 +1,213 @@
+/* OrbitDMD - fonctions communes a toutes les pages */
+"use strict";
+
+const $ = (sel, el = document) => el.querySelector(sel);
+
+const OD = {
+	pwKey: "orbitdmd_pw",
+	memo: "",
+	status: null,
+
+	/* --- mot de passe (memorise dans le navigateur) --- */
+	getPw () {
+		try { return localStorage.getItem(this.pwKey) || ""; } catch (e) { return this.memo; }
+	},
+	setPw (v) {
+		try { v ? localStorage.setItem(this.pwKey, v) : localStorage.removeItem(this.pwKey); } catch (e) { this.memo = v; }
+		this.updateLock();
+	},
+
+	/* --- notifications --- */
+	toast (text, ok = true) {
+		let box = $(".toasts");
+		if (!box) { box = document.createElement("div"); box.className = "toasts"; document.body.appendChild(box); }
+		const t = document.createElement("div");
+		t.className = "toast" + (ok ? "" : " err");
+		t.textContent = text;
+		box.appendChild(t);
+		setTimeout(() => t.remove(), ok ? 4000 : 7000);
+	},
+
+	/* --- envoi d'un formulaire (reponse "OK ..." ou "ERREUR ...") --- */
+	async post (url, fields = {}, file = null, password = null) {
+		const fd = new FormData();
+		fd.append("password", password !== null ? password : this.getPw());
+		for (const k in fields) fd.append(k, fields[k]);
+		if (file) fd.append("fichier", file, file.name);
+		try {
+			const r = await fetch(url, { method: "POST", body: fd });
+			const text = (await r.text()).trim();
+			return { ok: text.startsWith("OK"), text: text.replace(/^(OK|ERREUR) : /, "") };
+		} catch (e) {
+			return { ok: false, text: "Panneau injoignable" };
+		}
+	},
+
+	/* action protegee : demande le mot de passe si besoin, une seule nouvelle tentative */
+	async action (url, fields = {}, file = null) {
+		if (!this.getPw() && !(await this.askPassword())) return { ok: false, text: "Mot de passe requis", cancelled: true };
+		let r = await this.post(url, fields, file);
+		if (!r.ok && /mot de passe incorrect/i.test(r.text)) {
+			this.setPw("");
+			if (!(await this.askPassword("Mot de passe refusé, réessayez."))) return { ok: false, text: "Mot de passe requis", cancelled: true };
+			r = await this.post(url, fields, file);
+		}
+		return r;
+	},
+
+	/* --- boite de dialogue du mot de passe --- */
+	askPassword (message = "") {
+		let dlg = $("#pwdlg");
+		if (!dlg) {
+			dlg = document.createElement("dialog");
+			dlg.id = "pwdlg";
+			dlg.innerHTML =
+				'<form method="dialog">' +
+				'<h2>Mot de passe du panneau</h2>' +
+				'<p>Nécessaire pour modifier le panneau. Il se trouve sur la ligne <b>Web_Password</b> de config.txt. ' +
+				'Il sera mémorisé dans ce navigateur.</p>' +
+				'<input class="input" type="password" name="pw" autocomplete="current-password" required>' +
+				'<div class="err-line"></div>' +
+				'<div class="row" style="justify-content:flex-end">' +
+				'<button class="btn" type="button" value="cancel">Annuler</button>' +
+				'<button class="btn primary" value="ok">Valider</button></div></form>';
+			document.body.appendChild(dlg);
+		}
+		const input = $("input", dlg), err = $(".err-line", dlg), form = $("form", dlg);
+		input.value = "";
+		err.textContent = message;
+		return new Promise(resolve => {
+			/* "Annuler" n'envoie pas le formulaire : la touche Entree valide */
+			$("button[value=cancel]", dlg).onclick = () => { dlg.close(); resolve(false); };
+			form.onsubmit = async e => {
+				e.preventDefault();
+				err.textContent = "Vérification…";
+				this.setPw(input.value);
+				const r = await this.post("/api/verifier");
+				if (r.ok) { dlg.close(); this.toast("Mot de passe accepté"); resolve(true); }
+				else { this.setPw(""); err.textContent = r.text; input.select(); }
+			};
+			dlg.onclose = () => resolve(!!this.getPw());
+			dlg.showModal();
+			input.focus();
+		});
+	},
+
+	updateLock () {
+		const b = $("#lock");
+		if (!b) return;
+		const open = !!this.getPw();
+		b.innerHTML = open
+			? '<svg class="i" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg><span>Déverrouillé</span>'
+			: '<svg class="i" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Verrouillé</span>';
+		b.title = open ? "Oublier le mot de passe sur cet appareil" : "Saisir le mot de passe";
+	},
+
+	/* --- lecture JSON abandonnee au bout de 8 s (une requete perdue en Wi-Fi ne bloque pas la page) --- */
+	async getJSON (url, ms = 8000) {
+		const ctl = new AbortController();
+		const timer = setTimeout(() => ctl.abort(), ms);
+		try {
+			const r = await fetch(url, { cache: "no-store", signal: ctl.signal });
+			return await r.json();
+		} finally {
+			clearTimeout(timer);
+		}
+	},
+
+	/* --- etat du panneau, interroge en continu (evenement "etat" sur document)
+	       toutes les 3 s, et pas du tout quand l'onglet est cache (moins de trafic Wi-Fi) --- */
+	polling: false,
+	pollTimer: 0,
+	async poll () {
+		clearTimeout(this.pollTimer);
+		if (this.polling || document.hidden) return;
+		this.polling = true;
+		const dot = $("#conn-dot"), label = $("#conn-label");
+		try {
+			this.status = await this.getJSON("/api/etat");
+			if (dot) dot.className = "dot on";
+			if (label) label.textContent = "En ligne";
+			document.dispatchEvent(new CustomEvent("etat", { detail: this.status }));
+		} catch (e) {
+			this.status = null;
+			if (dot) dot.className = "dot off";
+			if (label) label.textContent = "Hors ligne";
+			document.dispatchEvent(new CustomEvent("etat", { detail: null }));
+		}
+		this.polling = false;
+		if (!document.hidden) this.pollTimer = setTimeout(() => this.poll(), 3000);
+	},
+
+	/* --- mise a l'heure depuis Internet (tableau de bord et page Horloge) --- */
+	syncAge (s) {
+		if (s === undefined || s === null || s < 0) return "pas encore depuis le démarrage";
+		if (s < 60) return "à l'instant";
+		if (s < 3600) return "il y a " + Math.floor(s / 60) + " min";
+		return "il y a " + Math.floor(s / 3600) + " h " + String(Math.floor(s / 60) % 60).padStart(2, "0");
+	},
+	async syncTime (button) {
+		if (button) button.disabled = true;
+		const r = await this.action("/api/heure/synchroniser");
+		if (button) button.disabled = false;
+		if (r.cancelled) return;
+		if (!r.ok) { this.toast(r.text, false); return; }
+		const m = /ecart=(-?\d+)/.exec(r.text), d = m ? +m[1] : 0, a = Math.abs(d);
+		const amount = a < 60 ? a + " s" : a < 3600 ? Math.round(a / 60) + " min" : (a / 3600).toFixed(1).replace(".", ",") + " h";
+		this.toast(a <= 1 ? "Heure synchronisée : elle était déjà exacte"
+			: "Heure synchronisée : le panneau " + (d > 0 ? "retardait" : "avançait") + " de " + amount);
+		this.poll();
+	},
+
+	/* --- petits outils --- */
+	pretty (name) { return name.replace(/\.gif$/i, "").replace(/[_-]+/g, " ").trim(); },
+	size (n) { return n < 1048576 ? Math.max(1, Math.round(n / 1024)) + " Ko" : (n / 1048576).toFixed(1).replace(".", ",") + " Mo"; },
+	/* apercu d'une GIF (garde un jour par le navigateur ; la taille change l'adresse si le fichier change) */
+	gifUrl (cat, name, size) {
+		return "/gif/voir?c=" + encodeURIComponent(cat) + "&f=" + encodeURIComponent(name) + (size ? "&s=" + size : "");
+	},
+	splitPath (path) {	/* "SD:/gif/Arcade/X.gif" -> ["Arcade", "X.gif"] */
+		const m = /^SD:\/gif\/([^/]+)\/(.+)$/.exec(path || "");
+		return m ? [m[1], m[2]] : null;
+	},
+	duration (s) {
+		const d = Math.floor(s / 86400), h = Math.floor(s / 3600) % 24, m = Math.floor(s / 60) % 60;
+		return d > 0 ? d + " j " + h + " h" : h > 0 ? h + " h " + String(m).padStart(2, "0") + " min" : m + " min " + (s % 60) + " s";
+	},
+
+	/* attend que le panneau revienne apres un redemarrage
+	   (la box peut mettre plusieurs minutes a lui redonner une adresse) */
+	async waitRestart (oldVersion, oldUptime) {
+		const start = Date.now();
+		await new Promise(r => setTimeout(r, 6000));
+		let warned = false;
+		while (Date.now() - start < 480000) {
+			if (!warned && Date.now() - start > 45000) {
+				warned = true;
+				this.toast("Le panneau redémarre ; la box peut mettre quelques minutes à lui redonner une adresse.");
+			}
+			try {
+				const s = await this.getJSON("/api/etat");
+				if (s.programme !== oldVersion || s.uptime_s < oldUptime) return s;
+			} catch (e) { /* encore en train de redemarrer */ }
+			await new Promise(r => setTimeout(r, 2000));
+		}
+		return null;
+	}
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+	OD.updateLock();
+	const lock = $("#lock");
+	if (lock) {
+		lock.onclick = () => {
+			if (OD.getPw()) {
+				if (confirm("Oublier le mot de passe sur cet appareil ?")) { OD.setPw(""); OD.toast("Mot de passe oublié"); }
+			} else {
+				OD.askPassword();
+			}
+		};
+	}
+	OD.poll();
+	document.addEventListener("visibilitychange", () => { if (!document.hidden) OD.poll(); });
+});

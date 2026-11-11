@@ -1,0 +1,33 @@
+name: 💡 Proposer une amélioration
+description: Une idée de nouvelle fonction ou d'amélioration.
+title: "[Idée] "
+labels: ["amélioration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci pour votre idée ! Pour en discuter librement d'abord, vous pouvez aussi ouvrir une
+        [discussion](https://github.com/ulrikadam/OrbitDMD/discussions/categories/ideas).
+  - type: textarea
+    id: idee
+    attributes:
+      label: Votre idée
+      description: Que devrait faire OrbitDMD ?
+    validations:
+      required: true
+  - type: textarea
+    id: pourquoi
+    attributes:
+      label: Pourquoi ?
+      description: À quoi cela vous servirait-il ? Quel problème cela résout-il ?
+  - type: textarea
+    id: exemple
+    attributes:
+      label: Exemple, dessin ou capture
+      description: Un croquis de ce que vous imaginez sur le panneau ou dans la page web aide beaucoup.
+  - type: checkboxes
+    id: aide
+    attributes:
+      label: Participer
+      options:
+        - label: Je peux aider à la réaliser (code, tests, graphismes, traduction…)

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrbitDMD · Tableau de bord</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top"><div class="top-in">
+	<a class="brand" href="/" aria-label="OrbitDMD"><picture>
+		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
+		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
+	</picture></a>
+	<nav class="tabs"><a href="/" class="on">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
+	<div class="status">
+		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
+		<button class="btn sm" id="lock"></button>
+	</div>
+</div></header>
+
+<main>
+	<div class="head">
+		<div>
+			<h1>Tableau de bord</h1>
+			<p class="sub">Ce qui se passe sur le panneau, en direct.</p>
+		</div>
+	</div>
+
+	<div class="stack">
+		<section class="card now">
+			<div class="panel"><div class="led"><img id="now-img" alt="" hidden><div class="none" id="now-none">En attente du panneau…</div></div></div>
+			<div>
+				<div class="label">Sur le panneau</div>
+				<div class="now-title" id="now-name">—</div>
+				<div class="row"><span class="chip teal" id="now-cat" hidden></span><span class="chip" id="now-state" hidden></span></div>
+				<div class="quick" aria-label="Commandes rapides">
+					<button class="btn" id="q-pause" title="Figer l'image affichée"></button>
+					<button class="btn" id="q-off" title="Éteindre l'affichage : le panneau reste joignable, et se rallume après un redémarrage"></button>
+					<button class="btn danger" id="q-reboot" title="Redémarrer le panneau (environ 20 secondes)"><svg class="i" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>Redémarrer</button>
+				</div>
+				<p class="small muted" style="margin:14px 0 0">Pour choisir ce qui s'affiche, ouvrez la page <a href="/gif">GIF</a>.</p>
+			</div>
+		</section>
+
+		<div class="grid">
+			<section class="card">
+				<div class="label">Heure</div>
+				<div class="big" id="clock">--:--:--</div>
+				<div class="row" style="margin-top:6px"><span class="muted" id="date">—</span><span class="spacer"></span><span class="chip" id="time-src">—</span></div>
+				<div class="row" style="margin-top:12px"><span class="small muted" id="sync-age"></span><span class="spacer"></span>
+					<button class="btn sm" id="sync" title="Remettre le panneau à l'heure exacte d'Internet"><svg class="i" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>Synchroniser</button></div>
+			</section>
+
+			<section class="card">
+				<div class="label">Météo</div>
+				<div class="big"><span id="wx-temp">—</span><span class="unit">°C</span></div>
+				<div class="row" style="margin-top:6px"><span class="muted" id="wx-text">Pas encore de météo</span><span class="spacer"></span>
+					<a class="btn sm" href="/meteo">Réglages</a></div>
+			</section>
+
+			<section class="card">
+				<div class="label">Affichage</div>
+				<div class="big"><span id="hz">—</span><span class="unit">images/s</span></div>
+				<dl class="kv"><dt>Luminosité</dt><dd id="lum">—</dd></dl>
+				<div class="bar"><i id="lum-bar" style="width:0"></i></div>
+			</section>
+
+			<section class="card">
+				<div class="label">Bibliothèque</div>
+				<div class="big"><span id="nbgif">—</span><span class="unit">GIF en rotation</span></div>
+				<dl class="kv"><dt>Carte SD libre</dt><dd id="sd">—</dd></dl>
+			</section>
+
+			<section class="card">
+				<div class="label">Système</div>
+				<div class="big"><span id="temp">—</span><span class="unit">°C</span></div>
+				<dl class="kv">
+					<dt>Processeur</dt><dd><span class="chip" id="temp-state">—</span></dd>
+					<dt>Mémoire libre</dt><dd id="mem">—</dd>
+					<dt>En marche depuis</dt><dd id="uptime">—</dd>
+					<dt title="Plus longue attente du Wi-Fi pendant que le panneau calcule (20 dernières secondes, puis 5 dernières minutes). Moins de 50 ms : parfait.">Réactivité</dt><dd id="lat">—</dd>
+				</dl>
+			</section>
+
+			<section class="card">
+				<div class="label">Réseau</div>
+				<div class="big" style="font-size:22px" id="host">—</div>
+				<dl class="kv">
+					<dt>Adresse IP</dt><dd id="ip">—</dd>
+					<dt>Wi-Fi</dt><dd id="wifi">—</dd>
+				</dl>
+			</section>
+
+			<section class="card">
+				<div class="label">Programme</div>
+				<div class="big" style="font-size:22px">OrbitDMD <span id="numero" style="color:var(--blue)"></span></div>
+				<dl class="kv"><dt>Version</dt><dd id="numero2">—</dd><dt>Compilé le</dt><dd id="version">—</dd></dl>
+				<div class="row" style="margin-top:12px"><a class="btn sm" href="/systeme">Mises à jour et journal</a></div>
+			</section>
+		</div>
+	</div>
+</main>
+
+<footer class="credit">Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be" target="_blank" rel="noopener">www.nexadam.be</a></footer>
+
+<script src="/app.js"></script>
+<script>
+"use strict";
+const DAYS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+let clockBase = null, clockAt = 0, uptimeBase = 0, uptimeAt = 0, lastGif = "";
+
+function set (id, text) { const el = document.getElementById(id); if (el.textContent !== String(text)) el.textContent = text; }
+function chip (id, text, kind) { const el = document.getElementById(id); el.textContent = text; el.className = "chip" + (kind ? " " + kind : ""); }
+
+function tick () {
+	if (clockBase !== null) {
+		const d = new Date(clockBase + (Date.now() - clockAt));
+		const p = n => String(n).padStart(2, "0");
+		set("clock", p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()) + ":" + p(d.getUTCSeconds()));
+		set("date", DAYS[d.getUTCDay()] + " " + d.getUTCDate() + " " + MONTHS[d.getUTCMonth()] + " " + d.getUTCFullYear());
+	}
+	if (uptimeAt) set("uptime", OD.duration(uptimeBase + Math.floor((Date.now() - uptimeAt) / 1000)));
+}
+
+/* --- commandes rapides : pause, affichage eteint, redemarrage --- */
+const ICONS = {
+	pause: '<svg class="i" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></svg>',
+	play: '<svg class="i" viewBox="0 0 24 24"><path d="M7 5v14l11-7z" fill="currentColor"/></svg>',
+	power: '<svg class="i" viewBox="0 0 24 24"><path d="M12 3v9"/><path d="M6.4 6.4a8 8 0 1 0 11.2 0"/></svg>'
+};
+let quick = { pause: false, off: false }, quickBusy = false;
+
+function renderQuick () {
+	const p = document.getElementById("q-pause"), o = document.getElementById("q-off");
+	p.innerHTML = quick.pause ? ICONS.play + "Reprendre" : ICONS.pause + "Pause";
+	p.className = "btn" + (quick.pause ? " primary" : "");
+	p.title = quick.pause ? "Relancer l'animation" : "Figer l'image affichée";
+	o.innerHTML = ICONS.power + (quick.off ? "Rallumer" : "Éteindre");
+	o.className = "btn" + (quick.off ? " primary" : "");
+	const st = document.getElementById("now-state");
+	st.hidden = !quick.pause && !quick.off;
+	st.textContent = quick.off ? "Affichage éteint" : "En pause";
+	st.className = "chip " + (quick.off ? "err" : "warn");
+	document.querySelector(".now .led").classList.toggle("off", quick.off);
+}
+
+async function command (action, done, message) {
+	if (quickBusy) return;
+	quickBusy = true;
+	const r = await OD.action("/api/commande", { action });
+	quickBusy = false;
+	if (r.cancelled) return;
+	if (r.ok) { done(); renderQuick(); OD.toast(message); }
+	else OD.toast(r.text, false);
+}
+
+document.getElementById("q-pause").onclick = () => quick.pause
+	? command("reprendre", () => { quick.pause = false; }, "Lecture reprise")
+	: command("pause", () => { quick.pause = true; }, "Image figée");
+document.getElementById("q-off").onclick = () => quick.off
+	? command("allumer", () => { quick.off = false; }, "Affichage rallumé")
+	: command("eteindre", () => { quick.off = true; }, "Affichage éteint : le panneau reste joignable");
+document.getElementById("q-reboot").onclick = async () => {
+	if (quickBusy || !confirm("Redémarrer le panneau maintenant ?")) return;
+	const b = document.getElementById("q-reboot"), s = OD.status || {};
+	quickBusy = b.disabled = true;
+	const r = await OD.action("/redemarrer");
+	if (!r.ok) {
+		quickBusy = b.disabled = false;
+		if (!r.cancelled) OD.toast(r.text, false);
+		return;
+	}
+	OD.toast("Redémarrage demandé");
+	const back = await OD.waitRestart(s.programme, s.uptime_s || 1e9);
+	quickBusy = b.disabled = false;
+	OD.toast(back ? "Panneau de retour" : "Le panneau ne répond pas après 8 minutes : vérifiez son écran", !!back);
+};
+renderQuick();
+document.getElementById("sync").onclick = e => OD.syncTime(e.currentTarget);
+
+/* --- apercu : la GIF en cours (animee par le navigateur), sinon une copie de l'ecran
+       du panneau (heure, meteo, message, pause...) redemandee chaque seconde --- */
+const SCREEN_NAMES = { heure: "Horloge", date: "Date", meteo: "Météo", message: "Message",
+	demarrage: "Démarrage", mire: "Mire de test", autre: "Panneau" };
+let mirrorUrl = null;
+
+function showGif (path) {
+	if (path === lastGif) return;
+	const parts = OD.splitPath(path), img = document.getElementById("now-img");
+	if (!parts) return;
+	lastGif = path;
+	img.src = OD.gifUrl(parts[0], parts[1]);
+	img.hidden = false;
+	document.getElementById("now-none").hidden = true;
+	set("now-name", OD.pretty(parts[1]));
+	const c = document.getElementById("now-cat"); c.textContent = parts[0]; c.hidden = false;
+}
+
+function showFrame (kind, blob) {
+	lastGif = "";
+	const img = document.getElementById("now-img"), url = URL.createObjectURL(blob), old = mirrorUrl;
+	mirrorUrl = url;
+	img.onload = () => { if (old) URL.revokeObjectURL(old); };
+	img.src = url;
+	img.hidden = false;
+	document.getElementById("now-none").hidden = true;
+	if (kind in SCREEN_NAMES) {		/* en pause ou eteint : le nom reste celui d'avant */
+		set("now-name", SCREEN_NAMES[kind]);
+		document.getElementById("now-cat").hidden = true;
+	}
+}
+
+async function mirror () {
+	if (!document.hidden) {
+		const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 6000);
+		try {
+			const r = await fetch("/api/ecran", { cache: "no-store", signal: ctl.signal });
+			const kind = r.headers.get("X-Ecran") || "autre";
+			if (r.ok && kind === "gif") showGif((await r.text()).trim());
+			else if (r.ok) showFrame(kind, await r.blob());
+		} catch (e) { /* panneau injoignable : l'etat le signale */ }
+		clearTimeout(timer);
+	}
+	setTimeout(mirror, 1000);
+}
+mirror();
+
+document.addEventListener("etat", e => {
+	const s = e.detail;
+	if (!s) { set("now-none", "Panneau injoignable"); document.getElementById("now-none").hidden = false; return; }
+
+	if (s.pause !== undefined && !quickBusy) { quick = { pause: !!s.pause, off: !!s.ecran_eteint }; renderQuick(); }
+
+	/* heure du panneau, avancee localement chaque seconde */
+	const m = /^(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)$/.exec(s.heure || "");
+	if (m) { clockBase = Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5], +m[6]); clockAt = Date.now(); }
+	const src = s.source_heure || "inconnue";
+	chip("time-src", src === "Internet" ? "Internet" : src, src === "Internet" ? "ok" : src === "inconnue" ? "err" : "warn");
+	if (s.synchro_s !== undefined) set("sync-age", "Synchronisée " + OD.syncAge(s.synchro_s));
+
+	set("hz", s.rafraichissement_hz);
+	set("lum", s.luminosite + " %");
+	document.getElementById("lum-bar").style.width = s.luminosite + "%";
+	set("nbgif", s.nb_gif);
+	if (s.meteo_temp !== undefined) {
+		set("wx-temp", Math.round(s.meteo_temp / 10));
+		set("wx-text", s.meteo_texte.charAt(0) + s.meteo_texte.slice(1).toLowerCase());
+	} else { set("wx-temp", "—"); set("wx-text", "Pas encore de météo"); }
+	set("sd", s.carte_libre_mo >= 1024 ? (s.carte_libre_mo / 1024).toFixed(1).replace(".", ",") + " Go" : s.carte_libre_mo + " Mo");
+	set("temp", s.temperature_c);
+	chip("temp-state", s.temperature_c < 70 ? "Normal" : s.temperature_c < 80 ? "Chaud" : "Trop chaud",
+	     s.temperature_c < 70 ? "ok" : s.temperature_c < 80 ? "warn" : "err");
+	set("mem", s.memoire_libre_mo + " Mo");
+	if (s.latence_ms !== undefined) set("lat", s.latence_ms + " ms · max " + s.latence_max_ms + " ms");
+	uptimeBase = s.uptime_s; uptimeAt = Date.now();
+	set("host", s.nom + ".local");
+	set("ip", s.ip);
+	set("wifi", s.wifi || "—");
+	set("version", s.programme);
+	if (s.version) { set("numero", s.version); set("numero2", s.version); }
+	tick();
+});
+setInterval(tick, 1000);
+</script>
+</body>
+</html>

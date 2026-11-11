@@ -1,0 +1,46 @@
+OrbitDMD - licences
+===================
+
+OrbitDMD, developpe par Ulrik Adam (www.nexadam.be).
+
+Le programme kernel8.img contient :
+
+- Circle, environnement C++ pour Raspberry Pi sans systeme d'exploitation
+  (c) R. Stange et contributeurs - GNU General Public License v3
+  https://github.com/rsta2/circle - texte : LICENCES/Circle-GPL3.txt
+  Comme Circle, le programme OrbitDMD est distribue sous GPL v3 : son code
+  source doit etre disponible pour toute personne qui recoit ce programme.
+
+- hostap / wpa_supplicant (Wi-Fi WPA2) - licence BSD
+  https://w1.fi/
+
+- FatFs (lecture de la carte SD) - (c) ChaN - licence de type BSD
+  http://elm-chan.org/fsw/ff/
+
+- stb_truetype et stb_image (polices TTF et images PNG) - Sean Barrett,
+  domaine public / MIT - https://github.com/nothings/stb
+
+Fichiers du Raspberry Pi (bootcode.bin, start.elf, fixup.dat) :
+  (c) Raspberry Pi Ltd / Broadcom - redistribuables, voir LICENCE.broadcom
+  https://github.com/raspberrypi/firmware
+
+Microprogramme Wi-Fi (firmware/brcmfmac*) :
+  (c) Broadcom / Cypress - redistribuable en binaire, voir
+  https://github.com/RPi-Distro/firmware-nonfree
+
+Meteo : donnees Open-Meteo.com, licence CC BY 4.0 (https://open-meteo.com/).
+
+Polices (fonts/*.ttf) - libres, depuis Google Fonts (https://fonts.google.com/) :
+  Audiowide, Black Ops One, Bungee, Creepster, Orbitron, Press Start 2P,
+  Righteous, Russo One, Silkscreen, VT323 : SIL Open Font License 1.1
+  Mountains of Christmas : Apache License 2.0
+  Textes des licences : LICENCES/Polices/
+  OrbitDMD-LED, OrbitDMD-Gras, OrbitDMD-Segments : polices creees pour OrbitDMD.
+
+Fonds animes (fonts/Background_*.gif), motifs (fonts/Pattern_*.png), ecrans de
+demarrage (gif/Accueil) : crees pour OrbitDMD.
+
+GIF (gif/) : la plupart viennent du projet RPI2DMD (RpiTe@m, pixel art de
+RattenJager et d'autres) ; les GIF de Noel au nom en minuscules sont des creations
+OrbitDMD. Detail : gif/A_PROPOS_DES_GIF.txt. Les personnages et scenes de jeux video
+restent la propriete de leurs ayants droit.

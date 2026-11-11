@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ❓ Une question, besoin d'aide
+    url: https://github.com/ulrikadam/OrbitDMD/discussions/categories/q-a
+    about: Posez votre question dans les discussions.
+  - name: 📷 Montrer votre panneau
+    url: https://github.com/ulrikadam/OrbitDMD/discussions/categories/show-and-tell
+    about: Partagez photos et vidéos de votre installation.

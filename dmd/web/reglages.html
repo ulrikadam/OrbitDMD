@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrbitDMD · Réglages</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top"><div class="top-in">
+	<a class="brand" href="/" aria-label="OrbitDMD"><picture>
+		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
+		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
+	</picture></a>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/reglages" class="on">Réglages</a><a href="/systeme">Système</a></nav>
+	<div class="status">
+		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
+		<button class="btn sm" id="lock"></button>
+	</div>
+</div></header>
+
+<main>
+	<div class="head">
+		<div>
+			<h1>Réglages</h1>
+			<p class="sub">Chaque valeur est vérifiée par le panneau avant d'être enregistrée dans config.txt.</p>
+		</div>
+	</div>
+
+	<div class="banner" id="pending" hidden>
+		<span><b>Redémarrage nécessaire</b> pour appliquer certains réglages enregistrés.</span>
+		<span class="spacer"></span>
+		<button class="btn sm" id="reboot-now">Redémarrer maintenant</button>
+	</div>
+
+	<div class="stack">
+		<!-- luminosite -->
+		<section class="card">
+			<div class="row" style="margin-bottom:6px">
+				<h2 style="margin:0">Luminosité heure par heure</h2>
+				<span class="spacer"></span>
+				<span class="readout" id="readout"></span>
+			</div>
+			<p class="small muted" style="margin:0 0 14px">Glissez sur les barres pour régler chaque heure (pas de 5 %, 0 % = panneau éteint). L'heure actuelle est entourée en ambre. Appliqué dès la GIF suivante.</p>
+			<div class="hours" id="hours" aria-label="Luminosité de 0 h à 23 h"></div>
+			<div class="presets">
+				<span class="row">Toute la journée
+					<input class="input num" type="number" id="p-all" min="0" max="100" step="5" value="60"> %
+					<button class="btn sm" id="p-all-go">Appliquer</button></span>
+				<span class="row">La nuit de
+					<input class="input num" type="number" id="p-from" min="0" max="23" value="22"> h à
+					<input class="input num" type="number" id="p-to" min="0" max="23" value="7"> h :
+					<input class="input num" type="number" id="p-night" min="0" max="100" step="5" value="10"> %
+					<button class="btn sm" id="p-night-go">Appliquer</button></span>
+			</div>
+			<div class="card-foot">
+				<span class="small muted" id="lum-state"></span>
+				<button class="btn" id="lum-undo">Annuler les modifications</button>
+				<button class="btn primary" id="lum-save">Enregistrer</button>
+			</div>
+		</section>
+
+		<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr))">
+			<!-- affichage -->
+			<section class="card" id="card-display">
+				<h2>Affichage</h2>
+				<div class="form-row"><label for="Gif_Active">Afficher les GIF<span class="hint">Sinon, seulement l'heure</span></label>
+					<span class="switch"><input type="checkbox" id="Gif_Active"></span></div>
+				<div class="form-row"><label for="Gif_Min_Duration">Durée minimale d'une GIF<span class="hint">Les GIF courtes tournent en boucle</span></label>
+					<span class="with-suffix"><input class="input num" type="number" id="Gif_Min_Duration" min="1" max="60" step="1" data-ms> s</span></div>
+				<div class="form-row"><span class="lbl">Heure et date<span class="hint">Police, couleurs, fuseau horaire…</span></span>
+					<a class="btn sm" href="/horloge">Page Horloge</a></div>
+				<div class="form-row"><label for="Test_Pattern">Mire de test au démarrage</label>
+					<span class="switch"><input type="checkbox" id="Test_Pattern"></span></div>
+				<div class="card-foot"><button class="btn primary" data-save="card-display">Enregistrer</button></div>
+			</section>
+
+			<!-- reseau -->
+			<section class="card" id="card-network">
+				<h2>Réseau</h2>
+				<div class="form-row"><label for="Network_name">Nom sur le réseau<span class="hint">Adresse de cette page</span></label>
+					<span class="with-suffix"><input class="input" type="text" id="Network_name" maxlength="31" style="width:130px">.local</span></div>
+				<div class="form-row"><label for="Wifi_ssid">Réseau Wi-Fi</label>
+					<input class="input" type="text" id="Wifi_ssid" maxlength="32" autocomplete="off"></div>
+				<div class="form-row"><label for="Wifi_psk">Mot de passe Wi-Fi<span class="hint">Laissez vide pour le garder</span></label>
+					<input class="input" type="password" id="Wifi_psk" maxlength="63" placeholder="inchangé" autocomplete="new-password"></div>
+				<div class="form-row"><label for="Wifi_country">Pays<span class="hint">Code à 2 lettres (FR, BE, CH…)</span></label>
+					<input class="input num" type="text" id="Wifi_country" maxlength="2" style="text-transform:uppercase"></div>
+				<div class="form-row"><label for="ip-mode">Adresse IP<span class="hint" id="ip-now">—</span></label>
+					<select class="input" id="ip-mode"><option value="auto">Automatique (box)</option><option value="fixe">Fixe</option></select></div>
+				<div id="ip-fields" hidden>
+					<div class="form-row"><label for="IP_Fixe">Adresse du panneau</label>
+						<input class="input" type="text" id="IP_Fixe" inputmode="decimal" placeholder="192.168.0.151"></div>
+					<div class="form-row"><label for="IP_Masque">Masque</label>
+						<input class="input" type="text" id="IP_Masque" inputmode="decimal" placeholder="255.255.255.0"></div>
+					<div class="form-row"><label for="IP_Passerelle">Passerelle<span class="hint">L'adresse de la box</span></label>
+						<input class="input" type="text" id="IP_Passerelle" inputmode="decimal" placeholder="192.168.0.1"></div>
+					<div class="form-row"><label for="IP_DNS">Serveur DNS<span class="hint">Souvent la box aussi</span></label>
+						<input class="input" type="text" id="IP_DNS" inputmode="decimal" placeholder="192.168.0.1"></div>
+					<p class="note" style="margin:8px 0 0">Conseil : dans votre box, réservez cette adresse pour le panneau
+						(adresse MAC <b id="mac">—</b>), pour qu'elle ne soit jamais donnée à un autre appareil.</p>
+				</div>
+				<p class="note" style="margin:8px 0 0">Après un changement de Wi-Fi ou d'adresse, le panneau redémarre. S'il n'est pas joignable en 2 min 30, il revient tout seul aux anciens réglages.</p>
+				<div class="card-foot"><button class="btn primary" data-save="card-network">Enregistrer</button></div>
+			</section>
+
+			<!-- securite -->
+			<section class="card" id="card-security">
+				<h2>Mot de passe de la page web</h2>
+				<div class="form-row"><label for="pw-new">Nouveau mot de passe<span class="hint">8 caractères minimum, sans espace</span></label>
+					<input class="input" type="password" id="pw-new" maxlength="63" autocomplete="new-password"></div>
+				<div class="form-row"><label for="pw-confirm">Confirmer</label>
+					<input class="input" type="password" id="pw-confirm" maxlength="63" autocomplete="new-password"></div>
+				<div class="card-foot"><button class="btn primary" id="pw-save">Changer le mot de passe</button></div>
+			</section>
+
+			<!-- panneaux -->
+			<section class="card" id="card-panel">
+				<details class="adv">
+					<summary><h2 style="margin:0">Panneaux (avancé)</h2></summary>
+					<div class="form-row"><label for="Panel_XSize">Largeur d'un panneau</label>
+						<select class="input num" id="Panel_XSize"><option>16</option><option>32</option><option>64</option><option>128</option></select></div>
+					<div class="form-row"><label for="Panel_YSize">Hauteur d'un panneau</label>
+						<select class="input num" id="Panel_YSize"><option>16</option><option>32</option><option>64</option></select></div>
+					<div class="form-row"><label for="Panel_XNumber">Panneaux à la suite<span class="hint">Sur une même sortie</span></label>
+						<input class="input num" type="number" id="Panel_XNumber" min="1" max="8"></div>
+					<div class="form-row"><label for="Panel_YNumber">Sorties en parallèle<span class="hint">3 désactive l'horloge à pile</span></label>
+						<input class="input num" type="number" id="Panel_YNumber" min="1" max="3"></div>
+					<div class="form-row"><label for="GPIO_Slowdown">Ralentissement GPIO<span class="hint">À augmenter si l'image est brouillée</span></label>
+						<input class="input num" type="number" id="GPIO_Slowdown" min="0" max="4"></div>
+					<div class="form-row"><label for="RGB_Order">Ordre des couleurs</label>
+						<select class="input num" id="RGB_Order"><option>RGB</option><option>RBG</option><option>GRB</option><option>GBR</option><option>BRG</option><option>BGR</option></select></div>
+					<div class="form-row"><label for="PWM_Bits">Bits de couleur<span class="hint">Moins = rafraîchissement plus rapide</span></label>
+						<input class="input num" type="number" id="PWM_Bits" min="1" max="11"></div>
+					<div class="form-row"><label for="PWM_LSB_Nanoseconds">Durée du plus petit palier<span class="hint">En nanosecondes</span></label>
+						<input class="input num" type="number" id="PWM_LSB_Nanoseconds" min="50" max="3000" step="10"></div>
+					<div class="form-row"><label for="Journal_Ecran">Journal sur l'écran HDMI<span class="hint">Pour le dépannage seulement : ralentit le réseau</span></label>
+						<span class="switch"><input type="checkbox" id="Journal_Ecran"></span></div>
+					<p class="note" style="margin:8px 0 0">Redémarrage nécessaire. Des valeurs inadaptées peuvent brouiller l'image : elles se corrigent ici même.</p>
+					<div class="card-foot"><button class="btn primary" data-save="card-panel">Enregistrer</button></div>
+				</details>
+			</section>
+		</div>
+	</div>
+</main>
+
+<footer class="credit">Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be" target="_blank" rel="noopener">www.nexadam.be</a></footer>
+
+<script src="/app.js"></script>
+<script>
+"use strict";
+let settings = null, lum = [], lumSaved = [], nowHour = -1, dragging = false, focusHour = 12;
+
+/* --- chargement --- */
+async function load () {
+	try {
+		settings = await (await fetch("/api/reglages", { cache: "no-store" })).json();
+	} catch (e) {
+		OD.toast("Panneau injoignable", false);
+		return;
+	}
+	lum = settings.luminosite.slice();
+	lumSaved = lum.slice();
+	nowHour = settings.heure_actuelle;
+
+	for (const el of document.querySelectorAll("[data-save] , section .input, section input[type=checkbox]")) {
+		const key = el.id;
+		if (!key || !(key in settings)) continue;
+		const v = settings[key];
+		if (el.type === "checkbox") el.checked = !!v;
+		else if (el.dataset.ms !== undefined) el.value = Math.round(v / 1000);
+		else el.value = v;
+	}
+	$("#Wifi_psk").value = "";
+	$("#Wifi_psk").placeholder = settings.wifi_psk_defini ? "inchangé" : "non défini";
+
+	/* adresse IP : mode et valeurs actuelles */
+	const net = settings.reseau_actuel || {};
+	$("#ip-now").textContent = net.ip ? "Actuellement " + net.ip + (net.fixe ? " (fixe)" : " (donnée par la box)") : "Wi-Fi non connecté";
+	$("#mac").textContent = net.mac || "—";
+	$("#ip-mode").value = settings.IP_Fixe ? "fixe" : "auto";
+	showIPFields();
+	$("#pending").hidden = !settings.redemarrage_en_attente;
+	buildHours();
+	renderHours();
+}
+
+/* --- graphique de luminosite --- */
+function buildHours () {
+	const box = $("#hours");
+	if (box.children.length) return;
+	for (let h = 0; h < 24; h++) {
+		const col = document.createElement("div");
+		col.className = "hour";
+		const bar = document.createElement("div");
+		bar.className = "hbar";
+		bar.tabIndex = 0;
+		bar.setAttribute("role", "slider");
+		bar.setAttribute("aria-label", h + " h");
+		bar.setAttribute("aria-valuemin", "0");
+		bar.setAttribute("aria-valuemax", "100");
+		bar.innerHTML = "<i></i><b></b>";
+		bar.onfocus = () => { focusHour = h; showReadout(h); };
+		bar.onkeydown = e => {
+			const step = { ArrowUp: 5, ArrowRight: 5, ArrowDown: -5, ArrowLeft: -5, PageUp: 25, PageDown: -25 }[e.key];
+			if (step === undefined) return;
+			e.preventDefault();
+			setHour(h, lum[h] + step);
+		};
+		const label = document.createElement("span");
+		label.textContent = h;
+		col.append(bar, label);
+		box.appendChild(col);
+	}
+	box.onpointerdown = e => { dragging = true; lastPoint = null; box.setPointerCapture(e.pointerId); fromPointer(e); };
+	box.onpointermove = e => { if (dragging) fromPointer(e); };
+	box.onpointerup = box.onpointercancel = () => { dragging = false; };
+}
+let lastPoint = null;
+function fromPointer (e) {
+	const cols = $("#hours").children;
+	const first = cols[0].getBoundingClientRect(), last = cols[23].getBoundingClientRect();
+	let h = Math.floor((e.clientX - first.left) / ((last.right - first.left) / 24));
+	h = Math.max(0, Math.min(23, h));
+	const bar = cols[h].firstChild.getBoundingClientRect();
+	const v = (bar.bottom - e.clientY) / bar.height * 100;
+	/* geste rapide : remplir les heures traversees entre deux positions */
+	if (lastPoint && Math.abs(h - lastPoint.h) > 1) {
+		const dir = h > lastPoint.h ? 1 : -1;
+		for (let k = lastPoint.h + dir; k !== h; k += dir)
+			lum[k] = Math.max(0, Math.min(100, Math.round((lastPoint.v + (v - lastPoint.v) * (k - lastPoint.h) / (h - lastPoint.h)) / 5) * 5));
+	}
+	lastPoint = { h, v };
+	setHour(h, v);
+}
+function setHour (h, v) {
+	lum[h] = Math.max(0, Math.min(100, Math.round(v / 5) * 5));
+	renderHours();
+	showReadout(h);
+}
+function showReadout (h) { $("#readout").textContent = h + " h : " + (lum[h] === 0 ? "éteint" : lum[h] + " %"); }
+function renderHours () {
+	const cols = $("#hours").children;
+	for (let h = 0; h < 24; h++) {
+		const col = cols[h], bar = col.firstChild;
+		col.className = "hour" + (h === nowHour ? " now" : "");
+		bar.firstChild.style.height = lum[h] + "%";
+		bar.lastChild.textContent = lum[h];
+		bar.setAttribute("aria-valuenow", lum[h]);
+	}
+	const changed = lum.some((v, i) => v !== lumSaved[i]);
+	$("#lum-save").disabled = !changed;
+	$("#lum-undo").disabled = !changed;
+	$("#lum-state").textContent = changed ? "Modifications non enregistrées" : "";
+	if (!$("#readout").textContent && nowHour >= 0) showReadout(nowHour);
+}
+
+$("#p-all-go").onclick = () => { const v = +$("#p-all").value; for (let h = 0; h < 24; h++) lum[h] = v; setHour(0, v); };
+$("#p-night-go").onclick = () => {
+	const from = +$("#p-from").value, to = +$("#p-to").value, v = +$("#p-night").value;
+	for (let h = from; h !== to; h = (h + 1) % 24) lum[h] = v;
+	setHour(from, v);
+};
+$("#lum-undo").onclick = () => { lum = lumSaved.slice(); renderHours(); };
+$("#lum-save").onclick = async () => {
+	const fields = {};
+	lum.forEach((v, h) => { if (v !== lumSaved[h]) fields["Panel_Brightness_" + h] = v; });
+	const r = await OD.action("/api/reglages", fields);
+	if (r.cancelled) return;
+	OD.toast(r.text, r.ok);
+	if (r.ok) { lumSaved = lum.slice(); renderHours(); }
+};
+
+/* --- adresse IP fixe : champs preremplis avec la configuration en service --- */
+function showIPFields () {
+	const fixed = $("#ip-mode").value === "fixe";
+	$("#ip-fields").hidden = !fixed;
+	if (fixed && settings) {
+		const net = settings.reseau_actuel || {};
+		const prefill = { IP_Fixe: net.ip, IP_Masque: net.masque, IP_Passerelle: net.passerelle, IP_DNS: net.dns };
+		for (const k in prefill) if (!$("#" + k).value && prefill[k]) $("#" + k).value = prefill[k];
+	}
+}
+$("#ip-mode").onchange = showIPFields;
+
+/* --- formulaires --- */
+function collect (card) {
+	const fields = {};
+	for (const el of card.querySelectorAll("input[id], select[id]")) {
+		if (!settings || !(el.id in settings) && el.id !== "Wifi_psk") continue;
+		if (el.type === "checkbox") fields[el.id] = el.checked ? 1 : 0;
+		else if (el.dataset.ms !== undefined) fields[el.id] = Math.round(+el.value * 1000);
+		else if (el.id === "Wifi_psk") { if (el.value) fields[el.id] = el.value; }
+		else fields[el.id] = el.value.trim();
+	}
+	return fields;
+}
+for (const b of document.querySelectorAll("[data-save]")) {
+	b.onclick = async () => {
+		const card = document.getElementById(b.dataset.save);
+		const fields = collect(card);
+		const oldName = settings.Network_name;
+		if ("IP_Fixe" in fields && $("#ip-mode").value === "auto") {
+			fields.IP_Fixe = "";		/* adresse automatique : les autres champs ne servent pas */
+			delete fields.IP_Masque; delete fields.IP_Passerelle; delete fields.IP_DNS;
+		}
+		const ipChanged = "IP_Fixe" in fields && (fields.IP_Fixe !== settings.IP_Fixe ||
+			(fields.IP_Fixe && ["IP_Masque", "IP_Passerelle", "IP_DNS"].some(k => fields[k] !== settings[k])));
+		const wifiChanged = "Wifi_ssid" in fields && (fields.Wifi_ssid !== settings.Wifi_ssid || fields.Wifi_psk ||
+			fields.Wifi_country.toUpperCase() !== settings.Wifi_country);
+		if ((ipChanged || wifiChanged) &&
+		    !confirm("Changer les réglages réseau ? Le panneau va redémarrer et les essayer ; " +
+			     "s'il n'est pas joignable en 2 min 30, il reviendra aux anciens.")) return;
+		b.disabled = true;
+		const r = await OD.action("/api/reglages", fields);
+		b.disabled = false;
+		if (r.cancelled) return;
+		OD.toast(r.text, r.ok);
+		if (r.ok && fields.Network_name && fields.Network_name !== oldName)
+			OD.toast("Après le redémarrage, l'adresse sera http://" + fields.Network_name.toLowerCase() + ".local/");
+		if (r.ok) load();
+	};
+}
+
+$("#pw-save").onclick = async () => {
+	const a = $("#pw-new").value, b = $("#pw-confirm").value;
+	if (a.length < 8 || /\s/.test(a)) { OD.toast("8 caractères minimum, sans espace", false); return; }
+	if (a !== b) { OD.toast("Les deux mots de passe sont différents", false); return; }
+	const r = await OD.action("/api/reglages", { Web_Password: a });
+	if (r.cancelled) return;
+	if (r.ok) { OD.setPw(a); $("#pw-new").value = $("#pw-confirm").value = ""; OD.toast("Mot de passe changé et mémorisé"); }
+	else OD.toast(r.text, false);
+};
+
+$("#reboot-now").onclick = async () => {
+	if (!confirm("Redémarrer le panneau maintenant ?")) return;
+	const s = OD.status || {};
+	const r = await OD.action("/redemarrer");
+	if (r.cancelled) return;
+	if (!r.ok) { OD.toast(r.text, false); return; }
+	OD.toast("Redémarrage…");
+	const back = await OD.waitRestart(s.programme, s.uptime_s || 1e9);
+	OD.toast(back ? "Panneau de retour" : "Le panneau ne répond pas", !!back);
+	load();
+};
+
+document.addEventListener("etat", e => {
+	if (e.detail && settings) {
+		const m = /^\d+-\d+-\d+ (\d+):/.exec(e.detail.heure || "");
+		if (m && +m[1] !== nowHour) { nowHour = +m[1]; renderHours(); }
+	}
+});
+load();
+</script>
+</body>
+</html>

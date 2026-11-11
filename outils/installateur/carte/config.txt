@@ -1,0 +1,7 @@
+# OrbitDMD - demarrage du Raspberry Pi 3 (sans Linux, programme Circle 64 bits)
+arm_64bit=1
+kernel=kernel8.img
+kernel_address=0x80000
+initial_turbo=0
+disable_splash=1
+boot_delay=0

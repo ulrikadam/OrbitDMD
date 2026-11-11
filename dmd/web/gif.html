@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrbitDMD · GIF</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top"><div class="top-in">
+	<a class="brand" href="/" aria-label="OrbitDMD"><picture>
+		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
+		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
+	</picture></a>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif" class="on">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
+	<div class="status">
+		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
+		<button class="btn sm" id="lock"></button>
+	</div>
+</div></header>
+
+<main>
+	<div class="head">
+		<div>
+			<h1>GIF</h1>
+			<p class="sub">Choisissez les catégories affichées, ajoutez ou retirez des animations.</p>
+		</div>
+		<span class="chip" id="free">—</span>
+	</div>
+
+	<div class="split">
+		<aside class="card cats">
+			<div class="cats-head"><span class="label" style="margin:0">Catégories</span><span class="small muted">affichée</span></div>
+			<div id="cats"></div>
+			<form class="newcat" id="newcat-form">
+				<input class="input" id="newcat" placeholder="Nouvelle catégorie" maxlength="32" aria-label="Nom de la nouvelle catégorie">
+				<button class="btn" type="submit">Créer</button>
+			</form>
+			<p class="small muted" style="margin:14px 2px 0">Les GIF fournies avec OrbitDMD viennent pour la plupart du projet RPI2DMD
+				(RpiTe@m, pixel art de RattenJager et d'autres). Merci à leurs auteurs.</p>
+		</aside>
+
+		<section>
+			<div class="card" id="nosel">
+				<div class="empty">Choisissez une catégorie à gauche.</div>
+			</div>
+
+			<div id="detail" hidden>
+				<div class="card">
+					<div class="row">
+						<div>
+							<h2 style="margin:0" id="dtitle"></h2>
+							<div class="small muted" id="dcount"></div>
+						</div>
+						<span class="spacer"></span>
+						<input class="input" type="search" id="filter" placeholder="Rechercher" aria-label="Rechercher une GIF" style="width:200px">
+						<button class="btn danger" id="delcat" title="Supprimer cette catégorie et toutes ses GIF"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Supprimer la catégorie</button>
+					</div>
+					<label class="drop" id="drop" style="margin-top:14px">
+						<input type="file" id="files" accept=".gif,image/gif" multiple>
+						<svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+						<span><b>Ajouter des GIF</b> : glissez-les ici ou cliquez (128×32 idéalement)</span>
+					</label>
+					<div class="note" id="splash-note" hidden>
+						<b>Écrans d'accueil.</b> Une GIF dont le nom contient « demarrage » tourne pendant la connexion Wi-Fi ;
+						« noel » ne sert qu'en décembre, « halloween » qu'en octobre ; les autres sont tirées au hasard.
+						Laissez cette catégorie désactivée pour qu'elles n'entrent pas dans la rotation.
+					</div>
+				</div>
+				<div class="thumbs" id="grid"></div>
+				<div class="empty" id="noresult" hidden>Aucune GIF.</div>
+			</div>
+		</section>
+	</div>
+</main>
+
+<footer class="credit">Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be" target="_blank" rel="noopener">www.nexadam.be</a></footer>
+
+<script src="/app.js"></script>
+<script>
+"use strict";
+let cats = [], cur = null, files = [];
+const ICON_PLAY = '<svg class="i" viewBox="0 0 24 24"><path d="M7 5v14l11-7z" fill="currentColor"/></svg>';
+const ICON_DEL = '<svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>';
+
+function byName (a, b) { return a.nom.localeCompare(b.nom, "fr", { sensitivity: "base" }); }
+
+/* apercus charges 3 par 3, quand ils deviennent visibles : le Wi-Fi du panneau
+   supporte mal une foule de connexions, et une GIF ratee est redemandee une fois */
+const THUMB_PARALLEL = 3;
+let thumbQueue = [], thumbBusy = 0, thumbGen = 0;
+const thumbObs = new IntersectionObserver(entries => {
+	for (const e of entries) {
+		if (e.isIntersecting) { thumbObs.unobserve(e.target); thumbQueue.push(e.target); }
+	}
+	thumbNext();
+}, { rootMargin: "300px" });
+
+function thumbNext () {
+	while (thumbBusy < THUMB_PARALLEL && thumbQueue.length) {
+		const img = thumbQueue.shift(), gen = thumbGen;
+		thumbBusy++;
+		const done = ok => {
+			if (gen !== thumbGen) return;		/* la liste a ete redessinee entre-temps */
+			thumbBusy--;
+			if (!ok && !img.dataset.retry) {
+				img.dataset.retry = "1";
+				setTimeout(() => { if (gen === thumbGen) { thumbQueue.push(img); thumbNext(); } }, 1000);
+			}
+			thumbNext();
+		};
+		img.onload = () => done(true);
+		img.onerror = () => done(false);
+		img.src = img.dataset.src + (img.dataset.retry ? "&r=1" : "");
+	}
+}
+
+function thumbReset () {
+	thumbObs.disconnect();
+	thumbQueue = [];
+	thumbBusy = 0;
+	thumbGen++;
+}
+
+async function loadCats () {
+	try {
+		const j = await (await fetch("/api/gif", { cache: "no-store" })).json();
+		const local = cats.filter(c => c.local && !j.categories.find(x => x.nom === c.nom));
+		cats = j.categories.concat(local).sort(byName);
+		$("#free").textContent = (j.libre_mo >= 1024 ? (j.libre_mo / 1024).toFixed(1).replace(".", ",") + " Go" : j.libre_mo + " Mo") + " libres sur la carte";
+		renderCats();
+	} catch (e) {
+		OD.toast("Panneau injoignable", false);
+	}
+}
+
+function renderCats () {
+	const box = $("#cats");
+	box.textContent = "";
+	for (const c of cats) {
+		const row = document.createElement("div");
+		row.className = "cat" + (c.nom === cur ? " sel" : "");
+		row.onclick = e => { if (!e.target.closest(".switch")) openCat(c.nom); };
+
+		const name = document.createElement("span");
+		name.className = "name";
+		name.textContent = c.nom;
+		const count = document.createElement("span");
+		count.className = "count";
+		count.textContent = c.nb;
+
+		const sw = document.createElement("label");
+		sw.className = "switch";
+		sw.title = c.active ? "Affichée sur le panneau" : "Non affichée";
+		const cb = document.createElement("input");
+		cb.type = "checkbox";
+		cb.checked = !!c.active;
+		cb.disabled = !!c.local;
+		cb.setAttribute("aria-label", "Afficher " + c.nom);
+		cb.onchange = () => saveActive(cb, c);
+		sw.appendChild(cb);
+
+		row.append(name, count, sw);
+		box.appendChild(row);
+	}
+}
+
+async function saveActive (cb, c) {
+	c.active = cb.checked;
+	const actives = cats.filter(x => x.active).map(x => x.nom);
+	if (actives.length === 0) {
+		c.active = cb.checked = true;
+		OD.toast("Gardez au moins une catégorie affichée", false);
+		return;
+	}
+	const r = await OD.action("/api/gif/categories", { actives: actives.join(",") });
+	if (!r.cancelled) OD.toast(r.ok ? c.nom + (c.active ? " affichée" : " retirée de la rotation") : r.text, r.ok);
+	if (!r.ok) { c.active = !c.active; cb.checked = c.active; }
+	renderCats();
+}
+
+/* suppression d'une categorie entiere : le mot de passe est redemande a chaque fois */
+function askDeleteCat (c) {
+	let dlg = $("#delcat-dlg");
+	if (!dlg) {
+		dlg = document.createElement("dialog");
+		dlg.id = "delcat-dlg";
+		dlg.innerHTML =
+			'<form method="dialog">' +
+			'<h2></h2><p></p>' +
+			'<input class="input" type="password" name="pw" autocomplete="current-password" required ' +
+			'placeholder="Mot de passe du panneau" aria-label="Mot de passe du panneau">' +
+			'<div class="err-line"></div>' +
+			'<div class="row" style="justify-content:flex-end">' +
+			'<button class="btn" type="button" value="cancel">Annuler</button>' +
+			'<button class="btn danger" value="ok">Supprimer définitivement</button></div></form>';
+		document.body.appendChild(dlg);
+	}
+	const form = $("form", dlg), input = $("input", dlg), err = $(".err-line", dlg), go = $("button[value=ok]", dlg);
+	$("h2", dlg).textContent = "Supprimer « " + c.nom + " » ?";
+	$("p", dlg).textContent = (c.nb ? "Ses " + c.nb + " GIF seront effacées de la carte SD. " : "")
+		+ "C'est définitif. Tapez le mot de passe pour confirmer.";
+	input.value = "";
+	err.textContent = "";
+	go.disabled = false;
+	$("button[value=cancel]", dlg).onclick = () => dlg.close();
+	form.onsubmit = async e => {
+		e.preventDefault();
+		go.disabled = true;
+		err.textContent = "Suppression en cours…";
+		const r = await OD.post("/api/gif/categorie/supprimer", { categorie: c.nom }, null, input.value);
+		go.disabled = false;
+		if (!r.ok) { err.textContent = r.text; input.select(); return; }
+		dlg.close();
+		OD.toast("Catégorie " + c.nom + " supprimée");
+		cats = cats.filter(x => x !== c);
+		cur = null;
+		try { localStorage.removeItem("orbitdmd_cat"); } catch (e2) {}
+		thumbReset();
+		$("#detail").hidden = true;
+		$("#nosel").hidden = false;
+		loadCats();
+	};
+	dlg.showModal();
+	input.focus();
+}
+
+$("#delcat").onclick = () => {
+	const c = cats.find(x => x.nom === cur);
+	if (!c) return;
+	if (c.local) {		/* creee dans cette page seulement : rien sur la carte */
+		cats = cats.filter(x => x !== c);
+		cur = null;
+		$("#detail").hidden = true;
+		$("#nosel").hidden = false;
+		renderCats();
+		return;
+	}
+	if (c.active && cats.filter(x => x.active).length === 1) {
+		OD.toast("C'est la seule catégorie affichée : activez-en une autre d'abord", false);
+		return;
+	}
+	askDeleteCat(c);
+};
+
+async function openCat (name) {
+	cur = name;
+	try { localStorage.setItem("orbitdmd_cat", name); } catch (e) {}
+	renderCats();
+	$("#nosel").hidden = true;
+	$("#detail").hidden = false;
+	$("#dtitle").textContent = name;
+	$("#splash-note").hidden = name.toLowerCase() !== "accueil";
+	$("#delcat").hidden = name.toLowerCase() === "accueil";	/* ecrans de demarrage du panneau */
+	$("#filter").value = "";
+	files = [];
+	renderFiles();
+	try {
+		const j = await (await fetch("/api/gif/liste?c=" + encodeURIComponent(name), { cache: "no-store" })).json();
+		if (cur !== name) return;
+		files = j.fichiers.sort(byName);
+	} catch (e) {
+		OD.toast("Panneau injoignable", false);
+	}
+	renderFiles();
+}
+
+function renderFiles () {
+	const q = $("#filter").value.toLowerCase();
+	const list = files.filter(x => x.nom.toLowerCase().includes(q));
+	$("#dcount").textContent = files.length + " GIF" + (q ? " · " + list.length + " affichée(s)" : "");
+	$("#noresult").hidden = list.length > 0;
+	const g = $("#grid");
+	g.textContent = "";
+	thumbReset();
+	for (const x of list) {
+		const card = document.createElement("div");
+		card.className = "thumb";
+
+		const led = document.createElement("div");
+		led.className = "led small";
+		const img = document.createElement("img");
+		img.alt = "";
+		img.dataset.src = OD.gifUrl(cur, x.nom, x.taille);
+		led.appendChild(img);
+		thumbObs.observe(img);
+
+		const name = document.createElement("div");
+		name.className = "t-name";
+		name.textContent = OD.pretty(x.nom);
+		name.title = x.nom;
+
+		const row = document.createElement("div");
+		row.className = "t-row";
+		const size = document.createElement("span");
+		size.className = "muted";
+		size.textContent = OD.size(x.taille);
+		const play = document.createElement("button");
+		play.className = "btn sm";
+		play.innerHTML = ICON_PLAY + "Afficher";
+		play.title = "Afficher tout de suite sur le panneau";
+		play.onclick = async () => {
+			const r = await OD.action("/api/gif/jouer", { categorie: cur, nom: x.nom });
+			if (!r.cancelled) OD.toast(r.ok ? OD.pretty(x.nom) + " va s'afficher" : r.text, r.ok);
+		};
+		const del = document.createElement("button");
+		del.className = "btn sm icon danger";
+		del.innerHTML = ICON_DEL;
+		del.title = "Supprimer de la carte SD";
+		del.setAttribute("aria-label", "Supprimer " + x.nom);
+		del.onclick = () => removeGif(x);
+		row.append(size, play, del);
+
+		card.append(led, name, row);
+		g.appendChild(card);
+	}
+}
+
+async function removeGif (x) {
+	if (!confirm("Supprimer « " + x.nom + " » de la carte SD ?")) return;
+	const r = await OD.action("/api/gif/supprimer", { categorie: cur, nom: x.nom });
+	if (r.cancelled) return;
+	OD.toast(r.ok ? OD.pretty(x.nom) + " supprimée" : r.text, r.ok);
+	if (r.ok) { files = files.filter(y => y !== x); renderFiles(); loadCats(); }
+}
+
+async function upload (list) {
+	list = Array.from(list).filter(f => /\.gif$/i.test(f.name) || f.type === "image/gif");
+	if (!cur || list.length === 0) return;
+	const drop = $("#drop"), label = drop.querySelector("span");
+	const saved = label.innerHTML;
+	let ok = 0, last = "";
+	for (let i = 0; i < list.length; i++) {
+		label.textContent = "Envoi " + (i + 1) + " / " + list.length + " : " + list[i].name;
+		const r = await OD.action("/api/gif/ajouter", { categorie: cur }, list[i]);
+		if (r.cancelled) break;
+		if (r.ok) ok++; else last = list[i].name + " : " + r.text;
+	}
+	label.innerHTML = saved;
+	$("#files").value = "";
+	if (ok > 0 || last) OD.toast(ok + " / " + list.length + " GIF ajoutée(s)" + (last ? " — " + last : ""), ok === list.length);
+	const c = cats.find(c => c.nom === cur);
+	if (c && ok > 0) delete c.local;
+	await loadCats();
+	await openCat(cur);
+}
+
+$("#files").onchange = e => upload(e.target.files);
+const drop = $("#drop");
+drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
+drop.ondragleave = () => drop.classList.remove("over");
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); upload(e.dataTransfer.files); };
+
+$("#newcat-form").onsubmit = e => {
+	e.preventDefault();
+	const n = $("#newcat").value.trim();
+	if (!/^[A-Za-z0-9_-]{1,32}$/.test(n)) { OD.toast("Nom de catégorie : lettres, chiffres, _ ou - (32 maximum)", false); return; }
+	if (!cats.find(c => c.nom.toLowerCase() === n.toLowerCase())) { cats.push({ nom: n, nb: 0, active: false, local: true }); cats.sort(byName); }
+	$("#newcat").value = "";
+	OD.toast("Ajoutez des GIF à « " + n + " » pour la créer sur la carte");
+	openCat(n);
+};
+
+$("#filter").oninput = renderFiles;
+
+loadCats().then(() => {
+	let last = "";
+	try { last = localStorage.getItem("orbitdmd_cat") || ""; } catch (e) {}
+	const c = cats.find(x => x.nom === last) || cats.find(x => x.active);
+	if (c) openCat(c.nom);
+});
+</script>
+</body>
+</html>

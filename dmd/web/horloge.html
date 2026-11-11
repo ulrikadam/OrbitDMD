@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrbitDMD · Horloge</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top"><div class="top-in">
+	<a class="brand" href="/" aria-label="OrbitDMD"><picture>
+		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
+		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
+	</picture></a>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge" class="on">Horloge</a><a href="/meteo">Météo</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
+	<div class="status">
+		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
+		<button class="btn sm" id="lock"></button>
+	</div>
+</div></header>
+
+<main>
+	<div class="head">
+		<div>
+			<h1>Horloge</h1>
+			<p class="sub">Police, couleurs et date de l'heure affichée entre les GIF. L'aperçu est dessiné par le panneau lui-même.</p>
+		</div>
+	</div>
+
+	<!-- apercu -->
+	<section class="card clock-preview">
+		<div class="panel"><div class="led"><img id="prev" alt="Aperçu de l'horloge"><div class="none" id="prev-none">Chargement de l'aperçu…</div></div></div>
+		<div class="row" style="margin-top:14px">
+			<div class="seg" role="group" aria-label="Écran de l'aperçu">
+				<button class="on" data-screen="heure">Heure</button><button data-screen="date" id="seg-date" title="La date seule, montrée après l'heure">Date</button>
+			</div>
+			<span class="small muted" id="state"></span>
+			<span class="spacer"></span>
+			<button class="btn" id="undo" disabled>Annuler</button>
+			<button class="btn" id="show" title="Enregistre puis montre l'heure 15 secondes sur le panneau">Voir sur le panneau</button>
+			<button class="btn primary" id="save" disabled>Enregistrer</button>
+		</div>
+	</section>
+
+	<div class="grid clock-grid">
+		<!-- heure -->
+		<section class="card">
+			<h2>Heure</h2>
+			<div class="form-row"><span class="lbl">Heure du panneau<span class="hint" id="sync-age">—</span></span>
+				<span class="row" style="gap:12px;flex-wrap:nowrap"><b id="panel-time" style="font-variant-numeric:tabular-nums">--:--:--</b>
+				<button class="btn sm" id="sync" title="Remettre le panneau à l'heure exacte d'Internet"><svg class="i" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>Synchroniser</button></span></div>
+			<div class="form-row"><label for="Clock_Active">Afficher l'heure<span class="hint">Entre deux GIF</span></label>
+				<span class="switch"><input type="checkbox" id="Clock_Active"></span></div>
+			<div class="form-row"><label for="Clock_Display_Time">Durée</label>
+				<span class="with-suffix"><input class="input num" type="number" id="Clock_Display_Time" min="1" max="60" step="1" data-ms> s</span></div>
+			<div class="form-row"><label for="fmt-time">Format</label>
+				<span class="fmt"><select class="input" id="fmt-time"></select>
+				<input class="input" type="text" id="Clock_Format" maxlength="39" placeholder="%H:%M:%S" hidden></span></div>
+			<div class="form-row"><label for="Clock_Blink">Deux-points clignotants</label>
+				<span class="switch"><input type="checkbox" id="Clock_Blink"></span></div>
+			<div class="form-row"><label for="Clock_TZ">Fuseau horaire<span class="hint">Heure d'été automatique</span></label>
+				<select class="input" id="Clock_TZ"></select></div>
+		</section>
+
+		<!-- date -->
+		<section class="card">
+			<h2>Date</h2>
+			<div class="form-row"><label for="Date_Active">Afficher la date</label>
+				<select class="input" id="Date_Active">
+					<option value="0">Non</option>
+					<option value="2">Sous l'heure</option>
+					<option value="1">Après l'heure (écran à part)</option>
+				</select></div>
+			<div class="form-row" data-date="1"><label for="Date_Display_Time">Durée de la date</label>
+				<span class="with-suffix"><input class="input num" type="number" id="Date_Display_Time" min="1" max="60" step="0.5" data-ms> s</span></div>
+			<div class="form-row" data-date="12"><label for="fmt-date">Format</label>
+				<span class="fmt"><select class="input" id="fmt-date"></select>
+				<input class="input" type="text" id="Date_Format" maxlength="39" placeholder="%a %d %b" hidden></span></div>
+			<div class="form-row" data-date="12"><label for="Date_Font">Police</label>
+				<select class="input" id="Date_Font"></select></div>
+			<div class="form-row" data-date="12"><span class="lbl">Taille</span>
+				<span class="size" data-key="Date_Font_Size"></span></div>
+			<div class="form-row" data-date="12"><label for="Date_Font_Pattern">Remplissage</label>
+				<span class="row" style="gap:8px;flex-wrap:nowrap">
+					<input class="input color" type="color" id="Date_Color" aria-label="Couleur de la date">
+					<select class="input" id="Date_Font_Pattern" style="width:150px"></select>
+				</span></div>
+		</section>
+	</div>
+
+	<!-- police -->
+	<section class="card">
+		<h2>Police de l'heure</h2>
+		<div class="tiles" id="fonts"></div>
+		<div class="form-row"><span class="lbl">Taille<span class="hint">Auto : la plus grande qui tient. Une taille choisie est réduite si le texte dépasse</span></span>
+			<span class="size" data-key="Clock_Font_Size"></span></div>
+		<div class="form-row"><label for="Clock_Smooth">Bords adoucis<span class="hint">Sinon, pixels nets</span></label>
+			<span class="switch"><input type="checkbox" id="Clock_Smooth"></span></div>
+	</section>
+
+	<!-- couleur -->
+	<section class="card">
+		<h2>Couleur de l'heure</h2>
+		<div class="swatches" id="swatches">
+			<input class="input color" type="color" id="Clock_Color" aria-label="Autre couleur" title="Autre couleur">
+		</div>
+		<div class="label" style="margin:18px 0 8px">Ou un motif</div>
+		<div class="tiles" id="patterns"></div>
+	</section>
+
+	<!-- fond -->
+	<section class="card">
+		<h2>Fond</h2>
+		<p class="small muted" style="margin:0 0 12px">Image ou animation derrière l'heure.</p>
+		<div class="tiles" id="backgrounds"></div>
+	</section>
+
+	<!-- ajout -->
+	<section class="card">
+		<h2>Ajouter des polices, motifs ou fonds</h2>
+		<label class="drop" id="drop">
+			<input type="file" id="files" accept=".ttf,.otf,.png,.gif" multiple>
+			<svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+			<span><b>Glissez des fichiers ici</b> ou cliquez : polices TTF ou OTF, images PNG ou GIF de 128×32</span>
+		</label>
+		<div class="form-row" style="border:0"><label for="up-type">Les images servent de</label>
+			<select class="input" id="up-type"><option value="motif">Motif (remplit le texte)</option><option value="fond">Fond (derrière l'heure)</option></select></div>
+	</section>
+</main>
+
+<footer class="credit">Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be" target="_blank" rel="noopener">www.nexadam.be</a></footer>
+
+<script src="/app.js"></script>
+<script>
+"use strict";
+const KEYS = ["Clock_Active", "Clock_Display_Time", "Clock_TZ", "Clock_Format", "Clock_Font", "Clock_Font_Size",
+	"Clock_Color", "Clock_Font_Pattern", "Clock_Background", "Clock_Blink", "Clock_Smooth", "Date_Active",
+	"Date_Display_Time", "Date_Format", "Date_Font", "Date_Font_Size", "Date_Color", "Date_Font_Pattern"];
+const NOT_IN_PREVIEW = ["Clock_Active", "Clock_Display_Time", "Clock_TZ", "Date_Display_Time"];
+const TIME_FORMATS = [["%H:%M:%S", "09:05:07"], ["%H:%M", "09:05"], ["%I:%M:%S %p", "09:05:07 AM"], ["%I:%M %p", "09:05 AM"]];
+const DATE_FORMATS = [["%a %d %b", "MAR 10 NOV"], ["%d %b %Y", "10 NOV 2026"], ["%d %b %g", "10 NOV 26"],
+	["%d/%m/%Y", "10/11/2026"], ["%d/%m/%y", "10/11/26"], ["%A %e %B", "MARDI 10 NOVEMBRE"], ["%A %d/%m", "MARDI 10/11"]];
+const COLORS = [["FFAA00", "Ambre"], ["FFFFFF", "Blanc"], ["FF2020", "Rouge"], ["FF7A00", "Orange"], ["FFE000", "Jaune"],
+	["20E040", "Vert"], ["01A7C5", "Turquoise"], ["2060FF", "Bleu"], ["A040FF", "Violet"], ["FF40A0", "Rose"]];
+
+let cur = {}, saved = {}, assets = { polices: [], motifs: [], fonds: [] }, screen = "heure", loaded = false;
+
+/* --- outils --- */
+const el = id => document.getElementById(id);
+function fontName (f) {
+	if (f === "Pixel") return "Pixel (intégrée)";
+	const base = f.replace(/^.*\//, "").replace(/\.(ttf|otf)$/i, "");
+	const noms = { goudysto: "Goudy Stout", pressstart2p: "Press Start 2P", vt323: "VT323", blackopsone: "Black Ops One",
+		russoone: "Russo One", mountainsofchristmas: "Mountains of Christmas", "orbitdmd-led": "OrbitDMD LED",
+		"orbitdmd-gras": "OrbitDMD Gras", "orbitdmd-segments": "OrbitDMD 7 segments" };
+	if (noms[base.toLowerCase()]) return noms[base.toLowerCase()];
+	return base.replace(/^HALLOWEEN_/i, "Halloween · ").replace(/_/g, " ");
+}
+function imageName (f) { return f.replace(/^.*\//, "").replace(/\.(png|gif)$/i, "").replace(/^(Pattern|Background|COLOR|Motif)_?/i, "").replace(/_/g, " ").replace(/ d /g, " d’") || f; }
+function assetUrl (f) { return "/fonts/voir?f=" + encodeURIComponent(f); }
+function dirty () { return KEYS.filter(k => String(cur[k]) !== String(saved[k])); }
+
+/* images chargees 2 par 2 (le Wi-Fi du panneau supporte mal la foule) */
+const imgQueue = [];
+let imgBusy = 0;
+function queueImage (img, url) {
+	img.dataset.src = url;
+	imgQueue.push(img);
+	queueMicrotask(nextImage);	/* une fois la tuile placee dans la page */
+}
+function nextImage () {
+	while (imgBusy < 2 && imgQueue.length) {
+		const img = imgQueue.shift();
+		if (!img.isConnected) continue;
+		imgBusy++;
+		img.onload = img.onerror = () => { imgBusy--; nextImage(); };
+		img.src = img.dataset.src;
+	}
+}
+
+/* --- apercu dessine par le panneau --- */
+let prevBusy = false, prevAgain = false, prevTimer = 0;
+function previewUrl (over = {}, scr = screen) {
+	const p = new URLSearchParams();
+	for (const k of KEYS) if (!NOT_IN_PREVIEW.includes(k)) p.set(k, k in over ? over[k] : cur[k]);
+	if (scr === "date") p.set("ecran", "date");
+	p.set("t", Date.now());
+	return "/api/horloge/apercu?" + p.toString();
+}
+function refreshPreview () {
+	if (!loaded) return;
+	if (prevBusy) { prevAgain = true; return; }
+	prevBusy = true;
+	const img = el("prev");
+	img.onload = () => { el("prev-none").hidden = true; done(); };
+	img.onerror = () => { el("prev-none").hidden = false; el("prev-none").textContent = "Aperçu indisponible"; done(); };
+	function done () { prevBusy = false; if (prevAgain) { prevAgain = false; refreshPreview(); } }
+	img.src = previewUrl();
+}
+function schedulePreview () { clearTimeout(prevTimer); prevTimer = setTimeout(refreshPreview, 200); }
+setInterval(() => { if (!document.hidden && !prevBusy) refreshPreview(); }, 3000);	/* l'heure avance */
+
+/* --- changement d'une valeur --- */
+function changed () {
+	const d = dirty();
+	el("save").disabled = el("undo").disabled = d.length === 0;
+	el("state").textContent = d.length ? "Modifications non enregistrées" : "";
+	const mode = String(cur.Date_Active);
+	for (const row of document.querySelectorAll("[data-date]")) row.hidden = !row.dataset.date.includes(mode);
+	el("seg-date").disabled = mode !== "1";
+	if (mode !== "1" && screen === "date") setScreen("heure");
+	schedulePreview();
+}
+function set (key, value) { cur[key] = String(value); changed(); }
+
+/* --- controles --- */
+function bindSimple () {
+	for (const k of KEYS) {
+		const input = el(k);
+		if (!input || input.dataset.bound) continue;
+		input.dataset.bound = "1";
+		const read = () => input.type === "checkbox" ? (input.checked ? "1" : "0")
+			: input.dataset.ms !== undefined ? String(Math.round(+input.value * 1000))
+			: input.type === "color" ? input.value.slice(1).toUpperCase() : input.value.trim();
+		input.addEventListener(input.type === "color" || input.type === "text" ? "input" : "change", () => {
+			if (input.type === "number" && (!input.value || +input.value <= 0)) return;
+			cur[k] = read();
+			/* une couleur choisie remplace le motif */
+			if (k === "Clock_Color") cur.Clock_Font_Pattern = "None";
+			if (k === "Date_Color") { cur.Date_Font_Pattern = "None"; el("Date_Font_Pattern").value = "None"; }
+			markAll();
+			changed();
+		});
+	}
+}
+function fillSimple () {
+	for (const k of KEYS) {
+		const input = el(k);
+		if (!input) continue;
+		const v = cur[k];
+		if (input.type === "checkbox") input.checked = v === "1";
+		else if (input.dataset.ms !== undefined) input.value = +v / 1000;
+		else if (input.type === "color") input.value = "#" + v.toLowerCase();
+		else input.value = v;
+	}
+}
+
+function setupFormat (selId, key, presets) {
+	const sel = el(selId), input = el(key);
+	sel.textContent = "";
+	for (const [f, label] of presets) sel.add(new Option(label, f));
+	sel.add(new Option("Personnalisé…", "custom"));
+	const known = presets.some(([f]) => f === cur[key]);
+	sel.value = known ? cur[key] : "custom";
+	input.hidden = known;
+	sel.onchange = () => {
+		input.hidden = sel.value !== "custom";
+		if (sel.value === "custom") { input.value = cur[key]; input.focus(); }
+		else set(key, sel.value);
+	};
+}
+
+/* taille : automatique ou curseur 6 a 48 */
+function setupSize (box) {
+	const key = box.dataset.key;
+	box.innerHTML = '<label class="row" style="gap:6px;font-weight:400"><span class="switch"><input type="checkbox"></span>Auto</label>' +
+		'<input type="range" min="6" max="48" step="1" aria-label="Taille en pixels"><output class="small muted"></output>';
+	const auto = box.querySelector("input[type=checkbox]"), range = box.querySelector("input[type=range]"), out = box.querySelector("output");
+	const show = () => {
+		const v = +cur[key];
+		auto.checked = v === 0;
+		range.disabled = v === 0;
+		if (v) range.value = v;
+		out.textContent = v ? v + " px" : "";
+	};
+	auto.onchange = () => { set(key, auto.checked ? 0 : (+range.value || 20)); show(); };
+	range.oninput = () => { set(key, range.value); show(); };
+	box.show = show;
+	show();
+}
+
+/* galeries : une tuile par choix ; seule la selection change ensuite (markAll) */
+function tile (key, value, label) {
+	const b = document.createElement("button");
+	b.type = "button";
+	b.className = "tile";
+	b.dataset.value = value;
+	b.onclick = () => {
+		cur[key] = value;
+		if (key === "Clock_Font_Pattern" && value === "None" && !cur.Clock_Color) cur.Clock_Color = "FFAA00";
+		markAll();
+		changed();
+	};
+	const led = document.createElement("div");
+	led.className = "led small";
+	const name = document.createElement("span");
+	name.textContent = label;
+	b.append(led, name);
+	return b;
+}
+
+function markAll () {
+	const galleries = { fonts: "Clock_Font", patterns: "Clock_Font_Pattern", backgrounds: "Clock_Background" };
+	for (const id in galleries) {
+		for (const t of el(id).children) {
+			const on = t.dataset.value === cur[galleries[id]];
+			t.classList.toggle("sel", on);
+			t.setAttribute("aria-pressed", on ? "true" : "false");
+		}
+	}
+	for (const s of el("swatches").querySelectorAll(".swatch"))
+		s.classList.toggle("sel", cur.Clock_Font_Pattern === "None" && s.dataset.value === cur.Clock_Color);
+	const plain = el("patterns").querySelector(".plain");
+	if (plain) plain.style.background = "#" + cur.Clock_Color;
+	el("Clock_Color").value = "#" + cur.Clock_Color.toLowerCase();
+}
+
+function renderFonts () {
+	const box = el("fonts");
+	box.textContent = "";
+	for (const f of ["Pixel"].concat(assets.polices)) {
+		const t = tile("Clock_Font", f, fontName(f));
+		const img = document.createElement("img");
+		img.alt = "";
+		t.firstChild.appendChild(img);
+		queueImage(img, previewUrl({ Clock_Font: f, Clock_Format: "%H:%M", Clock_Font_Size: 0, Clock_Color: "FFFFFF",
+			Clock_Font_Pattern: "None", Clock_Background: "None", Date_Active: 0 }, "heure").replace(/&t=\d+/, ""));
+		box.appendChild(t);
+	}
+}
+
+function renderSwatches () {
+	const box = el("swatches"), picker = el("Clock_Color");
+	for (const s of box.querySelectorAll(".swatch")) s.remove();
+	for (const [hex, name] of COLORS) {
+		const s = document.createElement("button");
+		s.type = "button";
+		s.className = "swatch";
+		s.dataset.value = hex;
+		s.style.background = "#" + hex;
+		s.title = name;
+		s.setAttribute("aria-label", name);
+		s.onclick = () => { cur.Clock_Color = hex; cur.Clock_Font_Pattern = "None"; markAll(); changed(); };
+		box.insertBefore(s, picker);
+	}
+}
+
+function renderPatterns () {
+	const box = el("patterns");
+	box.textContent = "";
+	const none = tile("Clock_Font_Pattern", "None", "Couleur unie");
+	none.firstChild.innerHTML = '<div class="plain"></div>';
+	box.appendChild(none);
+	for (const f of assets.motifs) {
+		const t = tile("Clock_Font_Pattern", f, imageName(f));
+		const img = document.createElement("img");
+		img.alt = "";
+		t.firstChild.appendChild(img);
+		queueImage(img, assetUrl(f));
+		box.appendChild(t);
+	}
+}
+
+function renderBackgrounds () {
+	const box = el("backgrounds");
+	box.textContent = "";
+	box.appendChild(tile("Clock_Background", "None", "Aucun (noir)"));
+	for (const f of assets.fonds) {
+		const t = tile("Clock_Background", f, imageName(f));
+		const img = document.createElement("img");
+		img.alt = "";
+		t.firstChild.appendChild(img);
+		queueImage(img, assetUrl(f));
+		box.appendChild(t);
+	}
+}
+
+function renderDateSelects () {
+	const font = el("Date_Font"), pat = el("Date_Font_Pattern");
+	font.textContent = "";
+	for (const f of ["Pixel"].concat(assets.polices)) font.add(new Option(fontName(f), f));
+	font.value = cur.Date_Font;
+	pat.textContent = "";
+	pat.add(new Option("Couleur unie", "None"));
+	for (const f of assets.motifs) pat.add(new Option("Motif " + imageName(f), f));
+	pat.value = cur.Date_Font_Pattern;
+}
+
+function renderAll () {
+	fillSimple();
+	setupFormat("fmt-time", "Clock_Format", TIME_FORMATS);
+	setupFormat("fmt-date", "Date_Format", DATE_FORMATS);
+	for (const box of document.querySelectorAll(".size")) box.show ? box.show() : setupSize(box);
+	renderFonts();
+	renderSwatches();
+	renderPatterns();
+	renderBackgrounds();
+	renderDateSelects();
+	markAll();
+	changed();
+}
+
+/* --- chargement --- */
+async function load () {
+	try {
+		const [s, a] = await Promise.all([OD.getJSON("/api/reglages", 15000), OD.getJSON("/api/horloge/fichiers", 15000)]);
+		assets = a;
+		const tz = el("Clock_TZ");
+		tz.textContent = "";
+		for (const z of s.fuseaux) tz.add(new Option(z, z));
+		for (const k of KEYS) cur[k] = String(s[k]);
+		saved = { ...cur };
+		loaded = true;
+		bindSimple();
+		renderAll();
+		refreshPreview();
+	} catch (e) {
+		el("prev-none").textContent = "Panneau injoignable";
+		OD.toast("Panneau injoignable", false);
+	}
+}
+
+/* --- ecran de l'apercu --- */
+function setScreen (s) {
+	screen = s;
+	for (const b of document.querySelectorAll(".seg button")) b.classList.toggle("on", b.dataset.screen === s);
+	refreshPreview();
+}
+for (const b of document.querySelectorAll(".seg button")) b.onclick = () => setScreen(b.dataset.screen);
+
+/* --- enregistrer, annuler, voir --- */
+async function save () {
+	const fields = {};
+	for (const k of dirty()) fields[k] = cur[k];
+	if (!Object.keys(fields).length) return true;
+	el("save").disabled = true;
+	const r = await OD.action("/api/reglages", fields);
+	if (r.cancelled) { changed(); return false; }
+	if (r.ok) { saved = { ...cur }; OD.toast("Horloge enregistrée"); }
+	else OD.toast(r.text, false);
+	changed();
+	return r.ok;
+}
+el("save").onclick = save;
+el("undo").onclick = () => { cur = { ...saved }; renderAll(); };
+el("show").onclick = async () => {
+	if (!(await save())) return;
+	const r = await OD.action("/api/horloge/montrer");
+	if (!r.cancelled) OD.toast(r.ok ? "L'heure s'affiche 15 secondes sur le panneau" : r.text, r.ok);
+};
+window.addEventListener("beforeunload", e => { if (loaded && dirty().length) { e.preventDefault(); e.returnValue = ""; } });
+
+/* --- ajout de fichiers --- */
+const drop = el("drop");
+async function upload (list) {
+	let added = 0;
+	for (const f of list) {
+		const ext = (f.name.split(".").pop() || "").toLowerCase();
+		const type = ext === "ttf" || ext === "otf" ? "police" : ext === "png" || ext === "gif" ? el("up-type").value : "";
+		if (!type) { OD.toast(f.name + " : format non pris en charge", false); continue; }
+		if (f.size > 4 * 1024 * 1024) { OD.toast(f.name + " : trop gros (4 Mo maximum)", false); continue; }
+		const r = await OD.action("/api/horloge/ajouter", { type }, f);
+		if (r.cancelled) return;
+		OD.toast(r.ok ? r.text : f.name + " : " + r.text, r.ok);
+		if (r.ok) added++;
+	}
+	if (added) {
+		try { assets = await OD.getJSON("/api/horloge/fichiers", 15000); } catch (e) {}
+		renderFonts(); renderPatterns(); renderBackgrounds(); renderDateSelects(); markAll();
+	}
+}
+el("files").onchange = () => { upload([...el("files").files]); el("files").value = ""; };
+drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
+drop.ondragleave = () => drop.classList.remove("over");
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); upload([...e.dataTransfer.files]); };
+
+/* --- heure du panneau (etat interroge par app.js), avancee ici chaque seconde --- */
+let panelBase = null, panelAt = 0;
+document.addEventListener("etat", e => {
+	const s = e.detail;
+	if (!s) return;
+	const m = /^(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)$/.exec(s.heure || "");
+	if (m) { panelBase = Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5], +m[6]); panelAt = Date.now(); }
+	const src = s.source_heure === "Internet" ? "heure Internet" : s.source_heure === "horloge a pile" ? "horloge à pile" : "heure inconnue";
+	el("sync-age").textContent = src + " · synchronisée " + OD.syncAge(s.synchro_s);
+});
+setInterval(() => {
+	if (panelBase === null) return;
+	const d = new Date(panelBase + (Date.now() - panelAt)), p = n => String(n).padStart(2, "0");
+	el("panel-time").textContent = p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()) + ":" + p(d.getUTCSeconds());
+}, 1000);
+el("sync").onclick = e => OD.syncTime(e.currentTarget);
+
+load();
+</script>
+</body>
+</html>
