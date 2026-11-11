@@ -21,11 +21,15 @@
 OrbitDMD transforme un **Raspberry Pi 3** et des **panneaux LED HUB75** (par exemple 2 × 64×32) en écran
 de type « DMD » de flipper ou de borne d'arcade :
 
-- 🎞️ **GIF animées** par catégories, choisies et ajoutées depuis la page web (562 fournies) ;
-- 🕒 **horloge** : 14 polices, couleurs, motifs, 13 fonds animés, date, synchronisation Internet ;
+- 🎞️ **GIF animées** par catégories (562 fournies), ajoutées depuis la page web une à une, par dossier
+  entier ou en .zip ; GIF favorites et GIF hors rotation ;
+- 🕒 **horloge** : 14 polices, couleurs, arc-en-ciel animé, motifs, 13 fonds animés, choix au hasard, date,
+  synchronisation Internet ;
+- 💬 **messages** : textes défilants et comptes à rebours (Noël, Nouvel an, date choisie), chacun avec son
+  style et son effet d'arrivée (défilement, montée, lettre par lettre, pluie de lettres, fondu…) ;
 - ⛅ **météo** de votre ville (Open-Meteo, sans inscription) avec icônes animées ;
 - 🌐 **page web** sur votre réseau (`http://orbitdmd.local/`) : aperçu en direct du panneau, réglages,
-  luminosité heure par heure, pause, extinction, mises à jour ;
+  luminosité heure par heure, pause, extinction, sauvegarde des réglages, mises à jour ;
 - ⚡ **sans Linux** : le programme démarre directement sur le Raspberry Pi (environnement
   [Circle](https://github.com/rsta2/circle)), en quelques secondes.
 
@@ -47,7 +51,7 @@ de type « DMD » de flipper ou de borne d'arcade :
 | Carte adaptatrice | HUB75 pour Raspberry Pi, brochage **« regular »** de rpi-rgb-led-matrix (par ex. Electrodragon) ; le brochage Adafruit HAT n'est pas géré |
 | Alimentation des panneaux | 5 V, suffisante pour vos panneaux (environ 4 A par panneau 64×32 à pleine luminosité) |
 | Carte micro-SD | 32 Go ou moins conseillé (une partition FAT32 de 31 Go au plus est créée) |
-| Réseau | Wi-Fi 2,4 GHz (le Raspberry Pi 3 ne voit pas le 5 GHz) |
+| Réseau | Câble réseau (Ethernet) ou Wi-Fi 2,4 GHz (le Raspberry Pi 3 ne voit pas le 5 GHz) |
 
 ## Installation
 
