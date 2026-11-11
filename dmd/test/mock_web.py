@@ -66,8 +66,12 @@ MESSAGE_DEFAULTS = {'Texte_Message': '', 'Texte_Font': 'Pixel', 'Texte_Font_Size
                     'Compte_Font': 'Pixel', 'Compte_Font_Size': '0', 'Compte_Color': 'E53935',
                     'Compte_Titre_Color': 'FFFFFF', 'Compte_Display_Time': '5000', 'Compte_Active': '0', 'Compte_Every': '3',
                     'Gif_Ordre': 'hasard', 'Texte_Effet': 'defile', 'Texte_Font_Pattern': 'None',
-                    'Compte_Font_Pattern': 'None'}
-MESSAGE_NUMBERS = {'Texte_Font_Size', 'Texte_Vitesse', 'Texte_Passages', 'Texte_Active', 'Texte_Every',
+                    'Compte_Font_Pattern': 'None', 'Gif_Cat_Mois': '', 'Prog_Eteint_Active': '0',
+                    'Prog_Eteint_Debut': '1', 'Prog_Eteint_Fin': '7', 'Prog_Heure_Active': '0',
+                    'Prog_Heure_Debut': '23', 'Prog_Heure_Fin': '7', 'HA_Active': '0', 'HA_Serveur': '',
+                    'HA_Port': '1883', 'HA_Utilisateur': ''}
+MESSAGE_NUMBERS = {'HA_Active', 'HA_Port', 'Prog_Eteint_Active', 'Prog_Eteint_Debut', 'Prog_Eteint_Fin', 'Prog_Heure_Active',
+                   'Prog_Heure_Debut', 'Prog_Heure_Fin', 'Texte_Font_Size', 'Texte_Vitesse', 'Texte_Passages', 'Texte_Active', 'Texte_Every',
                    'Compte_Font_Size', 'Compte_Display_Time', 'Compte_Active', 'Compte_Every'}
 WEATHER_DEFAULTS = {'Weather_Active': '1', 'Weather_Display_Time': '5000', 'Weather_Every': '2', 'Weather_Place': '',
                     'Weather_Latitude': '', 'Weather_Longitude': '', 'Weather_Font': 'Pixel', 'Weather_Font_Size': '0',
@@ -150,7 +154,7 @@ class Handler(BaseHTTPRequestHandler):
                     'heure': time.strftime('%Y-%m-%d %H:%M:%S'), 'source_heure': 'Internet',
                     'rafraichissement_hz': random.choice([172, 173, 175]), 'luminosite': 60,
                     'nb_gif': len(GIFS), 'memoire_libre_mo': 852, 'carte_libre_mo': 15071,
-                    'version': '1.0.0', 'temperature_c': 52, 'latence_ms': 6, 'latence_max_ms': 31, 'nom': 'OrbitDMD', 'reseau': os.environ.get('ORBITDMD_RESEAU', 'wifi'), 'wifi': 'Box-Maison', 'gif': gif,
+                    'version': '1.0.0', 'temperature_c': 52, 'latence_ms': 6, 'latence_max_ms': 31, 'nom': 'OrbitDMD', 'ha': os.environ.get('ORBITDMD_HA', ''), 'reseau': os.environ.get('ORBITDMD_RESEAU', 'wifi'), 'wifi': 'Box-Maison', 'gif': gif,
                     'pause': STATE['pause'], 'ecran_eteint': STATE['ecran_eteint'],
                     'synchro_s': int(time.time() - STATE['synchro']),
                     'meteo_temp': int(WEATHER['temp'] * 10), 'meteo_code': WEATHER['code'], 'meteo_jour': WEATHER['jour'],
@@ -361,6 +365,20 @@ class Handler(BaseHTTPRequestHandler):
                 for k in sorted(marks, key=str.lower):
                     f.write(marks[k] + k + '\n')
             reply = 'OK : %s %s' % (nom, marque)
+        elif self.path == '/api/reglages' and 'ORBITDMD_CARTE' in os.environ:
+            # enregistre les reglages dans le config.txt de la carte d'essai
+            fields = {k: v.encode('latin-1').decode('utf-8', 'replace')
+                      for k, v in re.findall(r'name="([^"]+)"\r\n\r\n(.*?)\r\n', body) if k != 'password'}
+            lines = open(CONFIG, encoding='utf-8', errors='replace').read().split('\n')
+            for k, v in fields.items():
+                for i, l in enumerate(lines):
+                    if l.split('=', 1)[0] == k:
+                        lines[i] = k + '=' + v
+                        break
+                else:
+                    lines.append(k + '=' + v)
+            open(CONFIG, 'w', encoding='utf-8').write('\n'.join(lines))
+            reply = 'OK : %d reglage(s) enregistre(s)' % len(fields)
         elif self.path == '/api/messages' and 'ORBITDMD_CARTE' in os.environ:
             m = re.search(r'name="fichier"; filename="[^"]*"\r\n[^\r]*\r\n\r\n(.*?)\r\n--', body, re.S)
             text = m.group(1).encode('latin-1').decode('utf-8', 'replace') if m else ''

@@ -21,6 +21,8 @@ CRemoteControl::CRemoteControl (void)
 	Status.nRefreshRate = 0;
 	Status.nBrightness = 0;
 	Status.pScreen = "demarrage";
+	Status.pSchedule = "";
+	m_nBrightnessOverride = -1;
 
 	s_pThis = this;
 }

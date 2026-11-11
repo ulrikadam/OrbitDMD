@@ -60,6 +60,11 @@
 						<input class="input" type="search" id="filter" placeholder="Rechercher" aria-label="Rechercher une GIF" style="width:200px">
 						<button class="btn danger" id="delcat" title="Supprimer cette catégorie et toutes ses GIF"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Supprimer la catégorie</button>
 					</div>
+					<div class="period" id="period">
+						<span class="small muted">Montrée</span>
+						<button class="chip-btn" data-all type="button">Toute l'année</button>
+						<span class="months" id="months"></span>
+					</div>
 					<label class="drop" id="drop" style="margin-top:14px">
 						<input type="file" id="files" accept=".gif,image/gif,.zip,application/zip" multiple>
 						<svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
@@ -78,6 +83,8 @@
 								<label class="row" style="gap:6px"><input type="radio" name="bulk-mode" value="ici">Tout dans <b id="bulk-cur"></b></label>
 							</div>
 							<ul class="bulk-list small" id="bulk-list"></ul>
+							<label class="row small" style="gap:8px;margin-top:8px"><input type="checkbox" id="bulk-fit" checked>
+								<span>Réduire au format du panneau (<span id="panel-size">128×32</span>) les GIF plus grandes</span></label>
 							<div class="small muted" id="bulk-warn"></div>
 							<div class="row" style="justify-content:flex-end;margin-top:10px">
 								<button class="btn" id="bulk-cancel">Annuler</button>
@@ -109,6 +116,7 @@
 <footer class="credit">Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be" target="_blank" rel="noopener">www.nexadam.be</a> · <a href="https://github.com/ulrikadam/OrbitDMD" target="_blank" rel="noopener">OrbitDMD sur GitHub</a><br><a class="kofi" href="https://ko-fi.com/H1U12A50RN" target="_blank" rel="noopener">☕ Soutenir sur Ko-fi</a></footer>
 
 <script src="/app.js"></script>
+<script src="/gifscale.js"></script>
 <script>
 "use strict";
 let cats = [], cur = null, files = [];
@@ -156,6 +164,93 @@ function thumbReset () {
 	thumbGen++;
 }
 
+/* --- mois ou chaque categorie est montree (cle Gif_Cat_Mois : "XMAS:12;Plage:6-8") --- */
+const MONTHS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+const MONTH_NAMES = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+let catMonths = {}, catMonthsRaw = "", panelW = 128, panelH = 32;
+function parseMonths (raw) {
+	const out = {};
+	for (const rule of String(raw || "").split(";")) {
+		const [cat, list] = rule.split(":");
+		if (!cat || !list) continue;
+		const set = new Set();
+		for (const part of list.split(",")) {
+			const [a, b] = part.split("-").map(Number);
+			if (!a) continue;
+			for (let m = a; ; m = m % 12 + 1) { set.add(m); if (m === (b || a)) break; }
+		}
+		out[cat.toLowerCase()] = set;
+	}
+	return out;
+}
+function monthsLabel (set) {
+	const l = [...set].sort((x, y) => x - y);
+	return l.length === 1 ? MONTH_NAMES[l[0] - 1] : l.map(m => MONTH_NAMES[m - 1]).join(", ");
+}
+function serializeMonths () {
+	return Object.entries(catMonths).filter(([, s]) => s.size && s.size < 12)
+		.map(([c, s]) => (cats.find(x => x.nom.toLowerCase() === c) || { nom: c }).nom + ":" + ranges([...s].sort((x, y) => x - y))).join(";");
+}
+/* 6,7,8,12 -> "6-8,12" (texte plus court dans config.txt) */
+function ranges (l) {
+	const out = [];
+	for (let i = 0; i < l.length; i++) {
+		let j = i;
+		while (j + 1 < l.length && l[j + 1] === l[j] + 1) j++;
+		out.push(j > i ? l[i] + "-" + l[j] : String(l[i]));
+		i = j;
+	}
+	return out.join(",");
+}
+async function loadMonths () {
+	try {
+		const s = await OD.getJSON("/api/reglages", 15000);
+		panelW = (+s.Panel_XSize || 64) * (+s.Panel_XNumber || 2);
+		panelH = (+s.Panel_YSize || 32) * (+s.Panel_YNumber || 1);
+		$("#panel-size").textContent = panelW + "×" + panelH;
+		catMonthsRaw = s.Gif_Cat_Mois || "";
+		catMonths = parseMonths(catMonthsRaw);
+	} catch (e) {}
+}
+function renderPeriod () {
+	const set = catMonths[(cur || "").toLowerCase()];
+	const all = !set || set.size === 0 || set.size === 12;
+	$("#period").hidden = !cur || cur.toLowerCase() === "accueil";
+	$("#period [data-all]").classList.toggle("on", all);
+	const box = $("#months");
+	box.textContent = "";
+	MONTHS.forEach((l, i) => {
+		const b = document.createElement("button");
+		b.type = "button";
+		b.className = "chip-btn" + (!all && set.has(i + 1) ? " on" : "");
+		b.textContent = l;
+		b.title = MONTH_NAMES[i];
+		b.onclick = () => toggleMonth(i + 1);
+		box.appendChild(b);
+	});
+}
+async function saveMonths (previous) {
+	const value = serializeMonths();
+	const r = await OD.action("/api/reglages", { Gif_Cat_Mois: value });
+	if (r.ok) { catMonthsRaw = value; OD.toast("Période de « " + cur + " » enregistrée"); }
+	else { catMonths = previous; if (!r.cancelled) OD.toast(r.text, false); }
+	renderPeriod();
+	renderCats();
+}
+function toggleMonth (m) {
+	const previous = parseMonths(catMonthsRaw);
+	const key = cur.toLowerCase();
+	const set = catMonths[key] && catMonths[key].size < 12 ? new Set(catMonths[key]) : new Set();
+	if (set.has(m)) set.delete(m); else set.add(m);
+	catMonths[key] = set;
+	saveMonths(previous);
+}
+$("#period [data-all]").onclick = () => {
+	const previous = parseMonths(catMonthsRaw);
+	delete catMonths[cur.toLowerCase()];
+	saveMonths(previous);
+};
+
 async function loadCats () {
 	try {
 		const j = await (await fetch("/api/gif", { cache: "no-store" })).json();
@@ -182,6 +277,14 @@ function renderCats () {
 		const count = document.createElement("span");
 		count.className = "count";
 		count.textContent = c.nb;
+		const m = catMonths[c.nom.toLowerCase()];
+		if (m && m.size < 12) {
+			const badge = document.createElement("span");
+			badge.className = "season";
+			badge.textContent = monthsLabel(m);
+			badge.title = "Montrée seulement : " + monthsLabel(m);
+			name.appendChild(badge);
+		}
 
 		const sw = document.createElement("label");
 		sw.className = "switch";
@@ -287,6 +390,7 @@ async function openCat (name) {
 	$("#splash-note").hidden = name.toLowerCase() !== "accueil";
 	$("#delcat").hidden = name.toLowerCase() === "accueil";	/* ecrans de demarrage du panneau */
 	$("#filter").value = "";
+	renderPeriod();
 	files = [];
 	renderFiles();
 	try {
@@ -564,7 +668,7 @@ async function runBulk () {
 		present.set(c.toLowerCase(), new Set(j && j.fichiers ? j.fichiers.map(f => f.nom.toLowerCase()) : []));
 	}
 
-	let ok = 0, skip = 0, err = 0, done = 0, sent = 0, lastErr = "";
+	let ok = 0, skip = 0, err = 0, done = 0, sent = 0, lastErr = "", resized = 0;
 	const t0 = Date.now(), total = bulk.items.length;
 	for (const x of bulk.items) {
 		if (bulk.stop) break;
@@ -574,7 +678,14 @@ async function runBulk () {
 		if (seen.has(name.toLowerCase())) { skip++; continue; }
 		$("#bulk-state").textContent = "Envoi " + done + " / " + total + " : " + c + " / " + name;
 		let r;
-		try { r = await OD.action("/api/gif/ajouter", { categorie: c }, await x.get()); }
+		try {
+			let file = await x.get();
+			if ($("#bulk-fit").checked && typeof GifScale !== "undefined") {
+				const small = await GifScale.fit(file, panelW, panelH).catch(() => null);	/* illisible : envoyee telle quelle */
+				if (small) { file = small; resized++; }
+			}
+			r = await OD.action("/api/gif/ajouter", { categorie: c }, file);
+		}
 		catch (e) { r = { ok: false, text: x.path + " : " + e.message }; }
 		if (r.cancelled) { done--; break; }
 		if (r.ok) { ok++; seen.add(name.toLowerCase()); sent += x.size; }
@@ -585,13 +696,15 @@ async function runBulk () {
 		let left = 0;
 		if (rate > 0) for (let i = done; i < total; i++) left += bulk.items[i].size / rate;
 		$("#bulk-detail").textContent = ok + " ajoutée(s) · " + skip + " déjà là · " + err + " erreur(s)" +
+			(resized ? " · " + resized + " réduite(s)" : "") +
 			(left > 90 ? " · reste environ " + Math.round(left / 60) + " min" : "");
 	}
 	window.onbeforeunload = null;
 	bulk.running = false;
 	const finished = done >= total && !bulk.stop;
 	if (finished) $("#bulk-bar").style.width = "100%";
-	$("#bulk-state").textContent = (finished ? "Terminé : " : "Envoi arrêté : ") + ok + " GIF ajoutée(s), " + skip + " déjà présente(s), " + err + " erreur(s)";
+	$("#bulk-state").textContent = (finished ? "Terminé : " : "Envoi arrêté : ") + ok + " GIF ajoutée(s), " + skip + " déjà présente(s), " + err + " erreur(s)" +
+		(resized ? ", " + resized + " réduite(s) au format du panneau" : "");
 	$("#bulk-detail").textContent = lastErr ? "Dernière erreur : " + lastErr : (finished ? "" : "Relancez le même envoi plus tard : les GIF déjà envoyées seront sautées.");
 	$("#bulk-stop").textContent = "Fermer";
 	$("#bulk-stop").onclick = closeBulk;
@@ -638,7 +751,7 @@ $("#newcat-form").onsubmit = e => {
 
 $("#filter").oninput = renderFiles;
 
-loadCats().then(() => {
+loadMonths().then(loadCats).then(() => {
 	let last = "";
 	try { last = localStorage.getItem("orbitdmd_cat") || ""; } catch (e) {}
 	const c = cats.find(x => x.nom === last) || cats.find(x => x.active);

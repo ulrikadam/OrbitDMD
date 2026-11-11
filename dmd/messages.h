@@ -50,6 +50,17 @@ public:
 	static unsigned CountActiveTexts (void);
 	static unsigned CountActiveCountdowns (void);
 
+	// active ou desactive un element et enregistre (Home Assistant) ; FALSE si hors liste
+	static boolean SetActive (boolean bText, unsigned nIndex, boolean bActive);
+
+	// style par defaut des messages de Home Assistant (section [notification])
+	static void NotifyDefaults (TBannerStyle *pStyle);
+
+	// change a chaque modification des listes (Home Assistant se reannonce)
+	static volatile unsigned s_nGeneration;
+
+	static TBannerStyle s_Notify;
+
 	static TBannerStyle s_Texts[MESSAGES_MAX_TEXTS];
 	static unsigned s_nTexts;
 	static TCountdownStyle s_Countdowns[MESSAGES_MAX_COUNTDOWNS];

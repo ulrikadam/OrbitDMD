@@ -60,6 +60,9 @@
 					<input type="range" id="f-Texte_Vitesse" min="1" max="10" step="1" style="width:220px"></div>
 				<div class="form-row"><label for="f-Texte_Passages">Nombre de passages</label>
 					<input class="input num" type="number" id="f-Texte_Passages" min="1" max="10" step="1"></div>
+				<div class="form-row"><span class="lbl">Période<span class="hint">Facultatif : seulement entre ces deux dates, chaque année</span></span>
+					<span class="row" style="gap:8px">du <input class="input" type="text" id="f-Texte_Du" placeholder="JJ/MM" maxlength="5" style="width:80px" inputmode="numeric">
+					au <input class="input" type="text" id="f-Texte_Au" placeholder="JJ/MM" maxlength="5" style="width:80px" inputmode="numeric"></span></div>
 			</div>
 		</section>
 
@@ -103,6 +106,9 @@
 					<span class="swatches" data-color="Compte_Titre_Color"></span></div>
 				<div class="form-row"><label for="f-Compte_Display_Time">Durée</label>
 					<span class="with-suffix"><input class="input num" type="number" id="f-Compte_Display_Time" min="1" max="60" step="1" data-ms> s</span></div>
+				<div class="form-row"><span class="lbl">Période<span class="hint">Facultatif : seulement entre ces deux dates, chaque année</span></span>
+					<span class="row" style="gap:8px">du <input class="input" type="text" id="f-Compte_Du" placeholder="JJ/MM" maxlength="5" style="width:80px" inputmode="numeric">
+					au <input class="input" type="text" id="f-Compte_Au" placeholder="JJ/MM" maxlength="5" style="width:80px" inputmode="numeric"></span></div>
 			</div>
 		</section>
 	</div>
@@ -115,20 +121,20 @@
 "use strict";
 const FIELDS = {
 	texte: ["Texte_Active", "Texte_Message", "Texte_Effet", "Texte_Vitesse", "Texte_Passages", "Texte_Font",
-		"Texte_Font_Size", "Texte_Color", "Texte_Font_Pattern"],
+		"Texte_Font_Size", "Texte_Color", "Texte_Font_Pattern", "Texte_Du", "Texte_Au"],
 	compte: ["Compte_Active", "Compte_Date", "Compte_Titre", "Compte_Fin", "Compte_Display_Time", "Compte_Font",
-		"Compte_Font_Size", "Compte_Color", "Compte_Titre_Color", "Compte_Font_Pattern"]
+		"Compte_Font_Size", "Compte_Color", "Compte_Titre_Color", "Compte_Font_Pattern", "Compte_Du", "Compte_Au"]
 };
 const NEW = {
 	texte: () => ({ Texte_Active: 1, Texte_Message: "", Texte_Effet: "defile", Texte_Vitesse: 4, Texte_Passages: 1,
-		Texte_Font: "Pixel", Texte_Font_Size: 0, Texte_Color: "01A7C5", Texte_Font_Pattern: "None" }),
+		Texte_Font: "Pixel", Texte_Font_Size: 0, Texte_Color: "01A7C5", Texte_Font_Pattern: "None", Texte_Du: "", Texte_Au: "" }),
 	compte: () => {
 		const t = new Date(Date.now() + 14 * 86400000);
 		t.setHours(20, 0, 0, 0);
 		const d = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16).replace("T", " ");
 		return { Compte_Active: 1, Compte_Date: d, Compte_Titre: "ANNIVERSAIRE DANS", Compte_Fin: "JOYEUX ANNIVERSAIRE !",
 			Compte_Display_Time: 5000, Compte_Font: "Pixel", Compte_Font_Size: 0, Compte_Color: "FFAA00",
-			Compte_Titre_Color: "FFFFFF", Compte_Font_Pattern: "None" };
+			Compte_Titre_Color: "FFFFFF", Compte_Font_Pattern: "None", Compte_Du: "", Compte_Au: "" };
 	}
 };
 const EFFECTS = [["defile", "Défile vers la gauche"], ["inverse", "Défile vers la droite"], ["monte", "Monte (du bas vers le haut)"],
@@ -139,7 +145,7 @@ const SIZES = [0, 8, 10, 12, 14, 16, 18, 20, 24, 28, 32];
 const RAINBOW = "Arc-en-ciel";
 const LIMIT = { texte: 10, compte: 10 };
 
-let lists = { texte: [], compte: [] }, every = {}, saved = "", sel = { texte: -1, compte: -1 }, loaded = false, fin = false;
+let lists = { texte: [], compte: [] }, notify = null, every = {}, saved = "", sel = { texte: -1, compte: -1 }, loaded = false, fin = false;
 const el = id => document.getElementById(id);
 const state = () => JSON.stringify([lists, every]);
 const dirty = () => loaded && state() !== saved;
@@ -156,6 +162,17 @@ function fontName (f) {
 const clean = s => s.replace(/"/g, "”").replace(/\\/g, "/").replace(/[\r\n]+/g, " ");
 const targetLabel = d => d === "noel" ? "Noël" : d === "nouvel-an" ? "Nouvel an" :
 	new Date(d.replace(" ", "T")).toLocaleString("fr-BE", { dateStyle: "long", timeStyle: "short" });
+
+/* periode : "25/12" a l'ecran, "12-25" pour le panneau ; "" si incomplet */
+const toDisplay = v => /^\d\d-\d\d$/.test(v || "") ? v.slice(3) + "/" + v.slice(0, 2) : "";
+function toPanel (v) {
+	const m = String(v).trim().match(/^(\d{1,2})[\/.-](\d{1,2})$/);
+	if (!m) return "";
+	const d = +m[1], mo = +m[2];
+	if (mo < 1 || mo > 12 || d < 1 || d > [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][mo - 1]) return "";
+	return String(mo).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+}
+const periodLabel = (a, b) => a || b ? " · du " + (toDisplay(a) || "1/1") + " au " + (toDisplay(b) || "31/12") : "";
 
 /* --- listes --- */
 function renderList (g) {
@@ -192,10 +209,10 @@ function renderList (g) {
 		const sub = document.createElement("span");
 		if (g === "texte") {
 			main.textContent = it.Texte_Message || "(texte vide)";
-			sub.textContent = (EFFECTS.find(e => e[0] === it.Texte_Effet) || EFFECTS[0])[1] + " · " + fontName(it.Texte_Font);
+			sub.textContent = (EFFECTS.find(e => e[0] === it.Texte_Effet) || EFFECTS[0])[1] + " · " + fontName(it.Texte_Font) + periodLabel(it.Texte_Du, it.Texte_Au);
 		} else {
 			main.textContent = (it.Compte_Titre || "Compte à rebours") + " → " + targetLabel(it.Compte_Date);
-			sub.textContent = fontName(it.Compte_Font) + " · " + (+it.Compte_Display_Time / 1000) + " s";
+			sub.textContent = fontName(it.Compte_Font) + " · " + (+it.Compte_Display_Time / 1000) + " s" + periodLabel(it.Compte_Du, it.Compte_Au);
 		}
 		txt.append(main, sub);
 		txt.onclick = () => select(g, i === sel[g] ? -1 : i);
@@ -250,6 +267,7 @@ function fillEditor (g) {
 		const input = el("f-" + k);
 		if (!input) continue;
 		if (input.dataset.ms !== undefined) input.value = +it[k] / 1000;
+		else if (/_(Du|Au)$/.test(k)) input.value = toDisplay(it[k]);
 		else input.value = it[k];
 	}
 	if (g === "compte") {
@@ -349,6 +367,7 @@ async function load () {
 		for (const id of ["f-Texte_Font_Size", "f-Compte_Font_Size"]) for (const n of SIZES) el(id).add(new Option(n ? n + " px" : "Automatique", n));
 		for (const [v, l] of EFFECTS) el("f-Texte_Effet").add(new Option(l, v));
 		lists = { texte: m.textes || [], compte: m.comptes || [] };
+		notify = m.notification || null;	/* style des messages de Home Assistant : garde tel quel */
 		LIMIT.texte = m.max_textes || 10;
 		LIMIT.compte = m.max_comptes || 10;
 		every = { Texte_Every: s.Texte_Every, Compte_Every: s.Compte_Every };
@@ -375,6 +394,7 @@ for (const g of ["texte", "compte"]) for (const k of FIELDS[g]) {
 	if (!input) continue;
 	const read = () => {
 		if (input.dataset.ms !== undefined) return Math.round(+input.value * 1000);
+		if (/_(Du|Au)$/.test(k)) return toPanel(input.value);
 		if (input.type === "number" || input.type === "range" || input.tagName === "SELECT" && /Size/.test(k)) return +input.value;
 		return input.type === "text" ? clean(input.value) : input.value;
 	};
@@ -410,6 +430,10 @@ function serialize () {
 	for (const g of ["texte", "compte"]) for (const it of lists[g]) {
 		t += "[" + g + "]\n";
 		for (const k of FIELDS[g]) t += k + "=" + it[k] + "\n";
+	}
+	if (notify) {
+		t += "[notification]\n";
+		for (const k in notify) t += k + "=" + notify[k] + "\n";
 	}
 	return t;
 }

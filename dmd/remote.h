@@ -30,6 +30,7 @@ struct TDisplayStatus
 	unsigned nGifCount;
 	unsigned nRefreshRate;	// images/s envoyees aux panneaux
 	unsigned nBrightness;	// %
+	const char *pSchedule;	// programme en cours : "eteint", "heure" ou "" (schedule.h)
 	const char *pScreen;	// ce qui est affiche : "gif", "heure", "date", "meteo", "message",
 				// "demarrage" ou "mire" (apercu du tableau de bord)
 };
@@ -71,6 +72,9 @@ public:
 	void SetPaused (boolean bPaused)	{ m_bPaused = bPaused; }
 	boolean IsPaused (void) const		{ return m_bPaused; }
 	void SetDisplayOff (boolean bOff)	{ m_bDisplayOff = bOff; }
+	// luminosite imposee (Home Assistant), -1 : luminosite heure par heure des reglages
+	void SetBrightnessOverride (int nPercent) { m_nBrightnessOverride = nPercent; }
+	int GetBrightnessOverride (void) const	{ return m_nBrightnessOverride; }
 	boolean IsDisplayOff (void) const	{ return m_bDisplayOff; }
 
 	// GIF a afficher tout de suite (chemin complet sur la carte),
@@ -95,6 +99,7 @@ private:
 	volatile boolean m_bWebRequestSeen;
 	volatile boolean m_bPaused;
 	volatile boolean m_bDisplayOff;
+	volatile int m_nBrightnessOverride;
 	CString m_PlayPath;
 
 	static CRemoteControl *s_pThis;

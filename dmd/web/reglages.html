@@ -80,6 +80,45 @@
 				<div class="card-foot"><button class="btn primary" data-save="card-display">Enregistrer</button></div>
 			</section>
 
+			<!-- programme -->
+			<section class="card" id="card-programme">
+				<h2>Programme</h2>
+				<div class="form-row"><label for="Prog_Eteint_Active">Éteindre le panneau<span class="hint">La page web reste joignable</span></label>
+					<span class="switch"><input type="checkbox" id="Prog_Eteint_Active"></span></div>
+				<div class="form-row" data-prog="Prog_Eteint_Active"><span class="lbl">Plage</span>
+					<span class="row" style="gap:8px">de <select class="input" id="Prog_Eteint_Debut"><option value="0">0 h</option><option value="1">1 h</option><option value="2">2 h</option><option value="3">3 h</option><option value="4">4 h</option><option value="5">5 h</option><option value="6">6 h</option><option value="7">7 h</option><option value="8">8 h</option><option value="9">9 h</option><option value="10">10 h</option><option value="11">11 h</option><option value="12">12 h</option><option value="13">13 h</option><option value="14">14 h</option><option value="15">15 h</option><option value="16">16 h</option><option value="17">17 h</option><option value="18">18 h</option><option value="19">19 h</option><option value="20">20 h</option><option value="21">21 h</option><option value="22">22 h</option><option value="23">23 h</option></select>
+					à <select class="input" id="Prog_Eteint_Fin"><option value="0">0 h</option><option value="1">1 h</option><option value="2">2 h</option><option value="3">3 h</option><option value="4">4 h</option><option value="5">5 h</option><option value="6">6 h</option><option value="7">7 h</option><option value="8">8 h</option><option value="9">9 h</option><option value="10">10 h</option><option value="11">11 h</option><option value="12">12 h</option><option value="13">13 h</option><option value="14">14 h</option><option value="15">15 h</option><option value="16">16 h</option><option value="17">17 h</option><option value="18">18 h</option><option value="19">19 h</option><option value="20">20 h</option><option value="21">21 h</option><option value="22">22 h</option><option value="23">23 h</option></select></span></div>
+				<div class="form-row"><label for="Prog_Heure_Active">L'heure seule, sans GIF<span class="hint">Avec la météo et les messages</span></label>
+					<span class="switch"><input type="checkbox" id="Prog_Heure_Active"></span></div>
+				<div class="form-row" data-prog="Prog_Heure_Active"><span class="lbl">Plage</span>
+					<span class="row" style="gap:8px">de <select class="input" id="Prog_Heure_Debut"><option value="0">0 h</option><option value="1">1 h</option><option value="2">2 h</option><option value="3">3 h</option><option value="4">4 h</option><option value="5">5 h</option><option value="6">6 h</option><option value="7">7 h</option><option value="8">8 h</option><option value="9">9 h</option><option value="10">10 h</option><option value="11">11 h</option><option value="12">12 h</option><option value="13">13 h</option><option value="14">14 h</option><option value="15">15 h</option><option value="16">16 h</option><option value="17">17 h</option><option value="18">18 h</option><option value="19">19 h</option><option value="20">20 h</option><option value="21">21 h</option><option value="22">22 h</option><option value="23">23 h</option></select>
+					à <select class="input" id="Prog_Heure_Fin"><option value="0">0 h</option><option value="1">1 h</option><option value="2">2 h</option><option value="3">3 h</option><option value="4">4 h</option><option value="5">5 h</option><option value="6">6 h</option><option value="7">7 h</option><option value="8">8 h</option><option value="9">9 h</option><option value="10">10 h</option><option value="11">11 h</option><option value="12">12 h</option><option value="13">13 h</option><option value="14">14 h</option><option value="15">15 h</option><option value="16">16 h</option><option value="17">17 h</option><option value="18">18 h</option><option value="19">19 h</option><option value="20">20 h</option><option value="21">21 h</option><option value="22">22 h</option><option value="23">23 h</option></select></span></div>
+				<p class="note" style="margin:8px 0 0">Les catégories de GIF montrées seulement certains mois (Noël en décembre…) se règlent dans la page <a href="/gif">GIF</a>.
+					Les périodes des textes et comptes à rebours, dans la page <a href="/messages">Messages</a>.</p>
+				<div class="card-foot"><button class="btn primary" data-save="card-programme">Enregistrer</button></div>
+			</section>
+
+			<!-- home assistant -->
+			<section class="card" id="card-ha">
+				<h2>Home Assistant</h2>
+				<div class="form-row"><label for="HA_Active">Relier à Home Assistant<span class="hint" id="ha-state">Par MQTT : le panneau apparaît tout seul dans Home Assistant</span></label>
+					<span class="switch"><input type="checkbox" id="HA_Active"></span></div>
+				<div data-prog="HA_Active">
+					<div class="form-row"><label for="HA_Serveur">Serveur MQTT<span class="hint">L'adresse IP de Home Assistant, par exemple 192.168.0.10</span></label>
+						<input class="input" type="text" id="HA_Serveur" maxlength="63" placeholder="192.168.0.10" autocomplete="off"></div>
+					<div class="form-row"><label for="HA_Port">Port</label>
+						<input class="input num" type="number" id="HA_Port" min="1" max="65535"></div>
+					<div class="form-row"><label for="HA_Utilisateur">Utilisateur MQTT<span class="hint">Un utilisateur de Home Assistant (Paramètres → Personnes)</span></label>
+						<input class="input" type="text" id="HA_Utilisateur" maxlength="63" autocomplete="off"></div>
+					<div class="form-row"><label for="HA_MotDePasse">Mot de passe MQTT<span class="hint">Laissez vide pour le garder</span></label>
+						<input class="input" type="password" id="HA_MotDePasse" maxlength="63" placeholder="inchangé" autocomplete="new-password"></div>
+					<p class="note" style="margin:8px 0 0">Il faut le module <b>Mosquitto broker</b> dans Home Assistant (Paramètres → Modules complémentaires) et l'intégration <b>MQTT</b>.
+						Le panneau redémarre pour se connecter. Ensuite, dans Home Assistant : Paramètres → Appareils → <b>OrbitDMD</b>.
+						Toutes les commandes et des exemples à copier : page <a href="/aide">Aide Home Assistant</a>.</p>
+				</div>
+				<div class="card-foot"><button class="btn primary" data-save="card-ha">Enregistrer</button></div>
+			</section>
+
 			<!-- reseau -->
 			<section class="card" id="card-network">
 				<h2>Réseau</h2>
@@ -184,6 +223,8 @@ async function load () {
 		else el.value = v;
 	}
 	$("#Wifi_psk").value = "";
+	$("#HA_MotDePasse").value = "";
+	$("#HA_MotDePasse").placeholder = settings.ha_mdp_defini ? "inchangé" : "aucun";
 	$("#Wifi_psk").placeholder = settings.wifi_psk_defini ? "inchangé" : "non défini";
 
 	/* adresse IP : mode et valeurs actuelles */
@@ -196,6 +237,7 @@ async function load () {
 	$("#pending").hidden = !settings.redemarrage_en_attente;
 	buildHours();
 	renderHours();
+	if (typeof showProg === "function") showProg();
 }
 
 /* --- graphique de luminosite --- */
@@ -300,10 +342,11 @@ $("#ip-mode").onchange = showIPFields;
 function collect (card) {
 	const fields = {};
 	for (const el of card.querySelectorAll("input[id], select[id]")) {
-		if (!settings || !(el.id in settings) && el.id !== "Wifi_psk") continue;
+		const secret = el.id === "Wifi_psk" || el.id === "HA_MotDePasse";	/* jamais renvoyes par le panneau */
+		if (!settings || !(el.id in settings) && !secret) continue;
 		if (el.type === "checkbox") fields[el.id] = el.checked ? 1 : 0;
 		else if (el.dataset.ms !== undefined) fields[el.id] = Math.round(+el.value * 1000);
-		else if (el.id === "Wifi_psk") { if (el.value) fields[el.id] = el.value; }
+		else if (secret) { if (el.value) fields[el.id] = el.value; }
 		else fields[el.id] = el.value.trim();
 	}
 	return fields;
@@ -364,6 +407,18 @@ document.addEventListener("etat", e => {
 	}
 });
 load();
+
+/* programme : plages visibles seulement si l'interrupteur est mis */
+function showProg () { for (const r of document.querySelectorAll("[data-prog]")) r.hidden = !$("#" + r.dataset.prog).checked; }
+for (const id of ["Prog_Eteint_Active", "Prog_Heure_Active", "HA_Active"]) $("#" + id).addEventListener("change", showProg);
+/* etat de la connexion a Home Assistant (page Systeme : journal "homeassistant") */
+document.addEventListener("etat", e => {
+	const s = e.detail;
+	if (!s || !settings || !settings.HA_Active) return;
+	$("#ha-state").textContent = s.ha === "connecte" ? "✅ Connecté au serveur MQTT"
+		: s.ha ? "⚠️ " + s.ha.charAt(0).toUpperCase() + s.ha.slice(1)
+		: "Réglages enregistrés : redémarrez le panneau pour se connecter";
+});
 </script>
 </body>
 </html>

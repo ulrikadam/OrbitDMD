@@ -15,6 +15,31 @@ programme (`dmd/`), puis reconstruire l'installateur (`bash outils/installateur/
 
 ---
 
+## 1.4.0 — 11 novembre 2026
+
+**Nouveautés**
+- **Home Assistant** (Réglages → Home Assistant) : le panneau se relie au serveur MQTT de Home Assistant
+  et y apparaît tout seul (découverte automatique) : allumer et éteindre, luminosité, pause, afficher
+  l'heure ou la météo, redémarrer, GIF affichée, température, version, et **messages** envoyés depuis les
+  automatisations (avec effet, couleur, arc-en-ciel et GIF facultative). Guide : `docs/HOME-ASSISTANT.md`.
+- Dans Home Assistant, sans YAML : un champ **Texte à afficher**, le style des messages (effet, couleur,
+  passages, vitesse), un interrupteur par texte et par compte à rebours de la page Messages, et la liste
+  des commandes MQTT (capteur « Commandes MQTT », publiée aussi sur `orbitdmd/<nom>/commandes`).
+- Page **Aide Home Assistant** (`/aide`) : toutes les commandes et des exemples à copier.
+
+## 1.3.0 — 11 novembre 2026
+
+**Nouveautés**
+- **Programme** (Réglages) : panneau éteint pendant une plage horaire (par exemple de 1 h à 7 h, la page
+  web reste joignable) et **l'heure seule**, sans GIF, pendant une autre plage.
+- **Catégories de GIF par mois** (page GIF) : une catégorie peut n'être montrée que certains mois
+  (Noël en décembre, Halloween en octobre…).
+- **Période des messages** : chaque texte et chaque compte à rebours peut n'être actif qu'entre deux
+  dates, chaque année (par exemple du 20/12 au 05/01).
+- **Mise au format automatique** : à l'envoi, les GIF plus grandes que le panneau sont réduites par le
+  navigateur (pixels nets, animation et durées gardées).
+- Le tableau de bord indique quand le programme éteint le panneau ou montre l'heure seule.
+
 ## 1.2.0 — 11 novembre 2026
 
 **Nouveautés**

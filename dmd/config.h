@@ -9,6 +9,16 @@
 
 #include <circle/types.h>
 #include "clockstyle.h"
+#include "schedule.h"
+
+struct TMqttConfig
+{
+	boolean	 bActive;
+	char	 Host[64];		// adresse IP (ou nom connu du DNS de la box)
+	unsigned nPort;
+	char	 User[64];
+	char	 Password[64];		// jamais ecrit dans le journal ni renvoye a la page web
+};
 
 #define CONFIG_MAX_CATEGORIES	20
 #define CONFIG_NAME_LEN		64
@@ -55,6 +65,7 @@ public:
 	TBannerStyle Banner;
 	TCountdownStyle Countdown;
 	boolean	 GifInOrder;		// Gif_Ordre : "ordre" (alphabetique) ou "hasard"
+	TSchedule Schedule;		// programme : Prog_*, Gif_Cat_Mois (schedule.h)
 
 	// Demarrage
 	boolean	 TestPattern;		// Test_Pattern (nouveau)
@@ -67,6 +78,9 @@ public:
 	char	 WifiCountry[8];		// Wifi_country
 	char	 NetworkName[32];		// Network_name (nom sur le reseau : <nom>.local)
 	char	 WebPassword[CONFIG_NAME_LEN];	// Web_Password (nouveau, jamais ecrit dans le journal)
+
+	// Home Assistant (MQTT) : HA_Active, HA_Serveur, HA_Port, HA_Utilisateur, HA_MotDePasse
+	TMqttConfig Mqtt;
 
 	// Adresse IP fixe (nouveau) : IP_Fixe vide = adresse donnee par la box (DHCP)
 	char	 IPAddress[16];			// IP_Fixe

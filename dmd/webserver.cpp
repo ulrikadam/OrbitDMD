@@ -8,6 +8,7 @@
 #include "gifmanager.h"
 #include "gifmarks.h"
 #include "messages.h"
+#include "ha.h"
 #include "settings.h"
 #include "webfiles.h"		// s_WebFiles, genere depuis web/ par outils/web2h.py
 #include "latency.h"
@@ -1428,6 +1429,10 @@ void CWebServer::BuildStatusJSON (CString *pJSON)
 	AppendEscaped (pJSON, m_pConfig->WifiSSID, TRUE);
 	pJSON->Append ("\",\"gif\":\"");
 	AppendEscaped (pJSON, pRemote->Status.CurrentGif, TRUE);
+	pJSON->Append ("\",\"ha\":\"");
+	pJSON->Append (CHomeAssistant::GetStatus () != 0 ? CHomeAssistant::GetStatus () : "");
+	pJSON->Append ("\",\"prog_actif\":\"");
+	pJSON->Append (pRemote->Status.pSchedule != 0 ? pRemote->Status.pSchedule : "");
 	pJSON->Append (pRemote->IsPaused () ? "\",\"pause\":true" : "\",\"pause\":false");
 	pJSON->Append (pRemote->IsDisplayOff () ? ",\"ecran_eteint\":true}\n" : ",\"ecran_eteint\":false}\n");
 }

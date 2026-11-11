@@ -23,6 +23,8 @@
 #include "../weatherdata.h"
 #include "../gifmarks.h"
 #include "../messages.h"
+#include "../schedule.h"
+#include "../hapayload.h"
 
 static const unsigned W = 128, H = 32;
 #define CHECK(x) do { boolean b_ = (x); if (!b_) nFailed++; printf ("%s %s\n", b_ ? "ok    " : "ECHEC ", #x); } while (0)
@@ -361,6 +363,104 @@ int main (int argc, char **argv)
 		CGifMarks::Export (&Text);
 		printf ("%s", (const char *) Text);
 		CHECK (strcmp (Text, "+Arcade/pacman.gif\n+Noel/Sapin.GIF\n") == 0);
+		printf ("%u echec(s)\n", nFailed);
+		return nFailed == 0 ? 0 : 1;
+	}
+
+	// hosttest ha : annonces Home Assistant (JSON ecrit dans <dossier>/annonce-N.json) et notifications
+	if (strcmp (argv[1], "ha") == 0 && argc == 3)
+	{
+		unsigned nFailed = 0;
+		char Node[32];
+		HAMakeNodeId ("Salon-DMD 2", Node, sizeof Node);
+		CHECK (strcmp (Node, "salon-dmd2") == 0);
+		for (unsigned i = 0; i < HAGetEntityCount (); i++)
+		{
+			CString Topic, Payload;
+			HABuildDiscovery (i, Node, "Salon \"DMD\"", "1.4.0", "192.168.0.151", &Topic, &Payload);
+			char Path[300];
+			snprintf (Path, sizeof Path, "%s/annonce-%02u.json", argv[2], i);
+			FILE *f = fopen (Path, "wb");
+			if (!f) return 3;
+			fprintf (f, "%s\n%s\n", (const char *) Topic, (const char *) Payload);
+			fclose (f);
+		}
+
+		THANotification N;
+		TBannerStyle Def;
+		CMessages::NotifyDefaults (&Def);
+		CHECK (HAParseNotification ("Quelqu'un sonne !", Def, &N) && strcmp (N.Style.Text, "Quelqu'un sonne !") == 0
+		       && N.Style.Effect == EffectScroll && N.Style.nPasses == 2);
+		CHECK (HAParseNotification ("{\"message\": \"Lave-linge termin\\u00e9\", \"effet\": \"pluie\", "
+					    "\"couleur\": \"arc-en-ciel\", \"passages\": 3, \"gif\": \"XMAS/sapin.gif\"}", Def, &N));
+		CHECK (strcmp (N.Style.Text, "Lave-linge termin\xC3\xA9") == 0 && N.Style.Effect == EffectRain);
+		CHECK (strcmp (N.Style.Style.Pattern, CLOCK_RAINBOW) == 0 && N.Style.nPasses == 3);
+		CHECK (strcmp (N.Gif, "XMAS/sapin.gif") == 0);
+		CHECK (HAParseNotification ("{\"message\":\"Colis\",\"couleur\":\"#FF8000\",\"gif\":\"../../Config/config.txt\"}", Def, &N)
+		       && N.Style.Style.Color[0] == 0xFF && N.Style.Style.Color[1] == 0x80 && N.Gif[0] == '\0');
+		CHECK (!HAParseNotification ("{\"effet\":\"pluie\"}", Def, &N));		// ni message ni GIF
+		// style de depart modifie depuis Home Assistant : utilise par un texte simple
+		CHECK (HASetEffectFromLabel ("Pluie de lettres", &Def) && Def.Effect == EffectRain);
+		CHECK (HASetColorFromLabel ("Rouge", &Def.Style) && strcmp (HAGetColorLabel (Def.Style), "Rouge") == 0);
+		CHECK (HASetColorFromLabel ("Arc-en-ciel", &Def.Style) && strcmp (HAGetColorLabel (Def.Style), "Arc-en-ciel") == 0);
+		CHECK (HASetColorFromLabel ("123456", &Def.Style) && strcmp (HAGetColorLabel (Def.Style), "Autre") == 0);
+		CHECK (HAParseNotification ("Bonne nuit", Def, &N) && N.Style.Effect == EffectRain && strcmp (N.Style.Text, "Bonne nuit") == 0);
+		CHECK (HAParseNotification ("{\"message\":\"x\",\"effet\":\"Fondu\",\"couleur\":\"Vert\"}", Def, &N)
+		       && N.Style.Effect == EffectFade && strcmp (HAGetColorLabel (N.Style.Style), "Vert") == 0);
+
+		// interrupteurs des messages et liste des commandes (fichiers JSON pour verification)
+		const char *Items[][2] = {{"1", "Joyeux anniversaire L\xC3\xA9" "a \"2026\""}, {"0", "NO\xC3\x8BL DANS"}, {"1", ""}};
+		for (unsigned i = 0; i < 3; i++)
+		{
+			CString Topic, Payload;
+			HABuildItemDiscovery (Items[i][0][0] == '1', i, Items[i][1], Node, "Salon", &Topic, &Payload);
+			char Path[300];
+			snprintf (Path, sizeof Path, "%s/element-%u.json", argv[2], i);
+			FILE *f = fopen (Path, "wb");
+			if (!f) return 3;
+			fprintf (f, "%s\n%s\n", (const char *) Topic, (const char *) Payload);
+			fclose (f);
+		}
+		CString List;
+		HABuildCommandList (Node, &List);
+		char Path[300];
+		snprintf (Path, sizeof Path, "%s/commandes.json", argv[2]);
+		FILE *f = fopen (Path, "wb");
+		if (!f) return 3;
+		fprintf (f, "%s\n", (const char *) List);
+		fclose (f);
+
+		char Value[32];
+		CHECK (HAGetJSONValue ("{\"a\": \"x:y\", \"b\" : 12, \"c\":true}", "b", Value, sizeof Value) && strcmp (Value, "12") == 0);
+		CHECK (HAGetJSONValue ("{\"msg\": \"b\", \"b\": \"vrai\"}", "b", Value, sizeof Value) && strcmp (Value, "vrai") == 0);
+		printf ("%u echec(s)\n", nFailed);
+		return nFailed == 0 ? 0 : 1;
+	}
+
+	// hosttest programme : plages horaires, mois des categories, periodes (schedule.cpp)
+	if (strcmp (argv[1], "programme") == 0)
+	{
+		unsigned nFailed = 0;
+		CHECK (InHourWindow (1, 7, 1) && InHourWindow (1, 7, 6) && !InHourWindow (1, 7, 7) && !InHourWindow (1, 7, 0));
+		CHECK (InHourWindow (23, 7, 23) && InHourWindow (23, 7, 0) && InHourWindow (23, 7, 6) && !InHourWindow (23, 7, 12));
+		CHECK (!InHourWindow (5, 5, 5));
+		TSchedule S;
+		ScheduleDefaults (&S);
+		CHECK (ParseCategoryMonths ("XMAS:12;Halloween:10;Plage:6-8;Hiver:11-2", &S) && S.nRules == 4);
+		CHECK (GetCategoryMonths (S, "xmas") == (1 << 12));
+		CHECK (GetCategoryMonths (S, "Plage") == ((1 << 6) | (1 << 7) | (1 << 8)));
+		CHECK (GetCategoryMonths (S, "Hiver") == ((1 << 11) | (1 << 12) | (1 << 1) | (1 << 2)));
+		CHECK (GetCategoryMonths (S, "Arcade") == SCHEDULE_ALL_MONTHS);
+		CHECK (!ParseCategoryMonths ("XMAS:13", &S) && S.nRules == 4);		// invalide : inchange
+		CHECK (!ParseCategoryMonths ("Mauvais nom:12", &S));
+		CHECK (ParseCategoryMonths ("", &S) && S.nRules == 0);
+		TDateTime Dec24 = {2026, 12, 24, 12, 0, 0}, Jan3 = {2027, 1, 3, 12, 0, 0}, Jul14 = {2026, 7, 14, 0, 0, 0};
+		CHECK (InDateWindow ("", "", Jul14));
+		CHECK (InDateWindow ("12-20", "01-05", Dec24) && InDateWindow ("12-20", "01-05", Jan3) && !InDateWindow ("12-20", "01-05", Jul14));
+		CHECK (InDateWindow ("07-14", "07-14", Jul14) && !InDateWindow ("07-15", "", Jul14));
+		CHECK (IsValidMonthDay ("02-29") && !IsValidMonthDay ("02-30") && !IsValidMonthDay ("13-01") && !IsValidMonthDay ("1-1"));
+		CHECK (SetScheduleValue (&S, "Prog_Eteint_Debut", "2") && S.nOffFrom == 2);
+		CHECK (SetScheduleValue (&S, "Prog_Eteint_Fin", "24") && S.nOffTo == 7);	// refuse : garde 7
 		printf ("%u echec(s)\n", nFailed);
 		return nFailed == 0 ? 0 : 1;
 	}

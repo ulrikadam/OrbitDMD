@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrbitDMD · Aide Home Assistant</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+<style>
+.cmd { width: 100%; border-collapse: collapse; font-size: 14px; }
+.cmd th, .cmd td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.cmd th { color: var(--muted); font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: .03em; }
+.cmd code { white-space: nowrap; }
+.code { position: relative; margin: 10px 0 18px; }
+.code pre { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font-size: 13px; line-height: 1.5; margin: 0; }
+.code .btn { position: absolute; top: 8px; right: 8px; }
+.table-wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+	<a class="brand" href="/" aria-label="OrbitDMD"><picture>
+		<source srcset="/logo-sombre.png" media="(prefers-color-scheme: dark)">
+		<img src="/logo.png" alt="OrbitDMD" width="187" height="38">
+	</picture></a>
+	<nav class="tabs"><a href="/">Tableau de bord</a><a href="/gif">GIF</a><a href="/horloge">Horloge</a><a href="/meteo">Météo</a><a href="/messages">Messages</a><a href="/reglages">Réglages</a><a href="/systeme">Système</a></nav>
+	<div class="status">
+		<span class="conn"><i class="dot" id="conn-dot"></i><span id="conn-label">Connexion…</span></span>
+		<button class="btn sm" id="lock"></button>
+	</div>
+</div></header>
+
+<main>
+	<div class="head">
+		<div>
+			<h1>Home Assistant</h1>
+			<p class="sub">Toutes les commandes du panneau <b data-name>OrbitDMD</b>, avec des exemples prêts à copier. La connexion se règle dans <a href="/reglages">Réglages → Home Assistant</a>.</p>
+		</div>
+		<span class="chip" id="ha-chip">—</span>
+	</div>
+
+	<div class="stack">
+		<section class="card">
+			<h2>Sans rien écrire</h2>
+			<p>Dans Home Assistant : <b>Paramètres → Appareils et services → MQTT → <span data-name>OrbitDMD</span></b>. Tout se fait depuis cette page :</p>
+			<div class="table-wrap"><table class="cmd">
+				<tr><th>Élément</th><th>Ce qu'il fait</th></tr>
+				<tr><td>Panneau</td><td>Allumer, éteindre (la page web reste joignable), luminosité</td></tr>
+				<tr><td>Pause</td><td>Allumé : image figée ; éteint : lecture normale</td></tr>
+				<tr><td>Texte à afficher</td><td>Tapez un texte et validez : il défile tout de suite</td></tr>
+				<tr><td>Effet, Couleur, Passages, Vitesse des messages</td><td>Le style des textes envoyés depuis Home Assistant</td></tr>
+				<tr><td>Texte : …, Compte à rebours : …</td><td>Activer ou non chaque élément de la page <a href="/messages">Messages</a></td></tr>
+				<tr><td>Afficher l'heure, Afficher la météo</td><td>Tout de suite, pendant 15 secondes</td></tr>
+				<tr><td>Luminosité heure par heure</td><td>Revenir à la luminosité des réglages après un changement depuis Home Assistant</td></tr>
+				<tr><td>Redémarrer</td><td>Redémarre le panneau</td></tr>
+				<tr><td>GIF affichée, Écran, Température, Adresse IP, Version</td><td>Ce que fait le panneau</td></tr>
+				<tr><td>Commandes MQTT</td><td>La liste ci-dessous, dans les attributs du capteur</td></tr>
+			</table></div>
+		</section>
+
+		<section class="card">
+			<h2>Envoyer un message</h2>
+			<p>Le plus simple, dans une automatisation ou dans <b>Outils de développement → Actions</b> (mode YAML) :</p>
+			<div class="code"><pre id="ex1"></pre><button class="btn sm" data-copy="ex1">Copier</button></div>
+			<p>Avec un style à part (couleur, effet, GIF avant le texte) :</p>
+			<div class="code"><pre id="ex2"></pre><button class="btn sm" data-copy="ex2">Copier</button></div>
+			<div class="table-wrap"><table class="cmd">
+				<tr><th>Champ</th><th>Valeurs</th></tr>
+				<tr><td><code>message</code></td><td>Le texte (200 caractères au plus, accents compris)</td></tr>
+				<tr><td><code>effet</code></td><td><code>defile</code>, <code>inverse</code>, <code>monte</code>, <code>descend</code>, <code>lettres</code>, <code>pluie</code>, <code>fondu</code></td></tr>
+				<tr><td><code>couleur</code></td><td>Blanc, Rouge, Orange, Ambre, Jaune, Vert, Turquoise, Bleu, Violet, Rose, <code>arc-en-ciel</code>, ou <code>FF8000</code></td></tr>
+				<tr><td><code>police</code></td><td><code>Pixel</code> ou une police de la page Horloge, par exemple <code>Orbitron.ttf</code></td></tr>
+				<tr><td><code>taille</code></td><td>Taille en pixels, <code>0</code> = automatique</td></tr>
+				<tr><td><code>vitesse</code>, <code>passages</code></td><td>1 à 10</td></tr>
+				<tr><td><code>gif</code></td><td>Une GIF à jouer avant le texte : <code>Categorie/nom.gif</code> (comme dans la page GIF)</td></tr>
+			</table></div>
+			<p class="small muted">Les champs absents prennent le style réglé dans Home Assistant (Effet, Couleur, Passages, Vitesse des messages). Si le panneau est éteint ou en pause, le message attend.</p>
+		</section>
+
+		<section class="card">
+			<h2>Exemple d'automatisation</h2>
+			<div class="code"><pre id="ex3"></pre><button class="btn sm" data-copy="ex3">Copier</button></div>
+		</section>
+
+		<section class="card">
+			<h2>Toutes les commandes MQTT</h2>
+			<p class="small muted">Pour les utilisateurs avancés (MQTT Explorer, Node-RED…). Le panneau publie aussi cette liste sur <code data-topic="commandes"></code>.</p>
+			<div class="table-wrap"><table class="cmd" id="topics">
+				<tr><th>Sujet</th><th>Valeur à envoyer</th></tr>
+			</table></div>
+			<p class="small muted">États publiés par le panneau : <code data-topic="…/etat"></code> pour chaque élément ;
+				disponibilité : <code data-topic="dispo"></code> (<code>online</code> / <code>offline</code>).</p>
+		</section>
+	</div>
+</main>
+
+<footer class="credit">Développé par <b>Ulrik Adam</b> · <a href="https://www.nexadam.be" target="_blank" rel="noopener">www.nexadam.be</a> · <a href="https://github.com/ulrikadam/OrbitDMD" target="_blank" rel="noopener">OrbitDMD sur GitHub</a><br><a class="kofi" href="https://ko-fi.com/H1U12A50RN" target="_blank" rel="noopener">☕ Soutenir sur Ko-fi</a></footer>
+
+<script src="/app.js"></script>
+<script>
+"use strict";
+/* meme regle que le panneau : nom sur le reseau en minuscules, lettres, chiffres, _ et - */
+const nodeOf = n => (String(n || "").toLowerCase().replace(/[^a-z0-9_-]/g, "")) || "orbitdmd";
+/* identifiant d'entite donne par Home Assistant : nom de l'appareil + nom de l'element */
+const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+const COMMANDS = [
+	["panneau/set", "ON (allumé) ou OFF (éteint)"],
+	["luminosite/set", "0 à 100 (%)"],
+	["luminosite_auto/set", "ON : luminosité heure par heure des réglages"],
+	["pause/set", "ON (image figée) ou OFF"],
+	["heure/set", "PRESS : afficher l'heure"],
+	["meteo/set", "PRESS : afficher la météo"],
+	["redemarrer/set", "PRESS : redémarrer"],
+	["texte/set", "un texte à afficher tout de suite"],
+	["notification", "un texte, ou du JSON {message, effet, couleur…}"],
+	["msg_effet/set", "Défile à gauche, Défile à droite, Monte, Descend, Lettre par lettre, Pluie de lettres, Fondu"],
+	["msg_couleur/set", "Blanc, Rouge, Orange, Ambre, Jaune, Vert, Turquoise, Bleu, Violet, Rose, Arc-en-ciel, ou RRGGBB"],
+	["msg_passages/set", "1 à 10"],
+	["msg_vitesse/set", "1 à 10"],
+	["texte_N/set", "ON / OFF : texte N de la page Messages (0 = le premier)"],
+	["compte_N/set", "ON / OFF : compte à rebours N de la page Messages"]
+];
+
+function fill (name) {
+	const node = nodeOf(name), base = "orbitdmd/" + node, notify = "notify." + slug(name + " Message");
+	for (const e of document.querySelectorAll("[data-name]")) e.textContent = name;
+	for (const e of document.querySelectorAll("[data-topic]")) e.textContent = base + "/" + e.dataset.topic;
+	const t = document.getElementById("topics");
+	while (t.rows.length > 1) t.deleteRow(1);
+	for (const [topic, value] of COMMANDS) {
+		const r = t.insertRow();
+		r.insertCell().innerHTML = "<code></code>";
+		r.cells[0].firstChild.textContent = base + "/" + topic;
+		r.insertCell().textContent = value;
+	}
+	document.getElementById("ex1").textContent =
+		"action: notify.send_message\ntarget:\n  entity_id: " + notify + "\ndata:\n  message: \"Quelqu'un sonne !\"";
+	document.getElementById("ex2").textContent =
+		"action: mqtt.publish\ndata:\n  topic: " + base + "/notification\n  payload: >\n" +
+		"    {\"message\": \"Lave-linge terminé\", \"effet\": \"pluie\", \"couleur\": \"arc-en-ciel\", \"passages\": 2}";
+	document.getElementById("ex3").textContent =
+		"alias: Sonnette sur le panneau\ntriggers:\n  - trigger: state\n    entity_id: binary_sensor.sonnette   # votre sonnette\n" +
+		"    to: \"on\"\nactions:\n  - action: notify.send_message\n    target:\n      entity_id: " + notify +
+		"\n    data:\n      message: \"Quelqu'un sonne !\"";
+}
+
+for (const b of document.querySelectorAll("[data-copy]")) b.onclick = async () => {
+	const text = document.getElementById(b.dataset.copy).textContent;
+	try { await navigator.clipboard.writeText(text); }
+	catch (e) {	/* page en http : pas toujours de presse-papiers, on selectionne le texte */
+		const r = document.createRange(); r.selectNodeContents(document.getElementById(b.dataset.copy));
+		const s = getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand("copy");
+	}
+	OD.toast("Copié");
+};
+
+document.addEventListener("etat", e => {
+	const s = e.detail;
+	if (!s) return;
+	const chip = document.getElementById("ha-chip");
+	chip.textContent = s.ha === "connecte" ? "Connecté à Home Assistant" : s.ha ? "Home Assistant : " + s.ha : "Home Assistant non activé";
+	chip.className = "chip " + (s.ha === "connecte" ? "teal" : "warn");
+});
+fill("OrbitDMD");
+OD.getJSON("/api/reglages", 15000).then(s => fill(s.Network_name || "OrbitDMD")).catch(() => {});
+</script>
+</body>
+</html>

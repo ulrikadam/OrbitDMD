@@ -49,6 +49,9 @@ private:
 	void ShowBanner (const TBannerStyle &rItem);
 	boolean ShowCountdown (const TCountdownStyle &rItem, unsigned nDuration);
 	void ShowMessageNow (const char *pRequest);
+	void ShowNotification (void);
+	boolean IsScheduledOff (void);
+	boolean IsClockOnlyTime (void);
 	boolean RunPagePhase (const TBannerStyle &rItem, const char *pPage, unsigned nPhase,
 			      unsigned nDuration, u64 nStart);
 	void PlayRequestedGifs (void);
@@ -70,7 +73,7 @@ private:
 
 	void ShowClock (unsigned nDuration);			// l'heure, puis la date si reglee ainsi
 	void ShowClockScreen (unsigned nDuration, boolean bDateScreen);
-	void ShowWeather (unsigned nDuration);		// rien si pas de meteo recente
+	void ShowWeather (unsigned nDuration, boolean bRequested = FALSE);	// rien si pas de meteo recente
 
 	// pause ou affichage eteint depuis la page web : attend sur place (pFrame = image a
 	// remettre si l'affichage est rallume pendant la pause) ; rend la duree d'attente en us
@@ -114,6 +117,8 @@ private:
 	unsigned m_nGifsSinceCountdown;	// ... depuis le dernier compte a rebours
 	unsigned m_nNextText;		// prochain texte de la liste (rotation)
 	unsigned m_nNextCountdown;	// prochain compte a rebours de la liste
+	unsigned m_nPlaylistMonth;	// mois de la liste de lecture (Gif_Cat_Mois), 0 : inconnu
+	unsigned m_nOutOfSeason;	// categories hors de leur periode
 	u64 m_nRateTicks;
 	unsigned m_nRateCount;
 };

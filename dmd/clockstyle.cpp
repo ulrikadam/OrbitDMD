@@ -4,6 +4,7 @@
 #include "clockstyle.h"
 #include <circle/util.h>
 #include <circle/string.h>
+#include "schedule.h"
 
 static const char *s_DayShort[7] = {"DIM", "LUN", "MAR", "MER", "JEU", "VEN", "SAM"};
 static const char *s_DayLong[7] =
@@ -787,6 +788,14 @@ boolean SetBannerStyleValue (TBannerStyle *pStyle, const char *pKey, const char 
 	{
 		if (IsValidBannerText (pValue))	CopyText (pStyle->Text, pValue, sizeof pStyle->Text);
 	}
+	else if (strcasecmp (pName, "Du") == 0)
+	{
+		if (IsValidMonthDay (pValue))	CopyText (pStyle->From, pValue, sizeof pStyle->From);
+	}
+	else if (strcasecmp (pName, "Au") == 0)
+	{
+		if (IsValidMonthDay (pValue))	CopyText (pStyle->To, pValue, sizeof pStyle->To);
+	}
 	else
 	{
 		return SetTextStyleKey (&pStyle->Style, pName, pValue);
@@ -895,6 +904,14 @@ boolean SetCountdownStyleValue (TCountdownStyle *pStyle, const char *pKey, const
 	else if (strcasecmp (pName, "Titre_Color") == 0)
 	{
 		ParseAnyColor (pValue, pStyle->TitleColor);
+	}
+	else if (strcasecmp (pName, "Du") == 0)
+	{
+		if (IsValidMonthDay (pValue))	CopyText (pStyle->From, pValue, sizeof pStyle->From);
+	}
+	else if (strcasecmp (pName, "Au") == 0)
+	{
+		if (IsValidMonthDay (pValue))	CopyText (pStyle->To, pValue, sizeof pStyle->To);
 	}
 	else
 	{

@@ -15,11 +15,37 @@ TBannerStyle CMessages::s_Texts[MESSAGES_MAX_TEXTS];
 unsigned CMessages::s_nTexts = 0;
 TCountdownStyle CMessages::s_Countdowns[MESSAGES_MAX_COUNTDOWNS];
 unsigned CMessages::s_nCountdowns = 0;
+TBannerStyle CMessages::s_Notify;
+volatile unsigned CMessages::s_nGeneration = 1;
+
+void CMessages::NotifyDefaults (TBannerStyle *pStyle)
+{
+	BannerStyleDefaults (pStyle);
+	pStyle->bActive = TRUE;
+	pStyle->nPasses = 2;
+	pStyle->nSpeed = 5;
+	pStyle->Style.Color[0] = pStyle->Style.Color[1] = pStyle->Style.Color[2] = 0xFF;
+}
+
+boolean CMessages::SetActive (boolean bText, unsigned nIndex, boolean bActive)
+{
+	if (nIndex >= (bText ? s_nTexts : s_nCountdowns))
+	{
+		return FALSE;
+	}
+	if (bText)	s_Texts[nIndex].bActive = bActive;
+	else		s_Countdowns[nIndex].bActive = bActive;
+	s_nGeneration++;
+
+	return Save ();
+}
 
 unsigned CMessages::Parse (const char *pText)
 {
 	s_nTexts = 0;
 	s_nCountdowns = 0;
+	NotifyDefaults (&s_Notify);
+	s_nGeneration++;
 
 	TBannerStyle *pText_ = 0;
 	TCountdownStyle *pCount = 0;
@@ -64,6 +90,11 @@ unsigned CMessages::Parse (const char *pText)
 					pCount->bActive = TRUE;
 					nItems++;
 				}
+			}
+			else if (strcasecmp (Line, "[notification]") == 0)
+			{
+				pText_ = &s_Notify;	// style des messages de Home Assistant (cles Texte_*)
+				pCount = 0;
 			}
 			else if (Line[0] == '[')
 			{
@@ -135,7 +166,18 @@ void CMessages::Export (CString *pText)
 		AppendNumber (pText, "Texte_Font_Size", T.Style.nSize);
 		AppendColor (pText, "Texte_Color", T.Style.Color);
 		AppendLine (pText, "Texte_Font_Pattern", T.Style.Pattern);
+		AppendLine (pText, "Texte_Du", T.From);
+		AppendLine (pText, "Texte_Au", T.To);
 	}
+
+	pText->Append ("[notification]\n");
+	AppendLine (pText, "Texte_Effet", BannerEffectName (s_Notify.Effect));
+	AppendNumber (pText, "Texte_Vitesse", s_Notify.nSpeed);
+	AppendNumber (pText, "Texte_Passages", s_Notify.nPasses);
+	AppendLine (pText, "Texte_Font", s_Notify.Style.Font);
+	AppendNumber (pText, "Texte_Font_Size", s_Notify.Style.nSize);
+	AppendColor (pText, "Texte_Color", s_Notify.Style.Color);
+	AppendLine (pText, "Texte_Font_Pattern", s_Notify.Style.Pattern);
 
 	for (unsigned i = 0; i < s_nCountdowns; i++)
 	{
@@ -151,6 +193,8 @@ void CMessages::Export (CString *pText)
 		AppendColor (pText, "Compte_Color", C.Style.Color);
 		AppendColor (pText, "Compte_Titre_Color", C.TitleColor);
 		AppendLine (pText, "Compte_Font_Pattern", C.Style.Pattern);
+		AppendLine (pText, "Compte_Du", C.From);
+		AppendLine (pText, "Compte_Au", C.To);
 	}
 }
 
@@ -204,6 +248,8 @@ void CMessages::BuildJSON (CString *pJSON)
 		AppendJSONNumber (pJSON, "Texte_Font_Size", T.Style.nSize);
 		AppendJSONColor (pJSON, "Texte_Color", T.Style.Color);
 		AppendJSON (pJSON, "Texte_Font_Pattern", T.Style.Pattern, FALSE);
+		AppendJSON (pJSON, "Texte_Du", T.From, FALSE);
+		AppendJSON (pJSON, "Texte_Au", T.To, FALSE);
 		pJSON->Append ("}");
 	}
 
@@ -222,11 +268,23 @@ void CMessages::BuildJSON (CString *pJSON)
 		AppendJSONColor (pJSON, "Compte_Color", C.Style.Color);
 		AppendJSONColor (pJSON, "Compte_Titre_Color", C.TitleColor);
 		AppendJSON (pJSON, "Compte_Font_Pattern", C.Style.Pattern, FALSE);
+		AppendJSON (pJSON, "Compte_Du", C.From, FALSE);
+		AppendJSON (pJSON, "Compte_Au", C.To, FALSE);
 		pJSON->Append ("}");
 	}
 
+	pJSON->Append ("],\"notification\":{");
+	AppendJSON (pJSON, "Texte_Effet", BannerEffectName (s_Notify.Effect), TRUE);
+	AppendJSONNumber (pJSON, "Texte_Vitesse", s_Notify.nSpeed);
+	AppendJSONNumber (pJSON, "Texte_Passages", s_Notify.nPasses);
+	AppendJSON (pJSON, "Texte_Font", s_Notify.Style.Font, FALSE);
+	AppendJSONNumber (pJSON, "Texte_Font_Size", s_Notify.Style.nSize);
+	AppendJSONColor (pJSON, "Texte_Color", s_Notify.Style.Color);
+	AppendJSON (pJSON, "Texte_Font_Pattern", s_Notify.Style.Pattern, FALSE);
+	pJSON->Append ("}");
+
 	CString End;
-	End.Format ("],\"max_textes\":%u,\"max_comptes\":%u}\n", MESSAGES_MAX_TEXTS, MESSAGES_MAX_COUNTDOWNS);
+	End.Format (",\"max_textes\":%u,\"max_comptes\":%u}\n", MESSAGES_MAX_TEXTS, MESSAGES_MAX_COUNTDOWNS);
 	pJSON->Append (End);
 }
 
@@ -272,6 +330,7 @@ void CMessages::Load (const CConfig *pConfig)
 	else
 	{
 		// premiere fois : le message et le compte a rebours de config.txt (version 1.2.0)
+		NotifyDefaults (&s_Notify);
 		s_nTexts = 0;
 		if (pConfig->Banner.Text[0] != '\0')
 		{

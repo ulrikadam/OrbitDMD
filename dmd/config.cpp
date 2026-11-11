@@ -79,6 +79,9 @@ CConfig::CConfig (void)
 	BannerStyleDefaults (&Banner);
 	CountdownStyleDefaults (&Countdown);
 	GifInOrder = FALSE;
+	ScheduleDefaults (&Schedule);
+	memset (&Mqtt, 0, sizeof Mqtt);
+	Mqtt.nPort = 1883;
 }
 
 boolean CConfig::Load (const char *pFileName)
@@ -113,6 +116,9 @@ boolean CConfig::Load (const char *pFileName)
 	BannerStyleDefaults (&Banner);
 	CountdownStyleDefaults (&Countdown);
 	GifInOrder = FALSE;
+	ScheduleDefaults (&Schedule);
+	memset (&Mqtt, 0, sizeof Mqtt);
+	Mqtt.nPort = 1883;
 
 	char *pLine = pBuffer;
 	while (pLine != 0 && *pLine != '\0')
@@ -216,6 +222,14 @@ void CConfig::SetValue (const char *pKey, const char *pValue)
 	{
 	}
 	else if (SetCountdownStyleValue (&Countdown, pKey, pValue))
+	{
+	}
+	else if (strcasecmp (pKey, "HA_Active") == 0)		Mqtt.bActive = nValue != 0;
+	else if (strcasecmp (pKey, "HA_Serveur") == 0)		CopyString (Mqtt.Host, pValue, sizeof Mqtt.Host);
+	else if (strcasecmp (pKey, "HA_Port") == 0)		{ if (1 <= nValue && nValue <= 65535) Mqtt.nPort = nValue; }
+	else if (strcasecmp (pKey, "HA_Utilisateur") == 0)	CopyString (Mqtt.User, pValue, sizeof Mqtt.User);
+	else if (strcasecmp (pKey, "HA_MotDePasse") == 0)	CopyString (Mqtt.Password, pValue, sizeof Mqtt.Password);
+	else if (SetScheduleValue (&Schedule, pKey, pValue))
 	{
 	}
 	else if (strcasecmp (pKey, "Gif_Ordre") == 0)

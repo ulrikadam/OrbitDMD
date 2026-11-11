@@ -112,6 +112,8 @@ struct TBannerStyle
 	unsigned   nPasses;			// Texte_Passages : nombre de passages (1 a 10)
 	unsigned   nSpeed;			// Texte_Vitesse (1 a 10)
 	char	   Text[BANNER_TEXT_LEN];	// Texte_Message
+	char	   From[6];			// Texte_Du : "MM-JJ" ou vide (schedule.h)
+	char	   To[6];			// Texte_Au
 	TTextStyle Style;			// Texte_Font, Texte_Font_Size, Texte_Font_Pattern, Texte_Color
 };
 
@@ -136,6 +138,8 @@ struct TCountdownStyle
 	char	   Done[COUNTDOWN_TITLE_LEN];	// Compte_Fin : montre le jour J ("JOYEUX NOEL !")
 	TTextStyle Style;			// valeur : Compte_Font, Compte_Font_Size, Compte_Font_Pattern, Compte_Color
 	u8	   TitleColor[3];		// Compte_Titre_Color
+	char	   From[6];			// Compte_Du : "MM-JJ" ou vide (schedule.h)
+	char	   To[6];			// Compte_Au
 };
 
 void CountdownStyleDefaults (TCountdownStyle *pStyle);

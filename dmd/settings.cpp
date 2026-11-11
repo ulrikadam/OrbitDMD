@@ -37,7 +37,11 @@ enum TKind
 	KindCoord,	// latitude ou longitude (vide autorise : pas de lieu)
 	KindText,	// nom de lieu (UTF-8, sans guillemet)
 	KindMessage,	// texte defilant ou titre (UTF-8, sans guillemet, longueur nMax)
-	KindTarget	// date du compte a rebours ("noel", "nouvel-an", "AAAA-MM-JJ HH:MM")
+	KindTarget,	// date du compte a rebours ("noel", "nouvel-an", "AAAA-MM-JJ HH:MM")
+	KindMonths,	// mois des categories ("XMAS:12;Plage:6-8")
+	KindServer,	// adresse IP ou nom d'un serveur (vide autorise)
+	KindLogin,	// nom d'utilisateur (vide autorise, sans espace ni guillemet)
+	KindSecret	// mot de passe d'un service (vide = inchange, jamais renvoye)
 };
 
 enum TApply
@@ -96,6 +100,18 @@ static const TSetting s_Settings[] =
 	{"Weather_Info_Color",	"Couleur de la deuxieme ligne", KindColor, 0, 0, 0,			ApplyLive},
 	{"Weather_Icon",	"Icone meteo",		KindBool,	0, 1,	  0,			ApplyLive},
 	{"Gif_Ordre",		"Ordre de lecture",	KindChoice,	0, 0,	  "hasard,ordre",	ApplyLive},
+	{"Prog_Eteint_Active",	"Panneau eteint la nuit", KindBool,	0, 1,	  0,			ApplyLive},
+	{"Prog_Eteint_Debut",	"Eteint a partir de",	KindNumber,	0, 23,	  0,			ApplyLive},
+	{"Prog_Eteint_Fin",	"Rallume a",		KindNumber,	0, 23,	  0,			ApplyLive},
+	{"Prog_Heure_Active",	"L'heure seule",	KindBool,	0, 1,	  0,			ApplyLive},
+	{"Prog_Heure_Debut",	"Heure seule a partir de", KindNumber,	0, 23,	  0,			ApplyLive},
+	{"Prog_Heure_Fin",	"GIF de nouveau a",	KindNumber,	0, 23,	  0,			ApplyLive},
+	{"Gif_Cat_Mois",	"Mois des categories",	KindMonths,	0, 0,	  0,			ApplyLive},
+	{"HA_Active",		"Home Assistant",	KindBool,	0, 1,	  0,			ApplyReboot},
+	{"HA_Serveur",		"Serveur MQTT",		KindServer,	0, 0,	  0,			ApplyReboot},
+	{"HA_Port",		"Port MQTT",		KindNumber,	1, 65535, 0,			ApplyReboot},
+	{"HA_Utilisateur",	"Utilisateur MQTT",	KindLogin,	0, 0,	  0,			ApplyReboot},
+	{"HA_MotDePasse",	"Mot de passe MQTT",	KindSecret,	0, 0,	  0,			ApplyReboot},
 	{"Texte_Every",		"Frequence du texte",	KindNumber,	1, 20,	  0,			ApplyLive},
 	{"Compte_Every",	"Frequence du compte",	KindNumber,	1, 20,	  0,			ApplyLive},
 	{"Weather_Animate",	"Icone animee",		KindBool,	0, 1,	  0,			ApplyLive},
@@ -298,6 +314,22 @@ static void GetCurrent (CConfig *pConfig, const char *pKey, CString *pValue)
 		}
 	}
 	else if (strcasecmp (pKey, "Gif_Ordre") == 0)		pText = pConfig->GifInOrder ? "ordre" : "hasard";
+	else if (strcasecmp (pKey, "Gif_Cat_Mois") == 0)	pText = pConfig->Schedule.MonthsRaw;
+	else if (strcasecmp (pKey, "HA_Active") == 0)		n = pConfig->Mqtt.bActive ? 1 : 0;
+	else if (strcasecmp (pKey, "HA_Serveur") == 0)		pText = pConfig->Mqtt.Host;
+	else if (strcasecmp (pKey, "HA_Port") == 0)		n = pConfig->Mqtt.nPort;
+	else if (strcasecmp (pKey, "HA_Utilisateur") == 0)	pText = pConfig->Mqtt.User;
+	else if (strncasecmp (pKey, "Prog_", 5) == 0)
+	{
+		const TSchedule &S = pConfig->Schedule;
+		const char *pName = pKey + 5;
+		if      (strcasecmp (pName, "Eteint_Active") == 0)	n = S.bOff ? 1 : 0;
+		else if (strcasecmp (pName, "Eteint_Debut") == 0)	n = S.nOffFrom;
+		else if (strcasecmp (pName, "Eteint_Fin") == 0)		n = S.nOffTo;
+		else if (strcasecmp (pName, "Heure_Active") == 0)	n = S.bClockOnly ? 1 : 0;
+		else if (strcasecmp (pName, "Heure_Debut") == 0)	n = S.nClockFrom;
+		else if (strcasecmp (pName, "Heure_Fin") == 0)		n = S.nClockTo;
+	}
 	else if (strncasecmp (pKey, "Texte_", 6) == 0 || strncasecmp (pKey, "Compte_", 7) == 0)
 	{
 		boolean bBanner = strncasecmp (pKey, "Texte_", 6) == 0;
@@ -575,6 +607,40 @@ static boolean Normalize (const TSetting *pSetting, const char *pIn, CString *pO
 		*pOut = pIn;
 		return TRUE;
 
+	case KindServer:
+	case KindLogin:
+	case KindSecret:
+		if (nLength > 63 || !IsPrintable (pIn, pSetting->Kind == KindSecret))
+		{
+			return FALSE;
+		}
+		for (const char *p = pIn; *p != '\0'; p++)
+		{
+			char c = *p;
+			if (   pSetting->Kind == KindServer
+			    && !(('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9')
+				 || c == '.' || c == '-'))
+			{
+				return FALSE;		// 192.168.0.10 ou homeassistant.maison
+			}
+			if (pSetting->Kind == KindLogin && c == ' ')
+			{
+				return FALSE;
+			}
+		}
+		*pOut = pIn;
+		return TRUE;
+
+	case KindMonths: {
+		TSchedule Test;
+		ScheduleDefaults (&Test);
+		if (!ParseCategoryMonths (pIn, &Test))
+		{
+			return FALSE;
+		}
+		*pOut = pIn;
+		return TRUE; }
+
 	case KindTarget:
 		if (!IsValidCountdownTarget (pIn))
 		{
@@ -642,7 +708,7 @@ void CSettings::BuildJSON (CConfig *pConfig, CString *pJSON)
 	for (unsigned i = 0; i < sizeof s_Settings / sizeof s_Settings[0]; i++)
 	{
 		const TSetting *pSetting = &s_Settings[i];
-		if (pSetting->Kind == KindPSK || pSetting->Kind == KindPassword)
+		if (pSetting->Kind == KindPSK || pSetting->Kind == KindPassword || pSetting->Kind == KindSecret)
 		{
 			continue;		// les secrets ne sortent jamais
 		}
@@ -682,6 +748,7 @@ void CSettings::BuildJSON (CConfig *pConfig, CString *pJSON)
 		      pNetwork != 0 && pNetwork->IsEthernet () ? "true" : "false");
 	pJSON->Append (Value);
 
+	pJSON->Append (pConfig->Mqtt.Password[0] != '\0' ? ",\"ha_mdp_defini\":true" : ",\"ha_mdp_defini\":false");
 	Value.Format (",\"wifi_psk_defini\":%s,\"redemarrage_en_attente\":%s,\"fuseaux\":[",
 		      pConfig->WifiPSK[0] != '\0' ? "true" : "false",
 		      CRemoteControl::Get ()->IsRebootPending () ? "true" : "false");
@@ -719,7 +786,7 @@ boolean CSettings::Apply (CConfig *pConfig, const char * const *ppNames, const c
 		}
 
 		// mot de passe vide : on garde l'actuel
-		if (   (pSetting->Kind == KindPSK || pSetting->Kind == KindPassword)
+		if (   (pSetting->Kind == KindPSK || pSetting->Kind == KindPassword || pSetting->Kind == KindSecret)
 		    && ppValues[i][0] == '\0')
 		{
 			continue;

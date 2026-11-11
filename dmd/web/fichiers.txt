@@ -5,10 +5,12 @@
 /horloge          horloge.html     text/html; charset=utf-8
 /meteo            meteo.html       text/html; charset=utf-8
 /messages         messages.html    text/html; charset=utf-8
+/aide             aide.html        text/html; charset=utf-8
 /reglages         reglages.html    text/html; charset=utf-8
 /systeme          systeme.html     text/html; charset=utf-8
 /style.css        style.css        text/css; charset=utf-8
 /app.js           app.js           application/javascript; charset=utf-8
+/gifscale.js      gifscale.js      application/javascript; charset=utf-8
 /logo.png         logo.png         image/png
 /logo-sombre.png  logo-sombre.png  image/png
 /favicon.png      favicon.png      image/png

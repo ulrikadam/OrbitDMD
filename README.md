@@ -27,6 +27,8 @@ de type « DMD » de flipper ou de borne d'arcade :
   synchronisation Internet ;
 - 💬 **messages** : textes défilants et comptes à rebours (Noël, Nouvel an, date choisie), chacun avec son
   style et son effet d'arrivée (défilement, montée, lettre par lettre, pluie de lettres, fondu…) ;
+- 🏠 **Home Assistant** : le panneau y apparaît tout seul (MQTT) ; allumage, luminosité et messages depuis
+  vos automatisations ([guide](docs/HOME-ASSISTANT.md)) ;
 - ⛅ **météo** de votre ville (Open-Meteo, sans inscription) avec icônes animées ;
 - 🌐 **page web** sur votre réseau (`http://orbitdmd.local/`) : aperçu en direct du panneau, réglages,
   luminosité heure par heure, pause, extinction, sauvegarde des réglages, mises à jour ;

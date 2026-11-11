@@ -4,6 +4,8 @@
 #include "dmdapp.h"
 #include "gifmarks.h"
 #include "messages.h"
+#include "ha.h"
+#include "gifmanager.h"
 #include "common.h"
 #include "testpattern.h"
 #include "clock.h"
@@ -43,6 +45,8 @@ CDmdApp::CDmdApp (CMemorySystem *pMemorySystem, CMatrix *pMatrix, CConfig *pConf
 	m_nGifsSinceCountdown (0),
 	m_nNextText (0),
 	m_nNextCountdown (0),
+	m_nPlaylistMonth (0),
+	m_nOutOfSeason (0),
 	m_nRateTicks (0),
 	m_nRateCount (0)
 {
@@ -144,7 +148,15 @@ void CDmdApp::MainLoop (void)
 
 	while (TRUE)
 	{
-		if (m_pConfig->GifActive && m_nFiles > 0)
+		// changement de mois : les categories du mois (Gif_Cat_Mois) changent
+		TDateTime Now;
+		if (   m_pConfig->GifActive && CClock::Get ()->GetLocalTime (&Now)
+		    && m_nPlaylistMonth != 0 && Now.Month != m_nPlaylistMonth)
+		{
+			BuildPlaylist ();
+		}
+
+		if (m_pConfig->GifActive && m_nFiles > 0 && !IsClockOnlyTime ())
 		{
 			if (m_pConfig->GifInOrder)
 			{
@@ -164,6 +176,15 @@ void CDmdApp::MainLoop (void)
 				{
 					BuildPlaylist ();
 					break;		// la liste a change : on la remelange
+				}
+
+				// programme : l'heure seule, ou nouveau mois
+				TDateTime Time;
+				if (   IsClockOnlyTime ()
+				    || (CClock::Get ()->GetLocalTime (&Time) && Time.Month != m_nPlaylistMonth
+					&& m_nPlaylistMonth != 0))
+				{
+					break;
 				}
 
 				UpdateBrightness ();
@@ -219,7 +240,11 @@ void CDmdApp::PlayRequestedGifs (void)
 		}
 		else if (strcmp (Path, WEATHER_PLAY_REQUEST) == 0)
 		{
-			ShowWeather (CLOCK_DEMO_MS);	// "Voir sur le panneau" de la page Meteo
+			ShowWeather (CLOCK_DEMO_MS, TRUE);	// "Voir sur le panneau", Home Assistant
+		}
+		else if (strcmp (Path, NOTIFY_PLAY_REQUEST) == 0)
+		{
+			ShowNotification ();		// message de Home Assistant
 		}
 		else if (   strncmp (Path, BANNER_PLAY_REQUEST ":", strlen (BANNER_PLAY_REQUEST) + 1) == 0
 			 || strncmp (Path, COUNTDOWN_PLAY_REQUEST ":", strlen (COUNTDOWN_PLAY_REQUEST) + 1) == 0)
@@ -368,6 +393,10 @@ void CDmdApp::BuildPlaylist (void)
 	}
 	m_nFiles = 0;
 	m_nExcluded = 0;
+	m_nOutOfSeason = 0;
+
+	TDateTime Now;
+	m_nPlaylistMonth = CClock::Get ()->GetLocalTime (&Now) ? Now.Month : 0;	// 0 : heure inconnue
 
 	if (m_pConfig->nCategories > 0)
 	{
@@ -387,6 +416,11 @@ void CDmdApp::BuildPlaylist (void)
 	CLogger::Get ()->Write (From, LogNotice, "%u GIF dans la liste de lecture (%s)%s", m_nFiles,
 				m_pConfig->GifInOrder ? "dans l'ordre" : "au hasard",
 				m_nExcluded > 0 ? ", GIF exclues retirees" : "");
+	if (m_nOutOfSeason > 0)
+	{
+		CLogger::Get ()->Write (From, LogNotice, "%u categorie(s) hors de leur periode (Gif_Cat_Mois)",
+					m_nOutOfSeason);
+	}
 }
 
 void CDmdApp::AddFolder (const char *pPath, boolean bRecurse)
@@ -398,6 +432,14 @@ void CDmdApp::AddFolder (const char *pPath, boolean bRecurse)
 		{
 			pCategory = p + 1;
 		}
+	}
+
+	// categorie montree seulement certains mois (Gif_Cat_Mois) ?
+	if (   m_nPlaylistMonth != 0
+	    && !(GetCategoryMonths (m_pConfig->Schedule, pCategory) & (1 << m_nPlaylistMonth)))
+	{
+		m_nOutOfSeason++;
+		return;
 	}
 
 	DIR Directory;
@@ -850,13 +892,24 @@ void CDmdApp::ShowClockScreen (unsigned nDuration, boolean bDateScreen)
 	}
 }
 
-void CDmdApp::ShowWeather (unsigned nDuration)
+// bRequested : demandee expres (page Meteo, Home Assistant) : montree meme si la meteo
+// n'est pas dans la rotation, et un message s'il n'y a pas de meteo
+void CDmdApp::ShowWeather (unsigned nDuration, boolean bRequested)
 {
 	CWeather *pWeather = CWeather::Get ();
 	TWeatherData Data;
-	if (   !m_pConfig->WeatherStyle.bActive
-	    || pWeather == 0 || !pWeather->GetData (&Data))
+	if (!bRequested && !m_pConfig->WeatherStyle.bActive)
 	{
+		return;
+	}
+	if (pWeather == 0 || !pWeather->GetData (&Data))
+	{
+		if (bRequested)
+		{
+			ShowMessage ("METEO", m_pConfig->WeatherStyle.Latitude[0] == '\0' ? "LIEU A CHOISIR"
+										  : "PAS ENCORE RECUE", 255, 128, 0);
+			Wait (3000);
+		}
 		return;			// pas de lieu choisi, ou pas de meteo recente
 	}
 
@@ -910,7 +963,9 @@ void CDmdApp::ShowMessages (boolean bEveryTime)
 		{
 			unsigned i = m_nNextText++ % CMessages::s_nTexts;
 			const TBannerStyle &T = CMessages::s_Texts[i];
-			if (T.bActive && T.Text[0] != '\0')
+			TDateTime Today;
+			boolean bInPeriod = !CClock::Get ()->GetLocalTime (&Today) || InDateWindow (T.From, T.To, Today);
+			if (T.bActive && T.Text[0] != '\0' && bInPeriod)
 			{
 				ShowBanner (T);
 				break;
@@ -927,11 +982,47 @@ void CDmdApp::ShowMessages (boolean bEveryTime)
 		{
 			unsigned i = m_nNextCountdown++ % CMessages::s_nCountdowns;
 			const TCountdownStyle &C = CMessages::s_Countdowns[i];
-			if (C.bActive && ShowCountdown (C, C.nDisplayTime))
+			TDateTime Today;
+			boolean bInPeriod = !CClock::Get ()->GetLocalTime (&Today) || InDateWindow (C.From, C.To, Today);
+			if (C.bActive && bInPeriod && ShowCountdown (C, C.nDisplayTime))
 			{
 				break;			// sinon (date passee) : le suivant
 			}
 		}
+	}
+}
+
+// message de Home Assistant : une GIF (facultative), puis le texte
+void CDmdApp::ShowNotification (void)
+{
+	THANotification N;
+	if (!CHomeAssistant::TakeNotification (&N))
+	{
+		return;
+	}
+
+	if (N.Gif[0] != '\0')
+	{
+		char Category[64], Name[CGifManager::MaxNameLength + 1];
+		const char *pSlash = strchr (N.Gif, '/');
+		size_t nCategory = pSlash - N.Gif;
+		if (nCategory < sizeof Category && strlen (pSlash + 1) < sizeof Name)
+		{
+			memcpy (Category, N.Gif, nCategory);
+			Category[nCategory] = '\0';
+			strcpy (Name, pSlash + 1);
+			if (CGifManager::IsValidCategory (Category) && CGifManager::IsValidFileName (Name))
+			{
+				CString Path;
+				Path.Format ("%s/%s/%s", GIF_DIR, Category, Name);
+				PlayGif (Path);
+			}
+		}
+	}
+
+	if (N.Style.Text[0] != '\0' && !CRemoteControl::Get ()->IsPlayRequested ())
+	{
+		ShowBanner (N.Style);
 	}
 }
 
@@ -1160,10 +1251,43 @@ boolean CDmdApp::ShowCountdown (const TCountdownStyle &rItem, unsigned nDuration
 	return TRUE;
 }
 
+// programme (Reglages) : panneau eteint, ou l'heure seule, a cette heure-ci ?
+boolean CDmdApp::IsScheduledOff (void)
+{
+	const TSchedule &S = m_pConfig->Schedule;
+	TDateTime Time;
+	boolean bOff = S.bOff && CClock::Get ()->GetLocalTime (&Time)
+		       && InHourWindow (S.nOffFrom, S.nOffTo, Time.Hour);
+	if (bOff)
+	{
+		CRemoteControl::Get ()->Status.pSchedule = "eteint";
+	}
+	else if (!IsClockOnlyTime ())
+	{
+		CRemoteControl::Get ()->Status.pSchedule = "";
+	}
+
+	return bOff;
+}
+
+boolean CDmdApp::IsClockOnlyTime (void)
+{
+	const TSchedule &S = m_pConfig->Schedule;
+	TDateTime Time;
+	boolean bClock = S.bClockOnly && CClock::Get ()->GetLocalTime (&Time)
+			 && InHourWindow (S.nClockFrom, S.nClockTo, Time.Hour);
+	if (bClock)
+	{
+		CRemoteControl::Get ()->Status.pSchedule = "heure";
+	}
+
+	return bClock;
+}
+
 u64 CDmdApp::HoldWhileStopped (const u8 *pFrame)
 {
 	CRemoteControl *pRemote = CRemoteControl::Get ();
-	if (!pRemote->IsPaused () && !pRemote->IsDisplayOff ())
+	if (!pRemote->IsPaused () && !pRemote->IsDisplayOff () && !IsScheduledOff ())
 	{
 		return 0;
 	}
@@ -1172,14 +1296,20 @@ u64 CDmdApp::HoldWhileStopped (const u8 *pFrame)
 	boolean bBlack = FALSE;
 
 	// la page web, le Wi-Fi et les mises a jour continuent pendant l'attente (Wait)
-	while (pRemote->IsPaused () || pRemote->IsDisplayOff ())
+	for (;;)
 	{
-		if (pRemote->IsDisplayOff () && !bBlack)
+		boolean bOff = pRemote->IsDisplayOff () || IsScheduledOff ();
+		if (!bOff && !pRemote->IsPaused ())
+		{
+			break;
+		}
+
+		if (bOff && !bBlack)
 		{
 			m_pMatrix->Show (m_pBlack);
 			bBlack = TRUE;
 		}
-		else if (!pRemote->IsDisplayOff () && bBlack)
+		else if (!bOff && bBlack)
 		{
 			m_pMatrix->Show (pFrame);	// rallume pendant la pause : image figee
 			bBlack = FALSE;
@@ -1197,6 +1327,11 @@ void CDmdApp::UpdateBrightness (void)
 	TDateTime Time;
 	unsigned nHour = CClock::Get ()->GetLocalTime (&Time) ? Time.Hour : 12;
 	unsigned nBrightness = m_pConfig->GetBrightness (nHour);
+	int nOverride = CRemoteControl::Get ()->GetBrightnessOverride ();
+	if (nOverride >= 0)
+	{
+		nBrightness = (unsigned) nOverride;	// impose par Home Assistant
+	}
 
 	m_pMatrix->SetBrightness (nBrightness);
 	CRemoteControl::Get ()->Status.nBrightness = nBrightness;

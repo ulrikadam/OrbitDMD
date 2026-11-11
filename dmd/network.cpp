@@ -6,6 +6,7 @@
 #include "netutil.h"
 #include "latency.h"
 #include "weather.h"
+#include "ha.h"
 #include "clock.h"
 #include <circle/net/ntpdaemon.h>
 #include <circle/net/ntpclient.h>
@@ -261,6 +262,11 @@ void CNetwork::Process (void)
 
 	new CLatencyProbe;		// mesure la reactivite du coeur 0 (dans /api/etat)
 	new CWeather (m_pNet, m_pConfig);	// meteo du lieu choisi (page Meteo)
+
+	if (m_pConfig->Mqtt.bActive && m_pConfig->Mqtt.Host[0] != '\0')
+	{
+		new CHomeAssistant (m_pNet, m_pConfig, m_IPAddress);	// Home Assistant (MQTT)
+	}
 
 	m_bServicesStarted = TRUE;
 	m_bLinkUp = TRUE;

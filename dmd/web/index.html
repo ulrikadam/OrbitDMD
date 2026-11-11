@@ -142,10 +142,13 @@ function renderQuick () {
 	o.innerHTML = ICONS.power + (quick.off ? "Rallumer" : "Éteindre");
 	o.className = "btn" + (quick.off ? " primary" : "");
 	const st = document.getElementById("now-state");
-	st.hidden = !quick.pause && !quick.off;
-	st.textContent = quick.off ? "Affichage éteint" : "En pause";
-	st.className = "chip " + (quick.off ? "err" : "warn");
-	document.querySelector(".now .led").classList.toggle("off", quick.off);
+	const prog = (OD.status && OD.status.prog_actif) || "";
+	st.hidden = !quick.pause && !quick.off && !prog;
+	st.textContent = quick.off ? "Affichage éteint" : quick.pause ? "En pause"
+		: prog === "eteint" ? "Éteint (programme)" : "Heure seule (programme)";
+	st.title = prog ? "Plage horaire réglée dans Réglages → Programme" : "";
+	st.className = "chip " + (quick.off || prog === "eteint" ? "err" : "warn");
+	document.querySelector(".now .led").classList.toggle("off", quick.off || prog === "eteint");
 }
 
 async function command (action, done, message) {
