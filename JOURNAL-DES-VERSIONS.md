@@ -15,6 +15,13 @@ programme (`dmd/`), puis reconstruire l'installateur (`bash outils/installateur/
 
 ---
 
+## 1.0.1 — 11 novembre 2026
+
+- Page web : lien « OrbitDMD sur GitHub » en bas de toutes les pages, et lien vers les nouvelles
+  versions dans la page Système.
+- Chaque version publiée sur GitHub fournit aussi `kernel8.img` seul, pour mettre à jour un panneau
+  depuis la page Système sans refaire la carte.
+
 ## 1.0.0 — 11 novembre 2026
 
 Première version complète, développée par Ulrik Adam (www.nexadam.be).

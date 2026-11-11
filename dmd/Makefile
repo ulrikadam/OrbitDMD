@@ -25,6 +25,7 @@ include $(CIRCLEHOME)/Rules.mk
 
 # interface web (pages, style, script, logo) integree au programme
 webserver.o: webfiles.h
+
 webfiles.h: $(wildcard web/*) ../outils/web2h.py
 	py -3.12 -I ../outils/web2h.py web/fichiers.txt webfiles.h
 
