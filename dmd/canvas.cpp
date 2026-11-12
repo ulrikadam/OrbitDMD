@@ -71,9 +71,9 @@ int CCanvas::DrawText (int x, int y, const char *pText, u8 r, u8 g, u8 b, unsign
 {
 	int x0 = x;
 
-	for (; *pText != '\0'; pText++)
+	while (*pText != '\0')
 	{
-		const char * const *pRows = FontGetGlyph (*pText);
+		const char * const *pRows = FontGetGlyph (Utf8Next (&pText));	// texte UTF-8
 		if (pRows == 0)
 		{
 			pRows = FontGetGlyph ('?');
@@ -106,7 +106,7 @@ void CCanvas::DrawTextCentered (int x0, int nAreaWidth, int y, const char *pText
 
 int CCanvas::GetTextWidth (const char *pText, unsigned nScale)
 {
-	int nLength = (int) strlen (pText);
+	int nLength = (int) Utf8Length (pText);
 	if (nLength == 0)
 	{
 		return 0;

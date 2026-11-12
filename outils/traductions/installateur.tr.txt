@@ -1,0 +1,171 @@
+# OrbitDMD kurulumu Türkçe : "numara | çeviri" (bkz. installateur.txt)
+1 | OrbitDMD kurulumu {}
+2 | Hoş geldiniz
+3 | Paneller
+4 | Bağlantı
+5 | Erişim, saat ve hava durumu
+6 | SD kart
+7 | Kartın oluşturulması
+8 | Çık
+9 | < Geri
+10 | İleri >
+11 | Geliştiren: Ulrik Adam · www.nexadam.be
+12 | Adım {} / {}
+13 | Son adım
+14 | Testi yaz
+15 | Kartı oluştur
+16 | Bitir
+17 | Hoş geldiniz!
+18 | Bu sihirbaz, HUB75 LED panellere bağlı bir Raspberry Pi 3 için micro-SD kart hazırlar. OrbitDMD GIF'lerinizi, saati ve hava durumunu gösterir; Linux olmadan bir web sayfasından ayarlanır.
+19 | Gerekenler:\n  •  bir micro-SD kart (32 GB veya daha küçüğü önerilir) ve bir kart okuyucu;\n  •  Wi-Fi ağınızın adı ve şifresi ya da bir ağ kablosu;\n  •  HUB75 adaptör kartlı bir Raspberry Pi 3 (“regular” bağlantı düzeni).
+20 | Dikkat: seçilen kartın tüm içeriği silinecek.
+21 | Test modu: hiçbir şey biçimlendirilmeyecek, kart şuraya yazılacak: {}
+22 | Panelin adı
+23 | Sayfasının adresi: {}
+24 | Paneller
+25 | Yan yana 2 panel 64×32 (128×32)
+26 | 1 panel 64×32
+27 | Yan yana 4 panel 64×32 (256×32)
+28 | 1 panel 64×64
+29 | Yan yana 2 panel 64×64 (128×64)
+30 | 1 panel 32×16
+31 | Diğer (gelişmiş ayarlar)
+32 | Bir panelin genişliği
+33 | Bir panelin yüksekliği
+34 | Arka arkaya paneller
+35 | Birbirine bağlı (çıkıştan girişe).
+36 | Paralel çıkışlar
+37 | Her şey adaptörün aynı çıkışına bağlıysa 1.
+38 | Çıkışların yavaşlatılması
+39 | 2 çoğu panele uyar. Görüntü titrerse veya kayarsa artırın.
+40 | Renk sırası
+41 | Kırmızı yeşil ya da mavi görünürse değiştirin.
+42 | Gündüz parlaklığı
+43 | Gece parlaklığı
+44 | %   saat
+45 | ile
+46 | Sonra web sayfasından saat saat ayarlanabilir.
+47 | Panel ağ kablosu veya Wi-Fi ile bağlanır (2,4 GHz: Raspberry Pi 3, 5 GHz'i görmez). Wi-Fi şifresi yalnızca karta kaydedilir.
+48 | Otomatik: başlatmada takılıysa kablo, değilse Wi-Fi — önerilir
+49 | Yalnızca Wi-Fi (biraz daha hızlı başlatma)
+50 | Yalnızca ağ kablosu (Wi-Fi isteğe bağlı)
+51 | Bağlantı
+52 | Wi-Fi ağı
+53 | Listeden seçin veya adı yazın.
+54 | Ağın tam adını yazın.
+55 | Wi-Fi şifresi
+56 | göster
+57 | Ülke
+58 | İzin verilen Wi-Fi kanalları için.
+59 | IP adresi
+60 | Otomatik (modemin verdiği) — önerilir
+61 | Sabit
+62 | Panelin adresi
+63 | Örneğin {} (ağınızda boş).
+64 | Alt ağ maskesi
+65 | Ağ geçidi (modem)
+66 | DNS sunucusu
+67 | Fransa
+68 | Belçika
+69 | İsviçre
+70 | Lüksemburg
+71 | Kanada
+72 | Almanya
+73 | Hollanda
+74 | İspanya
+75 | İtalya
+76 | Portekiz
+77 | Birleşik Krallık
+78 | Amerika Birleşik Devletleri
+79 | Fas
+80 | Tunus
+81 | Cezayir
+82 | Bu şifre, panelin web sayfasından yapılan değişiklikleri korur.
+83 | Sayfa şifresi
+84 | En az 8 karakter, boşluksuz.
+85 | Onay
+86 | Saat dilimi
+87 | Otomatik yaz saati.
+88 | Hava durumu için şehir
+89 | İsteğe bağlı: daha sonra Hava durumu sayfasında da seçilebilir.
+90 | Ara
+91 | Aranıyor…
+92 | Şehrinizi listeden seçin.
+93 | Şehir bulunamadı.
+94 | Arama yapılamadı (İnternet yok mu?). Şehir Hava durumu sayfasında seçilebilir.
+95 | Hava durumu: {}
+96 | micro-SD kartı okuyucuya takın, sonra seçin. Yalnızca çıkarılabilir kartlar ve bellekler gösterilir.
+97 | Yenile
+98 | Kart
+99 | {} GB
+100 | disk {}
+101 | RpiTeaM'in ücretsiz temel animasyonlu GIF paketi (RPI2DMD projesi), eLLuiGi'nin izniyle, ve OrbitDMD çalışmaları. İşaretli kategoriler kopyalanır ve gösterilir. 11.000 animasyonluk paket: rpiteam.carrd.co veya Neo-Arcadia forumu.
+102 | Dahil GIF'ler
+103 | Seç…
+104 | yok
+105 | GIF'leriniz (isteğe bağlı)
+106 | Klasördeki GIF'ler “Mes_GIF” içine gider; her alt klasör bir kategori olur. Sonra web sayfasından da eklenebilir.
+107 | Şimdilik gösterilmeyecekleri işaretten çıkarın: yine de kopyalanırlar ve GIF sayfasından etkinleştirilebilirler.
+108 | Gösterilen kategoriler
+109 | Klasör okunamıyor: {}
+110 | {2} klasörde {1} GIF bulundu
+111 | ; “Accueil” açılış ekranlarına eklenir.
+112 | GIF'lerinizin bulunduğu klasör (tercihen 128×32)
+113 | Bu kartın tüm içeriğinin silineceğini anladım.
+114 | İki şifre farklı.
+115 | Panel en fazla 20 kategori gösterir: {} tanesinin işaretini kaldırın.
+116 | micro-SD kartı seçin (takın, sonra Yenile'ye tıklayın).
+117 | Kartın silinebileceğini onaylamak için kutuyu işaretleyin.
+118 | Bu diskin tüm içeriği kalıcı olarak silinecek:\n\n{}\n\nDevam edilsin mi?
+119 | Kart silinsin mi?
+120 | Oluşturma iptal edildi: hiçbir şey değiştirilmedi.
+121 | Diskler listelenemedi: {}
+122 | Test modu: kart gerekmez.
+123 | Kart bulunamadı: takın, sonra Yenile'ye tıklayın.
+124 | Bu disk 64 GB'tan büyük: SD kart olduğundan ve bir yedek disk olmadığından emin olun!
+125 | {} GB'lık bir FAT32 “ORBITDMD” bölümü oluşturulacak.
+126 | OrbitDMD kurulumu {}.
+127 | Kart içeriği hazırlanıyor…
+128 | Test klasörü boş değil: {}
+129 | İçerik hazır ({} GIF eklendi).
+130 | İçerik hazır.
+131 | Dahil GIF'ler: {} GIF, {} kategoride
+132 | Açılış ekranları: {} GIF eklendi
+133 | {} zaten vardı
+134 | {} kategorisi: zaten dahil ({} GIF)
+135 | {} kategorisi: {} GIF
+136 | {} zaten dahil
+137 | kopyalandı, gösterilmiyor
+138 | HATA: {}
+139 | Kart oluşturulamadı
+140 | Kart hazır!
+141 | Test bitti: içerik şuraya yazıldı: {}
+142 | 1. Kartı çıkarın (aşağıdaki düğme) ve Raspberry Pi 3'e takın.
+143 | 2. Gücü bağlayın: ağa bağlanırken açılış ekranı görünür.
+144 | 3. Yaklaşık otuz saniye sonra şunu açın: {}
+145 | (açılmazsa panelin adresini modeminizin sayfasında arayın).
+146 | Windows kartı değiştirmek için izin isteyecek…
+147 | İzin reddedildi: kart değiştirilmedi.
+148 | Kart siliniyor…
+149 | Bölüm oluşturuluyor…
+150 | FAT32 biçimlendiriliyor…
+151 | Dosyalar kopyalanıyor…
+152 | Kopya doğrulanıyor…
+153 | Kart yazıldı ve doğrulandı ({} dosya), sürücü {}:
+154 | Hazırlık sonuçsuz durdu.
+155 | Kartı çıkar
+156 | Panelin sayfasını aç
+157 | Kart çıkarıldı: çıkarabilirsiniz.
+158 | Ad: 1-31 harf, rakam veya tire (boşluk ve Türkçe karakter yok).
+159 | Wi-Fi ağ adı: 1-32 karakter, Türkçe karakter ve tırnak yok.
+160 | Bağlantı: auto, wifi veya ethernet.
+161 | Wi-Fi şifresi: 8-63 karakter, Türkçe karakter ve tırnak yok.
+162 | Web sayfası şifresi: en az 8 karakter, boşluk ve Türkçe karakter yok.
+163 | Geçersiz IP adresi.
+164 | Geçersiz alt ağ maskesi.
+165 | Geçersiz ağ geçidi (modem).
+166 | Geçersiz DNS sunucusu.
+167 | Geçersiz alt ağ maskesi (örn. 255.255.255.0).
+168 | Bu ağ için geçersiz IP adresi.
+169 | Ağ geçidi aynı ağda, başka bir adreste olmalı.
+170 | sa

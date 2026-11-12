@@ -132,7 +132,7 @@ const NEW = {
 		const t = new Date(Date.now() + 14 * 86400000);
 		t.setHours(20, 0, 0, 0);
 		const d = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16).replace("T", " ");
-		return { Compte_Active: 1, Compte_Date: d, Compte_Titre: "ANNIVERSAIRE DANS", Compte_Fin: "JOYEUX ANNIVERSAIRE !",
+		return { Compte_Active: 1, Compte_Date: d, Compte_Titre: T("ANNIVERSAIRE DANS"), Compte_Fin: T("JOYEUX ANNIVERSAIRE !"),
 			Compte_Display_Time: 5000, Compte_Font: "Pixel", Compte_Font_Size: 0, Compte_Color: "FFAA00",
 			Compte_Titre_Color: "FFFFFF", Compte_Font_Pattern: "None", Compte_Du: "", Compte_Au: "" };
 	}
@@ -151,7 +151,7 @@ const state = () => JSON.stringify([lists, every]);
 const dirty = () => loaded && state() !== saved;
 
 function fontName (f) {
-	if (f === "Pixel") return "Pixel (intégrée)";
+	if (f === "Pixel") return T("Pixel (intégrée)");
 	const base = f.replace(/^.*\//, "").replace(/\.(ttf|otf)$/i, "");
 	const noms = { goudysto: "Goudy Stout", pressstart2p: "Press Start 2P", vt323: "VT323", blackopsone: "Black Ops One",
 		russoone: "Russo One", mountainsofchristmas: "Mountains of Christmas", "orbitdmd-led": "OrbitDMD LED",
@@ -160,8 +160,8 @@ function fontName (f) {
 }
 /* le panneau refuse guillemets et barres obliques inverses : remplaces */
 const clean = s => s.replace(/"/g, "”").replace(/\\/g, "/").replace(/[\r\n]+/g, " ");
-const targetLabel = d => d === "noel" ? "Noël" : d === "nouvel-an" ? "Nouvel an" :
-	new Date(d.replace(" ", "T")).toLocaleString("fr-BE", { dateStyle: "long", timeStyle: "short" });
+const targetLabel = d => d === "noel" ? T("Noël") : d === "nouvel-an" ? T("Nouvel an") :
+	new Date(d.replace(" ", "T")).toLocaleString(I18N.lang === "fr" ? "fr-BE" : I18N.lang, { dateStyle: "long", timeStyle: "short" });
 
 /* periode : "25/12" a l'ecran, "12-25" pour le panneau ; "" si incomplet */
 const toDisplay = v => /^\d\d-\d\d$/.test(v || "") ? v.slice(3) + "/" + v.slice(0, 2) : "";
@@ -172,7 +172,7 @@ function toPanel (v) {
 	if (mo < 1 || mo > 12 || d < 1 || d > [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][mo - 1]) return "";
 	return String(mo).padStart(2, "0") + "-" + String(d).padStart(2, "0");
 }
-const periodLabel = (a, b) => a || b ? " · du " + (toDisplay(a) || "1/1") + " au " + (toDisplay(b) || "31/12") : "";
+const periodLabel = (a, b) => a || b ? " · " + T("du {} au {}", toDisplay(a) || "1/1", toDisplay(b) || "31/12") : "";
 
 /* --- listes --- */
 function renderList (g) {
@@ -206,13 +206,14 @@ function renderList (g) {
 		txt.className = "msg-text";
 		txt.type = "button";
 		const main = document.createElement("b");
+		main.setAttribute("translate", "no");		/* texte de l'utilisateur */
 		const sub = document.createElement("span");
 		if (g === "texte") {
-			main.textContent = it.Texte_Message || "(texte vide)";
-			sub.textContent = (EFFECTS.find(e => e[0] === it.Texte_Effet) || EFFECTS[0])[1] + " · " + fontName(it.Texte_Font) + periodLabel(it.Texte_Du, it.Texte_Au);
+			main.textContent = it.Texte_Message || T("(texte vide)");
+			sub.textContent = T((EFFECTS.find(e => e[0] === it.Texte_Effet) || EFFECTS[0])[1]) + " · " + T(fontName(it.Texte_Font)) + periodLabel(it.Texte_Du, it.Texte_Au);
 		} else {
-			main.textContent = (it.Compte_Titre || "Compte à rebours") + " → " + targetLabel(it.Compte_Date);
-			sub.textContent = fontName(it.Compte_Font) + " · " + (+it.Compte_Display_Time / 1000) + " s" + periodLabel(it.Compte_Du, it.Compte_Au);
+			main.textContent = (it.Compte_Titre || T("Compte à rebours")) + " → " + targetLabel(it.Compte_Date);
+			sub.textContent = T(fontName(it.Compte_Font)) + " · " + (+it.Compte_Display_Time / 1000) + " s" + periodLabel(it.Compte_Du, it.Compte_Au);
 		}
 		txt.append(main, sub);
 		txt.onclick = () => select(g, i === sel[g] ? -1 : i);
@@ -292,7 +293,7 @@ function setField (g, k, v) {
 function updateHints () {
 	const t = item("texte");
 	if (t) {
-		el("count-texte").textContent = new TextEncoder().encode(t.Texte_Message || "").length + " / 200 octets (une lettre accentuée compte pour 2)";
+		el("count-texte").textContent = T("{} / 200 octets (une lettre accentuée compte pour 2)", new TextEncoder().encode(t.Texte_Message || "").length);
 		el("speed-texte").textContent = ["", "très lente", "lente", "lente", "moyenne", "moyenne", "rapide", "rapide", "très rapide", "très rapide", "maximale"][+t.Texte_Vitesse] || "";
 		el("prev-note-texte").textContent = t.Texte_Effet === "defile" || t.Texte_Effet === "inverse"
 			? "Aperçu du début du texte. Sur le panneau, il défile." : "Aperçu de la première page, une fois arrivée. Un texte long est coupé en pages.";

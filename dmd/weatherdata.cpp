@@ -2,6 +2,7 @@
 // weatherdata.cpp
 //
 #include "weatherdata.h"
+#include "lang.h"
 #include <circle/util.h>
 
 // debut de l'objet "nom":{ ... } (0 si absent)
@@ -164,30 +165,33 @@ boolean ParseOpenMeteo (const char *pJSON, TWeatherData *pData)
 
 const char *WeatherDescription (int nCode, boolean bDay)
 {
+	int n;		// index des textes de lang.cpp
 	switch (nCode)
 	{
-	case 0:			return bDay ? "ENSOLEILLE" : "NUIT CLAIRE";
-	case 1:			return "PEU NUAGEUX";
-	case 2:			return "NUAGEUX";
-	case 3:			return "COUVERT";
-	case 45: case 48:	return "BROUILLARD";
-	case 51: case 53:	return "BRUINE";
-	case 55:		return "FORTE BRUINE";
-	case 56: case 57:	return "BRUINE GEL.";
-	case 61:		return "PLUIE FAIBLE";
-	case 63:		return "PLUIE";
-	case 65:		return "FORTE PLUIE";
-	case 66: case 67:	return "VERGLAS";
-	case 71:		return "NEIGE FAIBLE";
-	case 73: case 77:	return "NEIGE";
-	case 75:		return "FORTE NEIGE";
-	case 80: case 81:	return "AVERSES";
-	case 82:		return "FORTES AVERSES";
-	case 85: case 86:	return "AVERSES NEIGE";
-	case 95:		return "ORAGE";
-	case 96: case 99:	return "ORAGE GRELE";
+	case 0:			n = bDay ? 0 : 1;	break;
+	case 1:			n = 2;		break;
+	case 2:			n = 3;		break;
+	case 3:			n = 4;		break;
+	case 45: case 48:	n = 5;		break;
+	case 51: case 53:	n = 6;		break;
+	case 55:		n = 7;		break;
+	case 56: case 57:	n = 8;		break;
+	case 61:		n = 9;		break;
+	case 63:		n = 10;		break;
+	case 65:		n = 11;		break;
+	case 66: case 67:	n = 12;		break;
+	case 71:		n = 13;		break;
+	case 73: case 77:	n = 14;		break;
+	case 75:		n = 15;		break;
+	case 80: case 81:	n = 16;		break;
+	case 82:		n = 17;		break;
+	case 85: case 86:	n = 18;		break;
+	case 95:		n = 19;		break;
+	case 96: case 99:	n = 20;		break;
 	default:		return "?";
 	}
+
+	return WeatherText ((unsigned) n);
 }
 
 TWeatherIcon WeatherIconFor (int nCode)

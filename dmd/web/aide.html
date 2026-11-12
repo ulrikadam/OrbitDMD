@@ -158,7 +158,7 @@ document.addEventListener("etat", e => {
 	const s = e.detail;
 	if (!s) return;
 	const chip = document.getElementById("ha-chip");
-	chip.textContent = s.ha === "connecte" ? "Connecté à Home Assistant" : s.ha ? "Home Assistant : " + s.ha : "Home Assistant non activé";
+	chip.textContent = s.ha === "connecte" ? "Connecté à Home Assistant" : s.ha ? T("Home Assistant : {}", T(s.ha.charAt(0).toUpperCase() + s.ha.slice(1))) : "Home Assistant non activé";
 	chip.className = "chip " + (s.ha === "connecte" ? "teal" : "warn");
 });
 fill("OrbitDMD");

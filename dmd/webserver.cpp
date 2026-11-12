@@ -14,6 +14,7 @@
 #include "latency.h"
 #include "clockrender.h"
 #include "weather.h"
+#include "lang.h"
 #include "matrix.h"
 #include "network.h"
 #include <circle/net/netsubsystem.h>
@@ -1036,9 +1037,8 @@ boolean CWebServer::RenderClockPreview (const char *pParams, u8 *pBuffer, unsign
 	else if (bBannerScreen)
 	{
 		// debut du texte, deux pixels apres le bord gauche
-		boolean bPixel = strcasecmp (Banner.Style.Font, CLOCK_FONT_PIXEL) == 0;
 		char Text[BANNER_TEXT_LEN];
-		TextToLatin1 (Banner.Text[0] != '\0' ? Banner.Text : "Votre texte ici", Text, sizeof Text, bPixel);
+		TextForDisplay (Banner.Text[0] != '\0' ? Banner.Text : "Votre texte ici", Text, sizeof Text);
 		s_pRenderer->PrepareText (Banner.Style);
 		if (IsPagedEffect (Banner.Effect))
 		{
@@ -1058,7 +1058,6 @@ boolean CWebServer::RenderClockPreview (const char *pParams, u8 *pBuffer, unsign
 	}
 	else if (bCountdownScreen)
 	{
-		boolean bPixel = strcasecmp (Countdown.Style.Font, CLOCK_FONT_PIXEL) == 0;
 		char Value[32], Latin[32], Title[COUNTDOWN_TITLE_LEN], Done[COUNTDOWN_TITLE_LEN];
 		TCountdownState State = FormatCountdown (Countdown.Target, Time, Value, sizeof Value);
 		char Fin[4];
@@ -1066,9 +1065,9 @@ boolean CWebServer::RenderClockPreview (const char *pParams, u8 *pBuffer, unsign
 		{
 			State = CountdownReached;		// apercu du jour J
 		}
-		TextToLatin1 (Countdown.Title, Title, sizeof Title, TRUE);
-		TextToLatin1 (Countdown.Done, Done, sizeof Done, bPixel);
-		TextToLatin1 (State == CountdownRunning ? Value : "DATE PASSEE", Latin, sizeof Latin, bPixel);
+		TextForDisplay (Countdown.Title, Title, sizeof Title);
+		TextForDisplay (Countdown.Done, Done, sizeof Done);
+		TextForDisplay (State == CountdownRunning ? Value : Tr (TxtDatePassed), Latin, sizeof Latin);
 		s_pRenderer->PrepareText (Countdown.Style);
 		if (State == CountdownReached)	s_pRenderer->RenderCountdown (Countdown, "", Done, nMillis, s_pCanvas);
 		else				s_pRenderer->RenderCountdown (Countdown, Title, Latin, nMillis, s_pCanvas);

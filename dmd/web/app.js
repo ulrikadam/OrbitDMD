@@ -3,6 +3,129 @@
 
 const $ = (sel, el = document) => el.querySelector(sel);
 
+/* --- langue de l'interface ---
+   Les pages sont ecrites en francais. Pour une autre langue, lang-xx.js (genere depuis
+   outils/traductions/web.txt par outils/langues.py) appelle I18N.start(dictionnaire) :
+   chaque texte de la page (et chaque texte ajoute ensuite par les scripts) est remplace
+   par sa traduction. Cle "{}" : partie variable ("il y a {} min") ; dans la traduction,
+   "{}" reprend les parties dans l'ordre, "{1}", "{2}"... dans un autre ordre. */
+const LANGS = { fr: "Français", en: "English", nl: "Nederlands", es: "Español", ru: "Русский", de: "Deutsch",
+	it: "Italiano", pt: "Português", pl: "Polski", uk: "Українська", tr: "Türkçe", cs: "Čeština" };
+const LANG_FILES = { en: "/lang-en.js", nl: "/lang-nl.js", es: "/lang-es.js", ru: "/lang-ru.js", de: "/lang-de.js",
+	it: "/lang-it.js", pt: "/lang-pt.js", pl: "/lang-pl.js", uk: "/lang-uk.js", tr: "/lang-tr.js", cs: "/lang-cs.js" };
+const I18N = {
+	lang: "fr",
+	dict: null,
+	tpls: [],
+	SKIP: { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, CODE: 1, PRE: 1 },
+	ATTRS: ["placeholder", "title", "aria-label", "alt"],
+
+	choose () {
+		let l = "";
+		try { l = localStorage.getItem("orbitdmd_langue") || ""; } catch (e) {}
+		if (!LANGS[l]) {
+			const wanted = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "fr"])
+				.map(x => String(x).slice(0, 2).toLowerCase());
+			l = wanted.find(x => LANGS[x]) || "en";
+		}
+		this.lang = l;
+		document.documentElement.lang = l;
+		if (LANG_FILES[l]) document.write('<script src="' + LANG_FILES[l] + '"><\/script>');
+	},
+	set (l) {
+		try { localStorage.setItem("orbitdmd_langue", l); } catch (e) {}
+		location.reload();
+	},
+
+	/* dictionnaire charge : traduit la page, puis tout ce qui change */
+	start (dict) {
+		this.dict = dict;
+		const esc = s => s.replace(/[.*+?^$()|[\]\\]/g, "\\$&");
+		for (const k in dict) {
+			if (k.includes("{}")) this.tpls.push([new RegExp("^" + k.split("{}").map(esc).join("([\\s\\S]+?)") + "$"), dict[k]]);
+		}
+		this.tpls.sort((a, b) => b[0].source.length - a[0].source.length);	/* le plus precis d'abord */
+		document.title = this.tr(document.title);
+		const css = document.documentElement.style;	/* textes de style.css (details.adv) */
+		css.setProperty("--t-show", JSON.stringify(this.tr("Afficher")));
+		css.setProperty("--t-hide", JSON.stringify(this.tr("Masquer")));
+		this.node(document.body);
+		new MutationObserver(list => {
+			for (const m of list) {
+				if (m.type === "childList") m.addedNodes.forEach(n => this.added(n));
+				else if (m.type === "characterData") this.added(m.target);
+				else this.attr(m.target, m.attributeName);
+			}
+		}).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: this.ATTRS });
+		for (const f of ["alert", "confirm", "prompt"]) {
+			const orig = window[f].bind(window);
+			window[f] = (msg, ...rest) => orig(this.tr(String(msg)), ...rest);
+		}
+	},
+
+	/* texte -> traduction (espaces autour gardes) ; texte inconnu : inchange */
+	tr (s) {
+		if (!this.dict || !s) return s;
+		const m = /^(\s*)([\s\S]*?)(\s*)$/.exec(s);
+		const core = m[2].replace(/\s+/g, " ");
+		if (!core || !/[A-Za-zÀ-ÿ]/.test(core)) return s;
+		let t = this.dict[core];
+		if (t === undefined) {
+			for (const [re, out] of this.tpls) {
+				const g = re.exec(core);
+				if (!g) continue;
+				let i = 1;
+				t = out.replace(/\{(\d?)\}/g, (_, n) => this.tr(g[n ? +n : i++] || ""));
+				break;
+			}
+		}
+		return t === undefined ? s : m[1] + t + m[3];
+	},
+	attr (el, a) {
+		const v = el.getAttribute(a);
+		if (v) { const t = this.tr(v); if (t !== v) el.setAttribute(a, t); }
+	},
+	added (n) {
+		const p = n.nodeType === 1 ? n.parentElement : n.parentNode;
+		for (let e = p; e; e = e.parentElement) {
+			if (this.SKIP[e.nodeName] || e.getAttribute("translate") === "no") return;
+		}
+		this.node(n);
+	},
+	node (n) {
+		if (n.nodeType === 3) {
+			const t = this.tr(n.data);
+			if (t !== n.data) n.data = t;
+		} else if (n.nodeType === 1 && !this.SKIP[n.nodeName] && n.getAttribute("translate") !== "no") {
+			for (const a of this.ATTRS) if (n.hasAttribute(a)) this.attr(n, a);
+			if (n.nodeName === "INPUT" && /^(button|submit)$/.test(n.type)) { const t = this.tr(n.value); if (t !== n.value) n.value = t; }
+			for (const c of n.childNodes) this.node(c);
+		}
+	},
+
+	/* choix de la langue dans l'en-tete */
+	picker () {
+		const box = $(".top .status");
+		if (!box || $("#langsel")) return;
+		const sel = document.createElement("select");
+		sel.id = "langsel";
+		sel.className = "input lang-sel";
+		sel.setAttribute("translate", "no");
+		sel.setAttribute("aria-label", "Language / Langue");
+		for (const l in LANGS) sel.add(new Option(LANGS[l], l, false, l === this.lang));
+		sel.onchange = () => this.set(sel.value);
+		box.insertBefore(sel, box.firstChild);
+	}
+};
+I18N.choose();
+/* texte assemble par un script : T("{} GIF ajoutee(s)", n) -> traduction, parties remplies dans
+   l'ordre ({}) ou par numero ({1}, {2}...) */
+const T = (s, ...a) => {
+	const t = I18N.dict && I18N.dict[s] !== undefined ? I18N.dict[s] : s;
+	let i = 0;
+	return t.replace(/\{(\d?)\}/g, (_, n) => String(a[n ? n - 1 : i++] ?? ""));
+};
+
 const OD = {
 	pwKey: "orbitdmd_pw",
 	memo: "",
@@ -193,10 +316,10 @@ const OD = {
 
 	/* --- mise a l'heure depuis Internet (tableau de bord et page Horloge) --- */
 	syncAge (s) {
-		if (s === undefined || s === null || s < 0) return "pas encore depuis le démarrage";
-		if (s < 60) return "à l'instant";
-		if (s < 3600) return "il y a " + Math.floor(s / 60) + " min";
-		return "il y a " + Math.floor(s / 3600) + " h " + String(Math.floor(s / 60) % 60).padStart(2, "0");
+		if (s === undefined || s === null || s < 0) return T("pas encore depuis le démarrage");
+		if (s < 60) return T("à l'instant");
+		if (s < 3600) return T("il y a {} min", Math.floor(s / 60));
+		return T("il y a {} h {}", Math.floor(s / 3600), String(Math.floor(s / 60) % 60).padStart(2, "0"));
 	},
 	async syncTime (button) {
 		if (button) button.disabled = true;
@@ -206,14 +329,14 @@ const OD = {
 		if (!r.ok) { this.toast(r.text, false); return; }
 		const m = /ecart=(-?\d+)/.exec(r.text), d = m ? +m[1] : 0, a = Math.abs(d);
 		const amount = a < 60 ? a + " s" : a < 3600 ? Math.round(a / 60) + " min" : (a / 3600).toFixed(1).replace(".", ",") + " h";
-		this.toast(a <= 1 ? "Heure synchronisée : elle était déjà exacte"
-			: "Heure synchronisée : le panneau " + (d > 0 ? "retardait" : "avançait") + " de " + amount);
+		this.toast(a <= 1 ? T("Heure synchronisée : elle était déjà exacte")
+			: T(d > 0 ? "Heure synchronisée : le panneau retardait de {}" : "Heure synchronisée : le panneau avançait de {}", amount));
 		this.poll();
 	},
 
 	/* --- petits outils --- */
 	pretty (name) { return name.replace(/\.gif$/i, "").replace(/[_-]+/g, " ").trim(); },
-	size (n) { return n < 1048576 ? Math.max(1, Math.round(n / 1024)) + " Ko" : (n / 1048576).toFixed(1).replace(".", ",") + " Mo"; },
+	size (n) { return n < 1048576 ? T("{} Ko", Math.max(1, Math.round(n / 1024))) : T("{} Mo", (n / 1048576).toFixed(1).replace(".", ",")); },
 	/* apercu d'une GIF (garde un jour par le navigateur ; la taille change l'adresse si le fichier change) */
 	gifUrl (cat, name, size) {
 		return "/gif/voir?c=" + encodeURIComponent(cat) + "&f=" + encodeURIComponent(name) + (size ? "&s=" + size : "");
@@ -224,7 +347,7 @@ const OD = {
 	},
 	duration (s) {
 		const d = Math.floor(s / 86400), h = Math.floor(s / 3600) % 24, m = Math.floor(s / 60) % 60;
-		return d > 0 ? d + " j " + h + " h" : h > 0 ? h + " h " + String(m).padStart(2, "0") + " min" : m + " min " + (s % 60) + " s";
+		return d > 0 ? T("{} j {} h", d, h) : h > 0 ? h + " h " + String(m).padStart(2, "0") + " min" : m + " min " + (s % 60) + " s";
 	},
 
 	/* attend que le panneau revienne apres un redemarrage
@@ -249,6 +372,7 @@ const OD = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+	I18N.picker();
 	OD.updateLock();
 	const lock = $("#lock");
 	if (lock) {

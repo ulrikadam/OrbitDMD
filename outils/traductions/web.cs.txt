@@ -1,0 +1,759 @@
+# OrbitDMD - webové rozhraní česky : "číslo | překlad" (číslo francouzského textu ve web.txt)
+1 | Přehled
+2 | Hodiny
+3 | Počasí
+4 | Zprávy
+5 | Nastavení
+6 | Systém
+7 | Připojování…
+8 | Online
+9 | Offline
+10 | Vyvinul
+11 | OrbitDMD na GitHubu
+12 | ☕ Podpořit na Ko-fi
+13 | Zobrazit
+14 | Skrýt
+15 | Zrušit
+16 | OK
+17 | Uložit
+18 | Zavřít
+19 | Smazat
+20 | Kopírovat
+21 | Zkopírováno
+22 | Zobrazit
+23 | Náhled
+24 | Zapnout
+25 | Ano
+26 | Ne
+27 | Auto
+28 | Automaticky
+29 | Doba
+30 | Písmo
+31 | Velikost
+32 | Barva
+33 | Vzor
+34 | Formát
+35 | Pozadí
+36 | Text
+37 | Nadpis
+38 | Rychlost
+39 | Období
+40 | Četnost
+41 | Panel
+42 | Pauza
+43 | Restartovat
+44 | Odeslat
+45 | Odesílání…
+46 | Načítání…
+47 | Neuložené změny
+48 | Pixel (vestavěné)
+49 | OrbitDMD Tučné
+50 | OrbitDMD 7 segmentů
+51 | Halloween · {}
+52 | Vzor {}
+53 | {} kB
+54 | {} MB
+55 | {} GB
+56 | {} d {} h
+57 | od
+58 | do
+59 | h do
+60 | Bílá
+61 | Červená
+62 | Oranžová
+63 | Jantarová
+64 | Žlutá
+65 | Zelená
+66 | Tyrkysová
+67 | Modrá
+68 | Fialová
+69 | Růžová
+70 | Duha
+71 | Animovaná duha
+72 | Duha (animovaná)
+73 | Jiná barva
+74 | Jednolitá barva
+75 | Vánoční červená
+76 | Náhodně
+77 | Vlastní…
+78 | Heslo panelu
+79 | Je potřeba ke změnám panelu. Najdete ho na řádku
+80 | v souboru config.txt.
+81 | Bude uloženo v tomto prohlížeči.
+82 | Ověřování…
+83 | Heslo přijato
+84 | Heslo odmítnuto, zkuste to znovu.
+85 | Vyžadováno heslo
+86 | Heslo zapomenuto
+87 | Zapomenout heslo na tomto zařízení
+88 | Zapomenout heslo na tomto zařízení?
+89 | Zadat heslo
+90 | Odemčeno
+91 | Zamčeno
+92 | Panel je nedostupný
+93 | OrbitDMD {} je k dispozici
+94 | je k dispozici
+95 | (tento panel má verzi
+96 | Zobrazit novinky
+97 | Stáhnout kernel8.img
+98 | Pak ho nainstalujte v
+99 | → Nový firmware. Vaše nastavení a GIFy zůstanou zachovány.
+100 | Později
+101 | od spuštění zatím ne
+102 | právě teď
+103 | před {} min
+104 | před {} h {}
+105 | Čas synchronizován: už byl přesný
+106 | Čas synchronizován: panel se zpožďoval o {}
+107 | Čas synchronizován: panel se předbíhal o {}
+108 | Panel se restartuje; router mu může přidělit adresu až za několik minut.
+109 | OrbitDMD · Přehled
+110 | Co se děje na panelu, živě.
+111 | Na panelu
+112 | Rychlé příkazy
+113 | Displej
+114 | Displej znovu zapnut
+115 | Displej vypnut
+116 | Displej vypnut: panel zůstává dostupný
+117 | Vypnout
+118 | Vypnout displej: panel zůstává dostupný a po restartu se znovu zapne
+119 | Znovu zapnout
+120 | Zastavit zobrazený obraz
+121 | Obraz zastaven
+122 | Pokračovat
+123 | Přehrávání obnoveno
+124 | Pozastaveno
+125 | Spustit animaci znovu
+126 | Restartovat panel (asi 20 sekund)
+127 | Restartovat panel teď?
+128 | Restart vyžádán
+129 | Panel je zpět
+130 | Panel neodpovídá 8 minut: zkontrolujte jeho obrazovku
+131 | Čekání na panel…
+132 | IP adresa
+133 | Knihovna
+134 | GIFy v rotaci
+135 | Volné místo na SD
+136 | Sestaveno
+137 | Připojení
+138 | Síťový kabel
+139 | Wi-Fi
+140 | Spouštění
+141 | Běží
+142 | Jen čas (plán)
+143 | Vypnuto (plán)
+144 | Časové okno nastavené v Nastavení → Časový plán
+145 | Jas
+146 | Zpráva
+147 | Testovací obrazec
+148 | Aktualizace a protokol
+149 | Volná paměť
+150 | Normální
+151 | Teplý
+152 | Příliš horký
+153 | Zatím žádné počasí
+154 | Co se zobrazuje, zvolíte na stránce
+155 | Procesor
+156 | Firmware
+157 | Odezva
+158 | Nejdelší čekání Wi-Fi, zatímco panel počítá (posledních 20 sekund, pak posledních 5 minut). Pod 50 ms: výborné.
+159 | Síť
+160 | Synchronizováno
+161 | Synchronizováno {}
+162 | Verze
+163 | OrbitDMD · GIFy
+164 | Zvolte zobrazené kategorie, přidávejte nebo odebírejte animace.
+165 | Kategorie
+166 | Kategorie
+167 | kategorie
+168 | Nová kategorie
+169 | Název nové kategorie
+170 | Název kategorie: písmena, číslice, _ nebo - (nejvýše 32)
+171 | Vytvořit
+172 | Vyberte kategorii vlevo.
+173 | Přidat GIFy
+174 | : přetáhněte sem GIFy, celou složku nebo soubor .zip, nebo klikněte (ideálně 128×32)
+175 | Hledat
+176 | Hledat GIF
+177 | Žádné GIFy.
+178 | Nenalezen žádný GIF.
+179 | Zobrazit hned na panelu
+180 | Zobrazeno na panelu
+181 | Zobrazovat {}
+182 | Smazat {}
+183 | Oblíbený: objevuje se častěji (kliknutím odebrat)
+184 | Přidat k oblíbeným: objevuje se častěji
+185 | Mimo rotaci (kliknutím vrátit)
+186 | Vyřadit z rotace bez smazání
+187 | Smazat ze SD karty
+188 | {} se bude objevovat častěji
+189 | {} se už nebude objevovat (zůstává na kartě)
+190 | {} se objevuje normálně
+191 | {} se zobrazí
+192 | {} smazán
+193 | oblíbené: {}
+194 | mimo rotaci: {}
+195 | zobrazeno: {}
+196 | {} volných na kartě
+197 | Smazat kategorii
+198 | Smazat tuto kategorii a všechny její GIFy
+199 | Smazat „{}“?
+200 | Její GIFy ({}) budou ze SD karty vymazány.
+201 | Je to nevratné. Pro potvrzení zadejte heslo.
+202 | Smazat natrvalo
+203 | Mazání…
+204 | Kategorie {} smazána
+205 | Je to jediná zobrazená kategorie: nejdřív zapněte jinou
+206 | Ponechte aspoň jednu zobrazenou kategorii
+207 | Zobrazená
+208 | Zobrazená jen: {}
+209 | Nezobrazená
+210 | zobrazená
+211 | Celý rok
+212 | Období „{}“ uloženo
+213 | Různé
+214 | Úvodní obrazovky.
+215 | GIF, jehož název obsahuje „demarrage“, běží během připojování k Wi-Fi; „noel“ se používá jen v prosinci, „halloween“ jen v říjnu; ostatní se losují. Nechte tuto kategorii vypnutou, aby se nedostaly do rotace.
+216 | OrbitDMD obsahuje bezplatný základní balíček animovaných GIFů od
+217 | (projekt RPI2DMD), se souhlasem eLLuiGi. Děkujeme! Balíček
+218 | 11 000 animací
+219 | na Neo-Arcadia
+220 | nebo na
+221 | Hodně GIFů v podsložkách?
+222 | Jedna složka = jedna kategorie
+223 | Vše do
+224 | Zmenšit na formát panelu (
+225 | ) větší GIFy
+226 | Vybrat složku
+227 | Čtení souborů…
+228 | Tento prohlížeč neumí otevřít .zip: rozbalte ho a pak přetáhněte složku
+229 | {} není čitelný soubor .zip
+230 | {} je příliš velký na čtení zde: rozbalte ho a pak přetáhněte složku
+231 | GIFy: {} ({}) k odeslání do {} kategorie
+232 | GIFy: {} ({}) k odeslání do kategorií: {}
+233 | nová kategorie
+234 | … a dalších {}
+235 | Přeskočené GIFy ze .zip: {} (chráněné heslem nebo neznámý formát).
+236 | ⚠️ Na SD kartě není dost místa: volných {}.
+237 | Odhadovaná doba: asi {} min přes Wi-Fi. Nechte tuto stránku otevřenou. Už přítomné GIFy se přeskočí: můžete pokračovat později.
+238 | Nové kategorie se na panelu objeví, až je vlevo zaškrtnete.
+239 | Kontrola „{}“…
+240 | Odesílání
+241 | Probíhá odesílání
+242 | Odesílání {} / {}: {} / {}
+243 | přidáno: {} · už bylo: {} · chyby: {}
+244 | zmenšeno: {}
+245 | zbývá asi {} min
+246 | Hotovo: přidáno GIFů: {}, už bylo: {}, chyby: {}
+247 | Odesílání zastaveno: přidáno GIFů: {}, už bylo: {}, chyby: {}
+248 | zmenšeno na formát panelu: {}
+249 | Přidáno GIFů: {}
+250 | chyby: {}
+251 | Poslední chyba: {}
+252 | Spusťte stejné odesílání později znovu: už odeslané GIFy se přeskočí.
+253 | Zastavit
+254 | Zastavení po aktuálním GIFu…
+255 | Přidejte GIFy do „{}“, aby se na kartě vytvořila
+256 | GIF bez obrazu
+257 | GIF bez palety
+258 | OrbitDMD · Hodiny
+259 | Písmo, barvy a datum času zobrazeného mezi GIFy. Náhled kreslí sám panel.
+260 | Náhled hodin
+261 | Obrazovka náhledu
+262 | Čas
+263 | Datum
+264 | Načítání náhledu…
+265 | Náhled není k dispozici
+266 | Zobrazovat čas
+267 | Mezi dvěma GIFy
+268 | Časové pásmo
+269 | Automatický letní čas
+270 | Písmo času
+271 | Barva času
+272 | Barva data
+273 | Velikost v pixelech
+274 | Auto: největší, která se vejde. Zvolená velikost se zmenší, pokud se text nevejde
+275 | Vzor (vyplní text)
+276 | Nebo vzor
+277 | Výplň
+278 | Pozadí (za časem)
+279 | Obrázek nebo animace za časem.
+280 | Žádné (černé)
+281 | Náhodné pozadí při každém zobrazení času
+282 | Barva, duha nebo vzor, náhodně při každém zobrazení času
+283 | Blikající dvojtečka
+284 | Vyhlazené okraje
+285 | Jinak ostré pixely
+286 | Zobrazovat datum
+287 | Jen datum, zobrazené po čase
+288 | Po čase (samostatná obrazovka)
+289 | Pod časem
+290 | Doba zobrazení data
+291 | Uloží a pak ukáže čas na panelu na 15 sekund
+292 | Zobrazit na panelu
+293 | Čas se na panelu zobrazí na 15 sekund
+294 | Hodiny uloženy
+295 | Čas panelu
+296 | Internet
+297 | čas z internetu
+298 | hodiny na baterii
+299 | čas neznámý
+300 | {} · synchronizováno {}
+301 | Nastavit panel na přesný čas z internetu
+302 | Synchronizovat
+303 | Přidat písma, vzory nebo pozadí
+304 | Přetáhněte sem soubory
+305 | nebo klikněte: písma TTF nebo OTF, obrázky PNG nebo GIF 128×32
+306 | Obrázky slouží jako
+307 | : nepodporovaný formát
+308 | : příliš velký (nejvýše 4 MB)
+309 | OrbitDMD · Počasí
+310 | Aktuální počasí zobrazené mezi GIFy. Aktualizace každých 15 minut.
+311 | Náhled obrazovky počasí
+312 | Právě teď
+313 | Dnes
+314 | Zítra
+315 | Vlhkost
+316 | Vítr
+317 | Pocitově
+318 | Aktualizace
+319 | Aktualizace {}
+320 | poslední pokus: {}
+321 | Obnovit
+322 | Načítání počasí…
+323 | Žádné počasí: {}
+324 | Nejdřív zvolte místo
+325 | Data o počasí:
+326 | Zobrazovat počasí
+327 | Po každém GIFu
+328 | Každé 2 GIFy
+329 | Každé 3 GIFy
+330 | Každých 5 GIFů
+331 | Každých 10 GIFů
+332 | Každých 20 GIFů
+333 | Místo
+334 | Zvolené místo
+335 | Místo zvoleno: uložte, abyste ho použili
+336 | Zatím nezvoleno
+337 | Zvolená poloha
+338 | Vyhledejte níže své město
+339 | Hledat město
+340 | Město nebo PSČ
+341 | Hledat
+342 | Hledání…
+343 | Žádné místo nenalezeno.
+344 | Hledání nelze provést (žádný přístup k internetu z tohoto prohlížeče?)
+345 | Hledání probíhá ve vašem prohlížeči; panel si uloží jen zvolenou polohu.
+346 | Písmo teploty
+347 | Barva teploty
+348 | Druhý řádek
+349 | Barva druhého řádku
+350 | Nic
+351 | Popis (DÉŠŤ…)
+352 | Minimum / maximum
+353 | Pocitová teplota
+354 | Ikona
+355 | Animovaná ikona
+356 | Padající déšť, svítící slunce…
+357 | Zobrazit všechny ikony
+358 | Slunce
+359 | Jasná noc
+360 | Skoro jasno
+361 | Oblačná noc
+362 | Zataženo
+363 | Mlha
+364 | Mrholení
+365 | Déšť
+366 | Sníh
+367 | Bouřka
+368 | Uloží a pak ukáže počasí na panelu na 15 sekund
+369 | Počasí se na panelu zobrazí na 15 sekund
+370 | Počasí uloženo
+371 | OrbitDMD · Zprávy
+372 | Běžící texty a odpočty, každý s vlastním stylem. Zapnuté se střídají mezi GIFy.
+373 | Běžící texty
+374 | Odpočty
+375 | Odpočet
+376 | Přidat text
+377 | Přidat odpočet
+378 | Žádný text: klikněte na „Přidat text“.
+379 | Žádný odpočet.
+380 | (prázdný text)
+381 | Jeden text je prázdný: napište ho nebo ho smažte
+382 | Mezi GIFy
+383 | Vždy jeden zapnutý text, postupně
+384 | Vždy jeden zapnutý odpočet, postupně
+385 | každé
+386 | Zapnuto: objevuje se mezi GIFy
+387 | Posunout nahoru
+388 | Všechno nejlepší!
+389 | {} / 200 bajtů (písmeno s diakritikou se počítá za 2)
+390 | Příchod textu
+391 | Běží doleva
+392 | Běží doprava
+393 | Stoupá (zdola nahoru)
+394 | Klesá (shora dolů)
+395 | Písmeno po písmenu
+396 | Déšť písmen
+397 | Prolínání
+398 | Počet průchodů
+399 | velmi pomalá
+400 | pomalá
+401 | střední
+402 | rychlá
+403 | velmi rychlá
+404 | maximální
+405 | Náhled textu
+406 | Náhled začátku textu. Na panelu běží.
+407 | Náhled první stránky po příchodu. Dlouhý text se dělí na stránky.
+408 | Náhled odpočtu
+409 | Volitelné: jen mezi těmito dvěma daty, každý rok
+410 | od
+411 | do
+412 | od {} do {}
+413 | DD/MM
+414 | Do
+415 | Vánoce
+416 | Vánoce (25. prosince)
+417 | Nový rok
+418 | Nový rok (1. ledna)
+419 | Zvolené datum
+420 | Předem
+421 | V den události
+422 | Nad zbývajícím časem
+423 | VÁNOCE ZA
+424 | VESELÉ VÁNOCE!
+425 | NAROZENINY ZA
+426 | VŠECHNO NEJLEPŠÍ!
+427 | Zpráva v den události
+428 | Zobrazuje se 24 h od zvoleného času
+429 | Barva nadpisu
+430 | Barva zbývajícího času
+431 | Uloží a hned ukáže na panelu
+432 | Text se zobrazuje na panelu
+433 | Odpočet se zobrazí na 15 sekund
+434 | Zprávy uloženy
+435 | OrbitDMD · Nastavení
+436 | Každou hodnotu panel před uložením do config.txt zkontroluje.
+437 | Jazyk panelu
+438 | Dny, měsíce, počasí a zprávy na panelu
+439 | Jas podle hodin
+440 | Tažením po sloupcích nastavíte každou hodinu (krok 5 %, 0 % = panel vypnutý). Aktuální hodina je orámovaná jantarově. Platí od dalšího GIFu.
+441 | Jas od 0 do 23 h
+442 | Celý den
+443 | V noci od
+444 | Použít
+445 | Zobrazovat GIFy
+446 | Jinak jen čas
+447 | Minimální doba GIFu
+448 | Krátké GIFy se opakují
+449 | Pořadí GIFů
+450 | Oblíbené se v losování objevují častěji
+451 | Popořadě (kategorie, pak název)
+452 | IP adresa na panelu
+453 | Při spuštění a při změně · 0 = nikdy
+454 | Testovací obrazec při spuštění
+455 | Protokol na HDMI obrazovce
+456 | Jen pro diagnostiku: zpomaluje síť
+457 | Vypínat panel
+458 | Webová stránka zůstává dostupná
+459 | Jen čas, bez GIFů
+460 | S počasím a zprávami
+461 | Časové okno
+462 | Kategorie GIFů zobrazované jen v některých měsících (Vánoce v prosinci…) se nastavují na stránce
+463 | . Období textů a odpočtů na stránce
+464 | Čas a datum
+465 | Stránka Hodiny
+466 | Písmo, barvy, časové pásmo…
+468 | Propojit s Home Assistant
+469 | Přes MQTT: panel se v Home Assistant objeví sám
+470 | Server MQTT
+471 | IP adresa Home Assistant, například 192.168.0.10
+472 | Port
+473 | Uživatel MQTT
+474 | Uživatel Home Assistant (Nastavení → Osoby)
+475 | Heslo MQTT
+476 | Ponechte prázdné, aby se zachovalo
+477 | Je potřeba doplněk
+478 | v Home Assistant (Nastavení → Doplňky) a integrace
+479 | . Panel se kvůli připojení restartuje. Potom v Home Assistant: Nastavení → Zařízení →
+480 | . Všechny příkazy a příklady ke zkopírování: stránka
+481 | Nápověda Home Assistant
+482 | ✅ Připojeno k serveru MQTT
+483 | Nastavení uloženo: restartujte panel, aby se připojil
+484 | Síť Wi-Fi
+485 | Heslo Wi-Fi
+486 | Aspoň 8 znaků, bez mezer
+487 | Země
+488 | Dvoupísmenný kód (CZ, SK, DE…)
+489 | Název v síti
+490 | Adresa této stránky
+491 | Automaticky: kabel, pokud je zapojený, jinak Wi-Fi
+492 | · nyní přes Wi-Fi
+493 | · nyní přes kabel
+494 | Wi-Fi nepřipojeno
+495 | Adresa panelu
+496 | Automaticky (router)
+497 | Pevná
+498 | Nyní
+499 | (přidělená routerem)
+500 | Maska
+501 | Brána
+502 | Adresa routeru
+503 | DNS server
+504 | Často také router
+505 | Tip: v routeru tuto adresu panelu rezervujte (MAC adresa
+506 | ), aby ji nikdy nedostalo jiné zařízení.
+507 | Kabel se volí při spuštění: po zapojení nebo odpojení panel restartujte. Po změně připojení, Wi-Fi nebo adresy se panel restartuje. Pokud není dostupný do 2 min 30 s, sám se vrátí k původnímu nastavení.
+508 | Změnit nastavení sítě? Panel se restartuje a vyzkouší je; pokud nebude dostupný do 2 min 30 s, vrátí se k původnímu.
+509 | Po restartu bude adresa http://{}
+510 | Heslo webové stránky
+511 | Nové heslo
+512 | Potvrdit
+513 | Změnit heslo
+514 | Hesla se liší
+515 | Heslo změněno a uloženo
+516 | beze změny
+517 | nenastaveno
+518 | Panely (pokročilé)
+519 | Je potřeba restart. Nevhodné hodnoty mohou zkreslit obraz: opravíte je přímo tady.
+520 | Šířka panelu
+521 | Výška panelu
+522 | Panelů za sebou
+523 | Na stejném výstupu
+524 | Paralelní výstupy
+525 | Zpomalení GPIO
+526 | Zvyšte, pokud je obraz zkreslený
+527 | 3 vypne hodiny na baterii
+528 | Pořadí barev
+529 | Bity barvy
+530 | Méně = rychlejší obnovování
+531 | Doba nejmenšího kroku
+532 | V nanosekundách
+533 | Zahodit změny
+534 | Je potřeba restart
+535 | aby se použila některá uložená nastavení.
+536 | Restartovat teď
+537 | Restartování…
+538 | Panel neodpovídá
+539 | vypnuto
+540 | OrbitDMD · Systém
+541 | Protokol panelu, aktualizace a restart.
+542 | OrbitDMD {} · firmware z {}
+543 | Protokol
+544 | Filtrovat
+545 | Filtrovat protokol
+546 | Sledovat živě
+547 | Protokol zkopírován
+548 | Kopírování selhalo: vyberte text ručně
+549 | Nový firmware
+550 | Soubor
+551 | . Starý se ponechá jako kernel8.bak, pak se panel restartuje. Nové verze:
+552 | Vybrat kernel8.img
+553 | nebo ho sem přetáhněte
+554 | Nainstalovat
+555 | Firmware přijat, instalace…
+556 | Je potřeba soubor {}
+557 | Panel je zpět (firmware z {})
+558 | Záloha nastavení
+559 | Všechna nastavení (Wi-Fi, panely, hodiny, počasí…), vaše texty a odpočty a oblíbené i vyřazené GIFy v jediném souboru. Uchovejte ho jen pro sebe: obsahuje vaše hesla.
+560 | Stáhnout zálohu
+561 | Záloha stažena: uchovejte ji jen pro sebe (hesla)
+562 | Obnovit
+563 | : vyberte zálohu (nebo config.txt) nebo ji sem přetáhněte
+564 | Nastavení obnoveno, restartování…
+565 | Restartovat panel
+566 | Panel na několik sekund zhasne a pak pokračuje úvodní obrazovkou.
+567 | Restartování panelu…
+568 | OrbitDMD · Nápověda Home Assistant
+569 | Všechny příkazy panelu
+570 | , s příklady připravenými ke zkopírování. Připojení se nastavuje v
+571 | Nastavení → Home Assistant
+572 | Home Assistant není zapnutý
+573 | Připojeno k Home Assistant
+574 | Home Assistant:
+575 | V Home Assistant:
+576 | Nastavení → Zařízení a služby → MQTT →
+577 | . Vše se dělá z této stránky:
+578 | Prvek
+579 | Co dělá
+580 | Zapnout, vypnout (webová stránka zůstává dostupná), jas
+581 | Zapnuto: zastavený obraz; vypnuto: normální přehrávání
+582 | Vrátit se k jasu z nastavení po změně z Home Assistant
+583 | Zobrazit čas, Zobrazit počasí
+584 | Hned, na 15 sekund
+585 | Restartuje panel
+586 | Text k zobrazení
+587 | Napište text a potvrďte: hned se rozběhne
+588 | Efekt, barva, průchody, rychlost zpráv
+589 | Styl textů posílaných z Home Assistant
+590 | Zapnout nebo vypnout každý prvek stránky
+591 | Text: …, Odpočet: …
+592 | Zobrazený GIF, Obrazovka, Teplota, IP adresa, Verze
+593 | Příkazy MQTT
+594 | Seznam níže, v atributech senzoru
+595 | Poslat zprávu
+596 | Nejjednodušeji v automatizaci nebo v
+597 | Vývojářské nástroje → Akce
+598 | (režim YAML):
+599 | S vlastním stylem (barva, efekt, GIF před textem):
+600 | Pole
+601 | Hodnoty
+602 | Text (nejvýše 200 znaků, včetně diakritiky)
+603 | Doleva, Doprava, Nahoru, Dolů, Písmeno po písmenu, Déšť písmen, Prolínání (přijímají se názvy v kterémkoli z 12 jazyků)
+604 | Bílá, Červená, Oranžová, Jantarová, Žlutá, Zelená, Tyrkysová, Modrá, Fialová, Růžová, Duha nebo RRGGBB (v kterémkoli z 12 jazyků)
+605 | nebo písmo ze stránky Hodiny, například
+606 | Velikost v pixelech,
+607 | = automaticky
+608 | GIF, který se přehraje před textem:
+609 | (jako na stránce GIFy)
+610 | Chybějící pole převezmou styl nastavený v Home Assistant (efekt, barva, průchody, rychlost). Pokud je panel vypnutý nebo pozastavený, zpráva počká.
+611 | Příklad automatizace
+612 | Všechny příkazy MQTT
+613 | Pro pokročilé (MQTT Explorer, Node-RED…). Panel tento seznam publikuje také v
+614 | Téma
+615 | Hodnota k odeslání
+616 | Co panel udělá
+617 | Bez psaní
+618 | Stavy publikované panelem:
+619 | pro každý prvek; dostupnost:
+620 | ON (zapnuto) nebo OFF (vypnuto)
+621 | ON (zastavený obraz) nebo OFF
+622 | ON: jas podle hodin z nastavení
+623 | ON / OFF: text N ze stránky Zprávy (0 = první)
+624 | ON / OFF: odpočet N ze stránky Zprávy
+625 | PRESS: zobrazit čas
+626 | PRESS: zobrazit počasí
+627 | PRESS: restartovat
+628 | text k okamžitému zobrazení
+629 | text nebo JSON {message, effet, couleur…}
+630 | nesprávné heslo (nebo prázdné Web_Password v config.txt)
+631 | heslo přijato
+632 | {} obsahuje úvodní obrazovky panelu; v případě potřeby mažte její GIFy jednotlivě
+633 | {} je jediná zobrazená kategorie, nejdřív zapněte jinou
+634 | {} už v {} existuje
+635 | {} už existuje
+636 | {} nenalezen
+637 | {} byla smazána jen částečně (smazané soubory: {})
+638 | {} není {}
+639 | {} není soubor GIF
+640 | Neplatný GIF
+641 | Wi-Fi zatím nepřipojeno
+642 | pevná adresa: {}
+643 | nepřijat žádný soubor
+644 | kategorie {} nenalezena
+645 | neznámá kategorie: {}
+646 | neznámý příkaz
+647 | config.txt musí obsahovat Web_Password a Wifi_ssid (nebo Reseau=ethernet)
+648 | nelze vytvořit složku {}
+649 | nelze zapsat {}
+650 | zápis {} nedokončen (plná karta?)
+651 | nelze zapsat config.txt
+652 | nelze zapisovat na kartu
+653 | nelze uložit (nejvýše {} označených GIFů)
+654 | nejdřív uložte seznam
+655 | soubor config.txt chybí nebo je neplatný
+656 | soubor kernel8.img chybí nebo má neobvyklou velikost
+657 | ponechte aspoň jednu kategorii zapnutou
+658 | nelze přečíst config.txt
+659 | seznam chybí nebo je příliš dlouhý
+660 | neznámé označení (favori, exclue nebo aucune)
+661 | neplatný název kategorie (písmena, číslice, _ nebo -)
+662 | neplatný název kategorie
+663 | příliš dlouhý název kategorie
+664 | neplatný název
+665 | neznámé nastavení: {}
+666 | internetový časový server je nedostupný, zkuste to znovu
+667 | příliš mnoho zapnutých kategorií
+668 | příliš mnoho nastavení najednou
+669 | neznámý typ souboru
+670 | už probíhá jiný požadavek
+671 | hodnota odmítnuta pro {}
+672 | {} přidán
+673 | {} přidán do {} (velikost {}x{}: bude vystředěn)
+674 | {} přidán do {}
+675 | označené GIFy: {}
+676 | zapnuté kategorie: {}
+677 | uložená nastavení: {}; k použití je potřeba restart
+678 | uložená nastavení: {}, platí od příštího spuštění
+679 | uložená nastavení: {}
+680 | uložená síťová nastavení: {}. Panel se restartuje; pokud nebude dostupný do {} s, vrátí se k původnímu nastavení.
+681 | texty: {}, odpočty: {}
+682 | displej vypnut, panel zůstává dostupný
+683 | displej znovu zapnut
+684 | žádná změna
+685 | kategorie {} smazána (soubory: {})
+686 | požadavek přijat, panel se restartuje
+687 | obraz zastaven
+688 | čas se zobrazuje na panelu
+689 | počasí se zobrazuje na panelu
+690 | odpočet se zobrazuje na panelu
+691 | text se zobrazuje na panelu
+692 | přehrávání obnoveno
+693 | počasí vyžádáno
+694 | Zobrazené GIFy
+695 | Minimální doba
+696 | Doba hodin
+697 | Formát času
+698 | Velikost času
+699 | Vzor času
+700 | Doba data
+701 | Formát data
+702 | Písmo data
+703 | Velikost data
+704 | Vzor data
+705 | Počasí
+706 | Doba počasí
+707 | Četnost počasí
+708 | Zeměpisná šířka
+709 | Zeměpisná délka
+710 | Písmo počasí
+711 | Velikost teploty
+712 | Vzor teploty
+713 | Barva teploty
+714 | Druhý řádek
+715 | Barva druhého řádku
+716 | Ikona počasí
+717 | Pořadí přehrávání
+718 | Panel v noci vypnutý
+719 | Vypnuto od
+720 | Znovu zapnuto v
+721 | Jen čas
+722 | Jen čas od
+723 | GIFy znovu v
+724 | Měsíce kategorií
+725 | Port MQTT
+726 | Četnost textu
+727 | Četnost odpočtu
+728 | Animovaná ikona
+729 | Protokol na obrazovce
+730 | Panelů za sebou
+731 | Paralelní výstupy
+732 | Doba LSB
+733 | Síťový název
+734 | Síť Wi-Fi
+735 | Země Wi-Fi
+736 | Webové heslo
+737 | Pevná IP adresa
+738 | Jas
+739 | Nyní {} (pevná)
+740 | Nyní {} (přidělená routerem)
+741 | žádné
+742 | , nebo
+743 | 1 až 10
+744 | 0 až 100 (%)
+745 | Časový plán
+746 | h:
+747 | v souboru config.txt. Bude uloženo v tomto prohlížeči.
+748 | Home Assistant: {}
+749 | Připojování...
+750 | Odpojeno
+751 | Verze protokolu odmítnuta
+752 | Identifikátor odmítnut
+753 | Server není k dispozici
+754 | Nesprávný uživatel nebo heslo
+755 | Bez oprávnění
+756 | Adresa serveru nenalezena
+757 | Server je nedostupný
+758 | Odpojeno serverem
+759 | Spojení ztraceno

@@ -1,4 +1,4 @@
-//
+﻿//
 // Installateur.cs - assistant de creation d'une carte micro-SD OrbitDMD (Windows)
 //
 // L'assistant pose les questions (nom, panneaux, Wi-Fi, mot de passe, fuseau, meteo...),
@@ -38,6 +38,74 @@ using System.Windows.Forms;
 
 namespace OrbitDMD
 {
+	// --- langue de l'assistant : francais (textes du programme), anglais, neerlandais,
+	// espagnol, russe (traductions/installateur.txt, integre au programme) ---
+
+	static class Langue
+	{
+		public static readonly string[] Codes = { "fr", "en", "nl", "es", "ru", "de", "it", "pt", "pl", "uk", "tr", "cs" };
+		public static readonly string[] Noms = { "Français", "English", "Nederlands", "Español", "Русский", "Deutsch",
+			"Italiano", "Português", "Polski", "Українська", "Türkçe", "Čeština" };
+		public static string Code = "fr";
+		static readonly Dictionary<string, string> s_Textes = new Dictionary<string, string> ();
+
+		// langue de Windows si elle fait partie des cinq, sinon anglais
+		public static string ParDefaut ()
+		{
+			string l = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+			return Codes.Contains (l) ? l : "en";
+		}
+
+		public static void Choisir (string code)
+		{
+			Code = Codes.Contains (code) ? code : "fr";
+			s_Textes.Clear ();
+			int col = Array.IndexOf (Codes, Code);
+			if (col == 0) return;
+			using (Stream st = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("langues.txt"))
+			{
+				if (st == null) return;
+				var r = new StreamReader (st, Encoding.UTF8);
+				string ligne;
+				while ((ligne = r.ReadLine ()) != null)
+				{
+					if (ligne.Trim () == "" || ligne.StartsWith ("#")) continue;
+					string[] c = ligne.Split (new[] { " | " }, StringSplitOptions.None);
+					if (c.Length != Codes.Length || c[col].Trim () == "") continue;
+					s_Textes[c[0].Trim ().Replace ("\\n", "\n")] = c[col].Trim ().Replace ("\\n", "\n");
+				}
+			}
+		}
+
+		// texte traduit (espaces au debut et a la fin gardes) ; inconnu : inchange
+		public static string T (string fr)
+		{
+			if (string.IsNullOrEmpty (fr) || s_Textes.Count == 0) return fr;
+			string coeur = fr.Trim ();
+			string t;
+			if (!s_Textes.TryGetValue (coeur, out t)) return fr;
+			int debut = fr.IndexOf (coeur, StringComparison.Ordinal);
+			return fr.Substring (0, debut) + t + fr.Substring (debut + coeur.Length);
+		}
+
+		// texte avec parties variables : "{}" dans l'ordre, "{1}", "{2}"... dans la traduction
+		public static string F (string fr, params object[] a)
+		{
+			int i = 0;
+			return Regex.Replace (T (fr), @"\{(\d?)\}", m => {
+				int n = m.Groups[1].Value != "" ? int.Parse (m.Groups[1].Value) - 1 : i++;
+				return n < a.Length ? Convert.ToString (a[n], CultureInfo.CurrentCulture) : "";
+			});
+		}
+
+		// textes fixes de la fenetre (etiquettes, boutons, cases) ; les champs ne sont pas touches
+		public static void Traduire (Control c)
+		{
+			if (c is Label || c is ButtonBase) c.Text = T (c.Text);
+			foreach (Control e in c.Controls) Traduire (e);
+		}
+	}
+
 	// --- reponses de l'assistant ---
 
 	class Reponses
@@ -56,6 +124,7 @@ namespace OrbitDMD
 		public string DossierGif = "";
 		public string CategoriesInactives = "";		// copiees mais pas affichees (separees par des virgules)
 		public string GifFournies = "*";		// categories fournies a installer ("*" : choix par defaut)
+		public string Langue = "fr";			// langue du panneau (Langue=fr|en|nl|es|ru)
 
 		// fichier "cle=valeur" (mode /auto)
 		public static Reponses Lire (string fichier)
@@ -80,28 +149,28 @@ namespace OrbitDMD
 	{
 		public static string Nom (string s) =>
 			Regex.IsMatch (s, "^[A-Za-z0-9](?:[A-Za-z0-9-]{0,29}[A-Za-z0-9])?$") ? null
-			: "Nom : 1 à 31 lettres, chiffres ou tirets (pas d'espace, pas d'accent).";
+			: Langue.T ("Nom : 1 à 31 lettres, chiffres ou tirets (pas d'espace, pas d'accent).");
 
 		static bool Imprimable (string s) => s.All (c => c >= ' ' && c <= '~' && c != '"');
 
 		public static string Ssid (string s) =>
 			s.Length >= 1 && s.Length <= 32 && Imprimable (s) && s.Trim () == s ? null
-			: "Nom du réseau Wi-Fi : 1 à 32 caractères, sans accent ni guillemet.";
+			: Langue.T ("Nom du réseau Wi-Fi : 1 à 32 caractères, sans accent ni guillemet.");
 
 		public static string Wifi (string connexion, string ssid, string psk)
 		{
-			if (connexion != "auto" && connexion != "wifi" && connexion != "ethernet") return "Connexion : auto, wifi ou ethernet.";
+			if (connexion != "auto" && connexion != "wifi" && connexion != "ethernet") return Langue.T ("Connexion : auto, wifi ou ethernet.");
 			if (connexion == "ethernet" && psk.Length == 0) return null;	// pas de Wi-Fi de secours
 			return Ssid (ssid) ?? Psk (psk);
 		}
 
 		public static string Psk (string s) =>
 			s.Length >= 8 && s.Length <= 63 && Imprimable (s) && s.Trim () == s ? null
-			: "Mot de passe Wi-Fi : 8 à 63 caractères, sans accent ni guillemet.";
+			: Langue.T ("Mot de passe Wi-Fi : 8 à 63 caractères, sans accent ni guillemet.");
 
 		public static string MotDePasse (string s) =>
 			s.Length >= 8 && s.Length <= 63 && Imprimable (s) && !s.Contains (" ") ? null
-			: "Mot de passe de la page web : 8 caractères minimum, sans espace ni accent.";
+			: Langue.T ("Mot de passe de la page web : 8 caractères minimum, sans espace ni accent.");
 
 		public static bool Ipv4 (string s, out byte[] octets)
 		{
@@ -115,16 +184,16 @@ namespace OrbitDMD
 		public static string AdresseFixe (string ip, string masque, string passerelle, string dns)
 		{
 			byte[] i, m, p, d;
-			if (!Ipv4 (ip, out i)) return "Adresse IP invalide.";
-			if (!Ipv4 (masque, out m)) return "Masque invalide.";
-			if (!Ipv4 (passerelle, out p)) return "Passerelle (box) invalide.";
-			if (!Ipv4 (dns, out d)) return "Serveur DNS invalide.";
+			if (!Ipv4 (ip, out i)) return Langue.T ("Adresse IP invalide.");
+			if (!Ipv4 (masque, out m)) return Langue.T ("Masque invalide.");
+			if (!Ipv4 (passerelle, out p)) return Langue.T ("Passerelle (box) invalide.");
+			if (!Ipv4 (dns, out d)) return Langue.T ("Serveur DNS invalide.");
 			uint ui = Mot (i), um = Mot (m), up = Mot (p);
 			int bits = 0;
 			while (bits < 32 && (um & (0x80000000u >> bits)) != 0) bits++;
-			if (bits < 8 || bits > 30 || um != (bits == 0 ? 0 : 0xFFFFFFFFu << (32 - bits))) return "Masque invalide (ex. 255.255.255.0).";
-			if ((ui & ~um) == 0 || (ui & ~um) == ~um) return "Adresse IP invalide pour ce réseau.";
-			if ((ui & um) != (up & um) || ui == up) return "La passerelle doit être sur le même réseau, à une autre adresse.";
+			if (bits < 8 || bits > 30 || um != (bits == 0 ? 0 : 0xFFFFFFFFu << (32 - bits))) return Langue.T ("Masque invalide (ex. 255.255.255.0).");
+			if ((ui & ~um) == 0 || (ui & ~um) == ~um) return Langue.T ("Adresse IP invalide pour ce réseau.");
+			if ((ui & um) != (up & um) || ui == up) return Langue.T ("La passerelle doit être sur le même réseau, à une autre adresse.");
 			return null;
 		}
 
@@ -161,6 +230,9 @@ namespace OrbitDMD
 			L ("# OrbitDMD " + Construction.Numero + " - reglages du panneau");
 			L ("# Cree par l'installateur le " + DateTime.Now.ToString ("dd/MM/yyyy HH:mm") + ".");
 			L ("# Ensuite, tout se regle depuis la page web du panneau : http://" + r.Nom.ToLowerInvariant () + ".local/");
+			L ("");
+			L ("# Langue des textes du panneau (fr, en, nl, es, ru)");
+			L ("Langue=" + r.Langue);
 			L ("");
 			L ("# Panneaux");
 			L ("Panel_XSize=" + r.Largeur);
@@ -261,7 +333,7 @@ namespace OrbitDMD
 					nbGif++;
 				}
 				categories.AddRange (choisies.Take (20));
-				journal ("GIF fournies : " + nbGif + " dans " + choisies.Count + " catégorie(s)");
+				journal (Langue.F ("GIF fournies : {} dans {} catégorie(s)", nbGif, choisies.Count));
 			}
 
 			if (r.DossierGif != "" && Directory.Exists (r.DossierGif))
@@ -355,12 +427,12 @@ namespace OrbitDMD
 
 				if (accueil)
 				{
-					journal ("Écrans d'accueil : " + n + " GIF ajoutée(s)" + (deja > 0 ? ", " + deja + " déjà présente(s)" : ""));
+					journal (Langue.F ("Écrans d'accueil : {} GIF ajoutée(s)", n) + (deja > 0 ? ", " + Langue.F ("{} déjà présente(s)", deja) : ""));
 					continue;
 				}
 				if (n == 0)
 				{
-					if (deja > 0) journal ("Catégorie " + g.Key + " : déjà fournie (" + deja + " GIF)");
+					if (deja > 0) journal (Langue.F ("Catégorie {} : déjà fournie ({} GIF)", g.Key, deja));
 					continue;
 				}
 
@@ -371,8 +443,8 @@ namespace OrbitDMD
 					if (categories.Count < 20) categories.Add (g.Key);
 					else affichee = false;		// le panneau en affiche 20 au plus
 				}
-				journal ("Catégorie " + g.Key + " : " + n + " GIF" + (deja > 0 ? " (+" + deja + " déjà fournies)" : "") +
-					 (affichee ? "" : " (copiée, pas affichée)"));
+				journal (Langue.F ("Catégorie {} : {} GIF", g.Key, n) + (deja > 0 ? " (+" + Langue.F ("{} déjà fournies", deja) + ")" : "") +
+					 (affichee ? "" : " (" + Langue.T ("copiée, pas affichée") + ")"));
 			}
 			return total;
 		}
@@ -420,7 +492,7 @@ namespace OrbitDMD
 		public override string ToString ()
 		{
 			string go = (Taille / 1e9).ToString ("0.#", CultureInfo.GetCultureInfo ("fr-FR"));
-			return Modele + " — " + go + " Go" + (Volumes != "" ? " — " + Volumes : "") + "  (disque " + Numero + ")";
+			return Modele + " — " + Langue.F ("{} Go", go) + (Volumes != "" ? " — " + Volumes : "") + "  (" + Langue.F ("disque {}", Numero) + ")";
 		}
 	}
 
@@ -525,7 +597,7 @@ namespace OrbitDMD
 			{
 				wc.Encoding = Encoding.UTF8;
 				wc.Headers[HttpRequestHeader.UserAgent] = "OrbitDMD-Installateur";
-				string json = wc.DownloadString ("https://geocoding-api.open-meteo.com/v1/search?count=8&language=fr&format=json&name=" + Uri.EscapeDataString (nom));
+				string json = wc.DownloadString ("https://geocoding-api.open-meteo.com/v1/search?count=8&language=" + Langue.Code + "&format=json&name=" + Uri.EscapeDataString (nom));
 				var res = new JavaScriptSerializer ().Deserialize<Dictionary<string, object>> (json);
 				var liste = new List<Dictionary<string, object>> ();
 				object r;
@@ -543,6 +615,7 @@ namespace OrbitDMD
 	class Assistant : Form
 	{
 		readonly string m_DossierEssai;		// /dossier: : ecrire dans ce dossier au lieu d'une carte
+		public string NouvelleLangue;		// langue choisie sur la premiere page : fenetre a recreer
 		readonly Reponses R = new Reponses ();
 		readonly List<Panel> m_Pages = new List<Panel> ();
 		readonly string[] m_Titres = { "Bienvenue", "Les panneaux", "La connexion", "Accès, heure et météo", "La carte SD", "Création de la carte" };
@@ -580,9 +653,10 @@ namespace OrbitDMD
 		public Assistant (string dossierEssai)
 		{
 			m_DossierEssai = dossierEssai;
+			R.Langue = Langue.Code;		// le panneau parle la langue de l'assistant
 			using (Graphics g = CreateGraphics ()) s_Echelle = g.DpiX / 96f;
 
-			Text = "Installateur OrbitDMD " + Version;
+			Text = Langue.F ("Installateur OrbitDMD {}", Version);
 			Font = new Font ("Segoe UI", 9.75f);
 			AutoScaleMode = AutoScaleMode.None;	// les polices suivent deja l'echelle ; le reste passe par P ()
 			ClientSize = Z (820, 740);
@@ -629,6 +703,7 @@ namespace OrbitDMD
 			m_Pages.Add (PageCarte ());
 			m_Pages.Add (PageCreation ());
 			foreach (Panel p in m_Pages) { p.Dock = DockStyle.Fill; p.Visible = false; corps.Controls.Add (p); }
+			Langue.Traduire (this);
 			Afficher (0);
 		}
 
@@ -702,6 +777,15 @@ namespace OrbitDMD
 		Panel PageBienvenue ()
 		{
 			var t = Grille ();
+			// langue de l'assistant (et du panneau) : la fenetre est recreee dans la langue choisie
+			var cLangue = Liste (160);
+			cLangue.Items.AddRange (Langue.Noms);
+			cLangue.SelectedIndex = Array.IndexOf (Langue.Codes, Langue.Code);
+			cLangue.SelectedIndexChanged += (s, e) => { NouvelleLangue = Langue.Codes[cLangue.SelectedIndex]; Close (); };
+			var fLangue = new FlowLayoutPanel { AutoSize = true, Margin = new Padding (P (0), P (0), P (0), P (10)) };
+			fLangue.Controls.Add (new Label { Text = "Langue / Language", AutoSize = true, Margin = new Padding (P (0), P (6), P (8), P (0)) });
+			fLangue.Controls.Add (cLangue);
+			Large (t, fLangue);
 			Large (t, new Label { Text = "Bienvenue !", AutoSize = true, Font = new Font ("Segoe UI Semibold", 13f), Margin = new Padding (P (0), P (0), P (0), P (6)) });
 			Large (t, Texte ("Cet assistant prépare une carte micro-SD pour un Raspberry Pi 3 relié à des panneaux LED HUB75. " +
 				"OrbitDMD affiche vos GIF, l'heure et la météo, et se règle depuis une page web, sans Linux."));
@@ -711,7 +795,7 @@ namespace OrbitDMD
 				"  •  un Raspberry Pi 3 avec une carte adaptatrice HUB75 (brochage « regular »)."));
 			Large (t, Texte ("Attention : tout le contenu de la carte choisie sera effacé.", gris: false));
 			if (m_DossierEssai != null)
-				Large (t, Texte ("Mode essai : rien ne sera formaté, la carte sera écrite dans " + m_DossierEssai, gris: true));
+				Large (t, Texte (Langue.F ("Mode essai : rien ne sera formaté, la carte sera écrite dans {}", m_DossierEssai), gris: true));
 			return Enveloppe (t);
 		}
 
@@ -731,7 +815,7 @@ namespace OrbitDMD
 			var t = Grille ();
 			tNom = new TextBox { Text = R.Nom, Width = P (200), MaxLength = 31 };
 			lAdresse = new Label { AutoSize = true, ForeColor = Gris, Font = new Font ("Segoe UI", 8.5f) };
-			tNom.TextChanged += (s, e) => lAdresse.Text = "Adresse de sa page : http://" + tNom.Text.ToLowerInvariant () + ".local/";
+			tNom.TextChanged += (s, e) => lAdresse.Text = Langue.F ("Adresse de sa page : {}", "http://" + tNom.Text.ToLowerInvariant () + ".local/");
 			var fNom = new FlowLayoutPanel { AutoSize = true, FlowDirection = FlowDirection.TopDown, WrapContents = false, Margin = new Padding (0) };
 			fNom.Controls.Add (tNom);
 			fNom.Controls.Add (lAdresse);
@@ -739,7 +823,7 @@ namespace OrbitDMD
 			tNom.Text = R.Nom;
 
 			cPreset = Liste (330);
-			cPreset.Items.AddRange (NomsPresets);
+			cPreset.Items.AddRange (NomsPresets.Select (Langue.T).ToArray ());
 			cPreset.SelectedIndex = 0;
 			Ligne (t, "Panneaux", cPreset);
 
@@ -812,7 +896,7 @@ namespace OrbitDMD
 			Ligne (t, "Mot de passe Wi-Fi", fPsk);
 
 			cPays = Liste (200);
-			foreach (string[] p in Carte.Pays) cPays.Items.Add (p[1] + " (" + p[0] + ")");
+			foreach (string[] p in Carte.Pays) cPays.Items.Add (Langue.T (p[1]) + " (" + p[0] + ")");
 			string region = RegionInfo.CurrentRegion.TwoLetterISORegionName;
 			int idx = Array.FindIndex (Carte.Pays, p => p[0] == region);
 			cPays.SelectedIndex = idx >= 0 ? idx : 0;
@@ -831,7 +915,7 @@ namespace OrbitDMD
 			tPasserelle = new TextBox { Width = P (150), Text = pc != null ? pc[2] : "" };
 			tDns = new TextBox { Width = P (150), Text = pc != null ? pc[3] : "" };
 			string exemple = pc != null ? Regex.Replace (pc[0], @"\d+$", "150") : "192.168.1.150";
-			Ligne (g, "Adresse du panneau", tIp, "Par exemple " + exemple + " (libre sur votre réseau).");
+			Ligne (g, "Adresse du panneau", tIp, Langue.F ("Par exemple {} (libre sur votre réseau).", exemple));
 			Ligne (g, "Masque", tMasque);
 			Ligne (g, "Passerelle (box)", tPasserelle);
 			Ligne (g, "Serveur DNS", tDns);
@@ -874,7 +958,7 @@ namespace OrbitDMD
 				string q = tVille.Text.Trim ();
 				if (q.Length < 2) return;
 				bChercher.Enabled = false;
-				lLieu.Text = "Recherche…";
+				lLieu.Text = Langue.T ("Recherche…");
 				try
 				{
 					resultats = await Task.Run (() => Systeme.ChercherVille (q));
@@ -887,11 +971,11 @@ namespace OrbitDMD
 						lVilles.Items.Add (v["name"] + " — " + string.Join (", ", new[] { a1 as string, pays as string }.Where (x => !string.IsNullOrEmpty (x))));
 					}
 					lVilles.Visible = resultats.Count > 0;
-					lLieu.Text = resultats.Count > 0 ? "Choisissez votre ville dans la liste." : "Aucune ville trouvée.";
+					lLieu.Text = Langue.T (resultats.Count > 0 ? "Choisissez votre ville dans la liste." : "Aucune ville trouvée.");
 				}
 				catch
 				{
-					lLieu.Text = "Recherche impossible (pas d'Internet ?). La ville se choisira sur la page Météo.";
+					lLieu.Text = Langue.T ("Recherche impossible (pas d'Internet ?). La ville se choisira sur la page Météo.");
 				}
 				bChercher.Enabled = true;
 			};
@@ -908,7 +992,7 @@ namespace OrbitDMD
 				R.Lieu = lieu.Replace ("\"", "").Replace ("\\", "");
 				R.Latitude = Convert.ToDouble (v["latitude"]).ToString ("0.####", CultureInfo.InvariantCulture);
 				R.Longitude = Convert.ToDouble (v["longitude"]).ToString ("0.####", CultureInfo.InvariantCulture);
-				lLieu.Text = "Météo de : " + R.Lieu;
+				lLieu.Text = Langue.F ("Météo de : {}", R.Lieu);
 			};
 			return Enveloppe (t);
 		}
@@ -965,7 +1049,7 @@ namespace OrbitDMD
 			{
 				List<KeyValuePair<string, string[]>> groupes;
 				try { groupes = Carte.Groupes (chemin); }
-				catch (Exception ex) { MessageBox.Show (this, "Dossier illisible : " + ex.Message, "OrbitDMD"); return; }
+				catch (Exception ex) { MessageBox.Show (this, Langue.F ("Dossier illisible : {}", ex.Message), "OrbitDMD"); return; }
 
 				tDossierGif.Text = chemin;
 				kCategories.Items.Clear ();
@@ -977,13 +1061,13 @@ namespace OrbitDMD
 					bool coche = !Regex.IsMatch (g.Key, "xxx|mature|adult", RegexOptions.IgnoreCase);
 					kCategories.Items.Add (new ChoixCategorie { Nom = g.Key, Nombre = g.Value.Length }, coche);
 				}
-				lGif.Text = total + " GIF trouvée(s) dans " + groupes.Count + " dossier(s)" +
-					(accueil > 0 ? " ; « Accueil » rejoint les écrans de démarrage." : ".");
+				lGif.Text = Langue.F ("{} GIF trouvée(s) dans {} dossier(s)", total, groupes.Count) +
+					(accueil > 0 ? Langue.T (" ; « Accueil » rejoint les écrans de démarrage.") : ".");
 				fCat.Visible = lCat.Visible = kCategories.Items.Count > 0;
 			};
 			bGif.Click += (s, e) =>
 			{
-				using (var d = new FolderBrowserDialog { Description = "Dossier contenant vos GIF (128×32 de préférence)", ShowNewFolderButton = false })
+				using (var d = new FolderBrowserDialog { Description = Langue.T ("Dossier contenant vos GIF (128×32 de préférence)"), ShowNewFolderButton = false })
 				{
 					if (d.ShowDialog (this) == DialogResult.OK) m_ChoisirGif (d.SelectedPath);
 				}
@@ -1020,10 +1104,10 @@ namespace OrbitDMD
 			if (page < 0 || page >= m_Pages.Count) return;
 			m_Page = page;
 			for (int i = 0; i < m_Pages.Count; i++) m_Pages[i].Visible = i == page;
-			m_Etape.Text = page < m_Pages.Count - 1 ? "Étape " + (page + 1) + " sur " + (m_Pages.Count - 1) : "Dernière étape";
-			m_TitrePage.Text = m_Titres[page];
+			m_Etape.Text = page < m_Pages.Count - 1 ? Langue.F ("Étape {} sur {}", page + 1, m_Pages.Count - 1) : Langue.T ("Dernière étape");
+			m_TitrePage.Text = Langue.T (m_Titres[page]);
 			m_Precedent.Visible = page > 0 && page < m_Pages.Count - 1;
-			m_Suivant.Text = page == m_Pages.Count - 2 ? (m_DossierEssai != null ? "Écrire l'essai" : "Créer la carte") : "Suivant >";
+			m_Suivant.Text = Langue.T (page == m_Pages.Count - 2 ? (m_DossierEssai != null ? "Écrire l'essai" : "Créer la carte") : "Suivant >");
 			m_Suivant.Visible = page < m_Pages.Count - 1;
 			if (page == 4) ListerDisques ();
 		}
@@ -1082,7 +1166,7 @@ namespace OrbitDMD
 
 			case 3:
 				if ((e = Regles.MotDePasse (tMdp1.Text)) != null) return e;
-				if (tMdp1.Text != tMdp2.Text) return "Les deux mots de passe sont différents.";
+				if (tMdp1.Text != tMdp2.Text) return Langue.T ("Les deux mots de passe sont différents.");
 				R.MotDePasse = tMdp1.Text;
 				R.Fuseau = (string) cFuseau.SelectedItem;
 				return null;
@@ -1094,16 +1178,16 @@ namespace OrbitDMD
 				var choix = kCategories.Items.Cast<ChoixCategorie> ().ToList ();
 				var cochees = kCategories.CheckedItems.Cast<ChoixCategorie> ().ToList ();
 				int affichees = fournies.Union (cochees.Select (c => c.Nom), StringComparer.OrdinalIgnoreCase).Count ();
-				if (affichees > 20) return "Le panneau affiche 20 catégories au plus : décochez-en " + (affichees - 20) + ".";
+				if (affichees > 20) return Langue.F ("Le panneau affiche 20 catégories au plus : décochez-en {}.", affichees - 20);
 				R.CategoriesInactives = string.Join (",", choix.Where (c => !cochees.Contains (c)).Select (c => c.Nom));
 				if (m_DossierEssai != null) return null;
-				if (cDisque.SelectedItem == null) return "Choisissez la carte micro-SD (insérez-la puis cliquez sur Actualiser).";
-				if (!kEffacer.Checked) return "Cochez la case pour confirmer que la carte peut être effacée.";
+				if (cDisque.SelectedItem == null) return Langue.T ("Choisissez la carte micro-SD (insérez-la puis cliquez sur Actualiser).");
+				if (!kEffacer.Checked) return Langue.T ("Cochez la case pour confirmer que la carte peut être effacée.");
 				var d = (Disque) cDisque.SelectedItem;
 				var ok = MessageBox.Show (this,
-					"Tout le contenu de ce disque va être effacé définitivement :\n\n" + d + "\n\nContinuer ?",
-					"Effacer la carte ?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-				return ok == DialogResult.Yes ? null : "Création annulée : rien n'a été modifié.";
+					Langue.F ("Tout le contenu de ce disque va être effacé définitivement :\n\n{}\n\nContinuer ?", d),
+					Langue.T ("Effacer la carte ?"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+				return ok == DialogResult.Yes ? null : Langue.T ("Création annulée : rien n'a été modifié.");
 			}
 			return null;
 		}
@@ -1118,7 +1202,7 @@ namespace OrbitDMD
 			}
 			catch (Exception ex)
 			{
-				lDisqueInfo.Text = "Liste des disques impossible : " + ex.Message;
+				lDisqueInfo.Text = Langue.F ("Liste des disques impossible : {}", ex.Message);
 				return;
 			}
 			if (cDisque.Items.Count > 0) cDisque.SelectedIndex = 0;
@@ -1130,14 +1214,14 @@ namespace OrbitDMD
 			var d = cDisque.SelectedItem as Disque;
 			if (d == null)
 			{
-				lDisqueInfo.Text = m_DossierEssai != null ? "Mode essai : aucune carte nécessaire." : "Aucune carte trouvée : insérez-la, puis cliquez sur Actualiser.";
+				lDisqueInfo.Text = Langue.T (m_DossierEssai != null ? "Mode essai : aucune carte nécessaire." : "Aucune carte trouvée : insérez-la, puis cliquez sur Actualiser.");
 				lDisqueInfo.ForeColor = Gris;
 				return;
 			}
 			bool gros = d.Taille > 64e9;
 			lDisqueInfo.Text = gros
-				? "Ce disque fait plus de 64 Go : vérifiez bien que c'est la carte SD et pas un disque de sauvegarde !"
-				: "Une partition FAT32 « ORBITDMD » de " + Math.Min (31, (int) (d.Taille / 1073741824.0)) + " Go sera créée.";
+				? Langue.T ("Ce disque fait plus de 64 Go : vérifiez bien que c'est la carte SD et pas un disque de sauvegarde !")
+				: Langue.F ("Une partition FAT32 « ORBITDMD » de {} Go sera créée.", Math.Min (31, (int) (d.Taille / 1073741824.0)));
 			lDisqueInfo.ForeColor = gros ? Color.FromArgb (210, 59, 59) : Gris;
 		}
 
@@ -1165,15 +1249,15 @@ namespace OrbitDMD
 
 			try
 			{
-				Journal ("Installateur OrbitDMD " + Version + ".");
-				Journal ("Préparation du contenu de la carte…");
+				Journal (Langue.F ("Installateur OrbitDMD {}.", Version));
+				Journal (Langue.T ("Préparation du contenu de la carte…"));
 				Progression (5);
 				string contenu = m_DossierEssai ?? Path.Combine (temp, "carte");
 				if (m_DossierEssai != null && Directory.Exists (contenu) && Directory.EnumerateFileSystemEntries (contenu).Any ())
-					throw new Exception ("Le dossier d'essai n'est pas vide : " + contenu);
+					throw new Exception (Langue.F ("Le dossier d'essai n'est pas vide : {}", contenu));
 				Directory.CreateDirectory (contenu);
 				int nbGif = await Task.Run (() => Carte.Preparer (R, contenu, Journal));
-				Journal ("Contenu prêt" + (nbGif > 0 ? " (" + nbGif + " GIF ajoutées)." : "."));
+				Journal (nbGif > 0 ? Langue.F ("Contenu prêt ({} GIF ajoutées).", nbGif) : Langue.T ("Contenu prêt."));
 				Progression (12);
 
 				if (m_DossierEssai == null)
@@ -1193,27 +1277,27 @@ namespace OrbitDMD
 			}
 
 			m_Annuler.Enabled = true;
-			m_Annuler.Text = "Terminer";
+			m_Annuler.Text = Langue.T ("Terminer");
 			if (erreur != null)
 			{
 				Journal ("");
-				Journal ("ÉCHEC : " + erreur);
-				m_TitrePage.Text = "La carte n'a pas pu être créée";
+				Journal (Langue.F ("ÉCHEC : {}", erreur));
+				m_TitrePage.Text = Langue.T ("La carte n'a pas pu être créée");
 				m_Precedent.Visible = true;
 				return;
 			}
 
-			m_TitrePage.Text = "La carte est prête !";
+			m_TitrePage.Text = Langue.T ("La carte est prête !");
 			Journal ("");
 			if (m_DossierEssai != null)
 			{
-				Journal ("Essai terminé : contenu écrit dans " + m_DossierEssai);
+				Journal (Langue.F ("Essai terminé : contenu écrit dans {}", m_DossierEssai));
 				return;
 			}
-			Journal ("1. Éjectez la carte (bouton ci-dessous) et mettez-la dans le Raspberry Pi 3.");
-			Journal ("2. Branchez l'alimentation : l'écran de démarrage s'affiche pendant la connexion au réseau.");
-			Journal ("3. Après une trentaine de secondes, ouvrez http://" + R.Nom.ToLowerInvariant () + ".local/");
-			Journal ("   (sinon, cherchez l'adresse du panneau dans la page de votre box).");
+			Journal (Langue.T ("1. Éjectez la carte (bouton ci-dessous) et mettez-la dans le Raspberry Pi 3."));
+			Journal (Langue.T ("2. Branchez l'alimentation : l'écran de démarrage s'affiche pendant la connexion au réseau."));
+			Journal (Langue.F ("3. Après une trentaine de secondes, ouvrez {}", "http://" + R.Nom.ToLowerInvariant () + ".local/"));
+			Journal (Langue.T ("   (sinon, cherchez l'adresse du panneau dans la page de votre box)."));
 			bEjecter.Visible = bOuvrir.Visible = true;
 		}
 
@@ -1229,7 +1313,7 @@ namespace OrbitDMD
 			}
 			File.WriteAllText (journal, "", new UTF8Encoding (true));
 
-			Journal ("Windows va demander l'autorisation de modifier la carte…");
+			Journal (Langue.T ("Windows va demander l'autorisation de modifier la carte…"));
 			string args = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"" + script + "\"" +
 				" -Disque " + d.Numero + " -Modele \"" + d.Modele.Replace ("\"", "") + "\" -Taille " + d.Taille +
 				" -Source \"" + contenu + "\" -Journal \"" + journal + "\"";
@@ -1240,16 +1324,16 @@ namespace OrbitDMD
 			}
 			catch (System.ComponentModel.Win32Exception)
 			{
-				throw new Exception ("Autorisation refusée : la carte n'a pas été modifiée.");
+				throw new Exception (Langue.T ("Autorisation refusée : la carte n'a pas été modifiée."));
 			}
 
 			var etapes = new Dictionary<string, string[]>
 			{
-				{ "effacement", new[] { "Effacement de la carte…", "20" } },
-				{ "partition", new[] { "Création de la partition…", "30" } },
-				{ "formatage", new[] { "Formatage FAT32…", "40" } },
-				{ "copie", new[] { "Copie des fichiers…", "55" } },
-				{ "verification", new[] { "Vérification de la copie…", "90" } }
+				{ "effacement", new[] { Langue.T ("Effacement de la carte…"), "20" } },
+				{ "partition", new[] { Langue.T ("Création de la partition…"), "30" } },
+				{ "formatage", new[] { Langue.T ("Formatage FAT32…"), "40" } },
+				{ "copie", new[] { Langue.T ("Copie des fichiers…"), "55" } },
+				{ "verification", new[] { Langue.T ("Vérification de la copie…"), "90" } }
 			};
 			int vues = 0;
 			while (true)
@@ -1268,7 +1352,7 @@ namespace OrbitDMD
 					else if (l.StartsWith ("OK "))
 					{
 						string[] parts = l.Split (' ');
-						Journal ("Carte écrite et vérifiée (" + parts[2] + " fichiers) sur " + parts[1] + ":");
+						Journal (Langue.F ("Carte écrite et vérifiée ({} fichiers) sur {}:", parts[2], parts[1]));
 						return parts[1];
 					}
 					else if (l.StartsWith ("ERREUR "))
@@ -1276,7 +1360,7 @@ namespace OrbitDMD
 						throw new Exception (l.Substring (7));
 					}
 				}
-				if (fini) throw new Exception ("La préparation s'est arrêtée sans résultat.");
+				if (fini) throw new Exception (Langue.T ("La préparation s'est arrêtée sans résultat."));
 				System.Threading.Thread.Sleep (300);
 			}
 		}
@@ -1285,7 +1369,7 @@ namespace OrbitDMD
 		{
 			if (m_LettreCarte == null) return;
 			Systeme.PowerShell ("(New-Object -ComObject Shell.Application).Namespace(17).ParseName('" + m_LettreCarte + ":').InvokeVerb('Eject')");
-			Journal ("Carte éjectée : vous pouvez la retirer.");
+			Journal (Langue.T ("Carte éjectée : vous pouvez la retirer."));
 			bEjecter.Enabled = false;
 		}
 
@@ -1314,12 +1398,13 @@ namespace OrbitDMD
 		[STAThread]
 		static int Main (string[] args)
 		{
-			string dossier = null, auto = null, captures = null;
+			string dossier = null, auto = null, captures = null, langue = Langue.ParDefaut ();
 			foreach (string a in args)
 			{
 				if (a.StartsWith ("/dossier:", StringComparison.OrdinalIgnoreCase)) dossier = Path.GetFullPath (a.Substring (9));
 				else if (a.StartsWith ("/auto:", StringComparison.OrdinalIgnoreCase)) auto = a.Substring (6);
 				else if (a.StartsWith ("/captures:", StringComparison.OrdinalIgnoreCase)) captures = a.Substring (10);
+				else if (a.StartsWith ("/langue:", StringComparison.OrdinalIgnoreCase)) langue = a.Substring (8).ToLowerInvariant ();
 			}
 
 			// sans fenetre : reponses lues dans un fichier, contenu ecrit dans un dossier (essais)
@@ -1348,14 +1433,19 @@ namespace OrbitDMD
 
 			Application.EnableVisualStyles ();
 			Application.SetCompatibleTextRenderingDefault (false);
-			var f = new Assistant (dossier);
-			if (captures != null)
+			while (true)
 			{
-				f.GifEssai = args.Where (a => a.StartsWith ("/gif:", StringComparison.OrdinalIgnoreCase)).Select (a => a.Substring (5)).FirstOrDefault ();
-				f.Shown += (s, e) => { f.Captures (captures); f.Close (); };
+				Langue.Choisir (langue);
+				var f = new Assistant (dossier);
+				if (captures != null)
+				{
+					f.GifEssai = args.Where (a => a.StartsWith ("/gif:", StringComparison.OrdinalIgnoreCase)).Select (a => a.Substring (5)).FirstOrDefault ();
+					f.Shown += (s, e) => { f.Captures (captures); f.Close (); };
+				}
+				Application.Run (f);
+				if (f.NouvelleLangue == null) return 0;
+				langue = f.NouvelleLangue;
 			}
-			Application.Run (f);
-			return 0;
 		}
 	}
 }

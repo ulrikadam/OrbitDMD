@@ -1,0 +1,191 @@
+# Traductions de l'installateur Windows d'OrbitDMD (integrees a l'exe par construire.sh)
+#
+# Une ligne par texte :  francais | anglais | neerlandais | espagnol | russe
+# "{}" : partie variable ("{1}", "{2}"... pour changer l'ordre) ; "\n" : retour a la ligne.
+# Les noms de dossiers (Accueil, Mes_GIF) ne sont pas traduits : ce sont des categories de la carte.
+
+# --- fenetre ---
+Installateur OrbitDMD {} | OrbitDMD Installer {} | OrbitDMD-installatie {} | Instalador de OrbitDMD {} | Установщик OrbitDMD {}
+Bienvenue | Welcome | Welkom | Bienvenida | Добро пожаловать
+Les panneaux | The panels | De panelen | Los paneles | Панели
+La connexion | The connection | De verbinding | La conexión | Подключение
+Accès, heure et météo | Access, time and weather | Toegang, tijd en weer | Acceso, hora y tiempo | Доступ, время и погода
+La carte SD | The SD card | De SD-kaart | La tarjeta SD | SD-карта
+Création de la carte | Creating the card | De kaart maken | Creación de la tarjeta | Создание карты
+Quitter | Quit | Afsluiten | Salir | Выход
+< Précédent | < Back | < Vorige | < Anterior | < Назад
+Suivant > | Next > | Volgende > | Siguiente > | Далее >
+Développé par Ulrik Adam · www.nexadam.be | Developed by Ulrik Adam · www.nexadam.be | Ontwikkeld door Ulrik Adam · www.nexadam.be | Desarrollado por Ulrik Adam · www.nexadam.be | Разработчик: Ulrik Adam · www.nexadam.be
+Étape {} sur {} | Step {} of {} | Stap {} van {} | Paso {} de {} | Шаг {} из {}
+Dernière étape | Last step | Laatste stap | Último paso | Последний шаг
+Écrire l'essai | Write the test | Test schrijven | Escribir la prueba | Записать тест
+Créer la carte | Create the card | Kaart maken | Crear la tarjeta | Создать карту
+Terminer | Finish | Voltooien | Terminar | Готово
+
+# --- bienvenue ---
+Bienvenue ! | Welcome! | Welkom! | ¡Bienvenido! | Добро пожаловать!
+Cet assistant prépare une carte micro-SD pour un Raspberry Pi 3 relié à des panneaux LED HUB75. OrbitDMD affiche vos GIF, l'heure et la météo, et se règle depuis une page web, sans Linux. | This wizard prepares a micro-SD card for a Raspberry Pi 3 connected to HUB75 LED panels. OrbitDMD shows your GIFs, the time and the weather, and is set up from a web page, without Linux. | Deze assistent maakt een micro-SD-kaart klaar voor een Raspberry Pi 3 met HUB75-ledpanelen. OrbitDMD toont je GIF's, de tijd en het weer, en wordt ingesteld via een webpagina, zonder Linux. | Este asistente prepara una tarjeta micro-SD para una Raspberry Pi 3 conectada a paneles LED HUB75. OrbitDMD muestra sus GIF, la hora y el tiempo, y se ajusta desde una página web, sin Linux. | Этот мастер готовит карту micro-SD для Raspberry Pi 3 со светодиодными панелями HUB75. OrbitDMD показывает ваши GIF, время и погоду и настраивается через веб-страницу, без Linux.
+Il vous faut :\n  •  une carte micro-SD (32 Go ou moins conseillé) et un lecteur de carte ;\n  •  le nom et le mot de passe de votre Wi-Fi, ou un câble réseau ;\n  •  un Raspberry Pi 3 avec une carte adaptatrice HUB75 (brochage « regular »). | You need:\n  •  a micro-SD card (32 GB or less recommended) and a card reader;\n  •  the name and password of your Wi-Fi, or a network cable;\n  •  a Raspberry Pi 3 with a HUB75 adapter board ("regular" pinout). | Je hebt nodig:\n  •  een micro-SD-kaart (32 GB of minder aanbevolen) en een kaartlezer;\n  •  de naam en het wachtwoord van je wifi, of een netwerkkabel;\n  •  een Raspberry Pi 3 met een HUB75-adapterbord ("regular"-pinout). | Necesita:\n  •  una tarjeta micro-SD (32 GB o menos recomendado) y un lector de tarjetas;\n  •  el nombre y la contraseña de su Wi-Fi, o un cable de red;\n  •  una Raspberry Pi 3 con una placa adaptadora HUB75 (conexión «regular»). | Понадобится:\n  •  карта micro-SD (лучше 32 ГБ или меньше) и картридер;\n  •  имя и пароль вашей сети Wi-Fi или сетевой кабель;\n  •  Raspberry Pi 3 с платой-адаптером HUB75 (распиновка «regular»).
+Attention : tout le contenu de la carte choisie sera effacé. | Warning: everything on the chosen card will be erased. | Let op: alle inhoud van de gekozen kaart wordt gewist. | Atención: se borrará todo el contenido de la tarjeta elegida. | Внимание: всё содержимое выбранной карты будет стёрто.
+Mode essai : rien ne sera formaté, la carte sera écrite dans {} | Test mode: nothing will be formatted, the card will be written to {} | Testmodus: er wordt niets geformatteerd, de kaart wordt geschreven naar {} | Modo de prueba: no se formateará nada, la tarjeta se escribirá en {} | Тестовый режим: ничего не форматируется, карта будет записана в {}
+
+# --- panneaux ---
+Nom du panneau | Panel name | Naam van het paneel | Nombre del panel | Имя панели
+Adresse de sa page : {} | Its page address: {} | Adres van de pagina: {} | Dirección de su página: {} | Адрес его страницы: {}
+Panneaux | Panels | Panelen | Paneles | Панели
+2 panneaux 64×32 côte à côte (128×32) | 2 panels 64×32 side by side (128×32) | 2 panelen 64×32 naast elkaar (128×32) | 2 paneles 64×32 uno al lado del otro (128×32) | 2 панели 64×32 рядом (128×32)
+1 panneau 64×32 | 1 panel 64×32 | 1 paneel 64×32 | 1 panel 64×32 | 1 панель 64×32
+4 panneaux 64×32 côte à côte (256×32) | 4 panels 64×32 side by side (256×32) | 4 panelen 64×32 naast elkaar (256×32) | 4 paneles 64×32 uno al lado del otro (256×32) | 4 панели 64×32 рядом (256×32)
+1 panneau 64×64 | 1 panel 64×64 | 1 paneel 64×64 | 1 panel 64×64 | 1 панель 64×64
+2 panneaux 64×64 côte à côte (128×64) | 2 panels 64×64 side by side (128×64) | 2 panelen 64×64 naast elkaar (128×64) | 2 paneles 64×64 uno al lado del otro (128×64) | 2 панели 64×64 рядом (128×64)
+1 panneau 32×16 | 1 panel 32×16 | 1 paneel 32×16 | 1 panel 32×16 | 1 панель 32×16
+Autre (réglages avancés) | Other (advanced settings) | Anders (geavanceerde instellingen) | Otro (ajustes avanzados) | Другое (дополнительные настройки)
+Largeur d'un panneau | Width of one panel | Breedte van één paneel | Ancho de un panel | Ширина одной панели
+Hauteur d'un panneau | Height of one panel | Hoogte van één paneel | Alto de un panel | Высота одной панели
+Panneaux à la suite | Panels in a chain | Panelen achter elkaar | Paneles en cadena | Панелей в цепочке
+Reliés les uns aux autres (sortie vers entrée). | Connected to each other (output to input). | Met elkaar verbonden (uitgang naar ingang). | Conectados entre sí (salida a entrada). | Соединены друг с другом (выход ко входу).
+Sorties en parallèle | Parallel outputs | Parallelle uitgangen | Salidas en paralelo | Параллельных выходов
+1 si tout est branché sur la même sortie de l'adaptateur. | 1 if everything is plugged into the same output of the adapter. | 1 als alles op dezelfde uitgang van de adapter is aangesloten. | 1 si todo está conectado a la misma salida del adaptador. | 1, если всё подключено к одному выходу адаптера.
+Ralentissement des sorties | Output slowdown | Vertraging van de uitgangen | Ralentización de las salidas | Замедление выходов
+2 convient à la plupart des panneaux. Augmentez si l'image scintille ou se décale. | 2 suits most panels. Increase it if the image flickers or shifts. | 2 past bij de meeste panelen. Verhoog als het beeld flikkert of verschuift. | 2 sirve para la mayoría de los paneles. Auméntelo si la imagen parpadea o se desplaza. | 2 подходит большинству панелей. Увеличьте, если изображение мерцает или сдвигается.
+Ordre des couleurs | Colour order | Kleurvolgorde | Orden de los colores | Порядок цветов
+À changer si le rouge s'affiche en vert ou en bleu. | Change it if red shows as green or blue. | Wijzig als rood als groen of blauw verschijnt. | Cámbielo si el rojo aparece verde o azul. | Измените, если красный отображается зелёным или синим.
+Luminosité le jour | Daytime brightness | Helderheid overdag | Brillo de día | Яркость днём
+Luminosité la nuit | Night-time brightness | Helderheid 's nachts | Brillo de noche | Яркость ночью
+%   de | %   from | %   van | %   de | %   с
+h à | h to | u tot | h a | ч до
+Réglable ensuite heure par heure depuis la page web. | Can then be set hour by hour from the web page. | Daarna per uur instelbaar via de webpagina. | Después se puede ajustar hora por hora desde la página web. | Потом можно настроить по часам на веб-странице.
+
+# --- connexion ---
+Le panneau se connecte par câble réseau ou par Wi-Fi (2,4 GHz : le Raspberry Pi 3 ne voit pas le 5 GHz). Le mot de passe Wi-Fi n'est enregistré que sur la carte. | The panel connects by network cable or Wi-Fi (2.4 GHz: the Raspberry Pi 3 cannot see 5 GHz). The Wi-Fi password is only saved on the card. | Het paneel maakt verbinding via netwerkkabel of wifi (2,4 GHz: de Raspberry Pi 3 ziet geen 5 GHz). Het wifi-wachtwoord wordt alleen op de kaart opgeslagen. | El panel se conecta por cable de red o por Wi-Fi (2,4 GHz: la Raspberry Pi 3 no ve los 5 GHz). La contraseña Wi-Fi solo se guarda en la tarjeta. | Панель подключается по сетевому кабелю или Wi-Fi (2,4 ГГц: Raspberry Pi 3 не видит 5 ГГц). Пароль Wi-Fi сохраняется только на карте.
+Automatique : câble s'il est branché au démarrage, sinon Wi-Fi — conseillé | Automatic: cable if plugged in at start-up, otherwise Wi-Fi — recommended | Automatisch: kabel als die bij het opstarten aangesloten is, anders wifi — aanbevolen | Automático: cable si está conectado al arrancar, si no Wi-Fi — recomendado | Автоматически: кабель, если подключён при запуске, иначе Wi-Fi — рекомендуется
+Wi-Fi seulement (démarrage un peu plus rapide) | Wi-Fi only (slightly faster start-up) | Alleen wifi (iets sneller opstarten) | Solo Wi-Fi (arranque algo más rápido) | Только Wi-Fi (запуск чуть быстрее)
+Câble réseau seulement (Wi-Fi facultatif) | Network cable only (Wi-Fi optional) | Alleen netwerkkabel (wifi optioneel) | Solo cable de red (Wi-Fi opcional) | Только сетевой кабель (Wi-Fi по желанию)
+Connexion | Connection | Verbinding | Conexión | Подключение
+Réseau Wi-Fi | Wi-Fi network | Wifi-netwerk | Red Wi-Fi | Сеть Wi-Fi
+Choisissez dans la liste ou tapez le nom. | Choose from the list or type the name. | Kies uit de lijst of typ de naam. | Elija de la lista o escriba el nombre. | Выберите из списка или введите имя.
+Tapez le nom exact du réseau. | Type the exact network name. | Typ de exacte netwerknaam. | Escriba el nombre exacto de la red. | Введите точное имя сети.
+Mot de passe Wi-Fi | Wi-Fi password | Wifi-wachtwoord | Contraseña Wi-Fi | Пароль Wi-Fi
+afficher | show | tonen | mostrar | показать
+Pays | Country | Land | País | Страна
+Pour les canaux Wi-Fi autorisés. | For the allowed Wi-Fi channels. | Voor de toegestane wifi-kanalen. | Para los canales Wi-Fi permitidos. | Для разрешённых каналов Wi-Fi.
+Adresse IP | IP address | IP-adres | Dirección IP | IP-адрес
+Automatique (donnée par la box) — conseillé | Automatic (given by the router) — recommended | Automatisch (gegeven door de router) — aanbevolen | Automática (dada por el router) — recomendado | Автоматически (выдаёт роутер) — рекомендуется
+Fixe | Fixed | Vast | Fija | Постоянный
+Adresse du panneau | Panel address | Adres van het paneel | Dirección del panel | Адрес панели
+Par exemple {} (libre sur votre réseau). | For example {} (free on your network). | Bijvoorbeeld {} (vrij op je netwerk). | Por ejemplo {} (libre en su red). | Например, {} (свободный в вашей сети).
+Masque | Subnet mask | Subnetmasker | Máscara | Маска
+Passerelle (box) | Gateway (router) | Gateway (router) | Puerta de enlace (router) | Шлюз (роутер)
+Serveur DNS | DNS server | DNS-server | Servidor DNS | DNS-сервер
+France | France | Frankrijk | Francia | Франция
+Belgique | Belgium | België | Bélgica | Бельгия
+Suisse | Switzerland | Zwitserland | Suiza | Швейцария
+Luxembourg | Luxembourg | Luxemburg | Luxemburgo | Люксембург
+Canada | Canada | Canada | Canadá | Канада
+Allemagne | Germany | Duitsland | Alemania | Германия
+Pays-Bas | Netherlands | Nederland | Países Bajos | Нидерланды
+Espagne | Spain | Spanje | España | Испания
+Italie | Italy | Italië | Italia | Италия
+Portugal | Portugal | Portugal | Portugal | Португалия
+Royaume-Uni | United Kingdom | Verenigd Koninkrijk | Reino Unido | Великобритания
+États-Unis | United States | Verenigde Staten | Estados Unidos | США
+Maroc | Morocco | Marokko | Marruecos | Марокко
+Tunisie | Tunisia | Tunesië | Túnez | Тунис
+Algérie | Algeria | Algerije | Argelia | Алжир
+
+# --- acces, heure et meteo ---
+Ce mot de passe protège les modifications faites depuis la page web du panneau. | This password protects changes made from the panel's web page. | Dit wachtwoord beschermt wijzigingen via de webpagina van het paneel. | Esta contraseña protege los cambios hechos desde la página web del panel. | Этот пароль защищает изменения через веб-страницу панели.
+Mot de passe de la page | Page password | Wachtwoord van de pagina | Contraseña de la página | Пароль страницы
+8 caractères minimum, sans espace. | At least 8 characters, no spaces. | Minimaal 8 tekens, zonder spaties. | Mínimo 8 caracteres, sin espacios. | Не менее 8 символов, без пробелов.
+Confirmation | Confirmation | Bevestiging | Confirmación | Подтверждение
+Fuseau horaire | Time zone | Tijdzone | Zona horaria | Часовой пояс
+Heure d'été automatique. | Automatic daylight saving time. | Automatische zomertijd. | Horario de verano automático. | Автоматический переход на летнее время.
+Ville pour la météo | Town for the weather | Plaats voor het weer | Ciudad para el tiempo | Город для погоды
+Facultatif : se choisit aussi plus tard sur la page Météo. | Optional: can also be chosen later on the Weather page. | Optioneel: kan ook later op de pagina Weer gekozen worden. | Opcional: también se puede elegir más tarde en la página Tiempo. | Необязательно: можно выбрать позже на странице «Погода».
+Chercher | Search | Zoeken | Buscar | Найти
+Recherche… | Searching… | Zoeken… | Buscando… | Поиск…
+Choisissez votre ville dans la liste. | Choose your town from the list. | Kies je plaats uit de lijst. | Elija su ciudad en la lista. | Выберите свой город в списке.
+Aucune ville trouvée. | No town found. | Geen plaats gevonden. | No se ha encontrado ninguna ciudad. | Город не найден.
+Recherche impossible (pas d'Internet ?). La ville se choisira sur la page Météo. | Search failed (no Internet?). The town can be chosen on the Weather page. | Zoeken onmogelijk (geen internet?). De plaats kies je later op de pagina Weer. | Búsqueda imposible (¿sin Internet?). La ciudad se elegirá en la página Tiempo. | Поиск невозможен (нет Интернета?). Город можно выбрать на странице «Погода».
+Météo de : {} | Weather for: {} | Weer voor: {} | Tiempo de: {} | Погода: {}
+
+# --- carte SD ---
+Insérez la carte micro-SD dans le lecteur, puis choisissez-la. Seules les cartes et clés amovibles sont proposées. | Insert the micro-SD card into the reader, then choose it. Only removable cards and drives are offered. | Steek de micro-SD-kaart in de lezer en kies hem. Alleen verwisselbare kaarten en sticks worden getoond. | Inserte la tarjeta micro-SD en el lector y elíjala. Solo se proponen tarjetas y memorias extraíbles. | Вставьте карту micro-SD в картридер и выберите её. Показываются только съёмные карты и накопители.
+Actualiser | Refresh | Vernieuwen | Actualizar | Обновить
+Carte | Card | Kaart | Tarjeta | Карта
+{} Go | {} GB | {} GB | {} GB | {} ГБ
+disque {} | disk {} | schijf {} | disco {} | диск {}
+Pack de GIF animées gratuit de base de la RpiTeaM (projet RPI2DMD), intégré avec l'accord d'eLLuiGi, et créations OrbitDMD. Les catégories cochées sont copiées et affichées. Pack de 11 000 animations : rpiteam.carrd.co ou le forum Neo-Arcadia. | Free basic animated GIF pack from the RpiTeaM (RPI2DMD project), included with eLLuiGi's permission, and OrbitDMD creations. Ticked categories are copied and shown. Pack of 11,000 animations: rpiteam.carrd.co or the Neo-Arcadia forum. | Gratis basispakket geanimeerde GIF's van het RpiTeaM (RPI2DMD-project), opgenomen met toestemming van eLLuiGi, en creaties van OrbitDMD. Aangevinkte categorieën worden gekopieerd en getoond. Pakket van 11.000 animaties: rpiteam.carrd.co of het forum Neo-Arcadia. | Pack básico gratuito de GIF animados del RpiTeaM (proyecto RPI2DMD), incluido con el permiso de eLLuiGi, y creaciones de OrbitDMD. Las categorías marcadas se copian y se muestran. Pack de 11 000 animaciones: rpiteam.carrd.co o el foro Neo-Arcadia. | Бесплатный базовый набор анимированных GIF от RpiTeaM (проект RPI2DMD) с согласия eLLuiGi и работы OrbitDMD. Отмеченные категории копируются и показываются. Набор из 11 000 анимаций: rpiteam.carrd.co или форум Neo-Arcadia.
+GIF fournies | Included GIFs | Meegeleverde GIF's | GIF incluidos | Встроенные GIF
+Choisir… | Choose… | Kiezen… | Elegir… | Выбрать…
+aucun | none | geen | ninguno | нет
+Vos GIF (facultatif) | Your GIFs (optional) | Je eigen GIF's (optioneel) | Sus GIF (opcional) | Ваши GIF (по желанию)
+Les GIF du dossier vont dans « Mes_GIF » ; chaque sous-dossier devient une catégorie. On peut aussi les ajouter plus tard depuis la page web. | GIFs in the folder go into "Mes_GIF"; each subfolder becomes a category. They can also be added later from the web page. | GIF's in de map gaan naar "Mes_GIF"; elke submap wordt een categorie. Je kunt ze ook later via de webpagina toevoegen. | Los GIF de la carpeta van a «Mes_GIF»; cada subcarpeta se convierte en una categoría. También se pueden añadir después desde la página web. | GIF из папки попадают в «Mes_GIF»; каждая вложенная папка становится категорией. Их можно добавить и позже через веб-страницу.
+Décochez celles à ne pas montrer pour l'instant : elles sont copiées quand même, et s'activent depuis la page GIF. | Untick the ones not to show for now: they are copied anyway and can be enabled from the GIF page. | Vink de categorieën uit die je nu niet wilt tonen: ze worden toch gekopieerd en zijn in te schakelen op de pagina GIF. | Desmarque las que no quiera mostrar por ahora: se copian igualmente y se activan desde la página GIF. | Снимите отметку с тех, что пока не показывать: они всё равно копируются и включаются на странице GIF.
+Catégories affichées | Categories shown | Getoonde categorieën | Categorías mostradas | Показываемые категории
+Dossier illisible : {} | Folder unreadable: {} | Map onleesbaar: {} | Carpeta ilegible: {} | Папка не читается: {}
+{} GIF trouvée(s) dans {} dossier(s) | {} GIF(s) found in {} folder(s) | {} GIF('s) gevonden in {} map(pen) | {} GIF encontrado(s) en {} carpeta(s) | Найдено GIF: {} в папках: {}
+; « Accueil » rejoint les écrans de démarrage. | ; "Accueil" joins the start-up screens. | ; "Accueil" komt bij de opstartschermen. | ; «Accueil» se une a las pantallas de arranque. | ; «Accueil» добавляется к экранам запуска.
+Dossier contenant vos GIF (128×32 de préférence) | Folder containing your GIFs (preferably 128×32) | Map met je GIF's (bij voorkeur 128×32) | Carpeta con sus GIF (preferiblemente 128×32) | Папка с вашими GIF (лучше 128×32)
+J'ai compris que tout le contenu de cette carte sera effacé. | I understand that everything on this card will be erased. | Ik begrijp dat alle inhoud van deze kaart wordt gewist. | Entiendo que se borrará todo el contenido de esta tarjeta. | Я понимаю, что всё содержимое карты будет стёрто.
+Les deux mots de passe sont différents. | The two passwords are different. | De twee wachtwoorden verschillen. | Las dos contraseñas son diferentes. | Пароли не совпадают.
+Le panneau affiche 20 catégories au plus : décochez-en {}. | The panel shows 20 categories at most: untick {} of them. | Het paneel toont maximaal 20 categorieën: vink er {} uit. | El panel muestra 20 categorías como máximo: desmarque {}. | Панель показывает не более 20 категорий: снимите отметку с {}.
+Choisissez la carte micro-SD (insérez-la puis cliquez sur Actualiser). | Choose the micro-SD card (insert it, then click Refresh). | Kies de micro-SD-kaart (steek hem in en klik op Vernieuwen). | Elija la tarjeta micro-SD (insértela y haga clic en Actualizar). | Выберите карту micro-SD (вставьте её и нажмите «Обновить»).
+Cochez la case pour confirmer que la carte peut être effacée. | Tick the box to confirm that the card may be erased. | Vink het vakje aan om te bevestigen dat de kaart gewist mag worden. | Marque la casilla para confirmar que la tarjeta se puede borrar. | Отметьте пункт, чтобы подтвердить стирание карты.
+Tout le contenu de ce disque va être effacé définitivement :\n\n{}\n\nContinuer ? | Everything on this disk will be permanently erased:\n\n{}\n\nContinue? | Alle inhoud van deze schijf wordt definitief gewist:\n\n{}\n\nDoorgaan? | Todo el contenido de este disco se borrará definitivamente:\n\n{}\n\n¿Continuar? | Всё содержимое этого диска будет удалено навсегда:\n\n{}\n\nПродолжить?
+Effacer la carte ? | Erase the card? | Kaart wissen? | ¿Borrar la tarjeta? | Стереть карту?
+Création annulée : rien n'a été modifié. | Creation cancelled: nothing was changed. | Aanmaken geannuleerd: er is niets gewijzigd. | Creación cancelada: no se ha modificado nada. | Создание отменено: ничего не изменено.
+Liste des disques impossible : {} | Cannot list the disks: {} | Schijven weergeven onmogelijk: {} | No se pueden listar los discos: {} | Не удалось получить список дисков: {}
+Mode essai : aucune carte nécessaire. | Test mode: no card needed. | Testmodus: geen kaart nodig. | Modo de prueba: no hace falta tarjeta. | Тестовый режим: карта не нужна.
+Aucune carte trouvée : insérez-la, puis cliquez sur Actualiser. | No card found: insert it, then click Refresh. | Geen kaart gevonden: steek hem in en klik op Vernieuwen. | No se ha encontrado ninguna tarjeta: insértela y haga clic en Actualizar. | Карта не найдена: вставьте её и нажмите «Обновить».
+Ce disque fait plus de 64 Go : vérifiez bien que c'est la carte SD et pas un disque de sauvegarde ! | This disk is larger than 64 GB: make sure it is the SD card and not a backup disk! | Deze schijf is groter dan 64 GB: controleer goed dat het de SD-kaart is en geen back-upschijf! | Este disco tiene más de 64 GB: ¡compruebe que es la tarjeta SD y no un disco de copia de seguridad! | Этот диск больше 64 ГБ: убедитесь, что это SD-карта, а не резервный диск!
+Une partition FAT32 « ORBITDMD » de {} Go sera créée. | A {} GB FAT32 partition "ORBITDMD" will be created. | Er wordt een FAT32-partitie "ORBITDMD" van {} GB aangemaakt. | Se creará una partición FAT32 «ORBITDMD» de {} GB. | Будет создан раздел FAT32 «ORBITDMD» размером {} ГБ.
+
+# --- creation ---
+Installateur OrbitDMD {}. | OrbitDMD Installer {}. | OrbitDMD-installatie {}. | Instalador de OrbitDMD {}. | Установщик OrbitDMD {}.
+Préparation du contenu de la carte… | Preparing the card contents… | Inhoud van de kaart voorbereiden… | Preparando el contenido de la tarjeta… | Подготовка содержимого карты…
+Le dossier d'essai n'est pas vide : {} | The test folder is not empty: {} | De testmap is niet leeg: {} | La carpeta de prueba no está vacía: {} | Тестовая папка не пуста: {}
+Contenu prêt ({} GIF ajoutées). | Contents ready ({} GIFs added). | Inhoud klaar ({} GIF's toegevoegd). | Contenido listo ({} GIF añadidos). | Содержимое готово (добавлено GIF: {}).
+Contenu prêt. | Contents ready. | Inhoud klaar. | Contenido listo. | Содержимое готово.
+GIF fournies : {} dans {} catégorie(s) | Included GIFs: {} in {} category(ies) | Meegeleverde GIF's: {} in {} categorie(ën) | GIF incluidos: {} en {} categoría(s) | Встроенные GIF: {} в категориях: {}
+Écrans d'accueil : {} GIF ajoutée(s) | Start-up screens: {} GIF(s) added | Startschermen: {} GIF('s) toegevoegd | Pantallas de inicio: {} GIF añadido(s) | Экраны запуска: добавлено GIF: {}
+{} déjà présente(s) | {} already there | {} al aanwezig | {} ya presente(s) | уже было: {}
+Catégorie {} : déjà fournie ({} GIF) | Category {}: already included ({} GIFs) | Categorie {}: al meegeleverd ({} GIF's) | Categoría {}: ya incluida ({} GIF) | Категория {}: уже есть ({} GIF)
+Catégorie {} : {} GIF | Category {}: {} GIFs | Categorie {}: {} GIF's | Categoría {}: {} GIF | Категория {}: {} GIF
+{} déjà fournies | {} already included | {} al meegeleverd | {} ya incluidos | {} уже было
+copiée, pas affichée | copied, not shown | gekopieerd, niet getoond | copiada, no mostrada | скопирована, не показывается
+ÉCHEC : {} | FAILED: {} | MISLUKT: {} | ERROR: {} | ОШИБКА: {}
+La carte n'a pas pu être créée | The card could not be created | De kaart kon niet worden gemaakt | No se ha podido crear la tarjeta | Не удалось создать карту
+La carte est prête ! | The card is ready! | De kaart is klaar! | ¡La tarjeta está lista! | Карта готова!
+Essai terminé : contenu écrit dans {} | Test finished: contents written to {} | Test klaar: inhoud geschreven naar {} | Prueba terminada: contenido escrito en {} | Тест завершён: содержимое записано в {}
+1. Éjectez la carte (bouton ci-dessous) et mettez-la dans le Raspberry Pi 3. | 1. Eject the card (button below) and put it in the Raspberry Pi 3. | 1. Werp de kaart uit (knop hieronder) en steek hem in de Raspberry Pi 3. | 1. Expulse la tarjeta (botón de abajo) y póngala en la Raspberry Pi 3. | 1. Извлеките карту (кнопка ниже) и вставьте её в Raspberry Pi 3.
+2. Branchez l'alimentation : l'écran de démarrage s'affiche pendant la connexion au réseau. | 2. Plug in the power: the start-up screen is shown while connecting to the network. | 2. Sluit de voeding aan: het opstartscherm verschijnt tijdens het verbinden met het netwerk. | 2. Conecte la alimentación: la pantalla de arranque se muestra durante la conexión a la red. | 2. Подключите питание: во время подключения к сети показывается экран запуска.
+3. Après une trentaine de secondes, ouvrez {} | 3. After about thirty seconds, open {} | 3. Open na een halve minuut {} | 3. Tras unos treinta segundos, abra {} | 3. Примерно через полминуты откройте {}
+(sinon, cherchez l'adresse du panneau dans la page de votre box). | (otherwise, look for the panel's address on your router's page). | (anders: zoek het adres van het paneel op de pagina van je router). | (si no, busque la dirección del panel en la página de su router). | (иначе найдите адрес панели на странице вашего роутера).
+Windows va demander l'autorisation de modifier la carte… | Windows will ask for permission to change the card… | Windows vraagt toestemming om de kaart te wijzigen… | Windows pedirá permiso para modificar la tarjeta… | Windows запросит разрешение на изменение карты…
+Autorisation refusée : la carte n'a pas été modifiée. | Permission refused: the card was not changed. | Toestemming geweigerd: de kaart is niet gewijzigd. | Permiso denegado: la tarjeta no se ha modificado. | В разрешении отказано: карта не изменена.
+Effacement de la carte… | Erasing the card… | Kaart wissen… | Borrando la tarjeta… | Стирание карты…
+Création de la partition… | Creating the partition… | Partitie aanmaken… | Creando la partición… | Создание раздела…
+Formatage FAT32… | Formatting FAT32… | FAT32 formatteren… | Formateando FAT32… | Форматирование FAT32…
+Copie des fichiers… | Copying files… | Bestanden kopiëren… | Copiando archivos… | Копирование файлов…
+Vérification de la copie… | Checking the copy… | Kopie controleren… | Comprobando la copia… | Проверка копии…
+Carte écrite et vérifiée ({} fichiers) sur {}: | Card written and checked ({} files) on {}: | Kaart geschreven en gecontroleerd ({} bestanden) op {}: | Tarjeta escrita y comprobada ({} archivos) en {}: | Карта записана и проверена ({} файлов) на {}:
+La préparation s'est arrêtée sans résultat. | Preparation stopped without a result. | De voorbereiding is gestopt zonder resultaat. | La preparación se detuvo sin resultado. | Подготовка остановилась без результата.
+Éjecter la carte | Eject the card | Kaart uitwerpen | Expulsar la tarjeta | Извлечь карту
+Ouvrir la page du panneau | Open the panel's page | Pagina van het paneel openen | Abrir la página del panel | Открыть страницу панели
+Carte éjectée : vous pouvez la retirer. | Card ejected: you can remove it. | Kaart uitgeworpen: je kunt hem verwijderen. | Tarjeta expulsada: puede retirarla. | Карта извлечена: её можно вынуть.
+
+# --- regles (messages d'erreur) ---
+Nom : 1 à 31 lettres, chiffres ou tirets (pas d'espace, pas d'accent). | Name: 1 to 31 letters, digits or hyphens (no spaces, no accents). | Naam: 1 tot 31 letters, cijfers of streepjes (geen spaties, geen accenten). | Nombre: de 1 a 31 letras, cifras o guiones (sin espacios ni acentos). | Имя: от 1 до 31 латинских букв, цифр или дефисов (без пробелов).
+Nom du réseau Wi-Fi : 1 à 32 caractères, sans accent ni guillemet. | Wi-Fi network name: 1 to 32 characters, no accents or quotes. | Naam van het wifi-netwerk: 1 tot 32 tekens, zonder accenten of aanhalingstekens. | Nombre de la red Wi-Fi: de 1 a 32 caracteres, sin acentos ni comillas. | Имя сети Wi-Fi: от 1 до 32 латинских символов, без кавычек.
+Connexion : auto, wifi ou ethernet. | Connection: auto, wifi or ethernet. | Verbinding: auto, wifi of ethernet. | Conexión: auto, wifi o ethernet. | Подключение: auto, wifi или ethernet.
+Mot de passe Wi-Fi : 8 à 63 caractères, sans accent ni guillemet. | Wi-Fi password: 8 to 63 characters, no accents or quotes. | Wifi-wachtwoord: 8 tot 63 tekens, zonder accenten of aanhalingstekens. | Contraseña Wi-Fi: de 8 a 63 caracteres, sin acentos ni comillas. | Пароль Wi-Fi: от 8 до 63 латинских символов, без кавычек.
+Mot de passe de la page web : 8 caractères minimum, sans espace ni accent. | Web page password: at least 8 characters, no spaces or accents. | Wachtwoord van de webpagina: minimaal 8 tekens, zonder spaties of accenten. | Contraseña de la página web: mínimo 8 caracteres, sin espacios ni acentos. | Пароль веб-страницы: не менее 8 латинских символов, без пробелов.
+Adresse IP invalide. | Invalid IP address. | Ongeldig IP-adres. | Dirección IP no válida. | Неверный IP-адрес.
+Masque invalide. | Invalid subnet mask. | Ongeldig subnetmasker. | Máscara no válida. | Неверная маска.
+Passerelle (box) invalide. | Invalid gateway (router). | Ongeldige gateway (router). | Puerta de enlace (router) no válida. | Неверный шлюз (роутер).
+Serveur DNS invalide. | Invalid DNS server. | Ongeldige DNS-server. | Servidor DNS no válido. | Неверный DNS-сервер.
+Masque invalide (ex. 255.255.255.0). | Invalid subnet mask (e.g. 255.255.255.0). | Ongeldig subnetmasker (bv. 255.255.255.0). | Máscara no válida (p. ej. 255.255.255.0). | Неверная маска (например, 255.255.255.0).
+Adresse IP invalide pour ce réseau. | Invalid IP address for this network. | Ongeldig IP-adres voor dit netwerk. | Dirección IP no válida para esta red. | IP-адрес не подходит для этой сети.
+La passerelle doit être sur le même réseau, à une autre adresse. | The gateway must be on the same network, at another address. | De gateway moet op hetzelfde netwerk liggen, op een ander adres. | La puerta de enlace debe estar en la misma red, en otra dirección. | Шлюз должен быть в той же сети, но с другим адресом.
+h | h | u | h | ч

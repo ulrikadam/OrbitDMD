@@ -1,0 +1,171 @@
+# Instalátor OrbitDMD česky : "číslo | překlad" (viz installateur.txt)
+1 | Instalátor OrbitDMD {}
+2 | Vítejte
+3 | Panely
+4 | Připojení
+5 | Přístup, čas a počasí
+6 | SD karta
+7 | Vytvoření karty
+8 | Ukončit
+9 | < Zpět
+10 | Další >
+11 | Vyvinul Ulrik Adam · www.nexadam.be
+12 | Krok {} z {}
+13 | Poslední krok
+14 | Zapsat test
+15 | Vytvořit kartu
+16 | Dokončit
+17 | Vítejte!
+18 | Tento průvodce připraví kartu micro-SD pro Raspberry Pi 3 s LED panely HUB75. OrbitDMD zobrazuje vaše GIFy, čas a počasí a nastavuje se z webové stránky, bez Linuxu.
+19 | Budete potřebovat:\n  •  kartu micro-SD (doporučeno 32 GB nebo méně) a čtečku karet;\n  •  název a heslo vaší Wi-Fi, nebo síťový kabel;\n  •  Raspberry Pi 3 s adaptérem HUB75 (zapojení „regular“).
+20 | Pozor: celý obsah zvolené karty bude smazán.
+21 | Testovací režim: nic se nenaformátuje, karta se zapíše do {}
+22 | Název panelu
+23 | Adresa jeho stránky: {}
+24 | Panely
+25 | 2 panely 64×32 vedle sebe (128×32)
+26 | 1 panel 64×32
+27 | 4 panely 64×32 vedle sebe (256×32)
+28 | 1 panel 64×64
+29 | 2 panely 64×64 vedle sebe (128×64)
+30 | 1 panel 32×16
+31 | Jiné (pokročilá nastavení)
+32 | Šířka panelu
+33 | Výška panelu
+34 | Panelů za sebou
+35 | Propojené mezi sebou (výstup do vstupu).
+36 | Paralelní výstupy
+37 | 1, pokud je vše zapojeno do stejného výstupu adaptéru.
+38 | Zpomalení výstupů
+39 | 2 vyhovuje většině panelů. Zvyšte, pokud obraz bliká nebo se posouvá.
+40 | Pořadí barev
+41 | Změňte, pokud se červená zobrazuje zeleně nebo modře.
+42 | Jas ve dne
+43 | Jas v noci
+44 | %   od
+45 | h do
+46 | Později lze nastavit po hodinách na webové stránce.
+47 | Panel se připojuje síťovým kabelem nebo přes Wi-Fi (2,4 GHz: Raspberry Pi 3 nevidí 5 GHz). Heslo Wi-Fi se ukládá jen na kartu.
+48 | Automaticky: kabel, pokud je při spuštění zapojený, jinak Wi-Fi — doporučeno
+49 | Jen Wi-Fi (o něco rychlejší spuštění)
+50 | Jen síťový kabel (Wi-Fi volitelně)
+51 | Připojení
+52 | Síť Wi-Fi
+53 | Vyberte ze seznamu nebo napište název.
+54 | Napište přesný název sítě.
+55 | Heslo Wi-Fi
+56 | zobrazit
+57 | Země
+58 | Pro povolené kanály Wi-Fi.
+59 | IP adresa
+60 | Automatická (přidělená routerem) — doporučeno
+61 | Pevná
+62 | Adresa panelu
+63 | Například {} (volná ve vaší síti).
+64 | Maska
+65 | Brána (router)
+66 | DNS server
+67 | Francie
+68 | Belgie
+69 | Švýcarsko
+70 | Lucembursko
+71 | Kanada
+72 | Německo
+73 | Nizozemsko
+74 | Španělsko
+75 | Itálie
+76 | Portugalsko
+77 | Spojené království
+78 | Spojené státy
+79 | Maroko
+80 | Tunisko
+81 | Alžírsko
+82 | Toto heslo chrání změny prováděné z webové stránky panelu.
+83 | Heslo stránky
+84 | Aspoň 8 znaků, bez mezer.
+85 | Potvrzení
+86 | Časové pásmo
+87 | Automatický letní čas.
+88 | Město pro počasí
+89 | Volitelné: lze zvolit i později na stránce Počasí.
+90 | Hledat
+91 | Hledání…
+92 | Vyberte své město ze seznamu.
+93 | Žádné město nenalezeno.
+94 | Hledání nelze provést (není internet?). Město zvolíte na stránce Počasí.
+95 | Počasí pro: {}
+96 | Vložte kartu micro-SD do čtečky a vyberte ji. Nabízejí se jen vyměnitelné karty a disky.
+97 | Obnovit
+98 | Karta
+99 | {} GB
+100 | disk {}
+101 | Bezplatný základní balíček animovaných GIFů od RpiTeaM (projekt RPI2DMD), zahrnutý se souhlasem eLLuiGi, a výtvory OrbitDMD. Zaškrtnuté kategorie se zkopírují a zobrazí. Balíček 11 000 animací: rpiteam.carrd.co nebo fórum Neo-Arcadia.
+102 | Přiložené GIFy
+103 | Vybrat…
+104 | žádná
+105 | Vaše GIFy (volitelné)
+106 | GIFy ze složky jdou do „Mes_GIF“; každá podsložka se stane kategorií. Přidat je lze i později z webové stránky.
+107 | Odškrtněte ty, které zatím nemají být vidět: zkopírují se i tak a zapnete je na stránce GIFy.
+108 | Zobrazené kategorie
+109 | Složku nelze přečíst: {}
+110 | Nalezeno GIFů: {} ve složkách: {}
+111 | ; „Accueil“ se připojí k úvodním obrazovkám.
+112 | Složka s vašimi GIFy (nejlépe 128×32)
+113 | Rozumím, že celý obsah této karty bude smazán.
+114 | Hesla se liší.
+115 | Panel zobrazí nejvýše 20 kategorií: odškrtněte {}.
+116 | Vyberte kartu micro-SD (vložte ji a klikněte na Obnovit).
+117 | Zaškrtněte políčko pro potvrzení, že lze kartu smazat.
+118 | Celý obsah tohoto disku bude trvale smazán:\n\n{}\n\nPokračovat?
+119 | Smazat kartu?
+120 | Vytvoření zrušeno: nic se nezměnilo.
+121 | Seznam disků nelze získat: {}
+122 | Testovací režim: karta není potřeba.
+123 | Žádná karta nenalezena: vložte ji a klikněte na Obnovit.
+124 | Tento disk má přes 64 GB: ověřte, že jde o SD kartu, a ne o zálohovací disk!
+125 | Vytvoří se oddíl FAT32 „ORBITDMD“ o velikosti {} GB.
+126 | Instalátor OrbitDMD {}.
+127 | Příprava obsahu karty…
+128 | Testovací složka není prázdná: {}
+129 | Obsah připraven (přidáno GIFů: {}).
+130 | Obsah připraven.
+131 | Přiložené GIFy: {} v kategoriích: {}
+132 | Úvodní obrazovky: přidáno GIFů: {}
+133 | už bylo: {}
+134 | Kategorie {}: už přiložena (GIFy: {})
+135 | Kategorie {}: GIFy: {}
+136 | už přiloženo: {}
+137 | zkopírována, nezobrazena
+138 | CHYBA: {}
+139 | Kartu se nepodařilo vytvořit
+140 | Karta je hotová!
+141 | Test dokončen: obsah zapsán do {}
+142 | 1. Vysuňte kartu (tlačítko níže) a vložte ji do Raspberry Pi 3.
+143 | 2. Zapojte napájení: během připojování k síti se zobrazí úvodní obrazovka.
+144 | 3. Asi po třiceti sekundách otevřete {}
+145 | (jinak najděte adresu panelu na stránce svého routeru).
+146 | Windows požádá o povolení změnit kartu…
+147 | Povolení odepřeno: karta nebyla změněna.
+148 | Mazání karty…
+149 | Vytváření oddílu…
+150 | Formátování FAT32…
+151 | Kopírování souborů…
+152 | Kontrola kopie…
+153 | Karta zapsána a zkontrolována ({} souborů) na {}:
+154 | Příprava skončila bez výsledku.
+155 | Vysunout kartu
+156 | Otevřít stránku panelu
+157 | Karta vysunuta: můžete ji vyjmout.
+158 | Název: 1 až 31 písmen, číslic nebo pomlček (bez mezer a diakritiky).
+159 | Název sítě Wi-Fi: 1 až 32 znaků, bez diakritiky a uvozovek.
+160 | Připojení: auto, wifi nebo ethernet.
+161 | Heslo Wi-Fi: 8 až 63 znaků, bez diakritiky a uvozovek.
+162 | Heslo webové stránky: aspoň 8 znaků, bez mezer a diakritiky.
+163 | Neplatná IP adresa.
+164 | Neplatná maska.
+165 | Neplatná brána (router).
+166 | Neplatný DNS server.
+167 | Neplatná maska (např. 255.255.255.0).
+168 | Neplatná IP adresa pro tuto síť.
+169 | Brána musí být ve stejné síti, na jiné adrese.
+170 | h

@@ -22,6 +22,8 @@
 #include "../clockrender.h"
 #include "../weatherdata.h"
 #include "../gifmarks.h"
+#include "../font5x7.h"
+#include "../lang.h"
 #include "../messages.h"
 #include "../schedule.h"
 #include "../hapayload.h"
@@ -259,6 +261,12 @@ int main (int argc, char **argv)
 			if (pEqual == 0 || pEqual - argv[i] >= (int) sizeof Key) return 2;
 			memcpy (Key, argv[i], pEqual - argv[i]);
 			Key[pEqual - argv[i]] = '\0';
+			unsigned nLanguage;
+			if (strcmp (Key, "Langue") == 0 && ParseLanguage (pEqual + 1, &nLanguage))
+			{
+				SetLanguage (nLanguage);		// noms des jours et des mois
+				continue;
+			}
 			if (!SetClockStyleValue (&Style, Key, pEqual + 1))
 			{
 				fprintf (stderr, "cle inconnue : %s\n", Key);
@@ -322,6 +330,8 @@ int main (int argc, char **argv)
 				if (pEqual == 0 || pEqual - pArg >= (int) sizeof Key) return 2;
 				memcpy (Key, pArg, pEqual - pArg);
 				Key[pEqual - pArg] = '\0';
+				unsigned nLanguage;
+				if (strcmp (Key, "Langue") == 0 && ParseLanguage (pEqual + 1, &nLanguage)) { SetLanguage (nLanguage); continue; }
 				if (!SetWeatherStyleValue (&Style, Key, pEqual + 1)) { fprintf (stderr, "cle inconnue : %s\n", Key); return 2; }
 			}
 		}
@@ -407,6 +417,41 @@ int main (int argc, char **argv)
 		CHECK (HAParseNotification ("Bonne nuit", Def, &N) && N.Style.Effect == EffectRain && strcmp (N.Style.Text, "Bonne nuit") == 0);
 		CHECK (HAParseNotification ("{\"message\":\"x\",\"effet\":\"Fondu\",\"couleur\":\"Vert\"}", Def, &N)
 		       && N.Style.Effect == EffectFade && strcmp (HAGetColorLabel (N.Style.Style), "Vert") == 0);
+
+		// langues : noms et listes de l'annonce dans la langue du panneau ; commandes dans toutes
+		SetLanguage (LangEN);
+		for (unsigned i = 0; i < HAGetEntityCount (); i++)
+		{
+			CString Topic, Payload;
+			HABuildDiscovery (i, Node, "Salon", "1.5.0", "192.168.0.151", &Topic, &Payload);
+			if (strcmp (HAGetEntity (i).pObject, "msg_effet") == 0)
+			{
+				CHECK (strstr (Payload, "\"name\":\"Message effect\"") != 0);
+				CHECK (strstr (Payload, "\"options\":[\"Scroll left\",\"Scroll right\",\"Rise\",\"Fall\",\"Letter by letter\",\"Raining letters\",\"Fade\"],") != 0);
+			}
+			if (strcmp (HAGetEntity (i).pObject, "msg_couleur") == 0)
+			{
+				CHECK (strstr (Payload, "\"Rainbow\",\"Other\"]") != 0);
+			}
+			CHECK (strstr (Payload, "panneaux") == 0);		// plus de francais
+		}
+		CHECK (HASetEffectFromLabel ("Raining letters", &Def) && Def.Effect == EffectRain);
+		CHECK (HASetEffectFromLabel ("Fondu", &Def) && Def.Effect == EffectFade);	// francais accepte
+		CHECK (HASetColorFromLabel ("Rouge", &Def.Style) && strcmp (HAGetColorLabel (Def.Style), "Red") == 0);
+		CHECK (HASetColorFromLabel ("\xD0\xA0\xD0\xB0\xD0\xB4\xD1\x83\xD0\xB3\xD0\xB0", &Def.Style)		// Радуга
+		       && strcmp (HAGetColorLabel (Def.Style), "Rainbow") == 0);
+		CHECK (strcmp (HAScreenName ("meteo"), "Weather") == 0 && strcmp (HAScreenName ("gif"), "gif") == 0);
+		CString Item, ItemTopic;
+		HABuildItemDiscovery (FALSE, 2, "NOEL", Node, "Salon", &ItemTopic, &Item);
+		CHECK (strstr (Item, "\"name\":\"Countdown: NOEL\"") != 0);
+		CString Cmds;
+		HABuildCommandList (Node, &Cmds);
+		CHECK (strstr (Cmds, "message effect: Scroll left, Scroll right") != 0 && strstr (Cmds, "Rainbow, RRGGBB") != 0);
+		SetLanguage (LangRU);
+		HABuildCommandList (Node, &Cmds);
+		CHECK (strstr (Cmds, "\xD0\xA0\xD0\xB0\xD0\xB4\xD1\x83\xD0\xB3\xD0\xB0, RRGGBB") != 0);
+		SetLanguage (LangFR);
+		CHECK (strcmp (HAScreenName ("meteo"), "meteo") == 0 && strcmp (HAGetColorLabel (Def.Style), "Arc-en-ciel") == 0);
 
 		// interrupteurs des messages et liste des commandes (fichiers JSON pour verification)
 		const char *Items[][2] = {{"1", "Joyeux anniversaire L\xC3\xA9" "a \"2026\""}, {"0", "NO\xC3\x8BL DANS"}, {"1", ""}};
@@ -522,22 +567,104 @@ int main (int argc, char **argv)
 			printf ("%s %-16s -> %d \"%s\"\n", bOK ? "ok    " : "ECHEC ", Cases[i].pTarget, State, Value);
 		}
 
-		struct { const char *pIn; boolean bAscii; const char *pOut; } Texts[] =
+		// textes : UTF-8 garde ; ligne coupee entre deux caracteres ; police Pixel (Unicode)
+		char Out[64];
+		TextForDisplay ("Partie \xC3\xA0 20 h\nce soir", Out, sizeof Out);
+		CHECK (strcmp (Out, "Partie \xC3\xA0 20 h ce soir") == 0);
+		TextForDisplay ("\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82", Out, 6);	// "Привет" coupe
+		CHECK (strcmp (Out, "\xD0\x9F\xD1\x80") == 0);
+		const char *pRu = "\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82";	// Привет
+		CHECK (Utf8Length (pRu) == 6 && Utf8Skip (pRu, 2) == pRu + 4);
+		const char *q = pRu;
+		CHECK (Utf8Next (&q) == 0x41F && Utf8Next (&q) == 0x440);
+		CHECK (FontGetGlyph (0x440) == FontGetGlyph ('P'));		// р minuscule -> Р -> P latin
+		CHECK (FontGetGlyph (0x431) == FontGetGlyph (0x411) && FontGetGlyph (0x411) != 0);	// б -> Б
+		CHECK (FontGetGlyph (0xE9) == FontGetGlyph ('E'));		// é -> E
+		CHECK (FontGetGlyph (0xF1) == FontGetGlyph (0xD1) && FontGetGlyph (0xD1) != FontGetGlyph ('N'));	// ñ -> Ñ
+		CHECK (FontGetGlyph ('\'') != 0 && FontGetGlyph (0x20AC) != 0 && FontGetGlyph (0x4E2D) == 0);
+		q = "\xB0";
+		CHECK (Utf8Next (&q) == 0xB0);					// ancien texte Latin-1 : garde
+
+		// langues du panneau : textes dessinables par la police Pixel, longueurs, formats
+		for (unsigned nLang = 0; nLang < LangCount; nLang++)
 		{
-			{"Joyeux anniversaire !", FALSE, "Joyeux anniversaire !"},
-			{"No\xC3\xABl \xC3\xA0 20 h", FALSE, "No\xEBl \xE0 20 h"},
-			{"No\xC3\xABl \xC3\xA0 20 h", TRUE, "Noel a 20 h"},
-			{"\xC3\x89t\xC3\xA9 7\xC2\xB0", TRUE, "Ete 7\xB0"},
-			{"Prix 5 \xE2\x82\xAC \xF0\x9F\x98\x80!", FALSE, "Prix 5 ? ?!"},
-		};
-		for (unsigned i = 0; i < sizeof Texts / sizeof Texts[0]; i++)
-		{
-			char Out[64];
-			TextToLatin1 (Texts[i].pIn, Out, sizeof Out, Texts[i].bAscii);
-			boolean bOK = strcmp (Out, Texts[i].pOut) == 0;
-			if (!bOK) nFailed++;
-			printf ("%s texte %u\n", bOK ? "ok    " : "ECHEC ", i);
+			SetLanguage (nLang);
+			for (unsigned t = 0; t < TxtCount; t++)
+			{
+				const char *pText = Tr ((TText) t);
+				unsigned nMax = t == TxtDayHourFormat || t == TxtHumidityFormat || t == TxtWindFormat ? 16 : 21;
+				boolean bOK = *pText != '\0' && Utf8Length (pText) <= nMax;
+				for (const char *r = pText; *r != '\0'; )
+				{
+					unsigned c = Utf8Next (&r);
+					bOK = bOK && (c == '%' || FontGetGlyph (c) != 0);
+				}
+				if (!bOK) printf ("texte trop long ou lettre absente : %s %u \"%s\"\n", LanguageCode (nLang), t, pText);
+				CHECK (bOK);
+			}
+			for (unsigned w = 0; w < WEATHER_TEXT_COUNT; w++)
+			{
+				const char *pText = WeatherText (w);
+				boolean bOK = *pText != '\0' && Utf8Length (pText) <= 16;
+				for (const char *r = pText; *r != '\0'; )
+				{
+					bOK = bOK && FontGetGlyph (Utf8Next (&r)) != 0;
+				}
+				if (!bOK) printf ("meteo trop longue ou lettre absente : %s %u \"%s\"\n", LanguageCode (nLang), w, pText);
+				CHECK (bOK);
+			}
+			for (unsigned d = 0; d < 7 + 12; d++)
+			{
+				const char *pText = d < 7 ? DayName (d, TRUE) : MonthName (d - 7, TRUE);
+				for (const char *r = pText; *r != '\0'; )
+				{
+					CHECK (FontGetGlyph (Utf8Next (&r)) != 0);
+				}
+			}
 		}
+		unsigned nLang = 99;
+		CHECK (ParseLanguage ("EN", &nLang) && nLang == LangEN && !ParseLanguage ("jp", &nLang) && !ParseLanguage ("e", &nLang));
+		CHECK (ParseLanguage ("uk", &nLang) && nLang == LangUK && ParseLanguage ("CS", &nLang) && nLang == LangCS);
+		// lettres ajoutees : allemand, ukrainien, polonais, tcheque, turc
+		CHECK (FontGetGlyph (0xE4) == FontGetGlyph (0xC4) && FontGetGlyph (0xC4) != FontGetGlyph ('A'));	// ä -> Ä
+		CHECK (FontGetGlyph (0xDF) != 0 && FontGetGlyph (0x1E9E) == FontGetGlyph (0xDF));			// ß
+		CHECK (FontGetGlyph (0x142) == FontGetGlyph ('L') && FontGetGlyph (0x159) == FontGetGlyph ('R'));	// ł, ř
+		CHECK (FontGetGlyph (0x131) == FontGetGlyph ('I') && FontGetGlyph (0x15F) == FontGetGlyph ('S'));	// ı, ş
+		CHECK (FontGetGlyph (0x456) == FontGetGlyph ('I') && FontGetGlyph (0x457) == FontGetGlyph (0x407)	// і, ї
+		       && FontGetGlyph (0x407) != 0 && FontGetGlyph (0x454) == FontGetGlyph (0x404) && FontGetGlyph (0x491) == FontGetGlyph (0x490));
+		SetLanguage (LangUK);
+		char Uk[32];
+		FormatDays (23, Uk, sizeof Uk);
+		CHECK (strcmp (Uk, "23 ДНІ") == 0);
+		SetLanguage (LangCS);
+		FormatDays (22, Uk, sizeof Uk);
+		CHECK (strcmp (Uk, "22 DNÍ") == 0);
+		TDateTime Wed = {2026, 11, 11, 18, 0, 0};
+		char Date[64];
+		SetLanguage (LangEN);
+		FormatDateTime ("%a %d %b", Wed, Date, sizeof Date);
+		CHECK (strcmp (Date, "WED 11 NOV") == 0);
+		CHECK (strcmp (WeatherDescription (0, FALSE), "CLEAR NIGHT") == 0);
+		char Left[32];
+		CHECK (FormatCountdown ("noel", Wed, Left, sizeof Left) == CountdownRunning && strcmp (Left, "43 DAYS") == 0);
+		SetLanguage (LangES);
+		FormatDateTime ("%A %e %B", Wed, Date, sizeof Date);
+		CHECK (strcmp (Date, "MIERCOLES 11 NOVIEMBRE") == 0);
+		SetLanguage (LangNL);
+		TDateTime Soon = {2026, 11, 18, 18, 0, 0};
+		CHECK (FormatCountdown ("2026-11-20 20:00", Soon, Left, sizeof Left) == CountdownRunning && strcmp (Left, "2 D 2 U") == 0);
+		SetLanguage (LangRU);
+		FormatDateTime ("%d %B", Wed, Date, sizeof Date);
+		CHECK (strcmp (Date, "11 НОЯБРЯ") == 0);
+		static const struct { unsigned n; const char *p; } Ru[] =
+			{{1, "1 ДЕНЬ"}, {3, "3 ДНЯ"}, {5, "5 ДНЕЙ"}, {11, "11 ДНЕЙ"}, {12, "12 ДНЕЙ"}, {21, "21 ДЕНЬ"},
+			 {22, "22 ДНЯ"}, {111, "111 ДНЕЙ"}, {114, "114 ДНЕЙ"}, {124, "124 ДНЯ"}};
+		for (unsigned i = 0; i < sizeof Ru / sizeof Ru[0]; i++)
+		{
+			FormatDays (Ru[i].n, Left, sizeof Left);
+			CHECK (strcmp (Left, Ru[i].p) == 0);
+		}
+		SetLanguage (LangFR);
 
 		boolean bChecks[] =
 		{
@@ -609,9 +736,8 @@ int main (int argc, char **argv)
 		CCanvas Canvas (W, H);
 		if (bBanner)
 		{
-			boolean bPixel = _stricmp (Banner.Style.Font, CLOCK_FONT_PIXEL) == 0;
 			char Text[BANNER_TEXT_LEN];
-			TextToLatin1 (Banner.Text, Text, sizeof Text, bPixel);
+			TextForDisplay (Banner.Text, Text, sizeof Text);
 			Renderer.PrepareText (Banner.Style);
 			int nWidth = Renderer.GetTextWidth (Banner.Style, Text);
 			// <decalage> pour le defilement, ou "in:500", "hold:0", "out:300" (phase:avancement)
@@ -643,13 +769,12 @@ int main (int argc, char **argv)
 			if (!bDone && sscanf (argv[3], "%u-%u-%u %u:%u:%u", &Now.Year, &Now.Month, &Now.Day,
 					      &Now.Hour, &Now.Minute, &Now.Second) != 6) return 2;
 			char Value[32], Latin[32], Title[COUNTDOWN_TITLE_LEN], Done[COUNTDOWN_TITLE_LEN];
-			boolean bPixel = _stricmp (Count.Style.Font, CLOCK_FONT_PIXEL) == 0;
 			TCountdownState State = FormatCountdown (Count.Target, Now, Value, sizeof Value);
 			if (bDone) State = CountdownReached;
 			if (State == CountdownNone) strcpy (Value, "DATE PASSEE");
-			TextToLatin1 (Count.Title, Title, sizeof Title, TRUE);
-			TextToLatin1 (Count.Done, Done, sizeof Done, bPixel);
-			TextToLatin1 (Value, Latin, sizeof Latin, bPixel);
+			TextForDisplay (Count.Title, Title, sizeof Title);
+			TextForDisplay (Count.Done, Done, sizeof Done);
+			TextForDisplay (Value, Latin, sizeof Latin);
 			Renderer.PrepareText (Count.Style);
 			if (State == CountdownReached)	Renderer.RenderCountdown (Count, "", Done, 0, &Canvas);
 			else				Renderer.RenderCountdown (Count, Title, Latin, 0, &Canvas);

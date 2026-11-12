@@ -10,6 +10,17 @@
 /systeme          systeme.html     text/html; charset=utf-8
 /style.css        style.css        text/css; charset=utf-8
 /app.js           app.js           application/javascript; charset=utf-8
+/lang-en.js       lang-en.js       application/javascript; charset=utf-8
+/lang-nl.js       lang-nl.js       application/javascript; charset=utf-8
+/lang-es.js       lang-es.js       application/javascript; charset=utf-8
+/lang-ru.js       lang-ru.js       application/javascript; charset=utf-8
+/lang-de.js       lang-de.js       application/javascript; charset=utf-8
+/lang-it.js       lang-it.js       application/javascript; charset=utf-8
+/lang-pt.js       lang-pt.js       application/javascript; charset=utf-8
+/lang-pl.js       lang-pl.js       application/javascript; charset=utf-8
+/lang-uk.js       lang-uk.js       application/javascript; charset=utf-8
+/lang-tr.js       lang-tr.js       application/javascript; charset=utf-8
+/lang-cs.js       lang-cs.js       application/javascript; charset=utf-8
 /gifscale.js      gifscale.js      application/javascript; charset=utf-8
 /logo.png         logo.png         image/png
 /logo-sombre.png  logo-sombre.png  image/png

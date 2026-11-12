@@ -65,6 +65,8 @@
 			<!-- affichage -->
 			<section class="card" id="card-display">
 				<h2>Affichage</h2>
+				<div class="form-row"><label for="Langue">Langue du panneau<span class="hint">Jours, mois, météo et messages affichés sur le panneau</span></label>
+					<select class="input" id="Langue" translate="no"><option value="fr">Français</option><option value="en">English</option><option value="nl">Nederlands</option><option value="es">Español</option><option value="ru">Русский</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="pt">Português</option><option value="pl">Polski</option><option value="uk">Українська</option><option value="tr">Türkçe</option><option value="cs">Čeština</option></select></div>
 				<div class="form-row"><label for="Gif_Active">Afficher les GIF<span class="hint">Sinon, seulement l'heure</span></label>
 					<span class="switch"><input type="checkbox" id="Gif_Active"></span></div>
 				<div class="form-row"><label for="Gif_Min_Duration">Durée minimale d'une GIF<span class="hint">Les GIF courtes tournent en boucle</span></label>
@@ -82,7 +84,7 @@
 
 			<!-- programme -->
 			<section class="card" id="card-programme">
-				<h2>Programme</h2>
+				<h2>Programme horaire</h2>
 				<div class="form-row"><label for="Prog_Eteint_Active">Éteindre le panneau<span class="hint">La page web reste joignable</span></label>
 					<span class="switch"><input type="checkbox" id="Prog_Eteint_Active"></span></div>
 				<div class="form-row" data-prog="Prog_Eteint_Active"><span class="lbl">Plage</span>
@@ -229,9 +231,9 @@ async function load () {
 
 	/* adresse IP : mode et valeurs actuelles */
 	const net = settings.reseau_actuel || {};
-	$("#ip-now").textContent = net.ip ? "Actuellement " + net.ip + (net.fixe ? " (fixe)" : " (donnée par la box)") : "Wi-Fi non connecté";
+	$("#ip-now").textContent = net.ip ? T(net.fixe ? "Actuellement {} (fixe)" : "Actuellement {} (donnée par la box)", net.ip) : "Wi-Fi non connecté";
 	$("#mac").textContent = net.mac || "—";
-	$("#net-now").textContent = "Automatique : câble s'il est branché, sinon Wi-Fi" + (net.ip ? (net.cable ? " · actuellement par câble" : " · actuellement en Wi-Fi") : "");
+	$("#net-now").textContent = T("Automatique : câble s'il est branché, sinon Wi-Fi") + (net.ip ? " " + T(net.cable ? "· actuellement par câble" : "· actuellement en Wi-Fi") : "");
 	$("#ip-mode").value = settings.IP_Fixe ? "fixe" : "auto";
 	showIPFields();
 	$("#pending").hidden = !settings.redemarrage_en_attente;
@@ -416,7 +418,7 @@ document.addEventListener("etat", e => {
 	const s = e.detail;
 	if (!s || !settings || !settings.HA_Active) return;
 	$("#ha-state").textContent = s.ha === "connecte" ? "✅ Connecté au serveur MQTT"
-		: s.ha ? "⚠️ " + s.ha.charAt(0).toUpperCase() + s.ha.slice(1)
+		: s.ha ? "⚠️ " + T(s.ha.charAt(0).toUpperCase() + s.ha.slice(1))
 		: "Réglages enregistrés : redémarrez le panneau pour se connecter";
 });
 </script>

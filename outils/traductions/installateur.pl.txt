@@ -1,0 +1,171 @@
+# Instalator OrbitDMD po polsku : "numer | tłumaczenie" (zob. installateur.txt)
+1 | Instalator OrbitDMD {}
+2 | Witamy
+3 | Panele
+4 | Połączenie
+5 | Dostęp, godzina i pogoda
+6 | Karta SD
+7 | Tworzenie karty
+8 | Zakończ
+9 | < Wstecz
+10 | Dalej >
+11 | Autor: Ulrik Adam · www.nexadam.be
+12 | Krok {} z {}
+13 | Ostatni krok
+14 | Zapisz test
+15 | Utwórz kartę
+16 | Zakończ
+17 | Witamy!
+18 | Ten kreator przygotowuje kartę micro-SD dla Raspberry Pi 3 z panelami LED HUB75. OrbitDMD wyświetla twoje GIF-y, godzinę i pogodę i jest ustawiany przez stronę WWW, bez Linuksa.
+19 | Potrzebujesz:\n  •  karty micro-SD (zalecane 32 GB lub mniej) i czytnika kart;\n  •  nazwy i hasła swojej sieci Wi-Fi albo kabla sieciowego;\n  •  Raspberry Pi 3 z płytką adaptera HUB75 (układ wyprowadzeń „regular”).
+20 | Uwaga: cała zawartość wybranej karty zostanie usunięta.
+21 | Tryb testowy: nic nie zostanie sformatowane, karta zostanie zapisana do {}
+22 | Nazwa panelu
+23 | Adres jego strony: {}
+24 | Panele
+25 | 2 panele 64×32 obok siebie (128×32)
+26 | 1 panel 64×32
+27 | 4 panele 64×32 obok siebie (256×32)
+28 | 1 panel 64×64
+29 | 2 panele 64×64 obok siebie (128×64)
+30 | 1 panel 32×16
+31 | Inne (ustawienia zaawansowane)
+32 | Szerokość panelu
+33 | Wysokość panelu
+34 | Paneli w łańcuchu
+35 | Połączone ze sobą (wyjście do wejścia).
+36 | Wyjścia równoległe
+37 | 1, jeśli wszystko jest podłączone do tego samego wyjścia adaptera.
+38 | Spowolnienie wyjść
+39 | 2 pasuje do większości paneli. Zwiększ, jeśli obraz migocze lub się przesuwa.
+40 | Kolejność kolorów
+41 | Zmień, jeśli czerwony wyświetla się jako zielony lub niebieski.
+42 | Jasność w dzień
+43 | Jasność w nocy
+44 | %   od
+45 | do
+46 | Później można ustawić każdą godzinę na stronie WWW.
+47 | Panel łączy się kablem sieciowym lub przez Wi-Fi (2,4 GHz: Raspberry Pi 3 nie widzi 5 GHz). Hasło Wi-Fi jest zapisywane tylko na karcie.
+48 | Automatycznie: kabel, jeśli jest podłączony przy starcie, inaczej Wi-Fi — zalecane
+49 | Tylko Wi-Fi (nieco szybszy start)
+50 | Tylko kabel sieciowy (Wi-Fi opcjonalne)
+51 | Połączenie
+52 | Sieć Wi-Fi
+53 | Wybierz z listy lub wpisz nazwę.
+54 | Wpisz dokładną nazwę sieci.
+55 | Hasło Wi-Fi
+56 | pokaż
+57 | Kraj
+58 | Dla dozwolonych kanałów Wi-Fi.
+59 | Adres IP
+60 | Automatyczny (nadany przez router) — zalecane
+61 | Stały
+62 | Adres panelu
+63 | Na przykład {} (wolny w twojej sieci).
+64 | Maska
+65 | Brama (router)
+66 | Serwer DNS
+67 | Francja
+68 | Belgia
+69 | Szwajcaria
+70 | Luksemburg
+71 | Kanada
+72 | Niemcy
+73 | Holandia
+74 | Hiszpania
+75 | Włochy
+76 | Portugalia
+77 | Wielka Brytania
+78 | Stany Zjednoczone
+79 | Maroko
+80 | Tunezja
+81 | Algieria
+82 | To hasło chroni zmiany wprowadzane przez stronę WWW panelu.
+83 | Hasło strony
+84 | Co najmniej 8 znaków, bez spacji.
+85 | Potwierdzenie
+86 | Strefa czasowa
+87 | Automatyczny czas letni.
+88 | Miasto dla pogody
+89 | Opcjonalnie: można je wybrać też później na stronie Pogoda.
+90 | Szukaj
+91 | Wyszukiwanie…
+92 | Wybierz swoje miasto z listy.
+93 | Nie znaleziono miasta.
+94 | Wyszukiwanie niemożliwe (brak Internetu?). Miasto można wybrać na stronie Pogoda.
+95 | Pogoda dla: {}
+96 | Włóż kartę micro-SD do czytnika i wybierz ją. Pokazywane są tylko karty i pamięci wymienne.
+97 | Odśwież
+98 | Karta
+99 | {} GB
+100 | dysk {}
+101 | Darmowy podstawowy pakiet animowanych GIF-ów od RpiTeaM (projekt RPI2DMD), dołączony za zgodą eLLuiGi, oraz twórczość OrbitDMD. Zaznaczone kategorie są kopiowane i wyświetlane. Pakiet 11 000 animacji: rpiteam.carrd.co lub forum Neo-Arcadia.
+102 | Dołączone GIF-y
+103 | Wybierz…
+104 | brak
+105 | Twoje GIF-y (opcjonalnie)
+106 | GIF-y z folderu trafiają do „Mes_GIF”; każdy podfolder staje się kategorią. Można je też dodać później przez stronę WWW.
+107 | Odznacz te, których na razie nie chcesz pokazywać: i tak zostaną skopiowane i można je włączyć na stronie GIF-y.
+108 | Wyświetlane kategorie
+109 | Folder nieczytelny: {}
+110 | Znaleziono GIF-y: {} w folderach: {}
+111 | ; „Accueil” dołącza do ekranów startowych.
+112 | Folder z twoimi GIF-ami (najlepiej 128×32)
+113 | Rozumiem, że cała zawartość tej karty zostanie usunięta.
+114 | Hasła się różnią.
+115 | Panel wyświetla najwyżej 20 kategorii: odznacz {}.
+116 | Wybierz kartę micro-SD (włóż ją, a potem kliknij Odśwież).
+117 | Zaznacz pole, aby potwierdzić, że kartę można wyczyścić.
+118 | Cała zawartość tego dysku zostanie trwale usunięta:\n\n{}\n\nKontynuować?
+119 | Wyczyścić kartę?
+120 | Tworzenie anulowane: nic nie zostało zmienione.
+121 | Nie można wyświetlić listy dysków: {}
+122 | Tryb testowy: karta nie jest potrzebna.
+123 | Nie znaleziono karty: włóż ją, a potem kliknij Odśwież.
+124 | Ten dysk ma ponad 64 GB: sprawdź dokładnie, czy to karta SD, a nie dysk z kopią zapasową!
+125 | Zostanie utworzona partycja FAT32 „ORBITDMD” o rozmiarze {} GB.
+126 | Instalator OrbitDMD {}.
+127 | Przygotowanie zawartości karty…
+128 | Folder testowy nie jest pusty: {}
+129 | Zawartość gotowa (dodano GIF-ów: {}).
+130 | Zawartość gotowa.
+131 | Dołączone GIF-y: {} w kategoriach: {}
+132 | Ekrany startowe: dodano GIF-ów: {}
+133 | już były: {}
+134 | Kategoria {}: już dołączona (GIF-y: {})
+135 | Kategoria {}: GIF-y: {}
+136 | już dołączone: {}
+137 | skopiowana, niewyświetlana
+138 | BŁĄD: {}
+139 | Nie udało się utworzyć karty
+140 | Karta jest gotowa!
+141 | Test zakończony: zawartość zapisana do {}
+142 | 1. Wysuń kartę (przycisk poniżej) i włóż ją do Raspberry Pi 3.
+143 | 2. Podłącz zasilanie: podczas łączenia z siecią wyświetla się ekran startowy.
+144 | 3. Po około trzydziestu sekundach otwórz {}
+145 | (w przeciwnym razie znajdź adres panelu na stronie swojego routera).
+146 | Windows poprosi o zgodę na zmianę karty…
+147 | Odmowa zgody: karta nie została zmieniona.
+148 | Czyszczenie karty…
+149 | Tworzenie partycji…
+150 | Formatowanie FAT32…
+151 | Kopiowanie plików…
+152 | Sprawdzanie kopii…
+153 | Karta zapisana i sprawdzona (plików: {}) na {}:
+154 | Przygotowanie zatrzymało się bez wyniku.
+155 | Wysuń kartę
+156 | Otwórz stronę panelu
+157 | Karta wysunięta: możesz ją wyjąć.
+158 | Nazwa: od 1 do 31 liter, cyfr lub łączników (bez spacji i polskich znaków).
+159 | Nazwa sieci Wi-Fi: od 1 do 32 znaków, bez polskich znaków i cudzysłowów.
+160 | Połączenie: auto, wifi lub ethernet.
+161 | Hasło Wi-Fi: od 8 do 63 znaków, bez polskich znaków i cudzysłowów.
+162 | Hasło strony WWW: co najmniej 8 znaków, bez spacji i polskich znaków.
+163 | Nieprawidłowy adres IP.
+164 | Nieprawidłowa maska.
+165 | Nieprawidłowa brama (router).
+166 | Nieprawidłowy serwer DNS.
+167 | Nieprawidłowa maska (np. 255.255.255.0).
+168 | Adres IP nieprawidłowy dla tej sieci.
+169 | Brama musi być w tej samej sieci, pod innym adresem.
+170 | :00

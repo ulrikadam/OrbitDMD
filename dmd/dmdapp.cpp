@@ -13,6 +13,7 @@
 #include "fileutil.h"
 #include "settings.h"
 #include "weather.h"
+#include "lang.h"
 #include <fatfs/ff.h>
 #include <circle/sched/scheduler.h>
 #include <circle/startup.h>
@@ -127,7 +128,7 @@ void CDmdApp::MainLoop (void)
 
 	if (!m_bFileSystemOK)
 	{
-		ShowMessage ("CARTE SD", "ILLISIBLE", 255, 0, 0);
+		ShowMessage (Tr (TxtSDCard), Tr (TxtUnreadable), 255, 0, 0);
 		while (TRUE)
 		{
 			Wait (1000);
@@ -139,7 +140,7 @@ void CDmdApp::MainLoop (void)
 		BuildPlaylist ();
 		if (m_nFiles == 0)
 		{
-			ShowMessage ("AUCUNE GIF", "DANS /GIF", 255, 128, 0);
+			ShowMessage (Tr (TxtNoGif), Tr (TxtInGifFolder), 255, 128, 0);
 			Wait (5000);
 		}
 	}
@@ -291,8 +292,8 @@ void CDmdApp::RunTestPattern (void)
 	}
 	else
 	{
-		C.DrawTextCentered (0, W, 4, "HORLOGE", 255, 0, 0);
-		C.DrawTextCentered (0, W, H - 11, "ABSENTE", 255, 0, 0);
+		C.DrawTextCentered (0, W, 4, Tr (TxtClock), 255, 0, 0);
+		C.DrawTextCentered (0, W, H - 11, Tr (TxtMissing), 255, 0, 0);
 	}
 	m_pMatrix->Show (C.GetData ());
 	Wait (3000);
@@ -305,7 +306,7 @@ void CDmdApp::RunTestPattern (void)
 	CString Rate;
 	Rate.Format ("%u HZ", nCount);
 	C.Clear ();
-	C.DrawTextCentered (0, W, 2, "RAFRAICHISSEMENT", 255, 255, 255);
+	C.DrawTextCentered (0, W, 2, Tr (TxtRefreshRate), 255, 255, 255);
 	C.DrawTextCentered (0, W, 14, Rate, 255, 255, 0, 2);
 	m_pMatrix->Show (C.GetData ());
 	pLogger->Write (From, LogNotice, "Rafraichissement : %u images/s", nCount);
@@ -333,7 +334,7 @@ void CDmdApp::ShowMessage (const char *pLine1, const char *pLine2, u8 r, u8 g, u
 void CDmdApp::ShowAddress (void)
 {
 	const char *pIP = m_pNetwork->GetIPAddress ();
-	const char *pTitle = m_pNetwork->IsEthernet () ? "CABLE CONNECTE" : "WIFI CONNECTE";
+	const char *pTitle = Tr (m_pNetwork->IsEthernet () ? TxtCableConnected : TxtWifiConnected);
 	CString Name;
 	Name.Format ("%s.local", m_pConfig->NetworkName);
 
@@ -380,7 +381,7 @@ void CDmdApp::CheckConnectedEvent (void)
 	}
 	else if (m_pNetwork->TakeTimeoutEvent ())
 	{
-		ShowMessage (m_pNetwork->IsEthernet () ? "CABLE RESEAU" : "WIFI", "NON CONNECTE", 255, 0, 0);
+		ShowMessage (Tr (m_pNetwork->IsEthernet () ? TxtCable : TxtWifi), Tr (TxtNotConnected), 255, 0, 0);
 		Wait (5000);
 	}
 }
@@ -740,7 +741,7 @@ void CDmdApp::RunBootSplash (void)
 	}
 	else
 	{
-		ShowMessage ("ORBITDMD", "DEMARRAGE", 0, 220, 255);
+		ShowMessage ("ORBITDMD", Tr (TxtStarting), 0, 220, 255);
 	}
 
 	if (m_bFileSystemOK)
@@ -820,7 +821,7 @@ void CDmdApp::ShowClockScreen (unsigned nDuration, boolean bDateScreen)
 	{
 		if (!bDateScreen && (!m_pConfig->GifActive || m_nFiles == 0))
 		{
-			ShowMessage ("ORBITDMD", "HEURE INCONNUE", 255, 128, 0);
+			ShowMessage ("ORBITDMD", Tr (TxtTimeUnknown), 255, 128, 0);
 			Wait (nDuration);
 		}
 		return;
@@ -906,8 +907,8 @@ void CDmdApp::ShowWeather (unsigned nDuration, boolean bRequested)
 	{
 		if (bRequested)
 		{
-			ShowMessage ("METEO", m_pConfig->WeatherStyle.Latitude[0] == '\0' ? "LIEU A CHOISIR"
-										  : "PAS ENCORE RECUE", 255, 128, 0);
+			ShowMessage (Tr (TxtWeather), Tr (m_pConfig->WeatherStyle.Latitude[0] == '\0' ? TxtChoosePlace
+										       : TxtNotReceived), 255, 128, 0);
 			Wait (3000);
 		}
 		return;			// pas de lieu choisi, ou pas de meteo recente
@@ -1103,9 +1104,8 @@ void CDmdApp::ShowBanner (const TBannerStyle &rItem)
 		return;
 	}
 
-	boolean bPixel = strcasecmp (Banner.Style.Font, CLOCK_FONT_PIXEL) == 0;
 	char Text[BANNER_TEXT_LEN];
-	TextToLatin1 (Banner.Text, Text, sizeof Text, bPixel);
+	TextForDisplay (Banner.Text, Text, sizeof Text);
 
 	m_pClock->PrepareText (Banner.Style);
 	CRemoteControl::Get ()->Status.pScreen = "texte";
@@ -1200,10 +1200,9 @@ boolean CDmdApp::ShowCountdown (const TCountdownStyle &rItem, unsigned nDuration
 		return FALSE;			// date passee
 	}
 
-	boolean bPixel = strcasecmp (Style.Style.Font, CLOCK_FONT_PIXEL) == 0;
 	char Title[COUNTDOWN_TITLE_LEN], Done[COUNTDOWN_TITLE_LEN];
-	TextToLatin1 (Style.Title, Title, sizeof Title, TRUE);		// titre en police Pixel
-	TextToLatin1 (Style.Done, Done, sizeof Done, bPixel);
+	TextForDisplay (Style.Title, Title, sizeof Title);		// titre en police Pixel
+	TextForDisplay (Style.Done, Done, sizeof Done);
 
 	m_pClock->PrepareText (Style.Style);
 	CRemoteControl::Get ()->Status.pScreen = "compte";
@@ -1238,7 +1237,7 @@ boolean CDmdApp::ShowCountdown (const TCountdownStyle &rItem, unsigned nDuration
 			else
 			{
 				char Latin[32];
-				TextToLatin1 (Value, Latin, sizeof Latin, bPixel);
+				TextForDisplay (Value, Latin, sizeof Latin);
 				m_pClock->RenderCountdown (Style, Title, Latin, nMillis, m_pCanvas);
 			}
 			m_pMatrix->Show (m_pCanvas->GetData ());
@@ -1394,13 +1393,13 @@ void CDmdApp::HandleRemoteRequest (void)
 	switch (pRemote->GetPending ())
 	{
 	case RemoteKernel:
-		ShowMessage ("MISE A JOUR", "PROGRAMME", 0, 170, 255);
+		ShowMessage (Tr (TxtUpdate), Tr (TxtFirmware), 0, 170, 255);
 		bOK = InstallFile (DRIVE "/kernel8.img", DRIVE "/kernel8.new", DRIVE "/kernel8.bak",
 				   pRemote->GetData (), pRemote->GetSize ());
 		break;
 
 	case RemoteConfig:
-		ShowMessage ("MISE A JOUR", "REGLAGES", 0, 170, 255);
+		ShowMessage (Tr (TxtUpdate), Tr (TxtSettings), 0, 170, 255);
 		bOK = InstallFile (CONFIG_FILE, DRIVE "/Config/config.new", DRIVE "/Config/config.bak",
 				   pRemote->GetData (), pRemote->GetSize ());
 		break;
@@ -1413,7 +1412,7 @@ void CDmdApp::HandleRemoteRequest (void)
 
 	if (!bOK)
 	{
-		ShowMessage ("ECHEC DE LA", "MISE A JOUR", 255, 0, 0);
+		ShowMessage (Tr (TxtUpdateFailed1), Tr (TxtUpdateFailed2), 255, 0, 0);
 		CScheduler::Get ()->Sleep (3);
 		m_bInRemoteRequest = FALSE;
 		return;
@@ -1444,7 +1443,7 @@ void CDmdApp::RollbackWifi (void)
 
 	pLogger->Write (From, LogWarning, "Nouveaux reglages reseau non valides apres %u s : retour aux anciens",
 			WIFI_TRIAL_SECONDS);
-	ShowMessage ("RESEAU REFUSE", "ANCIENS REGLAGES", 255, 128, 0);
+	ShowMessage (Tr (TxtNetworkRefused), Tr (TxtOldSettings), 255, 128, 0);
 
 	// config.bak = config.txt d'avant le changement ; la version refusee est gardee
 	unsigned nLength = FileBufferSize;
@@ -1466,7 +1465,7 @@ void CDmdApp::RollbackWifi (void)
 
 void CDmdApp::Reboot (void)
 {
-	ShowMessage ("REDEMARRAGE", "", 255, 170, 0);
+	ShowMessage (Tr (TxtRestarting), "", 255, 170, 0);
 
 	CScheduler::Get ()->Sleep (2);		// laisser partir la reponse de la page web
 

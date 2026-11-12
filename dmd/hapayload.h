@@ -14,6 +14,7 @@
 #include <circle/string.h>
 #include <circle/types.h>
 #include "clockstyle.h"
+#include "lang.h"
 
 #define HA_DISCOVERY_PREFIX	"homeassistant"
 #define HA_NOTIFY_GIF_LEN	140
@@ -22,7 +23,7 @@ struct THAEntity
 {
 	const char *pComponent;		// light, switch, button, sensor, notify
 	const char *pObject;		// panneau, pause...
-	const char *pName;		// nom affiche dans Home Assistant
+	const char *pName[LangCount];	// nom affiche dans Home Assistant, dans la langue du panneau
 	const char *pExtra;		// champs JSON en plus (avec %s = base des sujets), ou 0
 };
 
@@ -46,7 +47,8 @@ struct THANotification
 // Assistant) ; FALSE si aucun message ni GIF
 boolean HAParseNotification (const char *pPayload, const TBannerStyle &rDefault, THANotification *pNotification);
 
-// listes de choix de Home Assistant (effet et couleur des messages)
+// listes de choix de Home Assistant (effet et couleur des messages), dans la langue du panneau ;
+// les noms de toutes les langues sont acceptes en commande
 unsigned HAGetEffectCount (void);
 const char *HAGetEffectLabel (unsigned nEffect);		// "Pluie de lettres"
 boolean HASetEffectFromLabel (const char *pLabel, TBannerStyle *pStyle);
@@ -57,6 +59,9 @@ boolean HASetColorFromLabel (const char *pLabel, TTextStyle *pStyle);
 // "compte_0") ; pLabel vide : annonce vide, qui retire l'element de Home Assistant
 void HABuildItemDiscovery (boolean bText, unsigned nIndex, const char *pLabel, const char *pNodeId,
 			   const char *pDeviceName, CString *pTopic, CString *pPayload);
+
+// etat du capteur "Ecran" : "heure" -> "Time"... (en francais : le code tel quel, comme avant)
+const char *HAScreenName (const char *pScreen);
 
 // liste des commandes (attributs du capteur "Commandes", sujet <base>/commandes)
 void HABuildCommandList (const char *pNodeId, CString *pJSON);

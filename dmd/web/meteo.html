@@ -146,7 +146,7 @@ const el = id => document.getElementById(id);
 const dirty = () => KEYS.filter(k => String(cur[k]) !== String(saved[k]));
 const deg = v => Math.round(v) + "°";
 function fontName (f) {
-	if (f === "Pixel") return "Pixel (intégrée)";
+	if (f === "Pixel") return T("Pixel (intégrée)");
 	const base = f.replace(/^.*\//, "").replace(/\.(ttf|otf)$/i, "");
 	const noms = { goudysto: "Goudy Stout", pressstart2p: "Press Start 2P", vt323: "VT323", blackopsone: "Black Ops One",
 		russoone: "Russo One", mountainsofchristmas: "Mountains of Christmas", "orbitdmd-led": "OrbitDMD LED",
@@ -277,7 +277,7 @@ async function loadWeather () {
 	set("w-today", deg(w.min) + " / " + deg(w.max));
 	set("w-tomorrow", w.demain_min !== undefined ? deg(w.demain_min) + " / " + deg(w.demain_max) + " · " +
 		w.demain_description.charAt(0) + w.demain_description.slice(1).toLowerCase() : "—");
-	set("w-age", "Mise à jour " + OD.syncAge(w.maj_s) + (w.erreur ? " (dernier essai : " + w.erreur + ")" : ""));
+	set("w-age", T("Mise à jour {}", OD.syncAge(w.maj_s)) + (w.erreur ? " (" + T("dernier essai : {}", w.erreur) + ")" : ""));
 }
 setInterval(() => { if (!document.hidden) loadWeather(); }, 30000);
 

@@ -2,6 +2,7 @@
 // config.cpp
 //
 #include "config.h"
+#include "lang.h"
 #include <fatfs/ff.h>
 #include <circle/logger.h>
 #include <circle/util.h>
@@ -171,6 +172,14 @@ void CConfig::SetValue (const char *pKey, const char *pValue)
 	else if (strcasecmp (pKey, "PWM_Bits") == 0)		PWMBits = nValue;
 	else if (strcasecmp (pKey, "PWM_LSB_Nanoseconds") == 0)	PWMLSBNanos = nValue;
 	else if (strcasecmp (pKey, "RGB_Order") == 0)		CopyString (RGBOrder, pValue, sizeof RGBOrder);
+	else if (strcasecmp (pKey, "Langue") == 0)
+	{
+		unsigned nLanguage;
+		if (ParseLanguage (pValue, &nLanguage))
+		{
+			SetLanguage (nLanguage);
+		}
+	}
 	else if (strcasecmp (pKey, "Gif_Active") == 0)		GifActive = nValue != 0;
 	else if (strcasecmp (pKey, "Gif_Min_Duration") == 0)	GifMinDuration = nValue;
 	else if (strcasecmp (pKey, "IP_Ecran") == 0)		IPScreenTime = nValue;

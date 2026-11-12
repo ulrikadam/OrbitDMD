@@ -1,0 +1,171 @@
+# Installazione OrbitDMD in italiano : "numero | traduzione" (vedi installateur.txt)
+1 | Installazione OrbitDMD {}
+2 | Benvenuto
+3 | I pannelli
+4 | La connessione
+5 | Accesso, ora e meteo
+6 | La scheda SD
+7 | Creazione della scheda
+8 | Esci
+9 | < Indietro
+10 | Avanti >
+11 | Sviluppato da Ulrik Adam · www.nexadam.be
+12 | Passo {} di {}
+13 | Ultimo passo
+14 | Scrivi la prova
+15 | Crea la scheda
+16 | Fine
+17 | Benvenuto!
+18 | Questa procedura prepara una scheda micro-SD per un Raspberry Pi 3 collegato a pannelli LED HUB75. OrbitDMD mostra le tue GIF, l'ora e il meteo e si regola da una pagina web, senza Linux.
+19 | Ti serve:\n  •  una scheda micro-SD (consigliata da 32 GB o meno) e un lettore di schede;\n  •  il nome e la password del tuo Wi-Fi, oppure un cavo di rete;\n  •  un Raspberry Pi 3 con una scheda adattatrice HUB75 (piedinatura «regular»).
+20 | Attenzione: tutto il contenuto della scheda scelta verrà cancellato.
+21 | Modalità prova: niente verrà formattato, la scheda verrà scritta in {}
+22 | Nome del pannello
+23 | Indirizzo della sua pagina: {}
+24 | Pannelli
+25 | 2 pannelli 64×32 affiancati (128×32)
+26 | 1 pannello 64×32
+27 | 4 pannelli 64×32 affiancati (256×32)
+28 | 1 pannello 64×64
+29 | 2 pannelli 64×64 affiancati (128×64)
+30 | 1 pannello 32×16
+31 | Altro (impostazioni avanzate)
+32 | Larghezza di un pannello
+33 | Altezza di un pannello
+34 | Pannelli in fila
+35 | Collegati l'uno all'altro (uscita verso ingresso).
+36 | Uscite in parallelo
+37 | 1 se tutto è collegato alla stessa uscita dell'adattatore.
+38 | Rallentamento delle uscite
+39 | 2 va bene per la maggior parte dei pannelli. Aumenta se l'immagine sfarfalla o si sposta.
+40 | Ordine dei colori
+41 | Da cambiare se il rosso appare verde o blu.
+42 | Luminosità di giorno
+43 | Luminosità di notte
+44 | %   dalle
+45 | alle
+46 | Regolabile poi ora per ora dalla pagina web.
+47 | Il pannello si collega con un cavo di rete o in Wi-Fi (2,4 GHz: il Raspberry Pi 3 non vede i 5 GHz). La password Wi-Fi viene salvata solo sulla scheda.
+48 | Automatico: cavo se collegato all'avvio, altrimenti Wi-Fi — consigliato
+49 | Solo Wi-Fi (avvio un po' più veloce)
+50 | Solo cavo di rete (Wi-Fi facoltativo)
+51 | Connessione
+52 | Rete Wi-Fi
+53 | Scegli dall'elenco o scrivi il nome.
+54 | Scrivi il nome esatto della rete.
+55 | Password Wi-Fi
+56 | mostra
+57 | Paese
+58 | Per i canali Wi-Fi consentiti.
+59 | Indirizzo IP
+60 | Automatico (assegnato dal router) — consigliato
+61 | Fisso
+62 | Indirizzo del pannello
+63 | Per esempio {} (libero sulla tua rete).
+64 | Maschera
+65 | Gateway (router)
+66 | Server DNS
+67 | Francia
+68 | Belgio
+69 | Svizzera
+70 | Lussemburgo
+71 | Canada
+72 | Germania
+73 | Paesi Bassi
+74 | Spagna
+75 | Italia
+76 | Portogallo
+77 | Regno Unito
+78 | Stati Uniti
+79 | Marocco
+80 | Tunisia
+81 | Algeria
+82 | Questa password protegge le modifiche fatte dalla pagina web del pannello.
+83 | Password della pagina
+84 | Almeno 8 caratteri, senza spazi.
+85 | Conferma
+86 | Fuso orario
+87 | Ora legale automatica.
+88 | Città per il meteo
+89 | Facoltativo: si può scegliere anche dopo nella pagina Meteo.
+90 | Cerca
+91 | Ricerca…
+92 | Scegli la tua città dall'elenco.
+93 | Nessuna città trovata.
+94 | Ricerca impossibile (niente Internet?). La città si potrà scegliere nella pagina Meteo.
+95 | Meteo di: {}
+96 | Inserisci la scheda micro-SD nel lettore, poi sceglila. Vengono proposte solo schede e chiavette rimovibili.
+97 | Aggiorna
+98 | Scheda
+99 | {} GB
+100 | disco {}
+101 | Pacchetto base gratuito di GIF animate della RpiTeaM (progetto RPI2DMD), incluso con il consenso di eLLuiGi, e creazioni OrbitDMD. Le categorie spuntate vengono copiate e mostrate. Pacchetto di 11.000 animazioni: rpiteam.carrd.co o il forum Neo-Arcadia.
+102 | GIF incluse
+103 | Scegli…
+104 | nessuna
+105 | Le tue GIF (facoltativo)
+106 | Le GIF della cartella vanno in «Mes_GIF»; ogni sottocartella diventa una categoria. Si possono aggiungere anche dopo dalla pagina web.
+107 | Togli la spunta a quelle da non mostrare per ora: vengono copiate comunque e si attivano dalla pagina GIF.
+108 | Categorie mostrate
+109 | Cartella illeggibile: {}
+110 | {} GIF trovata/e in {} cartella/e
+111 | ; «Accueil» si aggiunge alle schermate di avvio.
+112 | Cartella con le tue GIF (meglio 128×32)
+113 | Ho capito che tutto il contenuto di questa scheda verrà cancellato.
+114 | Le due password sono diverse.
+115 | Il pannello mostra al massimo 20 categorie: togli la spunta a {}.
+116 | Scegli la scheda micro-SD (inseriscila e poi clicca su Aggiorna).
+117 | Spunta la casella per confermare che la scheda può essere cancellata.
+118 | Tutto il contenuto di questo disco verrà cancellato definitivamente:\n\n{}\n\nContinuare?
+119 | Cancellare la scheda?
+120 | Creazione annullata: non è stato modificato niente.
+121 | Impossibile elencare i dischi: {}
+122 | Modalità prova: nessuna scheda necessaria.
+123 | Nessuna scheda trovata: inseriscila, poi clicca su Aggiorna.
+124 | Questo disco supera i 64 GB: verifica bene che sia la scheda SD e non un disco di backup!
+125 | Verrà creata una partizione FAT32 «ORBITDMD» da {} GB.
+126 | Installazione OrbitDMD {}.
+127 | Preparazione del contenuto della scheda…
+128 | La cartella di prova non è vuota: {}
+129 | Contenuto pronto ({} GIF aggiunte).
+130 | Contenuto pronto.
+131 | GIF incluse: {} in {} categoria/e
+132 | Schermate di avvio: {} GIF aggiunta/e
+133 | {} già presente/i
+134 | Categoria {}: già inclusa ({} GIF)
+135 | Categoria {}: {} GIF
+136 | {} già incluse
+137 | copiata, non mostrata
+138 | ERRORE: {}
+139 | Non è stato possibile creare la scheda
+140 | La scheda è pronta!
+141 | Prova finita: contenuto scritto in {}
+142 | 1. Espelli la scheda (pulsante qui sotto) e inseriscila nel Raspberry Pi 3.
+143 | 2. Collega l'alimentazione: la schermata di avvio appare durante la connessione alla rete.
+144 | 3. Dopo una trentina di secondi, apri {}
+145 | (altrimenti cerca l'indirizzo del pannello nella pagina del tuo router).
+146 | Windows chiederà l'autorizzazione a modificare la scheda…
+147 | Autorizzazione negata: la scheda non è stata modificata.
+148 | Cancellazione della scheda…
+149 | Creazione della partizione…
+150 | Formattazione FAT32…
+151 | Copia dei file…
+152 | Verifica della copia…
+153 | Scheda scritta e verificata ({} file) su {}:
+154 | La preparazione si è fermata senza risultato.
+155 | Espelli la scheda
+156 | Apri la pagina del pannello
+157 | Scheda espulsa: puoi toglierla.
+158 | Nome: da 1 a 31 lettere, cifre o trattini (niente spazi né accenti).
+159 | Nome della rete Wi-Fi: da 1 a 32 caratteri, senza accenti né virgolette.
+160 | Connessione: auto, wifi o ethernet.
+161 | Password Wi-Fi: da 8 a 63 caratteri, senza accenti né virgolette.
+162 | Password della pagina web: almeno 8 caratteri, senza spazi né accenti.
+163 | Indirizzo IP non valido.
+164 | Maschera non valida.
+165 | Gateway (router) non valido.
+166 | Server DNS non valido.
+167 | Maschera non valida (es. 255.255.255.0).
+168 | Indirizzo IP non valido per questa rete.
+169 | Il gateway deve essere sulla stessa rete, a un altro indirizzo.
+170 | h

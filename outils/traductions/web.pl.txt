@@ -1,0 +1,759 @@
+# OrbitDMD - interfejs WWW po polsku : "numer | tłumaczenie" (numer francuskiego tekstu w web.txt)
+1 | Pulpit
+2 | Zegar
+3 | Pogoda
+4 | Wiadomości
+5 | Ustawienia
+6 | System
+7 | Łączenie…
+8 | Online
+9 | Offline
+10 | Autor:
+11 | OrbitDMD na GitHubie
+12 | ☕ Wesprzyj na Ko-fi
+13 | Pokaż
+14 | Ukryj
+15 | Anuluj
+16 | OK
+17 | Zapisz
+18 | Zamknij
+19 | Usuń
+20 | Kopiuj
+21 | Skopiowano
+22 | Zobacz
+23 | Podgląd
+24 | Włącz
+25 | Tak
+26 | Nie
+27 | Auto
+28 | Automatycznie
+29 | Czas trwania
+30 | Czcionka
+31 | Rozmiar
+32 | Kolor
+33 | Wzór
+34 | Format
+35 | Tło
+36 | Tekst
+37 | Tytuł
+38 | Prędkość
+39 | Okres
+40 | Częstotliwość
+41 | Panel
+42 | Pauza
+43 | Uruchom ponownie
+44 | Wyślij
+45 | Wysyłanie…
+46 | Wczytywanie…
+47 | Niezapisane zmiany
+48 | Pixel (wbudowana)
+49 | OrbitDMD Pogrubiona
+50 | OrbitDMD 7 segmentów
+51 | Halloween · {}
+52 | Wzór {}
+53 | {} KB
+54 | {} MB
+55 | {} GB
+56 | {} d {} godz.
+57 | od
+58 | do
+59 | do
+60 | Biały
+61 | Czerwony
+62 | Pomarańczowy
+63 | Bursztynowy
+64 | Żółty
+65 | Zielony
+66 | Turkusowy
+67 | Niebieski
+68 | Fioletowy
+69 | Różowy
+70 | Tęcza
+71 | Animowana tęcza
+72 | Tęcza (animowana)
+73 | Inny kolor
+74 | Jednolity kolor
+75 | Świąteczna czerwień
+76 | Losowo
+77 | Własny…
+78 | Hasło panelu
+79 | Potrzebne do zmiany ustawień panelu. Znajduje się w wierszu
+80 | pliku config.txt.
+81 | Zostanie zapamiętane w tej przeglądarce.
+82 | Sprawdzanie…
+83 | Hasło przyjęte
+84 | Hasło odrzucone, spróbuj ponownie.
+85 | Wymagane hasło
+86 | Hasło zapomniane
+87 | Zapomnij hasło na tym urządzeniu
+88 | Zapomnieć hasło na tym urządzeniu?
+89 | Wpisz hasło
+90 | Odblokowane
+91 | Zablokowane
+92 | Panel niedostępny
+93 | Dostępna jest wersja OrbitDMD {}
+94 | jest dostępna
+95 | (ten panel ma wersję
+96 | Zobacz nowości
+97 | Pobierz kernel8.img
+98 | Następnie zainstaluj ją w
+99 | → Nowe oprogramowanie. Ustawienia i GIF-y zostają zachowane.
+100 | Później
+101 | jeszcze nie od uruchomienia
+102 | przed chwilą
+103 | {} min temu
+104 | {} godz. {} temu
+105 | Czas zsynchronizowany: był już dokładny
+106 | Czas zsynchronizowany: panel spóźniał się o {}
+107 | Czas zsynchronizowany: panel spieszył się o {}
+108 | Panel uruchamia się ponownie; router może potrzebować kilku minut, aby znów nadać mu adres.
+109 | OrbitDMD · Pulpit
+110 | Co dzieje się na panelu, na żywo.
+111 | Na panelu
+112 | Szybkie polecenia
+113 | Wyświetlacz
+114 | Wyświetlacz znów włączony
+115 | Wyświetlacz wyłączony
+116 | Wyświetlacz wyłączony: panel pozostaje dostępny
+117 | Wyłącz
+118 | Wyłącz wyświetlacz: panel pozostaje dostępny i włączy się znowu po ponownym uruchomieniu
+119 | Włącz znowu
+120 | Zatrzymaj wyświetlany obraz
+121 | Obraz zatrzymany
+122 | Wznów
+123 | Odtwarzanie wznowione
+124 | Wstrzymano
+125 | Uruchom animację od nowa
+126 | Uruchom panel ponownie (około 20 sekund)
+127 | Uruchomić panel ponownie teraz?
+128 | Zlecono ponowne uruchomienie
+129 | Panel znów działa
+130 | Panel nie odpowiada od 8 minut: sprawdź jego ekran
+131 | Oczekiwanie na panel…
+132 | Adres IP
+133 | Biblioteka
+134 | GIF-y w rotacji
+135 | Wolne miejsce na karcie SD
+136 | Skompilowano
+137 | Połączenie
+138 | Kabel sieciowy
+139 | Wi-Fi
+140 | Uruchamianie
+141 | Działa od
+142 | Tylko godzina (harmonogram)
+143 | Wyłączony (harmonogram)
+144 | Przedział godzin ustawiony w Ustawienia → Harmonogram
+145 | Jasność
+146 | Wiadomość
+147 | Obraz testowy
+148 | Aktualizacje i dziennik
+149 | Wolna pamięć
+150 | Normalna
+151 | Ciepły
+152 | Za gorący
+153 | Jeszcze brak pogody
+154 | Aby wybrać, co jest wyświetlane, otwórz stronę
+155 | Procesor
+156 | Oprogramowanie
+157 | Reaktywność
+158 | Najdłuższe oczekiwanie Wi-Fi, gdy panel liczy (ostatnie 20 sekund, potem ostatnie 5 minut). Poniżej 50 ms: idealnie.
+159 | Sieć
+160 | Zsynchronizowany
+161 | Zsynchronizowany {}
+162 | Wersja
+163 | OrbitDMD · GIF-y
+164 | Wybierz wyświetlane kategorie, dodawaj lub usuwaj animacje.
+165 | Kategorie
+166 | Kategoria
+167 | kategoria
+168 | Nowa kategoria
+169 | Nazwa nowej kategorii
+170 | Nazwa kategorii: litery, cyfry, _ lub - (maksymalnie 32)
+171 | Utwórz
+172 | Wybierz kategorię po lewej.
+173 | Dodaj GIF-y
+174 | : przeciągnij tutaj GIF-y, cały folder lub plik .zip albo kliknij (najlepiej 128×32)
+175 | Szukaj
+176 | Szukaj GIF-a
+177 | Brak GIF-ów.
+178 | Nie znaleziono GIF-a.
+179 | Pokaż od razu na panelu
+180 | Wyświetlany na panelu
+181 | Pokazuj {}
+182 | Usuń {}
+183 | Ulubiony: pojawia się częściej (kliknij, aby usunąć)
+184 | Dodaj do ulubionych: pojawia się częściej
+185 | Poza rotacją (kliknij, aby przywrócić)
+186 | Wyjmij z rotacji bez usuwania
+187 | Usuń z karty SD
+188 | {} będzie pojawiać się częściej
+189 | {} nie będzie się już pojawiać (zostaje na karcie)
+190 | {} pojawia się normalnie
+191 | {} zaraz się pojawi
+192 | Usunięto {}
+193 | ulubione: {}
+194 | poza rotacją: {}
+195 | wyświetlane: {}
+196 | {} wolne na karcie
+197 | Usuń kategorię
+198 | Usuń tę kategorię i wszystkie jej GIF-y
+199 | Usunąć „{}”?
+200 | Jej GIF-y ({}) zostaną usunięte z karty SD.
+201 | Tego nie da się cofnąć. Wpisz hasło, aby potwierdzić.
+202 | Usuń na zawsze
+203 | Usuwanie…
+204 | Usunięto kategorię {}
+205 | To jedyna wyświetlana kategoria: najpierw włącz inną
+206 | Zostaw co najmniej jedną wyświetlaną kategorię
+207 | Wyświetlana
+208 | Wyświetlana tylko: {}
+209 | Niewyświetlana
+210 | wyświetlana
+211 | Cały rok
+212 | Zapisano okres „{}”
+213 | Różne
+214 | Ekrany startowe.
+215 | GIF, którego nazwa zawiera „demarrage”, odtwarza się podczas łączenia z Wi-Fi; „noel” tylko w grudniu, „halloween” tylko w październiku; pozostałe są losowane. Zostaw tę kategorię wyłączoną, aby nie trafiły do rotacji.
+216 | OrbitDMD zawiera darmowy podstawowy pakiet animowanych GIF-ów od
+217 | (projekt RPI2DMD), za zgodą eLLuiGi. Dziękujemy! Pakiet
+218 | 11 000 animacji
+219 | na Neo-Arcadia
+220 | lub na
+221 | Dużo GIF-ów w podfolderach?
+222 | Jeden folder = jedna kategoria
+223 | Wszystko w
+224 | Zmniejszaj do formatu panelu (
+225 | ) większe GIF-y
+226 | Wybierz folder
+227 | Odczyt plików…
+228 | Ta przeglądarka nie otwiera plików .zip: rozpakuj go, a potem przeciągnij folder
+229 | {} nie jest czytelnym plikiem .zip
+230 | {} jest za duży, by go tu odczytać: rozpakuj go, a potem przeciągnij folder
+231 | GIF-y: {} ({}) do wysłania do {} kategorii
+232 | GIF-y: {} ({}) do wysłania do {} kategorii
+233 | nowa kategoria
+234 | … i {} innych
+235 | Pominięto GIF-y z .zip: {} (chronione hasłem lub nieznany format).
+236 | ⚠️ Za mało miejsca na karcie SD: wolne {}.
+237 | Szacowany czas: około {} min przez Wi-Fi. Nie zamykaj tej strony. GIF-y już obecne są pomijane: możesz kontynuować później.
+238 | Nowe kategorie pojawiają się na panelu dopiero po zaznaczeniu ich po lewej.
+239 | Sprawdzanie „{}”…
+240 | Wysyłanie
+241 | Trwa wysyłanie
+242 | Wysyłanie {} / {}: {} / {}
+243 | dodano: {} · już były: {} · błędy: {}
+244 | zmniejszono: {}
+245 | zostało około {} min
+246 | Gotowe: dodano GIF-ów: {}, już były: {}, błędy: {}
+247 | Wysyłanie zatrzymane: dodano GIF-ów: {}, już były: {}, błędy: {}
+248 | zmniejszono do formatu panelu: {}
+249 | Dodano GIF-ów: {}
+250 | błędy: {}
+251 | Ostatni błąd: {}
+252 | Uruchom to samo wysyłanie później: już wysłane GIF-y zostaną pominięte.
+253 | Zatrzymaj
+254 | Zatrzymanie po bieżącym GIF-ie…
+255 | Dodaj GIF-y do „{}”, aby utworzyć ją na karcie
+256 | GIF bez obrazu
+257 | GIF bez palety
+258 | OrbitDMD · Zegar
+259 | Czcionka, kolory i data godziny wyświetlanej między GIF-ami. Podgląd rysuje sam panel.
+260 | Podgląd zegara
+261 | Ekran podglądu
+262 | Godzina
+263 | Data
+264 | Wczytywanie podglądu…
+265 | Podgląd niedostępny
+266 | Pokazuj godzinę
+267 | Między dwoma GIF-ami
+268 | Strefa czasowa
+269 | Automatyczny czas letni
+270 | Czcionka godziny
+271 | Kolor godziny
+272 | Kolor daty
+273 | Rozmiar w pikselach
+274 | Auto: największy, który się mieści. Wybrany rozmiar jest zmniejszany, jeśli tekst się nie mieści
+275 | Wzór (wypełnia tekst)
+276 | Lub wzór
+277 | Wypełnienie
+278 | Tło (za godziną)
+279 | Obraz lub animacja za godziną.
+280 | Brak (czarne)
+281 | Losowe tło przy każdym wyświetleniu godziny
+282 | Kolor, tęcza lub wzór, losowane przy każdym wyświetleniu godziny
+283 | Migający dwukropek
+284 | Wygładzone krawędzie
+285 | W przeciwnym razie ostre piksele
+286 | Pokazuj datę
+287 | Sama data, pokazywana po godzinie
+288 | Po godzinie (osobny ekran)
+289 | Pod godziną
+290 | Czas wyświetlania daty
+291 | Zapisuje, a potem pokazuje godzinę przez 15 sekund na panelu
+292 | Zobacz na panelu
+293 | Godzina jest pokazywana przez 15 sekund na panelu
+294 | Zegar zapisany
+295 | Godzina panelu
+296 | Internet
+297 | czas z Internetu
+298 | zegar z baterią
+299 | czas nieznany
+300 | {} · zsynchronizowany {}
+301 | Ustaw na panelu dokładny czas z Internetu
+302 | Synchronizuj
+303 | Dodaj czcionki, wzory lub tła
+304 | Przeciągnij pliki tutaj
+305 | lub kliknij: czcionki TTF lub OTF, obrazy PNG lub GIF 128×32
+306 | Obrazy służą jako
+307 | : nieobsługiwany format
+308 | : za duży (maksymalnie 4 MB)
+309 | OrbitDMD · Pogoda
+310 | Aktualna pogoda wyświetlana między GIF-ami. Aktualizacja co 15 minut.
+311 | Podgląd ekranu pogody
+312 | Teraz
+313 | Dzisiaj
+314 | Jutro
+315 | Wilgotność
+316 | Wiatr
+317 | Odczuwalna
+318 | Aktualizacja
+319 | Aktualizacja {}
+320 | ostatnia próba: {}
+321 | Odśwież
+322 | Wczytywanie pogody…
+323 | Brak pogody: {}
+324 | Najpierw wybierz miejsce
+325 | Dane pogodowe:
+326 | Pokazuj pogodę
+327 | Po każdym GIF-ie
+328 | Co 2 GIF-y
+329 | Co 3 GIF-y
+330 | Co 5 GIF-ów
+331 | Co 10 GIF-ów
+332 | Co 20 GIF-ów
+333 | Miejsce
+334 | Wybrane miejsce
+335 | Miejsce wybrane: zapisz, aby go użyć
+336 | Jeszcze nie wybrano
+337 | Wybrana pozycja
+338 | Wyszukaj swoje miasto poniżej
+339 | Szukaj miasta
+340 | Miasto lub kod pocztowy
+341 | Szukaj
+342 | Wyszukiwanie…
+343 | Nie znaleziono miejsca.
+344 | Wyszukiwanie niemożliwe (brak dostępu do Internetu w tej przeglądarce?)
+345 | Wyszukiwanie odbywa się w przeglądarce; panel zapisuje tylko wybraną pozycję.
+346 | Czcionka temperatury
+347 | Kolor temperatury
+348 | Drugi wiersz
+349 | Kolor drugiego wiersza
+350 | Nic
+351 | Opis (DESZCZ…)
+352 | Minimum / maksimum
+353 | Temperatura odczuwalna
+354 | Ikona
+355 | Animowana ikona
+356 | Padający deszcz, świecące słońce…
+357 | Zobacz wszystkie ikony
+358 | Słońce
+359 | Pogodna noc
+360 | Małe zachmurzenie
+361 | Pochmurna noc
+362 | Zachmurzenie
+363 | Mgła
+364 | Mżawka
+365 | Deszcz
+366 | Śnieg
+367 | Burza
+368 | Zapisuje, a potem pokazuje pogodę przez 15 sekund na panelu
+369 | Pogoda jest pokazywana przez 15 sekund na panelu
+370 | Pogoda zapisana
+371 | OrbitDMD · Wiadomości
+372 | Przewijane teksty i odliczania, każde z własnym stylem. Włączone pojawiają się kolejno między GIF-ami.
+373 | Przewijane teksty
+374 | Odliczania
+375 | Odliczanie
+376 | Dodaj tekst
+377 | Dodaj odliczanie
+378 | Brak tekstów: kliknij „Dodaj tekst”.
+379 | Brak odliczań.
+380 | (pusty tekst)
+381 | Jeden tekst jest pusty: wpisz go lub usuń
+382 | Między GIF-ami
+383 | Jeden włączony tekst naraz, po kolei
+384 | Jedno włączone odliczanie naraz, po kolei
+385 | co
+386 | Włączone: pojawia się między GIF-ami
+387 | W górę
+388 | Wszystkiego najlepszego!
+389 | {} / 200 bajtów (polska litera liczy się za 2)
+390 | Wejście tekstu
+391 | Przewija się w lewo
+392 | Przewija się w prawo
+393 | Wjeżdża w górę (od dołu)
+394 | Zjeżdża w dół (od góry)
+395 | Litera po literze
+396 | Deszcz liter
+397 | Przenikanie
+398 | Liczba przebiegów
+399 | bardzo wolna
+400 | wolna
+401 | średnia
+402 | szybka
+403 | bardzo szybka
+404 | maksymalna
+405 | Podgląd tekstu
+406 | Podgląd początku tekstu. Na panelu tekst się przewija.
+407 | Podgląd pierwszej strony po wejściu. Długi tekst jest dzielony na strony.
+408 | Podgląd odliczania
+409 | Opcjonalnie: tylko między tymi dwiema datami, co roku
+410 | od
+411 | do
+412 | od {} do {}
+413 | DD/MM
+414 | Do
+415 | Boże Narodzenie
+416 | Boże Narodzenie (25 grudnia)
+417 | Nowy Rok
+418 | Nowy Rok (1 stycznia)
+419 | Wybrana data
+420 | Przed
+421 | W dniu wydarzenia
+422 | Nad pozostałym czasem
+423 | DO ŚWIĄT
+424 | WESOŁYCH ŚWIĄT!
+425 | DO URODZIN
+426 | WSZYSTKIEGO NAJLEPSZEGO!
+427 | Wiadomość w dniu wydarzenia
+428 | Pokazywana przez 24 godz. od wybranej godziny
+429 | Kolor tytułu
+430 | Kolor pozostałego czasu
+431 | Zapisuje, a potem od razu pokazuje na panelu
+432 | Tekst jest pokazywany na panelu
+433 | Odliczanie jest pokazywane przez 15 sekund
+434 | Wiadomości zapisane
+435 | OrbitDMD · Ustawienia
+436 | Każda wartość jest sprawdzana przez panel przed zapisaniem w config.txt.
+437 | Język panelu
+438 | Dni, miesiące, pogoda i komunikaty wyświetlane na panelu
+439 | Jasność godzinowa
+440 | Przeciągaj po słupkach, aby ustawić każdą godzinę (krok 5 %, 0 % = panel wyłączony). Bieżąca godzina jest obwiedziona bursztynowo. Działa od następnego GIF-a.
+441 | Jasność od 0 do 23
+442 | Cały dzień
+443 | W nocy od
+444 | Zastosuj
+445 | Pokazuj GIF-y
+446 | W przeciwnym razie tylko godzina
+447 | Minimalny czas GIF-a
+448 | Krótkie GIF-y odtwarzają się w pętli
+449 | Kolejność GIF-ów
+450 | Ulubione pojawiają się częściej w losowaniu
+451 | Po kolei (kategoria, potem nazwa)
+452 | Adres IP na panelu
+453 | Przy uruchomieniu i gdy się zmieni · 0 = nigdy
+454 | Obraz testowy przy uruchomieniu
+455 | Dziennik na ekranie HDMI
+456 | Tylko do diagnostyki: spowalnia sieć
+457 | Wyłączaj panel
+458 | Strona WWW pozostaje dostępna
+459 | Tylko godzina, bez GIF-ów
+460 | Z pogodą i wiadomościami
+461 | Przedział
+462 | Kategorie GIF-ów pokazywane tylko w niektórych miesiącach (Boże Narodzenie w grudniu…) ustawia się na stronie
+463 | . Okresy tekstów i odliczań na stronie
+464 | Godzina i data
+465 | Strona Zegar
+466 | Czcionka, kolory, strefa czasowa…
+468 | Połącz z Home Assistant
+469 | Przez MQTT: panel sam pojawia się w Home Assistant
+470 | Serwer MQTT
+471 | Adres IP Home Assistant, na przykład 192.168.0.10
+472 | Port
+473 | Użytkownik MQTT
+474 | Użytkownik Home Assistant (Ustawienia → Osoby)
+475 | Hasło MQTT
+476 | Zostaw puste, aby zachować
+477 | Potrzebny jest dodatek
+478 | w Home Assistant (Ustawienia → Dodatki) oraz integracja
+479 | . Panel uruchamia się ponownie, aby się połączyć. Potem w Home Assistant: Ustawienia → Urządzenia →
+480 | . Wszystkie polecenia i przykłady do skopiowania: strona
+481 | Pomoc Home Assistant
+482 | ✅ Połączono z serwerem MQTT
+483 | Ustawienia zapisane: uruchom panel ponownie, aby się połączył
+484 | Sieć Wi-Fi
+485 | Hasło Wi-Fi
+486 | Co najmniej 8 znaków, bez spacji
+487 | Kraj
+488 | Kod z 2 liter (PL, DE, CZ…)
+489 | Nazwa w sieci
+490 | Adres tej strony
+491 | Automatycznie: kabel, jeśli jest podłączony, inaczej Wi-Fi
+492 | · obecnie przez Wi-Fi
+493 | · obecnie przez kabel
+494 | Wi-Fi niepołączone
+495 | Adres panelu
+496 | Automatyczny (router)
+497 | Stały
+498 | Obecnie
+499 | (nadany przez router)
+500 | Maska
+501 | Brama
+502 | Adres routera
+503 | Serwer DNS
+504 | Często też router
+505 | Wskazówka: zarezerwuj w routerze ten adres dla panelu (adres MAC
+506 | ), aby nigdy nie został nadany innemu urządzeniu.
+507 | Kabel jest wybierany przy uruchomieniu: po podłączeniu lub odłączeniu uruchom panel ponownie. Po zmianie połączenia, Wi-Fi lub adresu panel uruchamia się ponownie. Jeśli nie jest dostępny po 2 min 30 s, sam wraca do poprzednich ustawień.
+508 | Zmienić ustawienia sieci? Panel uruchomi się ponownie i je wypróbuje; jeśli nie będzie dostępny po 2 min 30 s, wróci do poprzednich.
+509 | Po ponownym uruchomieniu adres będzie http://{}
+510 | Hasło strony WWW
+511 | Nowe hasło
+512 | Potwierdź
+513 | Zmień hasło
+514 | Hasła się różnią
+515 | Hasło zmienione i zapamiętane
+516 | bez zmian
+517 | nieustawione
+518 | Panele (zaawansowane)
+519 | Wymagane ponowne uruchomienie. Nieodpowiednie wartości mogą zakłócić obraz: można je poprawić tutaj.
+520 | Szerokość panelu
+521 | Wysokość panelu
+522 | Paneli w łańcuchu
+523 | Na tym samym wyjściu
+524 | Wyjścia równoległe
+525 | Spowolnienie GPIO
+526 | Zwiększ, jeśli obraz jest zakłócony
+527 | 3 wyłącza zegar z baterią
+528 | Kolejność kolorów
+529 | Bity koloru
+530 | Mniej = szybsze odświeżanie
+531 | Czas najmniejszego kroku
+532 | W nanosekundach
+533 | Cofnij zmiany
+534 | Wymagane ponowne uruchomienie
+535 | aby zastosować niektóre zapisane ustawienia.
+536 | Uruchom ponownie teraz
+537 | Ponowne uruchamianie…
+538 | Panel nie odpowiada
+539 | wyłączony
+540 | OrbitDMD · System
+541 | Dziennik panelu, aktualizacje i ponowne uruchomienie.
+542 | OrbitDMD {} · oprogramowanie z {}
+543 | Dziennik
+544 | Filtruj
+545 | Filtruj dziennik
+546 | Na żywo
+547 | Skopiowano dziennik
+548 | Nie można skopiować: zaznacz tekst ręcznie
+549 | Nowe oprogramowanie
+550 | Plik
+551 | . Poprzedni jest zachowany jako kernel8.bak, potem panel uruchamia się ponownie. Nowe wersje:
+552 | Wybierz kernel8.img
+553 | lub przeciągnij tutaj
+554 | Zainstaluj
+555 | Oprogramowanie odebrane, instalacja…
+556 | Potrzebny jest plik {}
+557 | Panel znów działa (oprogramowanie z {})
+558 | Kopia zapasowa ustawień
+559 | Wszystkie ustawienia (Wi-Fi, panele, zegar, pogoda…), twoje teksty i odliczania oraz ulubione i wykluczone GIF-y w jednym pliku. Zachowaj dla siebie: zawiera twoje hasła.
+560 | Pobierz kopię zapasową
+561 | Kopia pobrana: zachowaj ją dla siebie (hasła)
+562 | Przywróć
+563 | : wybierz kopię (lub config.txt) albo przeciągnij ją tutaj
+564 | Ustawienia przywrócone, ponowne uruchamianie…
+565 | Uruchom panel ponownie
+566 | Panel gaśnie na kilka sekund, a potem wraca z ekranem startowym.
+567 | Ponowne uruchamianie panelu…
+568 | OrbitDMD · Pomoc Home Assistant
+569 | Wszystkie polecenia panelu
+570 | , z gotowymi przykładami do skopiowania. Połączenie ustawia się w
+571 | Ustawienia → Home Assistant
+572 | Home Assistant nie jest włączony
+573 | Połączono z Home Assistant
+574 | Home Assistant:
+575 | W Home Assistant:
+576 | Ustawienia → Urządzenia i usługi → MQTT →
+577 | . Wszystko robi się z tej strony:
+578 | Element
+579 | Co robi
+580 | Włączanie, wyłączanie (strona WWW pozostaje dostępna), jasność
+581 | Włączone: obraz zatrzymany; wyłączone: normalne odtwarzanie
+582 | Powrót do jasności z ustawień po zmianie z Home Assistant
+583 | Pokaż godzinę, Pokaż pogodę
+584 | Od razu, przez 15 sekund
+585 | Uruchamia panel ponownie
+586 | Tekst do wyświetlenia
+587 | Wpisz tekst i zatwierdź: od razu się przewija
+588 | Efekt, kolor, przebiegi, prędkość wiadomości
+589 | Styl tekstów wysyłanych z Home Assistant
+590 | Włączanie lub wyłączanie każdego elementu strony
+591 | Tekst: …, Odliczanie: …
+592 | Wyświetlany GIF, Ekran, Temperatura, Adres IP, Wersja
+593 | Polecenia MQTT
+594 | Lista poniżej, w atrybutach czujnika
+595 | Wysłanie wiadomości
+596 | Najprościej w automatyzacji lub w
+597 | Narzędzia deweloperskie → Akcje
+598 | (tryb YAML):
+599 | Z własnym stylem (kolor, efekt, GIF przed tekstem):
+600 | Pole
+601 | Wartości
+602 | Tekst (maksymalnie 200 znaków, z polskimi literami)
+603 | W lewo, W prawo, W górę, W dół, Litera po literze, Deszcz liter, Przenikanie (akceptowane są nazwy w każdym z 12 języków)
+604 | Biały, Czerwony, Pomarańczowy, Bursztynowy, Żółty, Zielony, Turkusowy, Niebieski, Fioletowy, Różowy, Tęcza lub RRGGBB (w każdym z 12 języków)
+605 | lub czcionka ze strony Zegar, na przykład
+606 | Rozmiar w pikselach,
+607 | = automatycznie
+608 | GIF do odtworzenia przed tekstem:
+609 | (jak na stronie GIF-y)
+610 | Brakujące pola przyjmują styl ustawiony w Home Assistant (efekt, kolor, przebiegi, prędkość). Jeśli panel jest wyłączony lub wstrzymany, wiadomość czeka.
+611 | Przykład automatyzacji
+612 | Wszystkie polecenia MQTT
+613 | Dla zaawansowanych (MQTT Explorer, Node-RED…). Panel publikuje tę listę także w
+614 | Temat
+615 | Wartość do wysłania
+616 | Co robi panel
+617 | Bez wpisywania
+618 | Stany publikowane przez panel:
+619 | dla każdego elementu; dostępność:
+620 | ON (włączony) lub OFF (wyłączony)
+621 | ON (obraz zatrzymany) lub OFF
+622 | ON: jasność godzinowa z ustawień
+623 | ON / OFF: tekst N ze strony Wiadomości (0 = pierwszy)
+624 | ON / OFF: odliczanie N ze strony Wiadomości
+625 | PRESS: pokaż godzinę
+626 | PRESS: pokaż pogodę
+627 | PRESS: uruchom ponownie
+628 | tekst do natychmiastowego wyświetlenia
+629 | tekst lub JSON {message, effet, couleur…}
+630 | błędne hasło (lub puste Web_Password w config.txt)
+631 | hasło przyjęte
+632 | {} zawiera ekrany startowe panelu; w razie potrzeby usuwaj jej GIF-y pojedynczo
+633 | {} to jedyna wyświetlana kategoria, najpierw włącz inną
+634 | {} już istnieje w {}
+635 | {} już istnieje
+636 | nie znaleziono {}
+637 | {} usunięto tylko częściowo (usunięte pliki: {})
+638 | {} nie jest {}
+639 | {} nie jest plikiem GIF
+640 | Nieprawidłowy GIF
+641 | Wi-Fi jeszcze niepołączone
+642 | stały adres: {}
+643 | nie otrzymano pliku
+644 | nie znaleziono kategorii {}
+645 | nieznana kategoria: {}
+646 | nieznane polecenie
+647 | config.txt musi zawierać Web_Password i Wifi_ssid (lub Reseau=ethernet)
+648 | nie można utworzyć folderu {}
+649 | nie można zapisać {}
+650 | niepełny zapis {} (karta pełna?)
+651 | nie można zapisać config.txt
+652 | nie można zapisać na karcie
+653 | nie można zapisać (maksymalnie {} oznaczonych GIF-ów)
+654 | najpierw zapisz listę
+655 | brak pliku config.txt lub jest nieprawidłowy
+656 | brak pliku kernel8.img lub ma nieprawidłowy rozmiar
+657 | zostaw co najmniej jedną aktywną kategorię
+658 | nie można odczytać config.txt
+659 | brak listy lub jest za długa
+660 | nieznane oznaczenie (favori, exclue lub aucune)
+661 | nieprawidłowa nazwa kategorii (litery, cyfry, _ lub -)
+662 | nieprawidłowa nazwa kategorii
+663 | za długa nazwa kategorii
+664 | nieprawidłowa nazwa
+665 | nieznane ustawienie: {}
+666 | serwer czasu w Internecie niedostępny, spróbuj ponownie
+667 | za dużo aktywnych kategorii
+668 | za dużo ustawień naraz
+669 | nieznany typ pliku
+670 | inne żądanie jest już w toku
+671 | wartość odrzucona dla {}
+672 | dodano {}
+673 | dodano {} do {} (rozmiar {}x{}: zostanie wyśrodkowany)
+674 | dodano {} do {}
+675 | oznaczone GIF-y: {}
+676 | aktywne kategorie: {}
+677 | zapisane ustawienia: {}; aby je zastosować, wymagane jest ponowne uruchomienie
+678 | zapisane ustawienia: {}, obowiązują od następnego uruchomienia
+679 | zapisane ustawienia: {}
+680 | zapisane ustawienia sieci: {}. Panel uruchamia się ponownie; jeśli nie będzie dostępny po {} s, wróci do poprzednich ustawień.
+681 | teksty: {}, odliczania: {}
+682 | wyświetlacz wyłączony, panel pozostaje dostępny
+683 | wyświetlacz znów włączony
+684 | bez zmian
+685 | usunięto kategorię {} (pliki: {})
+686 | żądanie przyjęte, panel uruchomi się ponownie
+687 | obraz zatrzymany
+688 | godzina jest pokazywana na panelu
+689 | pogoda jest pokazywana na panelu
+690 | odliczanie jest pokazywane na panelu
+691 | tekst jest pokazywany na panelu
+692 | odtwarzanie wznowione
+693 | zażądano pogody
+694 | Wyświetlane GIF-y
+695 | Minimalny czas
+696 | Czas zegara
+697 | Format godziny
+698 | Rozmiar godziny
+699 | Wzór godziny
+700 | Czas daty
+701 | Format daty
+702 | Czcionka daty
+703 | Rozmiar daty
+704 | Wzór daty
+705 | Pogoda
+706 | Czas pogody
+707 | Częstotliwość pogody
+708 | Szerokość geograficzna
+709 | Długość geograficzna
+710 | Czcionka pogody
+711 | Rozmiar temperatury
+712 | Wzór temperatury
+713 | Kolor temperatury
+714 | Drugi wiersz
+715 | Kolor drugiego wiersza
+716 | Ikona pogody
+717 | Kolejność odtwarzania
+718 | Panel wyłączony w nocy
+719 | Wyłączony od
+720 | Włączony znowu o
+721 | Tylko godzina
+722 | Tylko godzina od
+723 | GIF-y znowu o
+724 | Miesiące kategorii
+725 | Port MQTT
+726 | Częstotliwość tekstu
+727 | Częstotliwość odliczania
+728 | Animowana ikona
+729 | Dziennik na ekranie
+730 | Paneli w łańcuchu
+731 | Wyjścia równoległe
+732 | Czas LSB
+733 | Nazwa sieciowa
+734 | Sieć Wi-Fi
+735 | Kraj Wi-Fi
+736 | Hasło WWW
+737 | Stały adres IP
+738 | Jasność
+739 | Obecnie {} (stały)
+740 | Obecnie {} (nadany przez router)
+741 | brak
+742 | , lub
+743 | od 1 do 10
+744 | od 0 do 100 (%)
+745 | Harmonogram
+746 | :
+747 | pliku config.txt. Zostanie zapamiętane w tej przeglądarce.
+748 | Home Assistant: {}
+749 | Łączenie...
+750 | Rozłączono
+751 | Wersja protokołu odrzucona
+752 | Identyfikator odrzucony
+753 | Serwer niedostępny
+754 | Błędny użytkownik lub hasło
+755 | Brak uprawnień
+756 | Nie znaleziono adresu serwera
+757 | Serwer nieosiągalny
+758 | Rozłączono przez serwer
+759 | Połączenie utracone

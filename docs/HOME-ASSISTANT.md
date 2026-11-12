@@ -1,7 +1,10 @@
 # OrbitDMD et Home Assistant
 
+**Français** · [English](HOME-ASSISTANT.en.md) · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · [Deutsch](HOME-ASSISTANT.de.md) · [Italiano](HOME-ASSISTANT.it.md) · [Português](HOME-ASSISTANT.pt.md) · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · [Čeština](HOME-ASSISTANT.cs.md)
+
 À partir de la version 1.4.0, le panneau se relie à Home Assistant par **MQTT** et y apparaît tout seul
-(découverte automatique).
+(découverte automatique). Les noms des éléments suivent la langue du panneau (Réglages → Affichage →
+Langue du panneau).
 
 ## Mise en route
 

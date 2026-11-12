@@ -2,6 +2,7 @@
 // settings.cpp
 //
 #include "settings.h"
+#include "lang.h"
 #include "common.h"
 #include "configedit.h"
 #include "netutil.h"
@@ -65,6 +66,7 @@ struct TSetting
 
 static const TSetting s_Settings[] =
 {
+	{"Langue",		"Langue du panneau",	KindChoice,	0, 0,	  LANGUAGE_CHOICES,	ApplyLive},
 	{"Gif_Active",		"GIF affichees",	KindBool,	0, 1,	  0,			ApplyLive},
 	{"Gif_Min_Duration",	"Duree minimale",	KindNumber,	1000, 60000, 0,			ApplyLive},
 	{"IP_Ecran",		"Adresse IP sur le panneau", KindNumber, 0, 60000, 0,			ApplyLive},
@@ -257,7 +259,8 @@ static void GetCurrent (CConfig *pConfig, const char *pKey, CString *pValue)
 	unsigned n = 0;
 	const char *pText = 0;
 
-	if      (strcasecmp (pKey, "Gif_Active") == 0)		n = pConfig->GifActive ? 1 : 0;
+	if      (strcasecmp (pKey, "Langue") == 0)		pText = LanguageCode (GetLanguage ());
+	else if (strcasecmp (pKey, "Gif_Active") == 0)		n = pConfig->GifActive ? 1 : 0;
 	else if (strcasecmp (pKey, "Gif_Min_Duration") == 0)	n = pConfig->GifMinDuration;
 	else if (strcasecmp (pKey, "IP_Ecran") == 0)		n = pConfig->IPScreenTime;
 	else if (strcasecmp (pKey, "Clock_Active") == 0)	n = pConfig->ClockActive ? 1 : 0;

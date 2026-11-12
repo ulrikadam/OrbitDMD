@@ -109,8 +109,6 @@
 <script src="/app.js"></script>
 <script>
 "use strict";
-const DAYS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 let clockBase = null, clockAt = 0, uptimeBase = 0, uptimeAt = 0, lastGif = "";
 
 function set (id, text) { const el = document.getElementById(id); if (el.textContent !== String(text)) el.textContent = text; }
@@ -121,7 +119,7 @@ function tick () {
 		const d = new Date(clockBase + (Date.now() - clockAt));
 		const p = n => String(n).padStart(2, "0");
 		set("clock", p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()) + ":" + p(d.getUTCSeconds()));
-		set("date", DAYS[d.getUTCDay()] + " " + d.getUTCDate() + " " + MONTHS[d.getUTCMonth()] + " " + d.getUTCFullYear());
+		set("date", d.toLocaleDateString(I18N.lang, { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }));
 	}
 	if (uptimeAt) set("uptime", OD.duration(uptimeBase + Math.floor((Date.now() - uptimeAt) / 1000)));
 }
@@ -146,7 +144,7 @@ function renderQuick () {
 	st.hidden = !quick.pause && !quick.off && !prog;
 	st.textContent = quick.off ? "Affichage éteint" : quick.pause ? "En pause"
 		: prog === "eteint" ? "Éteint (programme)" : "Heure seule (programme)";
-	st.title = prog ? "Plage horaire réglée dans Réglages → Programme" : "";
+	st.title = prog ? "Plage horaire réglée dans Réglages → Programme horaire" : "";
 	st.className = "chip " + (quick.off || prog === "eteint" ? "err" : "warn");
 	document.querySelector(".now .led").classList.toggle("off", quick.off || prog === "eteint");
 }

@@ -149,7 +149,7 @@ let cur = {}, saved = {}, assets = { polices: [], motifs: [], fonds: [] }, scree
 /* --- outils --- */
 const el = id => document.getElementById(id);
 function fontName (f) {
-	if (f === "Pixel") return "Pixel (intégrée)";
+	if (f === "Pixel") return T("Pixel (intégrée)");
 	const base = f.replace(/^.*\//, "").replace(/\.(ttf|otf)$/i, "");
 	const noms = { goudysto: "Goudy Stout", pressstart2p: "Press Start 2P", vt323: "VT323", blackopsone: "Black Ops One",
 		russoone: "Russo One", mountainsofchristmas: "Mountains of Christmas", "orbitdmd-led": "OrbitDMD LED",
@@ -496,7 +496,7 @@ document.addEventListener("etat", e => {
 	const m = /^(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)$/.exec(s.heure || "");
 	if (m) { panelBase = Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5], +m[6]); panelAt = Date.now(); }
 	const src = s.source_heure === "Internet" ? "heure Internet" : s.source_heure === "horloge a pile" ? "horloge à pile" : "heure inconnue";
-	el("sync-age").textContent = src + " · synchronisée " + OD.syncAge(s.synchro_s);
+	el("sync-age").textContent = T("{} · synchronisée {}", T(src), OD.syncAge(s.synchro_s));
 });
 setInterval(() => {
 	if (panelBase === null) return;

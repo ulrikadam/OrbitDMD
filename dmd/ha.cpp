@@ -6,6 +6,7 @@
 #include "webserver.h"		// GetVersion ()
 #include "gifmanager.h"
 #include "messages.h"
+#include "lang.h"
 #include <circle/cputhrottle.h>
 #include <circle/logger.h>
 #include <circle/timer.h>
@@ -34,7 +35,8 @@ CHomeAssistant::CHomeAssistant (CNetSubSystem *pNetSubSystem, CConfig *pConfig, 
 	m_bAnnounce (FALSE),
 	m_nReconnectAt (0),
 	m_nLastSlowUpdate (0),
-	m_nGeneration (0)
+	m_nGeneration (0),
+	m_nLanguage (LangCount)
 {
 	HAMakeNodeId (pConfig->NetworkName, m_NodeId, sizeof m_NodeId);
 	m_Base.Format ("orbitdmd/%s", m_NodeId);
@@ -217,7 +219,7 @@ void CHomeAssistant::OnLoop (void)
 		return;
 	}
 
-	if (m_bAnnounce)
+	if (m_bAnnounce || m_nLanguage != GetLanguage ())	// langue changee : noms et listes a jour
 	{
 		m_bAnnounce = FALSE;
 		Announce ();
@@ -235,6 +237,7 @@ void CHomeAssistant::OnLoop (void)
 
 void CHomeAssistant::Announce (void)
 {
+	m_nLanguage = GetLanguage ();
 	for (unsigned i = 0; i < HAGetEntityCount (); i++)
 	{
 		CString Topic, Payload;
@@ -365,7 +368,7 @@ void CHomeAssistant::PublishState (boolean bAll)
 	PublishValue ("msg_passages", Value, &m_Last[LastPasses], bAll);
 	Value.Format ("%u", N.nSpeed);
 	PublishValue ("msg_vitesse", Value, &m_Last[LastSpeed], bAll);
-	PublishValue ("ecran", S.pScreen != 0 ? S.pScreen : "", &m_Last[LastScreen], bAll);
+	PublishValue ("ecran", S.pScreen != 0 ? HAScreenName (S.pScreen) : "", &m_Last[LastScreen], bAll);
 
 	unsigned nNow = CTimer::Get ()->GetUptime ();
 	if (bAll || nNow - m_nLastSlowUpdate >= SLOW_UPDATE_SECONDS)

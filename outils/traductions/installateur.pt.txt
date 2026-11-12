@@ -1,0 +1,171 @@
+# Instalador OrbitDMD em português (Brasil) : "número | tradução" (veja installateur.txt)
+1 | Instalador OrbitDMD {}
+2 | Boas-vindas
+3 | Os painéis
+4 | A conexão
+5 | Acesso, hora e tempo
+6 | O cartão SD
+7 | Criação do cartão
+8 | Sair
+9 | < Voltar
+10 | Avançar >
+11 | Desenvolvido por Ulrik Adam · www.nexadam.be
+12 | Etapa {} de {}
+13 | Última etapa
+14 | Gravar o teste
+15 | Criar o cartão
+16 | Concluir
+17 | Boas-vindas!
+18 | Este assistente prepara um cartão micro-SD para um Raspberry Pi 3 ligado a painéis de LED HUB75. O OrbitDMD mostra seus GIFs, a hora e o tempo, e é configurado por uma página web, sem Linux.
+19 | Você vai precisar de:\n  •  um cartão micro-SD (recomendado 32 GB ou menos) e um leitor de cartão;\n  •  o nome e a senha do seu Wi-Fi, ou um cabo de rede;\n  •  um Raspberry Pi 3 com uma placa adaptadora HUB75 (pinagem “regular”).
+20 | Atenção: todo o conteúdo do cartão escolhido será apagado.
+21 | Modo de teste: nada será formatado, o cartão será gravado em {}
+22 | Nome do painel
+23 | Endereço da página dele: {}
+24 | Painéis
+25 | 2 painéis 64×32 lado a lado (128×32)
+26 | 1 painel 64×32
+27 | 4 painéis 64×32 lado a lado (256×32)
+28 | 1 painel 64×64
+29 | 2 painéis 64×64 lado a lado (128×64)
+30 | 1 painel 32×16
+31 | Outro (configurações avançadas)
+32 | Largura de um painel
+33 | Altura de um painel
+34 | Painéis em sequência
+35 | Ligados uns aos outros (saída na entrada).
+36 | Saídas em paralelo
+37 | 1 se tudo estiver ligado na mesma saída do adaptador.
+38 | Atraso das saídas
+39 | 2 serve para a maioria dos painéis. Aumente se a imagem piscar ou se deslocar.
+40 | Ordem das cores
+41 | Mude se o vermelho aparecer verde ou azul.
+42 | Brilho de dia
+43 | Brilho à noite
+44 | %   das
+45 | h às
+46 | Ajustável depois hora a hora pela página web.
+47 | O painel se conecta por cabo de rede ou Wi-Fi (2,4 GHz: o Raspberry Pi 3 não vê o 5 GHz). A senha do Wi-Fi só é gravada no cartão.
+48 | Automático: cabo se estiver ligado na inicialização, senão Wi-Fi — recomendado
+49 | Só Wi-Fi (inicialização um pouco mais rápida)
+50 | Só cabo de rede (Wi-Fi opcional)
+51 | Conexão
+52 | Rede Wi-Fi
+53 | Escolha na lista ou digite o nome.
+54 | Digite o nome exato da rede.
+55 | Senha do Wi-Fi
+56 | mostrar
+57 | País
+58 | Para os canais de Wi-Fi permitidos.
+59 | Endereço IP
+60 | Automático (dado pelo roteador) — recomendado
+61 | Fixo
+62 | Endereço do painel
+63 | Por exemplo {} (livre na sua rede).
+64 | Máscara
+65 | Gateway (roteador)
+66 | Servidor DNS
+67 | França
+68 | Bélgica
+69 | Suíça
+70 | Luxemburgo
+71 | Canadá
+72 | Alemanha
+73 | Países Baixos
+74 | Espanha
+75 | Itália
+76 | Portugal
+77 | Reino Unido
+78 | Estados Unidos
+79 | Marrocos
+80 | Tunísia
+81 | Argélia
+82 | Esta senha protege as alterações feitas pela página web do painel.
+83 | Senha da página
+84 | No mínimo 8 caracteres, sem espaços.
+85 | Confirmação
+86 | Fuso horário
+87 | Horário de verão automático.
+88 | Cidade para o tempo
+89 | Opcional: também pode ser escolhida depois na página Tempo.
+90 | Procurar
+91 | Procurando…
+92 | Escolha sua cidade na lista.
+93 | Nenhuma cidade encontrada.
+94 | Busca impossível (sem Internet?). A cidade poderá ser escolhida na página Tempo.
+95 | Tempo de: {}
+96 | Insira o cartão micro-SD no leitor e depois escolha-o. Só cartões e pendrives removíveis são mostrados.
+97 | Atualizar
+98 | Cartão
+99 | {} GB
+100 | disco {}
+101 | Pacote básico gratuito de GIFs animados da RpiTeaM (projeto RPI2DMD), incluído com o consentimento de eLLuiGi, e criações OrbitDMD. As categorias marcadas são copiadas e exibidas. Pacote de 11.000 animações: rpiteam.carrd.co ou o fórum Neo-Arcadia.
+102 | GIFs incluídos
+103 | Escolher…
+104 | nenhum
+105 | Seus GIFs (opcional)
+106 | Os GIFs da pasta vão para “Mes_GIF”; cada subpasta vira uma categoria. Também dá para adicioná-los depois pela página web.
+107 | Desmarque as que não quer mostrar por enquanto: elas são copiadas mesmo assim e podem ser ativadas na página GIFs.
+108 | Categorias exibidas
+109 | Pasta ilegível: {}
+110 | {} GIF(s) encontrado(s) em {} pasta(s)
+111 | ; “Accueil” se junta às telas de inicialização.
+112 | Pasta com seus GIFs (de preferência 128×32)
+113 | Entendi que todo o conteúdo deste cartão será apagado.
+114 | As duas senhas são diferentes.
+115 | O painel mostra no máximo 20 categorias: desmarque {}.
+116 | Escolha o cartão micro-SD (insira-o e clique em Atualizar).
+117 | Marque a caixa para confirmar que o cartão pode ser apagado.
+118 | Todo o conteúdo deste disco será apagado definitivamente:\n\n{}\n\nContinuar?
+119 | Apagar o cartão?
+120 | Criação cancelada: nada foi alterado.
+121 | Não foi possível listar os discos: {}
+122 | Modo de teste: nenhum cartão necessário.
+123 | Nenhum cartão encontrado: insira-o e clique em Atualizar.
+124 | Este disco tem mais de 64 GB: confira se é mesmo o cartão SD e não um disco de backup!
+125 | Uma partição FAT32 “ORBITDMD” de {} GB será criada.
+126 | Instalador OrbitDMD {}.
+127 | Preparando o conteúdo do cartão…
+128 | A pasta de teste não está vazia: {}
+129 | Conteúdo pronto ({} GIFs adicionados).
+130 | Conteúdo pronto.
+131 | GIFs incluídos: {} em {} categoria(s)
+132 | Telas de inicialização: {} GIF(s) adicionado(s)
+133 | {} já existente(s)
+134 | Categoria {}: já incluída ({} GIFs)
+135 | Categoria {}: {} GIFs
+136 | {} já incluídos
+137 | copiada, não exibida
+138 | FALHA: {}
+139 | Não foi possível criar o cartão
+140 | O cartão está pronto!
+141 | Teste concluído: conteúdo gravado em {}
+142 | 1. Ejete o cartão (botão abaixo) e coloque-o no Raspberry Pi 3.
+143 | 2. Ligue a alimentação: a tela de inicialização aparece durante a conexão à rede.
+144 | 3. Depois de uns trinta segundos, abra {}
+145 | (senão, procure o endereço do painel na página do seu roteador).
+146 | O Windows vai pedir permissão para alterar o cartão…
+147 | Permissão negada: o cartão não foi alterado.
+148 | Apagando o cartão…
+149 | Criando a partição…
+150 | Formatando em FAT32…
+151 | Copiando os arquivos…
+152 | Verificando a cópia…
+153 | Cartão gravado e verificado ({} arquivos) em {}:
+154 | A preparação parou sem resultado.
+155 | Ejetar o cartão
+156 | Abrir a página do painel
+157 | Cartão ejetado: você pode retirá-lo.
+158 | Nome: 1 a 31 letras, números ou hífens (sem espaços nem acentos).
+159 | Nome da rede Wi-Fi: 1 a 32 caracteres, sem acentos nem aspas.
+160 | Conexão: auto, wifi ou ethernet.
+161 | Senha do Wi-Fi: 8 a 63 caracteres, sem acentos nem aspas.
+162 | Senha da página web: no mínimo 8 caracteres, sem espaços nem acentos.
+163 | Endereço IP inválido.
+164 | Máscara inválida.
+165 | Gateway (roteador) inválido.
+166 | Servidor DNS inválido.
+167 | Máscara inválida (ex.: 255.255.255.0).
+168 | Endereço IP inválido para esta rede.
+169 | O gateway deve estar na mesma rede, em outro endereço.
+170 | h

@@ -15,6 +15,28 @@ programme (`dmd/`), puis reconstruire l'installateur (`bash outils/installateur/
 
 ---
 
+## 1.5.0 — 11 novembre 2026
+
+**Nouveautés**
+- **12 langues** : français, anglais, néerlandais, espagnol, russe, allemand, italien, portugais (Brésil),
+  polonais, ukrainien, turc et tchèque.
+  - **Page web** : choix de la langue en haut à droite de chaque page (par défaut celle du navigateur).
+  - **Panneau** : réglage **Langue du panneau** (Réglages → Affichage) pour les jours, les mois, la météo,
+    les comptes à rebours et les messages d'état. Appliqué tout de suite.
+  - **Installateur** : dans la langue de Windows, ou au choix sur la première page ; la langue choisie
+    devient celle du panneau.
+  - **Fiche GitHub et guides** (Home Assistant dans les 12 langues ; guide de construction en français, anglais, néerlandais,
+    espagnol et russe).
+- **Lettres du monde entier sur le panneau** : les textes et messages gardent leurs accents ; la police
+  Pixel dessine le latin accentué (Ñ, Ä, Ö, Ü, ß, ¡, ¿… ; les lettres polonaises, tchèques et turques
+  prennent la lettre simple), le **cyrillique** (russe, ukrainien) et plus de ponctuation (€, @, &, ' …).
+  Si une police TTF n'a pas une lettre (le russe dans Orbitron, par exemple), le texte passe tout seul en
+  police Pixel. Press Start 2P et Russo One ont le cyrillique.
+- Les polices OrbitDMD LED, Gras et Segments ont aussi les accents et le cyrillique.
+- **Home Assistant** dans la langue du panneau : noms des éléments, listes des effets et des couleurs,
+  état « Écran » et liste des commandes MQTT. Le panneau se réannonce tout seul quand la langue change ;
+  les effets et couleurs sont acceptés en commande dans les 12 langues. En français, rien ne change.
+
 ## 1.4.0 — 11 novembre 2026
 
 **Nouveautés**

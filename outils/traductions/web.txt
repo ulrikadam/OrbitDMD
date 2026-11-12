@@ -1,0 +1,795 @@
+# Traductions de l'interface web d'OrbitDMD
+#
+# Une ligne par texte :  francais | anglais | neerlandais | espagnol | russe
+# Le francais est le texte exact de la page. "{}" : partie variable (nombre, nom...) ;
+# la traduction reprend les parties dans l'ordre avec "{}", ou dans un autre ordre avec
+# "{1}", "{2}"... Une case vide : le texte reste en francais.
+# Apres une modification : make -C dmd (outils/langues.py ecrit dmd/web/lang-xx.js).
+# Corrections bienvenues : https://github.com/ulrikadam/OrbitDMD/issues
+
+# --- en-tete, pied de page, communs ---
+Tableau de bord | Dashboard | Dashboard | Panel | Панель
+Horloge | Clock | Klok | Reloj | Часы
+Météo | Weather | Weer | Tiempo | Погода
+Messages | Messages | Berichten | Mensajes | Сообщения
+Réglages | Settings | Instellingen | Ajustes | Настройки
+Système | System | Systeem | Sistema | Система
+Connexion… | Connecting… | Verbinden… | Conectando… | Подключение…
+En ligne | Online | Online | En línea | В сети
+Hors ligne | Offline | Offline | Sin conexión | Не в сети
+Développé par | Developed by | Ontwikkeld door | Desarrollado por | Разработчик:
+OrbitDMD sur GitHub | OrbitDMD on GitHub | OrbitDMD op GitHub | OrbitDMD en GitHub | OrbitDMD на GitHub
+☕ Soutenir sur Ko-fi | ☕ Support on Ko-fi | ☕ Steun op Ko-fi | ☕ Apoyar en Ko-fi | ☕ Поддержать на Ko-fi
+Afficher | Show | Tonen | Mostrar | Показать
+Masquer | Hide | Verbergen | Ocultar | Скрыть
+Annuler | Cancel | Annuleren | Cancelar | Отмена
+Valider | OK | OK | Aceptar | ОК
+Enregistrer | Save | Opslaan | Guardar | Сохранить
+Fermer | Close | Sluiten | Cerrar | Закрыть
+Supprimer | Delete | Verwijderen | Eliminar | Удалить
+Copier | Copy | Kopiëren | Copiar | Копировать
+Copié | Copied | Gekopieerd | Copiado | Скопировано
+Voir | View | Bekijken | Ver | Смотреть
+Aperçu | Preview | Voorbeeld | Vista previa | Предпросмотр
+Activer | Enable | Inschakelen | Activar | Включить
+Oui | Yes | Ja | Sí | Да
+Non | No | Nee | No | Нет
+Auto | Auto | Auto | Auto | Авто
+Automatique | Automatic | Automatisch | Automático | Автоматически
+Durée | Duration | Duur | Duración | Длительность
+Police | Font | Lettertype | Fuente | Шрифт
+Taille | Size | Grootte | Tamaño | Размер
+Couleur | Colour | Kleur | Color | Цвет
+Motif | Pattern | Patroon | Motivo | Узор
+Format | Format | Opmaak | Formato | Формат
+Fond | Background | Achtergrond | Fondo | Фон
+Texte | Text | Tekst | Texto | Текст
+Titre | Title | Titel | Título | Заголовок
+Vitesse | Speed | Snelheid | Velocidad | Скорость
+Période | Period | Periode | Periodo | Период
+Fréquence | Frequency | Frequentie | Frecuencia | Частота
+Panneau | Panel | Paneel | Panel | Панель
+Pause | Pause | Pauze | Pausa | Пауза
+Redémarrer | Restart | Herstarten | Reiniciar | Перезапустить
+Envoyer | Send | Verzenden | Enviar | Отправить
+Envoi… | Sending… | Verzenden… | Enviando… | Отправка…
+Chargement… | Loading… | Laden… | Cargando… | Загрузка…
+Modifications non enregistrées | Unsaved changes | Niet-opgeslagen wijzigingen | Cambios sin guardar | Несохранённые изменения
+Pixel (intégrée) | Pixel (built-in) | Pixel (ingebouwd) | Pixel (integrada) | Pixel (встроенный)
+OrbitDMD Gras | OrbitDMD Bold | OrbitDMD Vet | OrbitDMD Negrita | OrbitDMD Жирный
+OrbitDMD 7 segments | OrbitDMD 7 segments | OrbitDMD 7 segmenten | OrbitDMD 7 segmentos | OrbitDMD 7 сегментов
+Halloween · {} | Halloween · {} | Halloween · {} | Halloween · {} | Хэллоуин · {}
+Motif {} | Pattern {} | Patroon {} | Motivo {} | Узор {}
+{} Ko | {} KB | {} kB | {} KB | {} КБ
+{} Mo | {} MB | {} MB | {} MB | {} МБ
+{} Go | {} GB | {} GB | {} GB | {} ГБ
+{} j {} h | {}d {}h | {}d {}u | {} d {} h | {} д {} ч
+de | from | van | de | с
+à | to | tot | a | до
+h à | h to | u tot | h a | ч до
+
+# --- couleurs ---
+Blanc | White | Wit | Blanco | Белый
+Rouge | Red | Rood | Rojo | Красный
+Orange | Orange | Oranje | Naranja | Оранжевый
+Ambre | Amber | Amber | Ámbar | Янтарный
+Jaune | Yellow | Geel | Amarillo | Жёлтый
+Vert | Green | Groen | Verde | Зелёный
+Turquoise | Turquoise | Turkoois | Turquesa | Бирюзовый
+Bleu | Blue | Blauw | Azul | Синий
+Violet | Purple | Paars | Violeta | Фиолетовый
+Rose | Pink | Roze | Rosa | Розовый
+Arc-en-ciel | Rainbow | Regenboog | Arcoíris | Радуга
+Arc-en-ciel animé | Animated rainbow | Bewegende regenboog | Arcoíris animado | Анимированная радуга
+Arc-en-ciel (animé) | Rainbow (animated) | Regenboog (bewegend) | Arcoíris (animado) | Радуга (анимация)
+Autre couleur | Other colour | Andere kleur | Otro color | Другой цвет
+Couleur unie | Solid colour | Effen kleur | Color sólido | Сплошной цвет
+Rouge Noël | Christmas red | Kerstrood | Rojo Navidad | Рождественский красный
+Au hasard | Random | Willekeurig | Al azar | Случайно
+Personnalisé… | Custom… | Aangepast… | Personalizado… | Свой…
+
+# --- mot de passe, mise a jour (app.js) ---
+Mot de passe du panneau | Panel password | Wachtwoord van het paneel | Contraseña del panel | Пароль панели
+Nécessaire pour modifier le panneau. Il se trouve sur la ligne | Needed to change the panel. It is on the line | Nodig om het paneel te wijzigen. Het staat op de regel | Necesaria para modificar el panel. Está en la línea | Нужен для изменения настроек панели. Он указан в строке
+de config.txt. | of config.txt. | van config.txt. | de config.txt. | файла config.txt.
+Il sera mémorisé dans ce navigateur. | It will be remembered in this browser. | Het wordt in deze browser onthouden. | Se recordará en este navegador. | Он будет сохранён в этом браузере.
+Vérification… | Checking… | Controleren… | Comprobando… | Проверка…
+Mot de passe accepté | Password accepted | Wachtwoord geaccepteerd | Contraseña aceptada | Пароль принят
+Mot de passe refusé, réessayez. | Wrong password, try again. | Wachtwoord geweigerd, probeer opnieuw. | Contraseña rechazada, inténtelo de nuevo. | Неверный пароль, попробуйте ещё раз.
+Mot de passe requis | Password required | Wachtwoord vereist | Contraseña necesaria | Требуется пароль
+Mot de passe oublié | Password forgotten | Wachtwoord vergeten | Contraseña olvidada | Пароль забыт
+Oublier le mot de passe sur cet appareil | Forget the password on this device | Wachtwoord op dit apparaat vergeten | Olvidar la contraseña en este dispositivo | Забыть пароль на этом устройстве
+Oublier le mot de passe sur cet appareil ? | Forget the password on this device? | Wachtwoord op dit apparaat vergeten? | ¿Olvidar la contraseña en este dispositivo? | Забыть пароль на этом устройстве?
+Saisir le mot de passe | Enter the password | Wachtwoord invoeren | Introducir la contraseña | Ввести пароль
+Déverrouillé | Unlocked | Ontgrendeld | Desbloqueado | Разблокировано
+Verrouillé | Locked | Vergrendeld | Bloqueado | Заблокировано
+Panneau injoignable | Panel unreachable | Paneel onbereikbaar | Panel inaccesible | Панель недоступна
+OrbitDMD {} est disponible | OrbitDMD {} is available | OrbitDMD {} is beschikbaar | OrbitDMD {} está disponible | Доступна версия OrbitDMD {}
+est disponible | is available | is beschikbaar | está disponible | доступен
+(ce panneau a la | (this panel has | (dit paneel heeft | (este panel tiene la | (на этой панели версия
+Voir les nouveautés | See what's new | Nieuwe functies bekijken | Ver las novedades | Что нового
+Télécharger kernel8.img | Download kernel8.img | kernel8.img downloaden | Descargar kernel8.img | Скачать kernel8.img
+Puis installez-le dans | Then install it in | Installeer het daarna in | Luego instálelo en | Затем установите его в разделе
+→ Nouveau programme. Vos réglages et vos GIF sont gardés. | → New firmware. Your settings and GIFs are kept. | → Nieuwe firmware. Je instellingen en GIF's blijven bewaard. | → Nuevo firmware. Se conservan sus ajustes y GIF. | → Новая прошивка. Настройки и GIF сохраняются.
+Plus tard | Later | Later | Más tarde | Позже
+pas encore depuis le démarrage | not yet since start-up | nog niet sinds het opstarten | todavía no desde el arranque | ещё не с момента запуска
+à l'instant | just now | zojuist | ahora mismo | только что
+il y a {} min | {} min ago | {} min geleden | hace {} min | {} мин назад
+il y a {} h {} | {} h {} ago | {} u {} geleden | hace {} h {} | {} ч {} назад
+Heure synchronisée : elle était déjà exacte | Time synchronised: it was already correct | Tijd gesynchroniseerd: die was al juist | Hora sincronizada: ya era correcta | Время синхронизировано: оно уже было точным
+Heure synchronisée : le panneau retardait de {} | Time synchronised: the panel was {} slow | Tijd gesynchroniseerd: het paneel liep {} achter | Hora sincronizada: el panel iba {} atrasado | Время синхронизировано: панель отставала на {}
+Heure synchronisée : le panneau avançait de {} | Time synchronised: the panel was {} fast | Tijd gesynchroniseerd: het paneel liep {} voor | Hora sincronizada: el panel iba {} adelantado | Время синхронизировано: панель спешила на {}
+Le panneau redémarre ; la box peut mettre quelques minutes à lui redonner une adresse. | The panel is restarting; your router may take a few minutes to give it an address again. | Het paneel herstart; de router kan enkele minuten nodig hebben om het weer een adres te geven. | El panel se reinicia; el router puede tardar unos minutos en volver a darle una dirección. | Панель перезапускается; роутеру может понадобиться несколько минут, чтобы снова выдать ей адрес.
+
+# --- tableau de bord (index.html) ---
+OrbitDMD · Tableau de bord | OrbitDMD · Dashboard | OrbitDMD · Dashboard | OrbitDMD · Panel | OrbitDMD · Панель
+Ce qui se passe sur le panneau, en direct. | What is happening on the panel, live. | Wat er op het paneel gebeurt, live. | Lo que pasa en el panel, en directo. | Что происходит на панели, в реальном времени.
+Sur le panneau | On the panel | Op het paneel | En el panel | На панели
+Commandes rapides | Quick controls | Snelle bediening | Controles rápidos | Быстрые команды
+Affichage | Display | Weergave | Pantalla | Экран
+Affichage rallumé | Display back on | Weergave weer aan | Pantalla encendida de nuevo | Экран снова включён
+Affichage éteint | Display off | Weergave uit | Pantalla apagada | Экран выключен
+Affichage éteint : le panneau reste joignable | Display off: the panel stays reachable | Weergave uit: het paneel blijft bereikbaar | Pantalla apagada: el panel sigue accesible | Экран выключен: панель остаётся доступной
+Éteindre | Turn off | Uitzetten | Apagar | Выключить
+Éteindre l'affichage : le panneau reste joignable, et se rallume après un redémarrage | Turn off the display: the panel stays reachable and turns back on after a restart | Weergave uitzetten: het paneel blijft bereikbaar en gaat weer aan na een herstart | Apagar la pantalla: el panel sigue accesible y se vuelve a encender tras un reinicio | Выключить экран: панель остаётся доступной и включится после перезапуска
+Rallumer | Turn on | Weer aanzetten | Encender | Включить
+Figer l'image affichée | Freeze the current image | Huidig beeld bevriezen | Congelar la imagen mostrada | Заморозить текущее изображение
+Image figée | Image frozen | Beeld bevroren | Imagen congelada | Изображение заморожено
+Reprendre | Resume | Hervatten | Reanudar | Продолжить
+Lecture reprise | Playback resumed | Afspelen hervat | Reproducción reanudada | Воспроизведение продолжено
+En pause | Paused | Gepauzeerd | En pausa | На паузе
+Relancer l'animation | Restart the animation | Animatie opnieuw starten | Reiniciar la animación | Перезапустить анимацию
+Redémarrer le panneau (environ 20 secondes) | Restart the panel (about 20 seconds) | Paneel herstarten (ongeveer 20 seconden) | Reiniciar el panel (unos 20 segundos) | Перезапустить панель (около 20 секунд)
+Redémarrer le panneau maintenant ? | Restart the panel now? | Paneel nu herstarten? | ¿Reiniciar el panel ahora? | Перезапустить панель сейчас?
+Redémarrage demandé | Restart requested | Herstart gevraagd | Reinicio solicitado | Перезапуск запрошен
+Panneau de retour | Panel is back | Paneel is terug | El panel ha vuelto | Панель снова в сети
+Le panneau ne répond pas après 8 minutes : vérifiez son écran | The panel has not answered after 8 minutes: check its screen | Het paneel reageert na 8 minuten niet: controleer het scherm | El panel no responde tras 8 minutos: compruebe su pantalla | Панель не отвечает 8 минут: проверьте её экран
+En attente du panneau… | Waiting for the panel… | Wachten op het paneel… | Esperando al panel… | Ожидание панели…
+Adresse IP | IP address | IP-adres | Dirección IP | IP-адрес
+Bibliothèque | Library | Bibliotheek | Biblioteca | Библиотека
+GIF en rotation | GIFs in rotation | GIF's in rotatie | GIF en rotación | GIF в ротации
+Carte SD libre | Free SD card space | Vrije ruimte SD-kaart | Espacio libre en la SD | Свободно на SD-карте
+Compilé le | Built on | Gecompileerd op | Compilado el | Сборка от
+Connexion | Connection | Verbinding | Conexión | Подключение
+Câble réseau | Network cable | Netwerkkabel | Cable de red | Сетевой кабель
+Wi-Fi | Wi-Fi | Wifi | Wi-Fi | Wi-Fi
+Démarrage | Start-up | Opstarten | Arranque | Запуск
+En marche depuis | Running for | Actief sinds | En marcha desde hace | Работает
+Heure seule (programme) | Time only (schedule) | Alleen tijd (schema) | Solo hora (programa) | Только время (расписание)
+Éteint (programme) | Off (schedule) | Uit (schema) | Apagado (programa) | Выключено (расписание)
+Plage horaire réglée dans Réglages → Programme horaire | Time range set in Settings → Schedule | Tijdvak ingesteld in Instellingen → Schema | Franja horaria fijada en Ajustes → Programa | Интервал задаётся в Настройки → Расписание
+Luminosité | Brightness | Helderheid | Brillo | Яркость
+Message | Message | Bericht | Mensaje | Сообщение
+Mire de test | Test pattern | Testbeeld | Patrón de prueba | Тестовая таблица
+Mises à jour et journal | Updates and log | Updates en logboek | Actualizaciones y registro | Обновления и журнал
+Mémoire libre | Free memory | Vrij geheugen | Memoria libre | Свободная память
+Normal | Normal | Normaal | Normal | Норма
+Chaud | Warm | Warm | Caliente | Тепло
+Trop chaud | Too hot | Te warm | Demasiado caliente | Слишком горячо
+Pas encore de météo | No weather yet | Nog geen weer | Todavía sin tiempo | Погоды пока нет
+Pour choisir ce qui s'affiche, ouvrez la page | To choose what is shown, open the page | Open de pagina om te kiezen wat er getoond wordt | Para elegir qué se muestra, abra la página | Чтобы выбрать, что показывать, откройте страницу
+Processeur | Processor | Processor | Procesador | Процессор
+Programme | Firmware | Firmware | Firmware | Прошивка
+Réactivité | Responsiveness | Reactiesnelheid | Capacidad de respuesta | Отзывчивость
+Plus longue attente du Wi-Fi pendant que le panneau calcule (20 dernières secondes, puis 5 dernières minutes). Moins de 50 ms : parfait. | Longest Wi-Fi wait while the panel is busy (last 20 seconds, then last 5 minutes). Under 50 ms: perfect. | Langste wifi-wachttijd terwijl het paneel rekent (laatste 20 seconden, daarna laatste 5 minuten). Minder dan 50 ms: perfect. | Espera más larga del Wi-Fi mientras el panel calcula (últimos 20 segundos, luego últimos 5 minutos). Menos de 50 ms: perfecto. | Самое долгое ожидание Wi-Fi, пока панель занята (последние 20 секунд, затем 5 минут). Меньше 50 мс — отлично.
+Réseau | Network | Netwerk | Red | Сеть
+Synchronisée | Synchronised | Gesynchroniseerd | Sincronizada | Синхронизировано
+Synchronisée {} | Synchronised {} | Gesynchroniseerd {} | Sincronizada {} | Синхронизировано {}
+Version | Version | Versie | Versión | Версия
+
+# --- GIF (gif.html, gifscale.js) ---
+OrbitDMD · GIF | OrbitDMD · GIFs | OrbitDMD · GIF's | OrbitDMD · GIF | OrbitDMD · GIF
+Choisissez les catégories affichées, ajoutez ou retirez des animations. | Choose which categories are shown, add or remove animations. | Kies welke categorieën getoond worden, voeg animaties toe of verwijder ze. | Elija las categorías mostradas, añada o quite animaciones. | Выберите показываемые категории, добавляйте и удаляйте анимации.
+Catégories | Categories | Categorieën | Categorías | Категории
+Catégorie | Category | Categorie | Categoría | Категория
+catégorie | category | categorie | categoría | категория
+Nouvelle catégorie | New category | Nieuwe categorie | Nueva categoría | Новая категория
+Nom de la nouvelle catégorie | Name of the new category | Naam van de nieuwe categorie | Nombre de la nueva categoría | Название новой категории
+Nom de catégorie : lettres, chiffres, _ ou - (32 maximum) | Category name: letters, digits, _ or - (32 at most) | Categorienaam: letters, cijfers, _ of - (maximaal 32) | Nombre de categoría: letras, cifras, _ o - (32 como máximo) | Название категории: буквы, цифры, _ или - (не более 32)
+Créer | Create | Aanmaken | Crear | Создать
+Choisissez une catégorie à gauche. | Choose a category on the left. | Kies links een categorie. | Elija una categoría a la izquierda. | Выберите категорию слева.
+Ajouter des GIF | Add GIFs | GIF's toevoegen | Añadir GIF | Добавить GIF
+: glissez ici des GIF, un dossier entier ou un fichier .zip, ou cliquez (128×32 idéalement) | : drop GIFs, a whole folder or a .zip file here, or click (ideally 128×32) | : sleep hier GIF's, een hele map of een .zip-bestand naartoe, of klik (bij voorkeur 128×32) | : arrastre aquí GIF, una carpeta entera o un archivo .zip, o haga clic (idealmente 128×32) | : перетащите сюда GIF, целую папку или .zip-файл, или нажмите (лучше 128×32)
+Rechercher | Search | Zoeken | Buscar | Поиск
+Rechercher une GIF | Search for a GIF | Een GIF zoeken | Buscar un GIF | Найти GIF
+Aucune GIF. | No GIFs. | Geen GIF's. | Ningún GIF. | Нет GIF.
+Aucune GIF trouvée. | No GIF found. | Geen GIF gevonden. | No se ha encontrado ningún GIF. | GIF не найдены.
+Afficher tout de suite sur le panneau | Show on the panel right now | Nu meteen op het paneel tonen | Mostrar ahora mismo en el panel | Показать на панели прямо сейчас
+Affichée sur le panneau | Shown on the panel | Getoond op het paneel | Mostrado en el panel | Показано на панели
+Afficher {} | Show {} | {} tonen | Mostrar {} | Показывать {}
+Supprimer {} | Delete {} | {} verwijderen | Eliminar {} | Удалить {}
+Favorite : passe plus souvent (cliquer pour enlever) | Favourite: plays more often (click to remove) | Favoriet: komt vaker voorbij (klik om te verwijderen) | Favorito: sale más a menudo (clic para quitar) | Избранное: показывается чаще (нажмите, чтобы убрать)
+Mettre en favori : passe plus souvent | Make favourite: plays more often | Favoriet maken: komt vaker voorbij | Marcar como favorito: sale más a menudo | В избранное: показывать чаще
+Hors rotation (cliquer pour la remettre) | Out of rotation (click to put it back) | Uit rotatie (klik om terug te zetten) | Fuera de rotación (clic para volver a ponerlo) | Вне ротации (нажмите, чтобы вернуть)
+Retirer de la rotation sans la supprimer | Take out of rotation without deleting | Uit rotatie halen zonder te verwijderen | Quitar de la rotación sin eliminar | Убрать из ротации, не удаляя
+Supprimer de la carte SD | Delete from the SD card | Van de SD-kaart verwijderen | Eliminar de la tarjeta SD | Удалить с SD-карты
+{} passera plus souvent | {} will play more often | {} komt vaker voorbij | {} saldrá más a menudo | {} будет показываться чаще
+{} ne passera plus (toujours sur la carte) | {} will no longer play (still on the card) | {} komt niet meer voorbij (staat nog op de kaart) | {} ya no saldrá (sigue en la tarjeta) | {} больше не будет показываться (остаётся на карте)
+{} passe normalement | {} plays normally | {} komt normaal voorbij | {} sale normalmente | {} показывается как обычно
+{} va s'afficher | {} will be shown | {} wordt getoond | {} se va a mostrar | {} сейчас появится
+{} supprimée | {} deleted | {} verwijderd | {} eliminado | {} удалён
+{} favorite(s) | {} favourite(s) | {} favoriet(en) | {} favorito(s) | избранных: {}
+{} hors rotation | {} out of rotation | {} uit rotatie | {} fuera de rotación | вне ротации: {}
+{} affichée(s) | {} shown | {} getoond | {} mostrado(s) | показано: {}
+{} libres sur la carte | {} free on the card | {} vrij op de kaart | {} libres en la tarjeta | {} свободно на карте
+Supprimer la catégorie | Delete the category | Categorie verwijderen | Eliminar la categoría | Удалить категорию
+Supprimer cette catégorie et toutes ses GIF | Delete this category and all its GIFs | Deze categorie en al haar GIF's verwijderen | Eliminar esta categoría y todos sus GIF | Удалить эту категорию и все её GIF
+Supprimer « {} » ? | Delete “{}”? | “{}” verwijderen? | ¿Eliminar «{}»? | Удалить «{}»?
+Ses {} GIF seront effacées de la carte SD. | Its {} GIFs will be erased from the SD card. | De {} GIF's worden van de SD-kaart gewist. | Sus {} GIF se borrarán de la tarjeta SD. | Её GIF ({}) будут стёрты с SD-карты.
+C'est définitif. Tapez le mot de passe pour confirmer. | This cannot be undone. Type the password to confirm. | Dit is definitief. Typ het wachtwoord om te bevestigen. | Es definitivo. Escriba la contraseña para confirmar. | Это необратимо. Введите пароль для подтверждения.
+Supprimer définitivement | Delete permanently | Definitief verwijderen | Eliminar definitivamente | Удалить навсегда
+Suppression en cours… | Deleting… | Bezig met verwijderen… | Eliminando… | Удаление…
+Catégorie {} supprimée | Category {} deleted | Categorie {} verwijderd | Categoría {} eliminada | Категория {} удалена
+C'est la seule catégorie affichée : activez-en une autre d'abord | It is the only category shown: enable another one first | Dit is de enige getoonde categorie: schakel eerst een andere in | Es la única categoría mostrada: active otra primero | Это единственная показываемая категория: сначала включите другую
+Gardez au moins une catégorie affichée | Keep at least one category shown | Laat minstens één categorie getoond | Mantenga al menos una categoría mostrada | Оставьте хотя бы одну показываемую категорию
+Montrée | Shown | Getoond | Mostrada | Показывается
+Montrée seulement : {} | Shown only: {} | Alleen getoond: {} | Mostrada solo: {} | Показывается только: {}
+Non affichée | Not shown | Niet getoond | No mostrada | Не показывается
+affichée | shown | getoond | mostrada | показывается
+Toute l'année | All year | Het hele jaar | Todo el año | Весь год
+Période de « {} » enregistrée | Period of “{}” saved | Periode van “{}” opgeslagen | Periodo de «{}» guardado | Период «{}» сохранён
+Divers | Miscellaneous | Diversen | Varios | Разное
+Écrans d'accueil. | Start-up screens. | Startschermen. | Pantallas de inicio. | Экраны запуска.
+Une GIF dont le nom contient « demarrage » tourne pendant la connexion Wi-Fi ; « noel » ne sert qu'en décembre, « halloween » qu'en octobre ; les autres sont tirées au hasard. Laissez cette catégorie désactivée pour qu'elles n'entrent pas dans la rotation. | A GIF whose name contains “demarrage” plays while Wi-Fi connects; “noel” is only used in December, “halloween” only in October; the others are picked at random. Leave this category disabled so they do not enter the rotation. | Een GIF met “demarrage” in de naam speelt tijdens de wifi-verbinding; “noel” alleen in december, “halloween” alleen in oktober; de andere worden willekeurig gekozen. Laat deze categorie uitgeschakeld zodat ze niet in de rotatie komen. | Un GIF cuyo nombre contiene «demarrage» se muestra durante la conexión Wi-Fi; «noel» solo en diciembre, «halloween» solo en octubre; los demás se eligen al azar. Deje esta categoría desactivada para que no entren en la rotación. | GIF с «demarrage» в имени показывается во время подключения Wi-Fi; «noel» — только в декабре, «halloween» — только в октябре; остальные выбираются случайно. Оставьте эту категорию выключенной, чтобы они не попадали в ротацию.
+OrbitDMD intègre le pack de GIF animées gratuit de base de la | OrbitDMD includes the free basic animated GIF pack from the | OrbitDMD bevat het gratis basispakket geanimeerde GIF's van het | OrbitDMD incluye el pack básico gratuito de GIF animados del | OrbitDMD включает бесплатный базовый набор анимированных GIF от
+(projet RPI2DMD), avec l'accord d'eLLuiGi. Merci à eux ! Un pack de | (RPI2DMD project), with eLLuiGi's permission. Thanks to them! A pack of | (RPI2DMD-project), met toestemming van eLLuiGi. Bedankt! Een pakket van | (proyecto RPI2DMD), con el permiso de eLLuiGi. ¡Gracias! Un pack de | (проект RPI2DMD), с согласия eLLuiGi. Спасибо им! Набор из
+11 000 animations | 11,000 animations | 11.000 animaties | 11 000 animaciones | 11 000 анимаций
+sur Neo-Arcadia | on Neo-Arcadia | op Neo-Arcadia | en Neo-Arcadia | на Neo-Arcadia
+ou sur | or on | of op | o en | или на
+Beaucoup de GIF dans des sous-dossiers ? | Lots of GIFs in subfolders? | Veel GIF's in submappen? | ¿Muchos GIF en subcarpetas? | Много GIF во вложенных папках?
+Un dossier = une catégorie | One folder = one category | Eén map = één categorie | Una carpeta = una categoría | Одна папка = одна категория
+Tout dans | Everything in | Alles in | Todo en | Всё в
+Réduire au format du panneau ( | Shrink to the panel size ( | Verkleinen tot het paneelformaat ( | Reducir al tamaño del panel ( | Уменьшать до размера панели (
+) les GIF plus grandes | ) the larger GIFs | ) voor grotere GIF's | ) los GIF más grandes | ) GIF большего размера
+Choisir un dossier | Choose a folder | Map kiezen | Elegir una carpeta | Выбрать папку
+Lecture des fichiers… | Reading files… | Bestanden lezen… | Leyendo archivos… | Чтение файлов…
+Ce navigateur ne sait pas ouvrir les .zip : décompressez-le, puis glissez le dossier | This browser cannot open .zip files: unzip it, then drop the folder | Deze browser kan geen .zip openen: pak het uit en sleep dan de map | Este navegador no puede abrir .zip: descomprímalo y arrastre la carpeta | Этот браузер не умеет открывать .zip: распакуйте архив и перетащите папку
+{} n'est pas un fichier .zip lisible | {} is not a readable .zip file | {} is geen leesbaar .zip-bestand | {} no es un archivo .zip legible | {} — нечитаемый .zip-файл
+{} est trop gros pour être lu ici : décompressez-le, puis glissez le dossier | {} is too big to be read here: unzip it, then drop the folder | {} is te groot om hier te lezen: pak het uit en sleep dan de map | {} es demasiado grande para leerlo aquí: descomprímalo y arrastre la carpeta | {} слишком велик для чтения здесь: распакуйте его и перетащите папку
+{} GIF ({}) à envoyer dans {} catégorie | {} GIFs ({}) to send into {} category | {} GIF's ({}) te verzenden naar {} categorie | {} GIF ({}) para enviar a {} categoría | {} GIF ({}) для отправки в {} категорию
+{} GIF ({}) à envoyer dans {} catégories | {} GIFs ({}) to send into {} categories | {} GIF's ({}) te verzenden naar {} categorieën | {} GIF ({}) para enviar a {} categorías | {} GIF ({}) для отправки в категории: {}
+nouvelle catégorie | new category | nieuwe categorie | categoría nueva | новая категория
+… et {} autres | … and {} more | … en {} andere | … y {} más | … и ещё {}
+{} GIF du .zip ignorée(s) (protégées par mot de passe ou format inconnu). | {} GIF(s) in the .zip skipped (password-protected or unknown format). | {} GIF('s) uit de .zip overgeslagen (met wachtwoord beveiligd of onbekend formaat). | {} GIF del .zip omitido(s) (protegidos con contraseña o formato desconocido). | Пропущено GIF из .zip: {} (защищены паролем или неизвестный формат).
+⚠️ Pas assez de place sur la carte SD : {} libres. | ⚠️ Not enough space on the SD card: {} free. | ⚠️ Niet genoeg ruimte op de SD-kaart: {} vrij. | ⚠️ No hay espacio suficiente en la tarjeta SD: {} libres. | ⚠️ Недостаточно места на SD-карте: свободно {}.
+Durée estimée : environ {} min en Wi-Fi. Laissez cette page ouverte. Les GIF déjà présentes sont sautées : vous pourrez reprendre plus tard. | Estimated time: about {} min over Wi-Fi. Keep this page open. GIFs already there are skipped: you can resume later. | Geschatte duur: ongeveer {} min via wifi. Laat deze pagina open. GIF's die er al zijn worden overgeslagen: je kunt later verdergaan. | Duración estimada: unos {} min por Wi-Fi. Deje esta página abierta. Los GIF ya presentes se omiten: podrá continuar más tarde. | Примерное время: около {} мин по Wi-Fi. Не закрывайте страницу. Уже имеющиеся GIF пропускаются — можно продолжить позже.
+Les nouvelles catégories ne s'affichent sur le panneau qu'une fois cochées à gauche. | New categories only appear on the panel once ticked on the left. | Nieuwe categorieën verschijnen pas op het paneel als ze links aangevinkt zijn. | Las categorías nuevas solo se muestran en el panel una vez marcadas a la izquierda. | Новые категории появятся на панели, только когда их отметят слева.
+Vérification de « {} »… | Checking “{}”… | “{}” controleren… | Comprobando «{}»… | Проверка «{}»…
+Envoi | Sending | Verzenden | Envío | Отправка
+Envoi en cours | Sending in progress | Bezig met verzenden | Envío en curso | Идёт отправка
+Envoi {} / {} : {} / {} | Sending {} / {}: {} / {} | Verzenden {} / {}: {} / {} | Enviando {} / {}: {} / {} | Отправка {} / {}: {} / {}
+{} ajoutée(s) · {} déjà là · {} erreur(s) | {} added · {} already there · {} error(s) | {} toegevoegd · {} al aanwezig · {} fout(en) | {} añadido(s) · {} ya presente(s) · {} error(es) | добавлено: {} · уже было: {} · ошибок: {}
+{} réduite(s) | {} shrunk | {} verkleind | {} reducido(s) | уменьшено: {}
+reste environ {} min | about {} min left | nog ongeveer {} min | quedan unos {} min | осталось около {} мин
+Terminé : {} GIF ajoutée(s), {} déjà présente(s), {} erreur(s) | Done: {} GIF(s) added, {} already there, {} error(s) | Klaar: {} GIF('s) toegevoegd, {} al aanwezig, {} fout(en) | Terminado: {} GIF añadido(s), {} ya presente(s), {} error(es) | Готово: добавлено GIF: {}, уже было: {}, ошибок: {}
+Envoi arrêté : {} GIF ajoutée(s), {} déjà présente(s), {} erreur(s) | Sending stopped: {} GIF(s) added, {} already there, {} error(s) | Verzenden gestopt: {} GIF('s) toegevoegd, {} al aanwezig, {} fout(en) | Envío detenido: {} GIF añadido(s), {} ya presente(s), {} error(es) | Отправка остановлена: добавлено GIF: {}, уже было: {}, ошибок: {}
+{} réduite(s) au format du panneau | {} shrunk to the panel size | {} verkleind tot paneelformaat | {} reducido(s) al tamaño del panel | уменьшено до размера панели: {}
+{} GIF ajoutée(s) | {} GIF(s) added | {} GIF('s) toegevoegd | {} GIF añadido(s) | Добавлено GIF: {}
+{} erreur(s) | {} error(s) | {} fout(en) | {} error(es) | ошибок: {}
+Dernière erreur : {} | Last error: {} | Laatste fout: {} | Último error: {} | Последняя ошибка: {}
+Relancez le même envoi plus tard : les GIF déjà envoyées seront sautées. | Start the same upload again later: GIFs already sent will be skipped. | Start dezelfde verzending later opnieuw: reeds verzonden GIF's worden overgeslagen. | Repita el mismo envío más tarde: los GIF ya enviados se omitirán. | Повторите ту же отправку позже: уже отправленные GIF будут пропущены.
+Arrêter | Stop | Stoppen | Detener | Остановить
+Arrêt après la GIF en cours… | Stopping after the current GIF… | Stoppen na de huidige GIF… | Deteniendo tras el GIF actual… | Остановка после текущего GIF…
+Ajoutez des GIF à « {} » pour la créer sur la carte | Add GIFs to “{}” to create it on the card | Voeg GIF's toe aan “{}” om haar op de kaart aan te maken | Añada GIF a «{}» para crearla en la tarjeta | Добавьте GIF в «{}», чтобы создать её на карте
+GIF sans image | GIF without image | GIF zonder beeld | GIF sin imagen | GIF без изображения
+GIF sans palette | GIF without palette | GIF zonder palet | GIF sin paleta | GIF без палитры
+
+# --- horloge (horloge.html) ---
+OrbitDMD · Horloge | OrbitDMD · Clock | OrbitDMD · Klok | OrbitDMD · Reloj | OrbitDMD · Часы
+Police, couleurs et date de l'heure affichée entre les GIF. L'aperçu est dessiné par le panneau lui-même. | Font, colours and date of the time shown between GIFs. The preview is drawn by the panel itself. | Lettertype, kleuren en datum van de tijd tussen de GIF's. Het voorbeeld wordt door het paneel zelf getekend. | Fuente, colores y fecha de la hora mostrada entre los GIF. La vista previa la dibuja el propio panel. | Шрифт, цвета и дата для времени между GIF. Предпросмотр рисует сама панель.
+Aperçu de l'horloge | Clock preview | Voorbeeld van de klok | Vista previa del reloj | Предпросмотр часов
+Écran de l'aperçu | Preview screen | Voorbeeldscherm | Pantalla de la vista previa | Экран предпросмотра
+Heure | Time | Tijd | Hora | Время
+Date | Date | Datum | Fecha | Дата
+Chargement de l'aperçu… | Loading preview… | Voorbeeld laden… | Cargando vista previa… | Загрузка предпросмотра…
+Aperçu indisponible | Preview unavailable | Voorbeeld niet beschikbaar | Vista previa no disponible | Предпросмотр недоступен
+Afficher l'heure | Show the time | Tijd tonen | Mostrar la hora | Показывать время
+Entre deux GIF | Between two GIFs | Tussen twee GIF's | Entre dos GIF | Между двумя GIF
+Fuseau horaire | Time zone | Tijdzone | Zona horaria | Часовой пояс
+Heure d'été automatique | Automatic daylight saving time | Automatische zomertijd | Horario de verano automático | Автоматический летний переход
+Police de l'heure | Time font | Lettertype van de tijd | Fuente de la hora | Шрифт времени
+Couleur de l'heure | Time colour | Kleur van de tijd | Color de la hora | Цвет времени
+Couleur de la date | Date colour | Kleur van de datum | Color de la fecha | Цвет даты
+Taille en pixels | Size in pixels | Grootte in pixels | Tamaño en píxeles | Размер в пикселях
+Auto : la plus grande qui tient. Une taille choisie est réduite si le texte dépasse | Auto: the largest that fits. A chosen size is reduced if the text does not fit | Auto: de grootste die past. Een gekozen grootte wordt verkleind als de tekst niet past | Auto: la más grande que cabe. Un tamaño elegido se reduce si el texto no cabe | Авто: самый крупный, который помещается. Выбранный размер уменьшается, если текст не помещается
+Motif (remplit le texte) | Pattern (fills the text) | Patroon (vult de tekst) | Motivo (rellena el texto) | Узор (заполняет текст)
+Ou un motif | Or a pattern | Of een patroon | O un motivo | Или узор
+Remplissage | Fill | Vulling | Relleno | Заливка
+Fond (derrière l'heure) | Background (behind the time) | Achtergrond (achter de tijd) | Fondo (detrás de la hora) | Фон (за временем)
+Image ou animation derrière l'heure. | Image or animation behind the time. | Afbeelding of animatie achter de tijd. | Imagen o animación detrás de la hora. | Изображение или анимация за временем.
+Aucun (noir) | None (black) | Geen (zwart) | Ninguno (negro) | Нет (чёрный)
+Un fond tiré au hasard à chaque affichage de l'heure | A random background each time the time is shown | Een willekeurige achtergrond telkens als de tijd getoond wordt | Un fondo al azar cada vez que se muestra la hora | Случайный фон при каждом показе времени
+Une couleur, l'arc-en-ciel ou un motif, tiré au hasard à chaque affichage de l'heure | A colour, the rainbow or a pattern, picked at random each time the time is shown | Een kleur, de regenboog of een patroon, willekeurig gekozen telkens als de tijd getoond wordt | Un color, el arcoíris o un motivo, al azar cada vez que se muestra la hora | Цвет, радуга или узор — случайно при каждом показе времени
+Deux-points clignotants | Blinking colon | Knipperende dubbele punt | Dos puntos parpadeantes | Мигающее двоеточие
+Bords adoucis | Smooth edges | Vloeiende randen | Bordes suavizados | Сглаженные края
+Sinon, pixels nets | Otherwise, sharp pixels | Anders scherpe pixels | Si no, píxeles nítidos | Иначе — чёткие пиксели
+Afficher la date | Show the date | Datum tonen | Mostrar la fecha | Показывать дату
+La date seule, montrée après l'heure | The date alone, shown after the time | Alleen de datum, getoond na de tijd | Solo la fecha, mostrada después de la hora | Только дата, после времени
+Après l'heure (écran à part) | After the time (separate screen) | Na de tijd (apart scherm) | Después de la hora (pantalla aparte) | После времени (отдельный экран)
+Sous l'heure | Below the time | Onder de tijd | Debajo de la hora | Под временем
+Durée de la date | Date duration | Duur van de datum | Duración de la fecha | Длительность даты
+Enregistre puis montre l'heure 15 secondes sur le panneau | Saves, then shows the time on the panel for 15 seconds | Opslaan en daarna de tijd 15 seconden op het paneel tonen | Guarda y luego muestra la hora 15 segundos en el panel | Сохраняет и показывает время на панели 15 секунд
+Voir sur le panneau | Show on the panel | Tonen op het paneel | Ver en el panel | Показать на панели
+L'heure s'affiche 15 secondes sur le panneau | The time is shown on the panel for 15 seconds | De tijd wordt 15 seconden op het paneel getoond | La hora se muestra 15 segundos en el panel | Время показывается на панели 15 секунд
+Horloge enregistrée | Clock saved | Klok opgeslagen | Reloj guardado | Часы сохранены
+Heure du panneau | Panel time | Tijd van het paneel | Hora del panel | Время панели
+Internet | Internet | Internet | Internet | Интернет
+heure Internet | Internet time | internettijd | hora de Internet | время из Интернета
+horloge à pile | battery clock | klok met batterij | reloj con pila | часы с батарейкой
+heure inconnue | unknown time | onbekende tijd | hora desconocida | время неизвестно
+{} · synchronisée {} | {} · synchronised {} | {} · gesynchroniseerd {} | {} · sincronizada {} | {} · синхронизировано {}
+Remettre le panneau à l'heure exacte d'Internet | Set the panel to the exact Internet time | Het paneel op de exacte internettijd zetten | Poner el panel en la hora exacta de Internet | Установить на панели точное время из Интернета
+Synchroniser | Synchronise | Synchroniseren | Sincronizar | Синхронизировать
+Ajouter des polices, motifs ou fonds | Add fonts, patterns or backgrounds | Lettertypen, patronen of achtergronden toevoegen | Añadir fuentes, motivos o fondos | Добавить шрифты, узоры или фоны
+Glissez des fichiers ici | Drop files here | Sleep bestanden hierheen | Arrastre archivos aquí | Перетащите файлы сюда
+ou cliquez : polices TTF ou OTF, images PNG ou GIF de 128×32 | or click: TTF or OTF fonts, 128×32 PNG or GIF images | of klik: TTF- of OTF-lettertypen, PNG- of GIF-afbeeldingen van 128×32 | o haga clic: fuentes TTF u OTF, imágenes PNG o GIF de 128×32 | или нажмите: шрифты TTF или OTF, изображения PNG или GIF 128×32
+Les images servent de | Images are used as | Afbeeldingen dienen als | Las imágenes sirven de | Изображения используются как
+: format non pris en charge | : unsupported format | : formaat niet ondersteund | : formato no compatible | : формат не поддерживается
+: trop gros (4 Mo maximum) | : too big (4 MB at most) | : te groot (maximaal 4 MB) | : demasiado grande (4 MB como máximo) | : слишком большой (не более 4 МБ)
+
+# --- meteo (meteo.html) ---
+OrbitDMD · Météo | OrbitDMD · Weather | OrbitDMD · Weer | OrbitDMD · Tiempo | OrbitDMD · Погода
+Le temps qu'il fait, affiché entre les GIF. Mise à jour toutes les 15 minutes. | The current weather, shown between GIFs. Updated every 15 minutes. | Het actuele weer, getoond tussen de GIF's. Elke 15 minuten bijgewerkt. | El tiempo actual, mostrado entre los GIF. Se actualiza cada 15 minutos. | Текущая погода между GIF. Обновляется каждые 15 минут.
+Aperçu de l'écran météo | Weather screen preview | Voorbeeld van het weerscherm | Vista previa de la pantalla del tiempo | Предпросмотр экрана погоды
+En ce moment | Right now | Op dit moment | Ahora mismo | Сейчас
+Aujourd'hui | Today | Vandaag | Hoy | Сегодня
+Demain | Tomorrow | Morgen | Mañana | Завтра
+Humidité | Humidity | Vochtigheid | Humedad | Влажность
+Vent | Wind | Wind | Viento | Ветер
+Ressenti | Feels like | Gevoelstemperatuur | Sensación | Ощущается
+Mise à jour | Updated | Bijgewerkt | Actualizado | Обновлено
+Mise à jour {} | Updated {} | Bijgewerkt {} | Actualizado {} | Обновлено {}
+dernier essai : {} | last try: {} | laatste poging: {} | último intento: {} | последняя попытка: {}
+Actualiser | Refresh | Vernieuwen | Actualizar | Обновить
+Météo en cours de chargement… | Loading weather… | Weer wordt geladen… | Cargando el tiempo… | Загрузка погоды…
+Pas de météo : {} | No weather: {} | Geen weer: {} | Sin tiempo: {} | Нет погоды: {}
+Choisissez d'abord un lieu | Choose a place first | Kies eerst een plaats | Elija primero un lugar | Сначала выберите место
+Données météo : | Weather data: | Weergegevens: | Datos meteorológicos: | Данные о погоде:
+Afficher la météo | Show the weather | Weer tonen | Mostrar el tiempo | Показывать погоду
+Après chaque GIF | After every GIF | Na elke GIF | Después de cada GIF | После каждого GIF
+Toutes les 2 GIF | Every 2 GIFs | Elke 2 GIF's | Cada 2 GIF | Каждые 2 GIF
+Toutes les 3 GIF | Every 3 GIFs | Elke 3 GIF's | Cada 3 GIF | Каждые 3 GIF
+Toutes les 5 GIF | Every 5 GIFs | Elke 5 GIF's | Cada 5 GIF | Каждые 5 GIF
+Toutes les 10 GIF | Every 10 GIFs | Elke 10 GIF's | Cada 10 GIF | Каждые 10 GIF
+Toutes les 20 GIF | Every 20 GIFs | Elke 20 GIF's | Cada 20 GIF | Каждые 20 GIF
+Lieu | Place | Plaats | Lugar | Место
+Lieu choisi | Chosen place | Gekozen plaats | Lugar elegido | Выбранное место
+Lieu choisi : enregistrez pour l'utiliser | Place chosen: save to use it | Plaats gekozen: sla op om ze te gebruiken | Lugar elegido: guarde para usarlo | Место выбрано: сохраните, чтобы использовать
+Pas encore choisi | Not chosen yet | Nog niet gekozen | Aún no elegido | Ещё не выбрано
+Position choisie | Chosen position | Gekozen positie | Posición elegida | Выбранная позиция
+Cherchez votre ville ci-dessous | Search for your town below | Zoek hieronder je woonplaats | Busque su ciudad abajo | Найдите свой город ниже
+Chercher une ville | Search for a town | Een plaats zoeken | Buscar una ciudad | Найти город
+Ville ou code postal | Town or postcode | Plaats of postcode | Ciudad o código postal | Город или индекс
+Chercher | Search | Zoeken | Buscar | Найти
+Recherche… | Searching… | Zoeken… | Buscando… | Поиск…
+Aucun lieu trouvé. | No place found. | Geen plaats gevonden. | No se ha encontrado ningún lugar. | Место не найдено.
+Recherche impossible (pas d'accès Internet depuis ce navigateur ?) | Search failed (no Internet access from this browser?) | Zoeken onmogelijk (geen internettoegang vanuit deze browser?) | Búsqueda imposible (¿sin acceso a Internet desde este navegador?) | Поиск невозможен (нет доступа в Интернет из этого браузера?)
+La recherche passe par votre navigateur ; le panneau ne garde que la position choisie. | The search goes through your browser; the panel only keeps the chosen position. | Het zoeken gaat via je browser; het paneel bewaart alleen de gekozen positie. | La búsqueda pasa por su navegador; el panel solo guarda la posición elegida. | Поиск идёт через ваш браузер; панель хранит только выбранную позицию.
+Police de la température | Temperature font | Lettertype van de temperatuur | Fuente de la temperatura | Шрифт температуры
+Couleur de la température | Temperature colour | Kleur van de temperatuur | Color de la temperatura | Цвет температуры
+Deuxième ligne | Second line | Tweede regel | Segunda línea | Вторая строка
+Couleur de la deuxième ligne | Second line colour | Kleur van de tweede regel | Color de la segunda línea | Цвет второй строки
+Rien | Nothing | Niets | Nada | Ничего
+Description (PLUIE…) | Description (RAIN…) | Beschrijving (REGEN…) | Descripción (LLUVIA…) | Описание (ДОЖДЬ…)
+Minimum / maximum | Minimum / maximum | Minimum / maximum | Mínimo / máximo | Минимум / максимум
+Température ressentie | Feels-like temperature | Gevoelstemperatuur | Sensación térmica | Ощущаемая температура
+Icône | Icon | Pictogram | Icono | Значок
+Icône animée | Animated icon | Bewegend pictogram | Icono animado | Анимированный значок
+Pluie qui tombe, soleil qui brille… | Falling rain, shining sun… | Vallende regen, schijnende zon… | Lluvia que cae, sol que brilla… | Падающий дождь, сияющее солнце…
+Voir toutes les icônes | See all icons | Alle pictogrammen bekijken | Ver todos los iconos | Все значки
+Soleil | Sun | Zon | Sol | Солнце
+Nuit claire | Clear night | Heldere nacht | Noche despejada | Ясная ночь
+Peu nuageux | Partly cloudy | Licht bewolkt | Poco nuboso | Малооблачно
+Nuit nuageuse | Cloudy night | Bewolkte nacht | Noche nublada | Облачная ночь
+Couvert | Overcast | Zwaar bewolkt | Cubierto | Пасмурно
+Brouillard | Fog | Mist | Niebla | Туман
+Bruine | Drizzle | Motregen | Llovizna | Морось
+Pluie | Rain | Regen | Lluvia | Дождь
+Neige | Snow | Sneeuw | Nieve | Снег
+Orage | Thunderstorm | Onweer | Tormenta | Гроза
+Enregistre puis montre la météo 15 secondes sur le panneau | Saves, then shows the weather on the panel for 15 seconds | Opslaan en daarna het weer 15 seconden op het paneel tonen | Guarda y luego muestra el tiempo 15 segundos en el panel | Сохраняет и показывает погоду на панели 15 секунд
+La météo s'affiche 15 secondes sur le panneau | The weather is shown on the panel for 15 seconds | Het weer wordt 15 seconden op het paneel getoond | El tiempo se muestra 15 segundos en el panel | Погода показывается на панели 15 секунд
+Météo enregistrée | Weather saved | Weer opgeslagen | Tiempo guardado | Погода сохранена
+
+# --- messages (messages.html) ---
+OrbitDMD · Messages | OrbitDMD · Messages | OrbitDMD · Berichten | OrbitDMD · Mensajes | OrbitDMD · Сообщения
+Des textes qui défilent et des comptes à rebours, chacun avec son style. Ceux qui sont activés passent à tour de rôle entre les GIF. | Scrolling texts and countdowns, each with its own style. The enabled ones take turns between GIFs. | Lopende teksten en aftellers, elk met een eigen stijl. De ingeschakelde komen om beurten tussen de GIF's. | Textos que se desplazan y cuentas atrás, cada uno con su estilo. Los activados se turnan entre los GIF. | Бегущие строки и обратные отсчёты, у каждого свой стиль. Включённые показываются по очереди между GIF.
+Textes défilants | Scrolling texts | Lopende teksten | Textos desplazables | Бегущие строки
+Comptes à rebours | Countdowns | Aftellers | Cuentas atrás | Обратные отсчёты
+Compte à rebours | Countdown | Afteller | Cuenta atrás | Обратный отсчёт
+Ajouter un texte | Add a text | Tekst toevoegen | Añadir un texto | Добавить текст
+Ajouter un compte à rebours | Add a countdown | Afteller toevoegen | Añadir una cuenta atrás | Добавить обратный отсчёт
+Aucun texte : cliquez sur « Ajouter un texte ». | No text: click “Add a text”. | Geen tekst: klik op “Tekst toevoegen”. | Ningún texto: haga clic en «Añadir un texto». | Нет текстов: нажмите «Добавить текст».
+Aucun compte à rebours. | No countdown. | Geen afteller. | Ninguna cuenta atrás. | Нет обратных отсчётов.
+(texte vide) | (empty text) | (lege tekst) | (texto vacío) | (пустой текст)
+Un texte est vide : écrivez-le ou supprimez-le | A text is empty: write it or delete it | Een tekst is leeg: vul hem in of verwijder hem | Un texto está vacío: escríbalo o elimínelo | Один текст пуст: заполните или удалите его
+Entre les GIF | Between GIFs | Tussen de GIF's | Entre los GIF | Между GIF
+Un texte activé à la fois, à tour de rôle | One enabled text at a time, in turn | Eén ingeschakelde tekst tegelijk, om beurten | Un texto activado a la vez, por turnos | По одному включённому тексту, по очереди
+Un compte activé à la fois, à tour de rôle | One enabled countdown at a time, in turn | Eén ingeschakelde afteller tegelijk, om beurten | Una cuenta activada a la vez, por turnos | По одному включённому отсчёту, по очереди
+toutes les | every | elke | cada | каждые
+Activé : passe entre les GIF | Enabled: plays between GIFs | Ingeschakeld: komt tussen de GIF's | Activado: sale entre los GIF | Включено: показывается между GIF
+Monter | Move up | Omhoog | Subir | Вверх
+Joyeux anniversaire ! | Happy birthday! | Gefeliciteerd! | ¡Feliz cumpleaños! | С днём рождения!
+{} / 200 octets (une lettre accentuée compte pour 2) | {} / 200 bytes (an accented letter counts as 2) | {} / 200 bytes (een letter met accent telt voor 2) | {} / 200 bytes (una letra acentuada cuenta como 2) | {} / 200 байт (буква не из латиницы считается за 2)
+Arrivée du texte | Text entrance | Binnenkomst van de tekst | Entrada del texto | Появление текста
+Défile vers la gauche | Scrolls to the left | Loopt naar links | Se desplaza a la izquierda | Влево
+Défile vers la droite | Scrolls to the right | Loopt naar rechts | Se desplaza a la derecha | Вправо
+Monte (du bas vers le haut) | Rises (bottom to top) | Omhoog (van onder naar boven) | Sube (de abajo arriba) | Вверх (снизу вверх)
+Descend (du haut vers le bas) | Falls (top to bottom) | Omlaag (van boven naar onder) | Baja (de arriba abajo) | Вниз (сверху вниз)
+Lettre par lettre | Letter by letter | Letter voor letter | Letra a letra | По буквам
+Pluie de lettres | Raining letters | Regen van letters | Lluvia de letras | Дождь из букв
+Fondu | Fade | Vervagen | Fundido | Плавное появление
+Nombre de passages | Number of passes | Aantal keren | Número de pasadas | Число проходов
+très lente | very slow | zeer traag | muy lenta | очень медленно
+lente | slow | traag | lenta | медленно
+moyenne | medium | gemiddeld | media | средне
+rapide | fast | snel | rápida | быстро
+très rapide | very fast | zeer snel | muy rápida | очень быстро
+maximale | maximum | maximaal | máxima | максимум
+Aperçu du texte | Text preview | Voorbeeld van de tekst | Vista previa del texto | Предпросмотр текста
+Aperçu du début du texte. Sur le panneau, il défile. | Preview of the start of the text. On the panel, it scrolls. | Voorbeeld van het begin van de tekst. Op het paneel loopt hij. | Vista previa del inicio del texto. En el panel, se desplaza. | Предпросмотр начала текста. На панели он прокручивается.
+Aperçu de la première page, une fois arrivée. Un texte long est coupé en pages. | Preview of the first page, once it has arrived. A long text is split into pages. | Voorbeeld van de eerste pagina, eenmaal aangekomen. Een lange tekst wordt in pagina's verdeeld. | Vista previa de la primera página, una vez llegada. Un texto largo se divide en páginas. | Предпросмотр первой страницы после появления. Длинный текст делится на страницы.
+Aperçu du compte à rebours | Countdown preview | Voorbeeld van de afteller | Vista previa de la cuenta atrás | Предпросмотр обратного отсчёта
+Facultatif : seulement entre ces deux dates, chaque année | Optional: only between these two dates, every year | Optioneel: alleen tussen deze twee datums, elk jaar | Opcional: solo entre estas dos fechas, cada año | Необязательно: только между этими датами, каждый год
+du | from | van | del | с
+au | to | tot | al | по
+du {} au {} | from {} to {} | van {} tot {} | del {} al {} | с {} по {}
+JJ/MM | DD/MM | DD/MM | DD/MM | ДД/ММ
+Jusqu'à | Until | Tot | Hasta | До
+Noël | Christmas | Kerstmis | Navidad | Рождество
+Noël (25 décembre) | Christmas (25 December) | Kerstmis (25 december) | Navidad (25 de diciembre) | Рождество (25 декабря)
+Nouvel an | New Year | Nieuwjaar | Año Nuevo | Новый год
+Nouvel an (1er janvier) | New Year (1 January) | Nieuwjaar (1 januari) | Año Nuevo (1 de enero) | Новый год (1 января)
+Une date choisie | A chosen date | Een gekozen datum | Una fecha elegida | Выбранная дата
+Avant | Before | Vooraf | Antes | До
+Le jour J | On the day | Op de dag zelf | El día D | В день события
+Au-dessus du temps restant | Above the time left | Boven de resterende tijd | Encima del tiempo restante | Над оставшимся временем
+NOËL DANS | CHRISTMAS IN | KERST OVER | NAVIDAD EN | ДО РОЖДЕСТВА
+JOYEUX NOËL ! | MERRY CHRISTMAS! | VROLIJK KERSTFEEST! | ¡FELIZ NAVIDAD! | С РОЖДЕСТВОМ!
+ANNIVERSAIRE DANS | BIRTHDAY IN | VERJAARDAG OVER | CUMPLEAÑOS EN | ДО ДНЯ РОЖДЕНИЯ
+JOYEUX ANNIVERSAIRE ! | HAPPY BIRTHDAY! | GEFELICITEERD! | ¡FELIZ CUMPLEAÑOS! | С ДНЁМ РОЖДЕНИЯ!
+Message du jour J | Message on the day | Bericht op de dag zelf | Mensaje del día D | Сообщение в день события
+Montré pendant 24 h à partir de l'heure choisie | Shown for 24 h from the chosen time | 24 u getoond vanaf het gekozen tijdstip | Se muestra durante 24 h desde la hora elegida | Показывается 24 ч с выбранного времени
+Couleur du titre | Title colour | Kleur van de titel | Color del título | Цвет заголовка
+Couleur du temps restant | Colour of the time left | Kleur van de resterende tijd | Color del tiempo restante | Цвет оставшегося времени
+Enregistre, puis montre sur le panneau tout de suite | Saves, then shows it on the panel right away | Opslaan en meteen op het paneel tonen | Guarda y lo muestra enseguida en el panel | Сохраняет и сразу показывает на панели
+Le texte s'affiche sur le panneau | The text is shown on the panel | De tekst wordt op het paneel getoond | El texto se muestra en el panel | Текст показывается на панели
+Le compte à rebours s'affiche 15 secondes | The countdown is shown for 15 seconds | De afteller wordt 15 seconden getoond | La cuenta atrás se muestra 15 segundos | Обратный отсчёт показывается 15 секунд
+Messages enregistrés | Messages saved | Berichten opgeslagen | Mensajes guardados | Сообщения сохранены
+
+# --- reglages (reglages.html) ---
+OrbitDMD · Réglages | OrbitDMD · Settings | OrbitDMD · Instellingen | OrbitDMD · Ajustes | OrbitDMD · Настройки
+Chaque valeur est vérifiée par le panneau avant d'être enregistrée dans config.txt. | Each value is checked by the panel before being saved in config.txt. | Elke waarde wordt door het paneel gecontroleerd voordat ze in config.txt wordt opgeslagen. | El panel comprueba cada valor antes de guardarlo en config.txt. | Панель проверяет каждое значение перед сохранением в config.txt.
+Langue du panneau | Panel language | Taal van het paneel | Idioma del panel | Язык панели
+Jours, mois, météo et messages affichés sur le panneau | Days, months, weather and messages shown on the panel | Dagen, maanden, weer en meldingen op het paneel | Días, meses, tiempo y mensajes mostrados en el panel | Дни, месяцы, погода и сообщения на панели
+Luminosité heure par heure | Hour-by-hour brightness | Helderheid per uur | Brillo hora por hora | Яркость по часам
+Glissez sur les barres pour régler chaque heure (pas de 5 %, 0 % = panneau éteint). L'heure actuelle est entourée en ambre. Appliqué dès la GIF suivante. | Drag the bars to set each hour (5 % steps, 0 % = panel off). The current hour is outlined in amber. Applied from the next GIF. | Sleep over de balken om elk uur in te stellen (stappen van 5 %, 0 % = paneel uit). Het huidige uur is oranje omlijnd. Toegepast vanaf de volgende GIF. | Deslice sobre las barras para ajustar cada hora (pasos del 5 %, 0 % = panel apagado). La hora actual está rodeada en ámbar. Se aplica desde el siguiente GIF. | Тяните полосы, чтобы задать каждый час (шаг 5 %, 0 % = панель выключена). Текущий час обведён янтарным. Применяется со следующего GIF.
+Luminosité de 0 h à 23 h | Brightness from 0 h to 23 h | Helderheid van 0 u tot 23 u | Brillo de 0 h a 23 h | Яркость с 0 до 23 ч
+Toute la journée | All day | De hele dag | Todo el día | Весь день
+La nuit de | At night from | 's Nachts van | Por la noche de | Ночью с
+Appliquer | Apply | Toepassen | Aplicar | Применить
+Afficher les GIF | Show GIFs | GIF's tonen | Mostrar los GIF | Показывать GIF
+Sinon, seulement l'heure | Otherwise, only the time | Anders alleen de tijd | Si no, solo la hora | Иначе — только время
+Durée minimale d'une GIF | Minimum GIF duration | Minimale duur van een GIF | Duración mínima de un GIF | Минимальная длительность GIF
+Les GIF courtes tournent en boucle | Short GIFs loop | Korte GIF's worden herhaald | Los GIF cortos se repiten | Короткие GIF повторяются
+Ordre des GIF | GIF order | Volgorde van de GIF's | Orden de los GIF | Порядок GIF
+Les favorites passent plus souvent au hasard | Favourites play more often at random | Favorieten komen willekeurig vaker voorbij | Los favoritos salen más a menudo al azar | Избранные чаще выпадают случайно
+Dans l'ordre (catégorie, puis nom) | In order (category, then name) | Op volgorde (categorie, dan naam) | En orden (categoría, luego nombre) | По порядку (категория, затем имя)
+Adresse IP sur le panneau | IP address on the panel | IP-adres op het paneel | Dirección IP en el panel | IP-адрес на панели
+Au démarrage et si elle change · 0 = jamais | At start-up and when it changes · 0 = never | Bij het opstarten en als het verandert · 0 = nooit | Al arrancar y si cambia · 0 = nunca | При запуске и при смене · 0 = никогда
+Mire de test au démarrage | Test pattern at start-up | Testbeeld bij het opstarten | Patrón de prueba al arrancar | Тестовая таблица при запуске
+Journal sur l'écran HDMI | Log on the HDMI screen | Logboek op het HDMI-scherm | Registro en la pantalla HDMI | Журнал на экране HDMI
+Pour le dépannage seulement : ralentit le réseau | For troubleshooting only: slows the network | Alleen voor probleemoplossing: vertraagt het netwerk | Solo para diagnóstico: ralentiza la red | Только для диагностики: замедляет сеть
+Éteindre le panneau | Turn the panel off | Paneel uitzetten | Apagar el panel | Выключать панель
+La page web reste joignable | The web page stays reachable | De webpagina blijft bereikbaar | La página web sigue accesible | Веб-страница остаётся доступной
+L'heure seule, sans GIF | Time only, no GIFs | Alleen de tijd, zonder GIF's | Solo la hora, sin GIF | Только время, без GIF
+Avec la météo et les messages | With the weather and messages | Met het weer en de berichten | Con el tiempo y los mensajes | С погодой и сообщениями
+Plage | Time range | Tijdvak | Franja | Интервал
+Les catégories de GIF montrées seulement certains mois (Noël en décembre…) se règlent dans la page | GIF categories shown only in certain months (Christmas in December…) are set on the page | GIF-categorieën die alleen in bepaalde maanden getoond worden (Kerstmis in december…) stel je in op de pagina | Las categorías de GIF mostradas solo ciertos meses (Navidad en diciembre…) se ajustan en la página | Категории GIF, показываемые только в некоторые месяцы (Рождество в декабре…), настраиваются на странице
+. Les périodes des textes et comptes à rebours, dans la page | . Periods of texts and countdowns, on the page | . De periodes van teksten en aftellers op de pagina | . Los periodos de los textos y cuentas atrás, en la página | . Периоды текстов и отсчётов — на странице
+Heure et date | Time and date | Tijd en datum | Hora y fecha | Время и дата
+Page Horloge | Clock page | Pagina Klok | Página Reloj | Страница «Часы»
+Police, couleurs, fuseau horaire… | Font, colours, time zone… | Lettertype, kleuren, tijdzone… | Fuente, colores, zona horaria… | Шрифт, цвета, часовой пояс…
+Home Assistant | Home Assistant | Home Assistant | Home Assistant | Home Assistant
+Relier à Home Assistant | Connect to Home Assistant | Verbinden met Home Assistant | Conectar con Home Assistant | Подключить к Home Assistant
+Par MQTT : le panneau apparaît tout seul dans Home Assistant | Via MQTT: the panel appears in Home Assistant by itself | Via MQTT: het paneel verschijnt vanzelf in Home Assistant | Por MQTT: el panel aparece solo en Home Assistant | Через MQTT: панель сама появится в Home Assistant
+Serveur MQTT | MQTT server | MQTT-server | Servidor MQTT | Сервер MQTT
+L'adresse IP de Home Assistant, par exemple 192.168.0.10 | The IP address of Home Assistant, for example 192.168.0.10 | Het IP-adres van Home Assistant, bijvoorbeeld 192.168.0.10 | La dirección IP de Home Assistant, por ejemplo 192.168.0.10 | IP-адрес Home Assistant, например 192.168.0.10
+Port | Port | Poort | Puerto | Порт
+Utilisateur MQTT | MQTT user | MQTT-gebruiker | Usuario MQTT | Пользователь MQTT
+Un utilisateur de Home Assistant (Paramètres → Personnes) | A Home Assistant user (Settings → People) | Een gebruiker van Home Assistant (Instellingen → Personen) | Un usuario de Home Assistant (Ajustes → Personas) | Пользователь Home Assistant (Настройки → Люди)
+Mot de passe MQTT | MQTT password | MQTT-wachtwoord | Contraseña MQTT | Пароль MQTT
+Laissez vide pour le garder | Leave empty to keep it | Laat leeg om het te behouden | Déjelo vacío para conservarla | Оставьте пустым, чтобы не менять
+Il faut le module | You need the | Je hebt de add-on | Hace falta el complemento | Нужен модуль
+dans Home Assistant (Paramètres → Modules complémentaires) et l'intégration | add-on in Home Assistant (Settings → Add-ons) and the | nodig in Home Assistant (Instellingen → Add-ons) en de integratie | en Home Assistant (Ajustes → Complementos) y la integración | в Home Assistant (Настройки → Дополнения) и интеграция
+. Le panneau redémarre pour se connecter. Ensuite, dans Home Assistant : Paramètres → Appareils → | integration. The panel restarts to connect. Then, in Home Assistant: Settings → Devices → | . Het paneel herstart om te verbinden. Daarna in Home Assistant: Instellingen → Apparaten → | . El panel se reinicia para conectarse. Después, en Home Assistant: Ajustes → Dispositivos → | . Панель перезапустится для подключения. Затем в Home Assistant: Настройки → Устройства →
+. Toutes les commandes et des exemples à copier : page | . All commands and examples to copy: page | . Alle opdrachten en voorbeelden om te kopiëren: pagina | . Todos los comandos y ejemplos para copiar: página | . Все команды и примеры для копирования: страница
+Aide Home Assistant | Home Assistant help | Hulp Home Assistant | Ayuda de Home Assistant | Справка Home Assistant
+✅ Connecté au serveur MQTT | ✅ Connected to the MQTT server | ✅ Verbonden met de MQTT-server | ✅ Conectado al servidor MQTT | ✅ Подключено к серверу MQTT
+Réglages enregistrés : redémarrez le panneau pour se connecter | Settings saved: restart the panel to connect | Instellingen opgeslagen: herstart het paneel om te verbinden | Ajustes guardados: reinicie el panel para conectarse | Настройки сохранены: перезапустите панель для подключения
+Réseau Wi-Fi | Wi-Fi network | Wifi-netwerk | Red Wi-Fi | Сеть Wi-Fi
+Mot de passe Wi-Fi | Wi-Fi password | Wifi-wachtwoord | Contraseña Wi-Fi | Пароль Wi-Fi
+8 caractères minimum, sans espace | At least 8 characters, no spaces | Minimaal 8 tekens, zonder spaties | Mínimo 8 caracteres, sin espacios | Не менее 8 символов, без пробелов
+Pays | Country | Land | País | Страна
+Code à 2 lettres (FR, BE, CH…) | 2-letter code (GB, FR, DE…) | Code van 2 letters (NL, BE, FR…) | Código de 2 letras (ES, FR, MX…) | Код из 2 букв (RU, FR, DE…)
+Nom sur le réseau | Name on the network | Naam op het netwerk | Nombre en la red | Имя в сети
+Adresse de cette page | Address of this page | Adres van deze pagina | Dirección de esta página | Адрес этой страницы
+Automatique : câble s'il est branché, sinon Wi-Fi | Automatic: cable if plugged in, otherwise Wi-Fi | Automatisch: kabel als die aangesloten is, anders wifi | Automático: cable si está conectado, si no Wi-Fi | Автоматически: кабель, если подключён, иначе Wi-Fi
+· actuellement en Wi-Fi | · currently on Wi-Fi | · nu via wifi | · ahora por Wi-Fi | · сейчас по Wi-Fi
+· actuellement par câble | · currently by cable | · nu via kabel | · ahora por cable | · сейчас по кабелю
+Wi-Fi non connecté | Wi-Fi not connected | Wifi niet verbonden | Wi-Fi no conectado | Wi-Fi не подключён
+Adresse du panneau | Panel address | Adres van het paneel | Dirección del panel | Адрес панели
+Automatique (box) | Automatic (router) | Automatisch (router) | Automática (router) | Автоматически (роутер)
+Fixe | Fixed | Vast | Fija | Постоянный
+Actuellement | Currently | Op dit moment | Actualmente | Сейчас
+(donnée par la box) | (given by the router) | (gegeven door de router) | (dada por el router) | (выдан роутером)
+Masque | Subnet mask | Subnetmasker | Máscara | Маска
+Passerelle | Gateway | Gateway | Puerta de enlace | Шлюз
+L'adresse de la box | The router's address | Het adres van de router | La dirección del router | Адрес роутера
+Serveur DNS | DNS server | DNS-server | Servidor DNS | DNS-сервер
+Souvent la box aussi | Often the router too | Vaak ook de router | A menudo también el router | Часто тоже роутер
+Conseil : dans votre box, réservez cette adresse pour le panneau (adresse MAC | Tip: in your router, reserve this address for the panel (MAC address | Tip: reserveer dit adres in je router voor het paneel (MAC-adres | Consejo: en su router, reserve esta dirección para el panel (dirección MAC | Совет: закрепите этот адрес за панелью в роутере (MAC-адрес
+), pour qu'elle ne soit jamais donnée à un autre appareil. | ), so that it is never given to another device. | ), zodat het nooit aan een ander apparaat wordt gegeven. | ), para que nunca se asigne a otro dispositivo. | ), чтобы его никогда не получило другое устройство.
+Le câble est choisi au démarrage : après l'avoir branché ou débranché, redémarrez le panneau. Après un changement de connexion, de Wi-Fi ou d'adresse, le panneau redémarre. S'il n'est pas joignable en 2 min 30, il revient tout seul aux anciens réglages. | The cable is chosen at start-up: after plugging it in or out, restart the panel. After a change of connection, Wi-Fi or address, the panel restarts. If it cannot be reached within 2 min 30, it goes back to the old settings by itself. | De kabel wordt bij het opstarten gekozen: herstart het paneel na het in- of uitpluggen. Na een wijziging van verbinding, wifi of adres herstart het paneel. Is het na 2 min 30 niet bereikbaar, dan keert het vanzelf terug naar de oude instellingen. | El cable se elige al arrancar: después de conectarlo o desconectarlo, reinicie el panel. Tras un cambio de conexión, de Wi-Fi o de dirección, el panel se reinicia. Si no es accesible en 2 min 30, vuelve solo a los ajustes anteriores. | Кабель выбирается при запуске: после подключения или отключения перезапустите панель. После смены подключения, Wi-Fi или адреса панель перезапускается. Если она недоступна 2 мин 30 с, то сама вернётся к прежним настройкам.
+Changer les réglages réseau ? Le panneau va redémarrer et les essayer ; s'il n'est pas joignable en 2 min 30, il reviendra aux anciens. | Change the network settings? The panel will restart and try them; if it cannot be reached within 2 min 30, it will go back to the old ones. | Netwerkinstellingen wijzigen? Het paneel herstart en probeert ze; is het na 2 min 30 niet bereikbaar, dan keert het terug naar de oude. | ¿Cambiar los ajustes de red? El panel se reiniciará y los probará; si no es accesible en 2 min 30, volverá a los anteriores. | Изменить сетевые настройки? Панель перезапустится и попробует их; если она недоступна 2 мин 30 с, вернутся прежние.
+Après le redémarrage, l'adresse sera http://{} | After the restart, the address will be http://{} | Na de herstart is het adres http://{} | Tras el reinicio, la dirección será http://{} | После перезапуска адрес будет http://{}
+Mot de passe de la page web | Web page password | Wachtwoord van de webpagina | Contraseña de la página web | Пароль веб-страницы
+Nouveau mot de passe | New password | Nieuw wachtwoord | Nueva contraseña | Новый пароль
+Confirmer | Confirm | Bevestigen | Confirmar | Подтвердить
+Changer le mot de passe | Change the password | Wachtwoord wijzigen | Cambiar la contraseña | Сменить пароль
+Les deux mots de passe sont différents | The two passwords are different | De twee wachtwoorden verschillen | Las dos contraseñas son diferentes | Пароли не совпадают
+Mot de passe changé et mémorisé | Password changed and remembered | Wachtwoord gewijzigd en onthouden | Contraseña cambiada y recordada | Пароль изменён и сохранён
+inchangé | unchanged | ongewijzigd | sin cambios | без изменений
+non défini | not set | niet ingesteld | sin definir | не задан
+Panneaux (avancé) | Panels (advanced) | Panelen (geavanceerd) | Paneles (avanzado) | Панели (дополнительно)
+Redémarrage nécessaire. Des valeurs inadaptées peuvent brouiller l'image : elles se corrigent ici même. | Restart required. Unsuitable values can scramble the image: they can be fixed right here. | Herstart nodig. Ongeschikte waarden kunnen het beeld verstoren: je kunt ze hier corrigeren. | Reinicio necesario. Valores inadecuados pueden distorsionar la imagen: se corrigen aquí mismo. | Нужен перезапуск. Неподходящие значения могут исказить изображение — их можно исправить здесь же.
+Largeur d'un panneau | Width of one panel | Breedte van één paneel | Ancho de un panel | Ширина одной панели
+Hauteur d'un panneau | Height of one panel | Hoogte van één paneel | Alto de un panel | Высота одной панели
+Panneaux à la suite | Panels in a chain | Panelen achter elkaar | Paneles en cadena | Панелей в цепочке
+Sur une même sortie | On the same output | Op dezelfde uitgang | En la misma salida | На одном выходе
+Sorties en parallèle | Parallel outputs | Parallelle uitgangen | Salidas en paralelo | Параллельных выходов
+Ralentissement GPIO | GPIO slowdown | GPIO-vertraging | Ralentización GPIO | Замедление GPIO
+À augmenter si l'image est brouillée | Increase if the image is scrambled | Verhogen als het beeld verstoord is | Aumentar si la imagen se distorsiona | Увеличьте, если изображение искажено
+3 désactive l'horloge à pile | 3 disables the battery clock | 3 schakelt de klok met batterij uit | 3 desactiva el reloj con pila | 3 отключает часы с батарейкой
+Ordre des couleurs | Colour order | Kleurvolgorde | Orden de los colores | Порядок цветов
+Bits de couleur | Colour bits | Kleurbits | Bits de color | Бит цвета
+Moins = rafraîchissement plus rapide | Fewer = faster refresh | Minder = snellere verversing | Menos = refresco más rápido | Меньше — быстрее обновление
+Durée du plus petit palier | Duration of the smallest step | Duur van de kleinste stap | Duración del escalón más pequeño | Длительность наименьшего шага
+En nanosecondes | In nanoseconds | In nanoseconden | En nanosegundos | В наносекундах
+Annuler les modifications | Discard changes | Wijzigingen annuleren | Deshacer los cambios | Отменить изменения
+Redémarrage nécessaire | Restart required | Herstart nodig | Reinicio necesario | Нужен перезапуск
+pour appliquer certains réglages enregistrés. | to apply some saved settings. | om sommige opgeslagen instellingen toe te passen. | para aplicar algunos ajustes guardados. | чтобы применить некоторые сохранённые настройки.
+Redémarrer maintenant | Restart now | Nu herstarten | Reiniciar ahora | Перезапустить сейчас
+Redémarrage… | Restarting… | Herstarten… | Reiniciando… | Перезапуск…
+Le panneau ne répond pas | The panel is not answering | Het paneel reageert niet | El panel no responde | Панель не отвечает
+éteint | off | uit | apagado | выкл.
+
+# --- systeme (systeme.html) ---
+OrbitDMD · Système | OrbitDMD · System | OrbitDMD · Systeem | OrbitDMD · Sistema | OrbitDMD · Система
+Journal du panneau, mises à jour et redémarrage. | Panel log, updates and restart. | Logboek van het paneel, updates en herstart. | Registro del panel, actualizaciones y reinicio. | Журнал панели, обновления и перезапуск.
+OrbitDMD {} · programme du {} | OrbitDMD {} · firmware of {} | OrbitDMD {} · firmware van {} | OrbitDMD {} · firmware del {} | OrbitDMD {} · прошивка от {}
+Journal | Log | Logboek | Registro | Журнал
+Filtrer | Filter | Filteren | Filtrar | Фильтр
+Filtrer le journal | Filter the log | Logboek filteren | Filtrar el registro | Фильтр журнала
+Suivi en direct | Live follow | Live volgen | Seguimiento en directo | Обновлять в реальном времени
+Journal copié | Log copied | Logboek gekopieerd | Registro copiado | Журнал скопирован
+Copie impossible : sélectionnez le texte à la main | Copy failed: select the text by hand | Kopiëren mislukt: selecteer de tekst handmatig | No se puede copiar: seleccione el texto a mano | Не удалось скопировать: выделите текст вручную
+Nouveau programme | New firmware | Nieuwe firmware | Nuevo firmware | Новая прошивка
+Fichier | File | Bestand | Archivo | Файл
+. L'ancien est gardé en kernel8.bak, puis le panneau redémarre. Nouvelles versions : | . The old one is kept as kernel8.bak, then the panel restarts. New versions: | . De oude wordt bewaard als kernel8.bak, daarna herstart het paneel. Nieuwe versies: | . El anterior se guarda como kernel8.bak y luego el panel se reinicia. Nuevas versiones: | . Старая сохраняется как kernel8.bak, затем панель перезапускается. Новые версии:
+Choisir kernel8.img | Choose kernel8.img | kernel8.img kiezen | Elegir kernel8.img | Выбрать kernel8.img
+ou le glisser ici | or drop it here | of sleep het hierheen | o arrástrelo aquí | или перетащите его сюда
+Installer | Install | Installeren | Instalar | Установить
+Programme reçu, installation… | Firmware received, installing… | Firmware ontvangen, installeren… | Firmware recibido, instalando… | Прошивка получена, установка…
+Il faut un fichier {} | A {} file is required | Er is een {}-bestand nodig | Hace falta un archivo {} | Нужен файл {}
+Panneau de retour (programme du {}) | Panel is back (firmware of {}) | Paneel is terug (firmware van {}) | El panel ha vuelto (firmware del {}) | Панель снова в сети (прошивка от {})
+Sauvegarde des réglages | Settings backup | Back-up van de instellingen | Copia de seguridad de los ajustes | Резервная копия настроек
+Tous les réglages (Wi-Fi, panneaux, horloge, météo…), vos textes et comptes à rebours, et vos GIF favorites et exclues, dans un seul fichier. À garder pour soi : il contient vos mots de passe. | All settings (Wi-Fi, panels, clock, weather…), your texts and countdowns, and your favourite and excluded GIFs, in a single file. Keep it to yourself: it contains your passwords. | Alle instellingen (wifi, panelen, klok, weer…), je teksten en aftellers, en je favoriete en uitgesloten GIF's, in één bestand. Houd het voor jezelf: het bevat je wachtwoorden. | Todos los ajustes (Wi-Fi, paneles, reloj, tiempo…), sus textos y cuentas atrás, y sus GIF favoritos y excluidos, en un solo archivo. Guárdelo para usted: contiene sus contraseñas. | Все настройки (Wi-Fi, панели, часы, погода…), тексты, отсчёты, избранные и исключённые GIF — в одном файле. Храните его у себя: в нём ваши пароли.
+Télécharger la sauvegarde | Download the backup | Back-up downloaden | Descargar la copia | Скачать копию
+Sauvegarde téléchargée : gardez-la pour vous (mots de passe) | Backup downloaded: keep it to yourself (passwords) | Back-up gedownload: houd hem voor jezelf (wachtwoorden) | Copia descargada: guárdela para usted (contraseñas) | Копия скачана: храните её у себя (пароли)
+Restaurer | Restore | Herstellen | Restaurar | Восстановить
+: choisir la sauvegarde (ou un config.txt) ou la glisser ici | : choose the backup (or a config.txt) or drop it here | : kies de back-up (of een config.txt) of sleep hem hierheen | : elija la copia (o un config.txt) o arrástrela aquí | : выберите копию (или config.txt) или перетащите её сюда
+Réglages restaurés, redémarrage… | Settings restored, restarting… | Instellingen hersteld, herstarten… | Ajustes restaurados, reiniciando… | Настройки восстановлены, перезапуск…
+Redémarrer le panneau | Restart the panel | Paneel herstarten | Reiniciar el panel | Перезапустить панель
+Le panneau s'éteint quelques secondes puis reprend avec l'écran de démarrage. | The panel goes dark for a few seconds, then resumes with the start-up screen. | Het paneel gaat enkele seconden uit en start dan met het opstartscherm. | El panel se apaga unos segundos y vuelve con la pantalla de arranque. | Панель погаснет на несколько секунд и вернётся с экраном запуска.
+Redémarrage du panneau… | Restarting the panel… | Paneel herstarten… | Reiniciando el panel… | Перезапуск панели…
+
+# --- aide Home Assistant (aide.html) ---
+OrbitDMD · Aide Home Assistant | OrbitDMD · Home Assistant help | OrbitDMD · Hulp Home Assistant | OrbitDMD · Ayuda de Home Assistant | OrbitDMD · Справка Home Assistant
+Toutes les commandes du panneau | All the commands of the panel | Alle opdrachten van het paneel | Todos los comandos del panel | Все команды панели
+, avec des exemples prêts à copier. La connexion se règle dans | , with ready-to-copy examples. The connection is set in | , met voorbeelden om te kopiëren. De verbinding stel je in bij | , con ejemplos listos para copiar. La conexión se ajusta en | , с готовыми примерами. Подключение настраивается в
+Réglages → Home Assistant | Settings → Home Assistant | Instellingen → Home Assistant | Ajustes → Home Assistant | Настройки → Home Assistant
+Home Assistant non activé | Home Assistant not enabled | Home Assistant niet ingeschakeld | Home Assistant no activado | Home Assistant не включён
+Connecté à Home Assistant | Connected to Home Assistant | Verbonden met Home Assistant | Conectado a Home Assistant | Подключено к Home Assistant
+Home Assistant : | Home Assistant: | Home Assistant: | Home Assistant: | Home Assistant:
+Dans Home Assistant : | In Home Assistant: | In Home Assistant: | En Home Assistant: | В Home Assistant:
+Paramètres → Appareils et services → MQTT → | Settings → Devices & services → MQTT → | Instellingen → Apparaten en diensten → MQTT → | Ajustes → Dispositivos y servicios → MQTT → | Настройки → Устройства и службы → MQTT →
+. Tout se fait depuis cette page : | . Everything is done from that page: | . Alles gebeurt vanaf die pagina: | . Todo se hace desde esa página: | . Всё делается на этой странице:
+Élément | Item | Onderdeel | Elemento | Элемент
+Ce qu'il fait | What it does | Wat het doet | Qué hace | Что делает
+Allumer, éteindre (la page web reste joignable), luminosité | Turn on, turn off (the web page stays reachable), brightness | Aan, uit (de webpagina blijft bereikbaar), helderheid | Encender, apagar (la página web sigue accesible), brillo | Включить, выключить (веб-страница доступна), яркость
+Allumé : image figée ; éteint : lecture normale | On: frozen image; off: normal playback | Aan: bevroren beeld; uit: normaal afspelen | Encendido: imagen congelada; apagado: reproducción normal | Вкл.: изображение заморожено; выкл.: обычный показ
+Revenir à la luminosité des réglages après un changement depuis Home Assistant | Go back to the brightness from the settings after a change from Home Assistant | Terug naar de helderheid uit de instellingen na een wijziging vanuit Home Assistant | Volver al brillo de los ajustes tras un cambio desde Home Assistant | Вернуть яркость из настроек после изменения из Home Assistant
+Afficher l'heure, Afficher la météo | Show the time, Show the weather | Tijd tonen, Weer tonen | Mostrar la hora, Mostrar el tiempo | Показать время, Показать погоду
+Tout de suite, pendant 15 secondes | Right away, for 15 seconds | Meteen, 15 seconden lang | Enseguida, durante 15 segundos | Сразу, на 15 секунд
+Redémarre le panneau | Restarts the panel | Herstart het paneel | Reinicia el panel | Перезапускает панель
+Texte à afficher | Text to show | Te tonen tekst | Texto a mostrar | Текст для показа
+Tapez un texte et validez : il défile tout de suite | Type a text and confirm: it scrolls right away | Typ een tekst en bevestig: hij loopt meteen | Escriba un texto y valide: se desplaza enseguida | Введите текст и подтвердите: он сразу побежит
+Effet, Couleur, Passages, Vitesse des messages | Effect, Colour, Passes, Speed of messages | Effect, Kleur, Aantal keren, Snelheid van berichten | Efecto, Color, Pasadas, Velocidad de los mensajes | Эффект, цвет, проходы, скорость сообщений
+Le style des textes envoyés depuis Home Assistant | The style of the texts sent from Home Assistant | De stijl van teksten die vanuit Home Assistant worden verstuurd | El estilo de los textos enviados desde Home Assistant | Стиль текстов из Home Assistant
+Activer ou non chaque élément de la page | Enable or disable each item of the page | Elk onderdeel van de pagina in- of uitschakelen | Activar o no cada elemento de la página | Включение и выключение каждого элемента страницы
+Texte : …, Compte à rebours : … | Text: …, Countdown: … | Tekst: …, Afteller: … | Texto: …, Cuenta atrás: … | Текст: …, Обратный отсчёт: …
+GIF affichée, Écran, Température, Adresse IP, Version | GIF shown, Screen, Temperature, IP address, Version | Getoonde GIF, Scherm, Temperatuur, IP-adres, Versie | GIF mostrado, Pantalla, Temperatura, Dirección IP, Versión | Текущий GIF, Экран, Температура, IP-адрес, Версия
+Commandes MQTT | MQTT commands | MQTT-opdrachten | Comandos MQTT | Команды MQTT
+La liste ci-dessous, dans les attributs du capteur | The list below, in the sensor's attributes | De lijst hieronder, in de attributen van de sensor | La lista de abajo, en los atributos del sensor | Список ниже, в атрибутах датчика
+Envoyer un message | Send a message | Een bericht sturen | Enviar un mensaje | Отправить сообщение
+Le plus simple, dans une automatisation ou dans | The simplest way, in an automation or in | Het eenvoudigst, in een automatisering of in | Lo más sencillo, en una automatización o en | Проще всего — в автоматизации или в
+Outils de développement → Actions | Developer tools → Actions | Ontwikkelhulpmiddelen → Acties | Herramientas para desarrolladores → Acciones | Панель разработчика → Действия
+(mode YAML) : | (YAML mode): | (YAML-modus): | (modo YAML): | (режим YAML):
+Avec un style à part (couleur, effet, GIF avant le texte) : | With its own style (colour, effect, GIF before the text): | Met een eigen stijl (kleur, effect, GIF vóór de tekst): | Con un estilo propio (color, efecto, GIF antes del texto): | Со своим стилем (цвет, эффект, GIF перед текстом):
+Champ | Field | Veld | Campo | Поле
+Valeurs | Values | Waarden | Valores | Значения
+Le texte (200 caractères au plus, accents compris) | The text (200 characters at most, accents included) | De tekst (maximaal 200 tekens, accenten inbegrepen) | El texto (200 caracteres como máximo, acentos incluidos) | Текст (не более 200 символов)
+Défile à gauche, Défile à droite, Monte, Descend, Lettre par lettre, Pluie de lettres, Fondu | Scroll left, Scroll right, Rise, Fall, Letter by letter, Raining letters, Fade (names in any of the 12 languages are accepted) | Naar links, Naar rechts, Omhoog, Omlaag, Letter voor letter, Regen van letters, Vervagen (namen in elk van de 12 talen worden aanvaard) | Hacia la izquierda, Hacia la derecha, Sube, Baja, Letra a letra, Lluvia de letras, Fundido (se aceptan los nombres en los 12 idiomas) | Влево, Вправо, Вверх, Вниз, По буквам, Дождь из букв, Плавно (принимаются названия на любом из 12 языков)
+Blanc, Rouge, Orange, Ambre, Jaune, Vert, Turquoise, Bleu, Violet, Rose, Arc-en-ciel, ou RRGGBB | White, Red, Orange, Amber, Yellow, Green, Turquoise, Blue, Purple, Pink, Rainbow, or RRGGBB (any of the 12 languages) | Wit, Rood, Oranje, Amber, Geel, Groen, Turkoois, Blauw, Paars, Roze, Regenboog, of RRGGBB (in elk van de 12 talen) | Blanco, Rojo, Naranja, Ámbar, Amarillo, Verde, Turquesa, Azul, Violeta, Rosa, Arcoíris, o RRGGBB (en cualquiera de los 12 idiomas) | Белый, Красный, Оранжевый, Янтарный, Жёлтый, Зелёный, Бирюзовый, Синий, Фиолетовый, Розовый, Радуга или RRGGBB (на любом из 12 языков)
+ou une police de la page Horloge, par exemple | or a font from the Clock page, for example | of een lettertype van de pagina Klok, bijvoorbeeld | o una fuente de la página Reloj, por ejemplo | или шрифт со страницы «Часы», например
+Taille en pixels, | Size in pixels, | Grootte in pixels, | Tamaño en píxeles, | Размер в пикселях,
+= automatique | = automatic | = automatisch | = automático | = автоматически
+Une GIF à jouer avant le texte : | A GIF to play before the text: | Een GIF om vóór de tekst af te spelen: | Un GIF para reproducir antes del texto: | GIF перед текстом:
+(comme dans la page GIF) | (as on the GIF page) | (zoals op de pagina GIF) | (como en la página GIF) | (как на странице GIF)
+Les champs absents prennent le style réglé dans Home Assistant (Effet, Couleur, Passages, Vitesse des messages). Si le panneau est éteint ou en pause, le message attend. | Missing fields take the style set in Home Assistant (Effect, Colour, Passes, Speed of messages). If the panel is off or paused, the message waits. | Ontbrekende velden krijgen de stijl die in Home Assistant is ingesteld (Effect, Kleur, Aantal keren, Snelheid). Als het paneel uit of gepauzeerd is, wacht het bericht. | Los campos ausentes toman el estilo ajustado en Home Assistant (Efecto, Color, Pasadas, Velocidad). Si el panel está apagado o en pausa, el mensaje espera. | Отсутствующие поля берут стиль из Home Assistant (эффект, цвет, проходы, скорость). Если панель выключена или на паузе, сообщение ждёт.
+Exemple d'automatisation | Automation example | Voorbeeld van een automatisering | Ejemplo de automatización | Пример автоматизации
+Toutes les commandes MQTT | All MQTT commands | Alle MQTT-opdrachten | Todos los comandos MQTT | Все команды MQTT
+Pour les utilisateurs avancés (MQTT Explorer, Node-RED…). Le panneau publie aussi cette liste sur | For advanced users (MQTT Explorer, Node-RED…). The panel also publishes this list on | Voor gevorderde gebruikers (MQTT Explorer, Node-RED…). Het paneel publiceert deze lijst ook op | Para usuarios avanzados (MQTT Explorer, Node-RED…). El panel también publica esta lista en | Для опытных пользователей (MQTT Explorer, Node-RED…). Панель также публикует этот список в
+Sujet | Topic | Onderwerp | Tema | Топик
+Valeur à envoyer | Value to send | Te sturen waarde | Valor a enviar | Отправляемое значение
+Ce que fait le panneau | What the panel does | Wat het paneel doet | Qué hace el panel | Что делает панель
+Sans rien écrire | Without writing anything | Zonder iets te schrijven | Sin escribir nada | Без ввода
+États publiés par le panneau : | States published by the panel: | Statussen die het paneel publiceert: | Estados publicados por el panel: | Состояния, публикуемые панелью:
+pour chaque élément ; disponibilité : | for each item; availability: | voor elk onderdeel; beschikbaarheid: | para cada elemento; disponibilidad: | для каждого элемента; доступность:
+ON (allumé) ou OFF (éteint) | ON (on) or OFF (off) | ON (aan) of OFF (uit) | ON (encendido) u OFF (apagado) | ON (вкл.) или OFF (выкл.)
+ON (image figée) ou OFF | ON (frozen image) or OFF | ON (bevroren beeld) of OFF | ON (imagen congelada) u OFF | ON (заморозка) или OFF
+ON : luminosité heure par heure des réglages | ON: hour-by-hour brightness from the settings | ON: helderheid per uur uit de instellingen | ON: brillo hora por hora de los ajustes | ON: яркость по часам из настроек
+ON / OFF : texte N de la page Messages (0 = le premier) | ON / OFF: text N of the Messages page (0 = the first) | ON / OFF: tekst N van de pagina Berichten (0 = de eerste) | ON / OFF: texto N de la página Mensajes (0 = el primero) | ON / OFF: текст N со страницы «Сообщения» (0 — первый)
+ON / OFF : compte à rebours N de la page Messages | ON / OFF: countdown N of the Messages page | ON / OFF: afteller N van de pagina Berichten | ON / OFF: cuenta atrás N de la página Mensajes | ON / OFF: обратный отсчёт N со страницы «Сообщения»
+PRESS : afficher l'heure | PRESS: show the time | PRESS: tijd tonen | PRESS: mostrar la hora | PRESS: показать время
+PRESS : afficher la météo | PRESS: show the weather | PRESS: weer tonen | PRESS: mostrar el tiempo | PRESS: показать погоду
+PRESS : redémarrer | PRESS: restart | PRESS: herstarten | PRESS: reiniciar | PRESS: перезапуск
+un texte à afficher tout de suite | a text to show right away | een tekst om meteen te tonen | un texto para mostrar enseguida | текст для немедленного показа
+un texte, ou du JSON {message, effet, couleur…} | a text, or JSON {message, effet, couleur…} | een tekst, of JSON {message, effet, couleur…} | un texto, o JSON {message, effet, couleur…} | текст или JSON {message, effet, couleur…}
+
+# --- reponses du panneau (webserver.cpp, settings.cpp, gifmanager.cpp : sans "OK :" ni "ERREUR :") ---
+mot de passe incorrect (ou Web_Password vide dans config.txt) | wrong password (or Web_Password empty in config.txt) | onjuist wachtwoord (of Web_Password leeg in config.txt) | contraseña incorrecta (o Web_Password vacío en config.txt) | неверный пароль (или пустой Web_Password в config.txt)
+mot de passe accepte | password accepted | wachtwoord geaccepteerd | contraseña aceptada | пароль принят
+{} contient les ecrans de demarrage du panneau, supprimez ses GIF une par une si besoin | {} holds the panel's start-up screens; delete its GIFs one by one if needed | {} bevat de opstartschermen van het paneel; verwijder de GIF's zo nodig één voor één | {} contiene las pantallas de arranque del panel; elimine sus GIF uno a uno si hace falta | {} содержит экраны запуска панели; при необходимости удаляйте её GIF по одному
+{} est la seule categorie affichee, activez-en une autre d'abord | {} is the only category shown, enable another one first | {} is de enige getoonde categorie, schakel eerst een andere in | {} es la única categoría mostrada, active otra primero | {} — единственная показываемая категория, сначала включите другую
+{} existe deja dans {} | {} already exists in {} | {} bestaat al in {} | {} ya existe en {} | {} уже есть в {}
+{} existe deja | {} already exists | {} bestaat al | {} ya existe | {} уже существует
+{} introuvable | {} not found | {} niet gevonden | {} no encontrado | {} не найден
+{} n'a ete supprimee qu'en partie ({} fichier(s) supprime(s)) | {} was only partly deleted ({} file(s) deleted) | {} is maar gedeeltelijk verwijderd ({} bestand(en) verwijderd) | {} solo se eliminó en parte ({} archivo(s) eliminado(s)) | {} удалена лишь частично (удалено файлов: {})
+{} n'est pas {} | {} is not {} | {} is geen {} | {} no es {} | {} не является {}
+{} n'est pas un fichier GIF | {} is not a GIF file | {} is geen GIF-bestand | {} no es un archivo GIF | {} — не GIF-файл
+GIF invalide | Invalid GIF | Ongeldige GIF | GIF no válido | Неверный GIF
+Wi-Fi pas encore connecte | Wi-Fi not connected yet | Wifi nog niet verbonden | Wi-Fi aún no conectado | Wi-Fi ещё не подключён
+adresse fixe : {} | fixed address: {} | vast adres: {} | dirección fija: {} | постоянный адрес: {}
+aucun fichier recu | no file received | geen bestand ontvangen | ningún archivo recibido | файл не получен
+categorie {} introuvable | category {} not found | categorie {} niet gevonden | categoría {} no encontrada | категория {} не найдена
+categorie inconnue : {} | unknown category: {} | onbekende categorie: {} | categoría desconocida: {} | неизвестная категория: {}
+commande inconnue | unknown command | onbekende opdracht | comando desconocido | неизвестная команда
+config.txt doit contenir Web_Password et Wifi_ssid (ou Reseau=ethernet) | config.txt must contain Web_Password and Wifi_ssid (or Reseau=ethernet) | config.txt moet Web_Password en Wifi_ssid bevatten (of Reseau=ethernet) | config.txt debe contener Web_Password y Wifi_ssid (o Reseau=ethernet) | config.txt должен содержать Web_Password и Wifi_ssid (или Reseau=ethernet)
+creation du dossier {} impossible | cannot create folder {} | map {} aanmaken onmogelijk | no se puede crear la carpeta {} | не удалось создать папку {}
+ecriture de {} impossible | cannot write {} | {} schrijven onmogelijk | no se puede escribir {} | не удалось записать {}
+ecriture de {} incomplete (carte pleine ?) | writing {} incomplete (card full?) | {} onvolledig geschreven (kaart vol?) | escritura de {} incompleta (¿tarjeta llena?) | запись {} не завершена (карта заполнена?)
+ecriture de config.txt impossible | cannot write config.txt | config.txt schrijven onmogelijk | no se puede escribir config.txt | не удалось записать config.txt
+ecriture sur la carte impossible | cannot write to the card | schrijven naar de kaart onmogelijk | no se puede escribir en la tarjeta | не удалось записать на карту
+enregistrement impossible ({} GIF marquees au plus) | cannot save ({} marked GIFs at most) | opslaan onmogelijk (maximaal {} gemarkeerde GIF's) | no se puede guardar ({} GIF marcados como máximo) | сохранение невозможно (не более {} отмеченных GIF)
+enregistrez d'abord la liste | save the list first | sla eerst de lijst op | guarde primero la lista | сначала сохраните список
+fichier config.txt absent ou invalide | config.txt file missing or invalid | bestand config.txt ontbreekt of is ongeldig | archivo config.txt ausente o no válido | файл config.txt отсутствует или неверен
+fichier kernel8.img absent ou de taille anormale | kernel8.img file missing or of abnormal size | bestand kernel8.img ontbreekt of heeft een abnormale grootte | archivo kernel8.img ausente o de tamaño anómalo | файл kernel8.img отсутствует или имеет неверный размер
+gardez au moins une categorie active | keep at least one category enabled | laat minstens één categorie ingeschakeld | mantenga al menos una categoría activa | оставьте хотя бы одну включённую категорию
+lecture de config.txt impossible | cannot read config.txt | config.txt lezen onmogelijk | no se puede leer config.txt | не удалось прочитать config.txt
+liste absente ou trop longue | list missing or too long | lijst ontbreekt of is te lang | lista ausente o demasiado larga | список отсутствует или слишком длинный
+marque inconnue (favori, exclue ou aucune) | unknown mark (favori, exclue or aucune) | onbekende markering (favori, exclue of aucune) | marca desconocida (favori, exclue o aucune) | неизвестная отметка (favori, exclue или aucune)
+nom de categorie invalide (lettres, chiffres, _ ou -) | invalid category name (letters, digits, _ or -) | ongeldige categorienaam (letters, cijfers, _ of -) | nombre de categoría no válido (letras, cifras, _ o -) | неверное название категории (буквы, цифры, _ или -)
+nom de categorie invalide | invalid category name | ongeldige categorienaam | nombre de categoría no válido | неверное название категории
+nom de categorie trop long | category name too long | categorienaam te lang | nombre de categoría demasiado largo | название категории слишком длинное
+nom invalide | invalid name | ongeldige naam | nombre no válido | неверное имя
+reglage inconnu : {} | unknown setting: {} | onbekende instelling: {} | ajuste desconocido: {} | неизвестная настройка: {}
+serveur d'heure Internet injoignable, reessayez | Internet time server unreachable, try again | internettijdserver onbereikbaar, probeer opnieuw | servidor de hora de Internet inaccesible, inténtelo de nuevo | сервер времени недоступен, попробуйте ещё раз
+trop de categories actives | too many enabled categories | te veel ingeschakelde categorieën | demasiadas categorías activas | слишком много включённых категорий
+trop de reglages a la fois | too many settings at once | te veel instellingen tegelijk | demasiados ajustes a la vez | слишком много настроек сразу
+type de fichier inconnu | unknown file type | onbekend bestandstype | tipo de archivo desconocido | неизвестный тип файла
+une autre demande est deja en cours | another request is already in progress | er loopt al een ander verzoek | ya hay otra solicitud en curso | уже выполняется другой запрос
+valeur refusee pour {} | value refused for {} | waarde geweigerd voor {} | valor rechazado para {} | значение отклонено для {}
+{} ajoute | {} added | {} toegevoegd | {} añadido | {} добавлен
+{} ajoutee dans {} (taille {}x{} : elle sera centree) | {} added to {} (size {}x{}: it will be centred) | {} toegevoegd aan {} (grootte {}x{}: wordt gecentreerd) | {} añadido a {} (tamaño {}x{}: se centrará) | {} добавлен в {} (размер {}x{}: будет по центру)
+{} ajoutee dans {} | {} added to {} | {} toegevoegd aan {} | {} añadido a {} | {} добавлен в {}
+{} GIF marquee(s) | {} GIF(s) marked | {} GIF('s) gemarkeerd | {} GIF marcado(s) | отмечено GIF: {}
+{} categorie(s) active(s) | {} category(ies) enabled | {} categorie(ën) ingeschakeld | {} categoría(s) activa(s) | включено категорий: {}
+{} reglage(s) enregistre(s) ; redemarrage necessaire pour les appliquer | {} setting(s) saved; restart required to apply them | {} instelling(en) opgeslagen; herstart nodig om ze toe te passen | {} ajuste(s) guardado(s); reinicio necesario para aplicarlos | сохранено настроек: {}; для применения нужен перезапуск
+{} reglage(s) enregistre(s), effectif(s) au prochain demarrage | {} setting(s) saved, effective at the next start-up | {} instelling(en) opgeslagen, actief bij de volgende start | {} ajuste(s) guardado(s), efectivo(s) en el próximo arranque | сохранено настроек: {}, вступят в силу при следующем запуске
+{} reglage(s) enregistre(s) | {} setting(s) saved | {} instelling(en) opgeslagen | {} ajuste(s) guardado(s) | сохранено настроек: {}
+{} reglage(s) reseau enregistre(s). Le panneau redemarre ; s'il n'est pas joignable en {} s, il revient aux anciens reglages. | {} network setting(s) saved. The panel restarts; if it cannot be reached within {} s, it goes back to the old settings. | {} netwerkinstelling(en) opgeslagen. Het paneel herstart; is het na {} s niet bereikbaar, dan keert het terug naar de oude instellingen. | {} ajuste(s) de red guardado(s). El panel se reinicia; si no es accesible en {} s, vuelve a los ajustes anteriores. | сохранено сетевых настроек: {}. Панель перезапускается; если она недоступна {} с, вернутся прежние настройки.
+{} texte(s), {} compte(s) a rebours | {} text(s), {} countdown(s) | {} tekst(en), {} afteller(s) | {} texto(s), {} cuenta(s) atrás | текстов: {}, отсчётов: {}
+affichage eteint, le panneau reste joignable | display off, the panel stays reachable | weergave uit, het paneel blijft bereikbaar | pantalla apagada, el panel sigue accesible | экран выключен, панель остаётся доступной
+affichage rallume | display back on | weergave weer aan | pantalla encendida de nuevo | экран снова включён
+aucun changement | no change | geen wijziging | ningún cambio | без изменений
+categorie {} supprimee ({} fichier(s)) | category {} deleted ({} file(s)) | categorie {} verwijderd ({} bestand(en)) | categoría {} eliminada ({} archivo(s)) | категория {} удалена (файлов: {})
+demande recue, le panneau va redemarrer | request received, the panel will restart | verzoek ontvangen, het paneel herstart | solicitud recibida, el panel se va a reiniciar | запрос получен, панель перезапустится
+image figee | image frozen | beeld bevroren | imagen congelada | изображение заморожено
+l'heure s'affiche sur le panneau | the time is shown on the panel | de tijd wordt op het paneel getoond | la hora se muestra en el panel | время показывается на панели
+la meteo s'affiche sur le panneau | the weather is shown on the panel | het weer wordt op het paneel getoond | el tiempo se muestra en el panel | погода показывается на панели
+le compte a rebours s'affiche sur le panneau | the countdown is shown on the panel | de afteller wordt op het paneel getoond | la cuenta atrás se muestra en el panel | обратный отсчёт показывается на панели
+le texte s'affiche sur le panneau | the text is shown on the panel | de tekst wordt op het paneel getoond | el texto se muestra en el panel | текст показывается на панели
+lecture reprise | playback resumed | afspelen hervat | reproducción reanudada | воспроизведение продолжено
+meteo demandee | weather requested | weer opgevraagd | tiempo solicitado | погода запрошена
+
+# --- noms des reglages (settings.cpp : "valeur refusee pour ...") ---
+GIF affichees | GIFs shown | Getoonde GIF's | GIF mostrados | Показ GIF
+Duree minimale | Minimum duration | Minimale duur | Duración mínima | Минимальная длительность
+Duree de l'horloge | Clock duration | Duur van de klok | Duración del reloj | Длительность часов
+Format de l'heure | Time format | Tijdnotatie | Formato de la hora | Формат времени
+Taille de l'heure | Time size | Grootte van de tijd | Tamaño de la hora | Размер времени
+Motif de l'heure | Time pattern | Patroon van de tijd | Motivo de la hora | Узор времени
+Duree de la date | Date duration | Duur van de datum | Duración de la fecha | Длительность даты
+Format de la date | Date format | Datumnotatie | Formato de la fecha | Формат даты
+Police de la date | Date font | Lettertype van de datum | Fuente de la fecha | Шрифт даты
+Taille de la date | Date size | Grootte van de datum | Tamaño de la fecha | Размер даты
+Motif de la date | Date pattern | Patroon van de datum | Motivo de la fecha | Узор даты
+Meteo | Weather | Weer | Tiempo | Погода
+Duree de la meteo | Weather duration | Duur van het weer | Duración del tiempo | Длительность погоды
+Frequence de la meteo | Weather frequency | Frequentie van het weer | Frecuencia del tiempo | Частота погоды
+Latitude | Latitude | Breedtegraad | Latitud | Широта
+Longitude | Longitude | Lengtegraad | Longitud | Долгота
+Police de la meteo | Weather font | Lettertype van het weer | Fuente del tiempo | Шрифт погоды
+Taille de la temperature | Temperature size | Grootte van de temperatuur | Tamaño de la temperatura | Размер температуры
+Motif de la temperature | Temperature pattern | Patroon van de temperatuur | Motivo de la temperatura | Узор температуры
+Couleur de la temperature | Temperature colour | Kleur van de temperatuur | Color de la temperatura | Цвет температуры
+Deuxieme ligne | Second line | Tweede regel | Segunda línea | Вторая строка
+Couleur de la deuxieme ligne | Second line colour | Kleur van de tweede regel | Color de la segunda línea | Цвет второй строки
+Icone meteo | Weather icon | Weerpictogram | Icono del tiempo | Значок погоды
+Ordre de lecture | Play order | Afspeelvolgorde | Orden de reproducción | Порядок показа
+Panneau eteint la nuit | Panel off at night | Paneel 's nachts uit | Panel apagado por la noche | Панель выключена ночью
+Eteint a partir de | Off from | Uit vanaf | Apagado desde | Выключено с
+Rallume a | Back on at | Weer aan om | Encendido a las | Включится в
+L'heure seule | Time only | Alleen de tijd | Solo la hora | Только время
+Heure seule a partir de | Time only from | Alleen tijd vanaf | Solo hora desde | Только время с
+GIF de nouveau a | GIFs again at | GIF's weer om | GIF de nuevo a las | GIF снова в
+Mois des categories | Category months | Maanden van de categorieën | Meses de las categorías | Месяцы категорий
+Port MQTT | MQTT port | MQTT-poort | Puerto MQTT | Порт MQTT
+Frequence du texte | Text frequency | Frequentie van de tekst | Frecuencia del texto | Частота текста
+Frequence du compte | Countdown frequency | Frequentie van de afteller | Frecuencia de la cuenta | Частота отсчёта
+Icone animee | Animated icon | Bewegend pictogram | Icono animado | Анимированный значок
+Journal sur l'ecran | Log on the screen | Logboek op het scherm | Registro en la pantalla | Журнал на экране
+Panneaux a la suite | Panels in a chain | Panelen achter elkaar | Paneles en cadena | Панелей в цепочке
+Sorties en parallele | Parallel outputs | Parallelle uitgangen | Salidas en paralelo | Параллельных выходов
+Duree LSB | LSB duration | LSB-duur | Duración LSB | Длительность LSB
+Nom reseau | Network name | Netwerknaam | Nombre de red | Сетевое имя
+Reseau Wi-Fi | Wi-Fi network | Wifi-netwerk | Red Wi-Fi | Сеть Wi-Fi
+Pays Wi-Fi | Wi-Fi country | Wifi-land | País Wi-Fi | Страна Wi-Fi
+Mot de passe web | Web password | Webwachtwoord | Contraseña web | Веб-пароль
+Adresse IP fixe | Fixed IP address | Vast IP-adres | Dirección IP fija | Постоянный IP-адрес
+Luminosite | Brightness | Helderheid | Brillo | Яркость
+Actuellement {} (fixe) | Currently {} (fixed) | Nu {} (vast) | Actualmente {} (fija) | Сейчас {} (постоянный)
+Actuellement {} (donnée par la box) | Currently {} (given by the router) | Nu {} (gegeven door de router) | Actualmente {} (dada por el router) | Сейчас {} (выдан роутером)
+aucun | none | geen | ninguno | нет
+, ou | , or | , of | , o | или
+1 à 10 | 1 to 10 | 1 tot 10 | 1 a 10 | от 1 до 10
+0 à 100 (%) | 0 to 100 (%) | 0 tot 100 (%) | 0 a 100 (%) | от 0 до 100 (%)
+Programme horaire | Schedule | Schema | Programa horario | Расписание
+h : | h: | u: | h: | ч:
+de config.txt. Il sera mémorisé dans ce navigateur. | of config.txt. It will be remembered in this browser. | van config.txt. Het wordt in deze browser onthouden. | de config.txt. Se recordará en este navegador. | файла config.txt. Он будет сохранён в этом браузере.
+
+# --- etat de la connexion a Home Assistant (ha.cpp, avec une majuscule) ---
+Home Assistant : {} | Home Assistant: {} | Home Assistant: {} | Home Assistant: {} | Home Assistant: {}
+Connexion... | Connecting... | Verbinden... | Conectando... | Подключение...
+Deconnecte | Disconnected | Verbroken | Desconectado | Отключено
+Version de protocole refusee | Protocol version refused | Protocolversie geweigerd | Versión de protocolo rechazada | Версия протокола отклонена
+Identifiant refuse | Client ID refused | Client-ID geweigerd | Identificador rechazado | Идентификатор отклонён
+Serveur indisponible | Server unavailable | Server niet beschikbaar | Servidor no disponible | Сервер недоступен
+Utilisateur ou mot de passe incorrect | Wrong user or password | Onjuiste gebruiker of wachtwoord | Usuario o contraseña incorrectos | Неверный пользователь или пароль
+Non autorise | Not authorised | Niet toegestaan | No autorizado | Нет доступа
+Adresse du serveur introuvable | Server address not found | Serveradres niet gevonden | Dirección del servidor no encontrada | Адрес сервера не найден
+Serveur injoignable | Server unreachable | Server onbereikbaar | Servidor inaccesible | Сервер недоступен по сети
+Deconnecte par le serveur | Disconnected by the server | Verbroken door de server | Desconectado por el servidor | Отключено сервером
+Connexion perdue | Connection lost | Verbinding verbroken | Conexión perdida | Соединение потеряно

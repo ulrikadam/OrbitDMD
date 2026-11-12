@@ -40,11 +40,23 @@ def main():
         if name not in contents:
             contents[name] = open(os.path.join(base, name), 'rb').read()
 
-    # empreinte de chaque fichier qui n'est pas une page
-    stamps = {}
+    # empreinte de chaque fichier qui n'est pas une page ; les scripts qui chargent d'autres
+    # fichiers ("/lang-en.js" dans app.js) recoivent leurs empreintes, puis la leur
+    def stamp_all():
+        return {path: hashlib.sha1(contents[name]).hexdigest()[:8]
+                for path, name, ctype in entries if not is_html(ctype)}
+
+    def with_stamps(data, stamps):
+        text = data.decode('utf-8')
+        for asset, stamp in stamps.items():
+            text = text.replace('"%s"' % asset, '"%s?v=%s"' % (asset, stamp))
+        return text.encode('utf-8')
+
+    stamps = stamp_all()
     for path, name, ctype in entries:
-        if not is_html(ctype):
-            stamps[path] = hashlib.sha1(contents[name]).hexdigest()[:8]
+        if 'javascript' in ctype:
+            contents[name] = with_stamps(contents[name], {a: s for a, s in stamps.items() if a != path})
+    stamps = stamp_all()
 
     arrays = {}
     lines = ['// genere automatiquement par outils/web2h.py depuis web/ : ne pas modifier',
@@ -57,10 +69,7 @@ def main():
             continue
         data = contents[name]
         if is_html(ctype):
-            text = data.decode('utf-8')
-            for asset, stamp in stamps.items():
-                text = text.replace('"%s"' % asset, '"%s?v=%s"' % (asset, stamp))
-            data = text.encode('utf-8')
+            data = with_stamps(data, stamps)
         total += len(data)
         var = 's_Web_' + ''.join(c if c.isalnum() else '_' for c in name)
         arrays[name] = (var, len(data))

@@ -6,6 +6,7 @@
 #include "gifanim.h"
 #include "fileutil.h"
 #include "weathericons.h"
+#include "lang.h"
 #include <circle/logger.h>
 #include <circle/string.h>
 #include <circle/util.h>
@@ -25,7 +26,7 @@ static const char From[] = "horloge";
 #define DATE_SHARE_PERCENT	38	// date sous l'heure : 38 % de la hauteur au plus (taille auto)
 #define LINE_GAP		1
 
-static inline boolean IsDigit (char c)
+static inline boolean IsDigit (unsigned c)
 {
 	return '0' <= c && c <= '9';
 }
@@ -284,16 +285,40 @@ const CClockRenderer::TDigits &CClockRenderer::GetDigits (const TFont &rFont, un
 	return m_Digits;
 }
 
+// la police TTF a-t-elle toutes les lettres du texte ? (sinon : police Pixel pour ce texte)
+boolean CClockRenderer::Covers (const TFont &rFont, const char *pText)
+{
+	if (rFont.pInfo == 0)
+	{
+		return TRUE;
+	}
+	for (const char *p = pText; *p != '\0'; )
+	{
+		unsigned c = Utf8Next (&p);
+		if (c != ' ' && c != ':' && c != DEGREE_CHAR && stbtt_FindGlyphIndex (rFont.pInfo, (int) c) == 0)
+		{
+			return FALSE;		// deux-points et degre sont dessines au besoin
+		}
+	}
+
+	return TRUE;
+}
+
 boolean CClockRenderer::Measure (const TFont &rFont, unsigned nSize, const char *pText,
 				 TMetrics *pMetrics)
 {
+	if (!Covers (rFont, pText))
+	{
+		return Measure (m_Pixel, nSize, pText, pMetrics);
+	}
+
 	TMetrics M = {0x7FFF, -0x7FFF, 0x7FFF, -0x7FFF};
 
 	if (rFont.pInfo == 0)
 	{
 		// police Pixel : 5x7, avance de 6, agrandie
 		unsigned nScale = PixelScale (nSize);
-		int nLength = (int) strlen (pText);
+		int nLength = (int) Utf8Length (pText);
 		if (nLength == 0)
 		{
 			return FALSE;
@@ -310,12 +335,12 @@ boolean CClockRenderer::Measure (const TFont &rFont, unsigned nSize, const char 
 	float fScale = stbtt_ScaleForMappingEmToPixels (rFont.pInfo, (float) nSize);
 	float fX = 0.0f;
 	int nPrevious = 0;
-	char chPrevious = 0;
+	unsigned chPrevious = 0;
 
-	for (const char *p = pText; *p != '\0'; p++)
+	for (const char *p = pText; *p != '\0'; )
 	{
-		char c = *p;
-		int nGlyph = stbtt_FindGlyphIndex (rFont.pInfo, (unsigned char) c);
+		unsigned c = Utf8Next (&p);		// texte UTF-8 : un caractere Unicode
+		int nGlyph = stbtt_FindGlyphIndex (rFont.pInfo, (int) c);
 
 		TColon Colon;
 		if (c == ':' && (nGlyph == 0 || stbtt_IsGlyphEmpty (rFont.pInfo, nGlyph)))
@@ -331,7 +356,7 @@ boolean CClockRenderer::Measure (const TFont &rFont, unsigned nSize, const char 
 			continue;
 		}
 
-		if ((unsigned char) c == DEGREE_CHAR && (nGlyph == 0 || stbtt_IsGlyphEmpty (rFont.pInfo, nGlyph)))
+		if (c == DEGREE_CHAR && (nGlyph == 0 || stbtt_IsGlyphEmpty (rFont.pInfo, nGlyph)))
 		{
 			int nSize = DegreeSize (Digits);	// police sans signe degre : petit anneau
 			int x = (int) (fX + 0.5f) + 1;
@@ -398,20 +423,27 @@ boolean CClockRenderer::Measure (const TFont &rFont, unsigned nSize, const char 
 void CClockRenderer::Draw (const TFont &rFont, unsigned nSize, const char *pText, int x,
 			   int yBaseline, boolean bColonOn, boolean bSmooth, u8 *pMask)
 {
+	if (!Covers (rFont, pText))
+	{
+		Draw (m_Pixel, nSize, pText, x, yBaseline, bColonOn, bSmooth, pMask);
+		return;
+	}
+
 	const int W = (int) m_nWidth, H = (int) m_nHeight;
 
 	if (rFont.pInfo == 0)
 	{
 		unsigned nScale = PixelScale (nSize);
 		int yTop = yBaseline - (int) (FONT_HEIGHT * nScale);
-		for (const char *p = pText; *p != '\0' && x < W; p++, x += FONT_ADVANCE * nScale)
+		for (const char *p = pText; *p != '\0' && x < W; x += FONT_ADVANCE * nScale)
 		{
+			unsigned c = Utf8Next (&p);
 			if (x + (int) (FONT_ADVANCE * nScale) <= 0)
 			{
 				continue;		// encore a gauche de l'ecran
 			}
-			const char * const *ppGlyph = FontGetGlyph (*p);
-			if (ppGlyph == 0 || (*p == ':' && !bColonOn))
+			const char * const *ppGlyph = FontGetGlyph (c);
+			if (ppGlyph == 0 || (c == ':' && !bColonOn))
 			{
 				continue;
 			}
@@ -445,12 +477,12 @@ void CClockRenderer::Draw (const TFont &rFont, unsigned nSize, const char *pText
 	float fScale = stbtt_ScaleForMappingEmToPixels (rFont.pInfo, (float) nSize);
 	float fX = (float) x;
 	int nPrevious = 0;
-	char chPrevious = 0;
+	unsigned chPrevious = 0;
 
-	for (const char *p = pText; *p != '\0'; p++)
+	for (const char *p = pText; *p != '\0'; )
 	{
-		char c = *p;
-		int nGlyph = stbtt_FindGlyphIndex (rFont.pInfo, (unsigned char) c);
+		unsigned c = Utf8Next (&p);		// texte UTF-8 : un caractere Unicode
+		int nGlyph = stbtt_FindGlyphIndex (rFont.pInfo, (int) c);
 
 		if (c == ':' && (nGlyph == 0 || stbtt_IsGlyphEmpty (rFont.pInfo, nGlyph)))
 		{
@@ -477,7 +509,7 @@ void CClockRenderer::Draw (const TFont &rFont, unsigned nSize, const char *pText
 			continue;
 		}
 
-		if ((unsigned char) c == DEGREE_CHAR && (nGlyph == 0 || stbtt_IsGlyphEmpty (rFont.pInfo, nGlyph)))
+		if (c == DEGREE_CHAR && (nGlyph == 0 || stbtt_IsGlyphEmpty (rFont.pInfo, nGlyph)))
 		{
 			// petit anneau aux coins arrondis, en haut des chiffres
 			int nSize = DegreeSize (Digits);
@@ -981,7 +1013,7 @@ void CClockRenderer::RenderPage (const TTextStyle &rStyle, const char *pText, un
 	int x = bInk ? (W - (M.nRight - M.nLeft)) / 2 - M.nLeft : 0;
 
 	unsigned p = nProgress > 1000 ? 1000 : nProgress;
-	unsigned nLength = strlen (pText);
+	unsigned nLength = Utf8Length (pText);		// en caracteres
 	if (nLength >= BANNER_TEXT_LEN)
 	{
 		nLength = BANNER_TEXT_LEN - 1;
@@ -990,8 +1022,7 @@ void CClockRenderer::RenderPage (const TTextStyle &rStyle, const char *pText, un
 	int dy = 0;
 	unsigned nAlpha = 1000;
 	char Part[BANNER_TEXT_LEN];
-	memcpy (Part, pText, nLength);
-	Part[nLength] = '\0';
+	TextForDisplay (pText, Part, sizeof Part);
 
 	switch (nEffect)
 	{
@@ -1008,7 +1039,7 @@ void CClockRenderer::RenderPage (const TTextStyle &rStyle, const char *pText, un
 	case EffectTyping: {
 		unsigned n =   nPhase == PageIn  ? (p * nLength + 999) / 1000
 			     : nPhase == PageOut ? nLength - p * nLength / 1000 : nLength;
-		Part[n] = '\0';			// lettre par lettre (et effacement a la fin)
+		Part[Utf8Skip (Part, n) - Part] = '\0';	// lettre par lettre (et effacement a la fin)
 		break; }
 
 	case EffectFade:
@@ -1031,8 +1062,9 @@ void CClockRenderer::RenderPage (const TTextStyle &rStyle, const char *pText, un
 		for (unsigned i = 0; i < nLength; i++)
 		{
 			char Prefix[BANNER_TEXT_LEN];
-			memcpy (Prefix, pText, i + 1);
-			Prefix[i + 1] = '\0';
+			size_t nBytes = Utf8Skip (pText, i + 1) - pText;
+			memcpy (Prefix, pText, nBytes);
+			Prefix[nBytes] = '\0';
 			TMetrics P;
 			if (Measure (Font, nSize, Prefix, &P) && x + P.nRight > nLast)
 			{
@@ -1382,7 +1414,8 @@ static void FormatDegrees (int nTenths, char *pOut)
 	if (nValue >= 100)	pOut[n++] = '0' + nValue / 100 % 10;
 	if (nValue >= 10)	pOut[n++] = '0' + nValue / 10 % 10;
 	pOut[n++] = '0' + nValue % 10;
-	pOut[n++] = (char) DEGREE_CHAR;
+	pOut[n++] = (char) 0xC2;		// signe degre en UTF-8
+	pOut[n++] = (char) 0xB0;
 	pOut[n] = '\0';
 }
 
@@ -1409,18 +1442,18 @@ void CClockRenderer::RenderWeather (const TWeatherStyle &rStyle, const TWeatherD
 
 	case InfoFeels:
 		FormatDegrees (rData.nFeels10, A);
-		strcpy (Info, "RESSENTI "); strcat (Info, A);
+		strcpy (Info, Tr (TxtFeels)); strcat (Info, " "); strcat (Info, A);
 		break;
 
 	case InfoHumidity: {
 		CString Text;
-		Text.Format ("HUMIDITE %d%%", rData.nHumidity);
+		Text.Format (Tr (TxtHumidityFormat), rData.nHumidity);
 		strcpy (Info, Text);
 		break; }
 
 	case InfoWind: {
 		CString Text;
-		Text.Format ("VENT %d KM/H", (rData.nWind10 + 5) / 10);
+		Text.Format (Tr (TxtWindFormat), (rData.nWind10 + 5) / 10);
 		strcpy (Info, Text);
 		break; }
 
@@ -1429,7 +1462,7 @@ void CClockRenderer::RenderWeather (const TWeatherStyle &rStyle, const TWeatherD
 		{
 			FormatDegrees (rData.nTomorrowMin10, A);
 			FormatDegrees (rData.nTomorrowMax10, B);
-			strcpy (Info, "DEMAIN "); strcat (Info, A); strcat (Info, "/"); strcat (Info, B);
+			strcpy (Info, Tr (TxtTomorrow)); strcat (Info, " "); strcat (Info, A); strcat (Info, "/"); strcat (Info, B);
 		}
 		break;
 

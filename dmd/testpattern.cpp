@@ -2,6 +2,7 @@
 // testpattern.cpp
 //
 #include "testpattern.h"
+#include "lang.h"
 
 static const TTestScreen s_Screens[] =
 {
@@ -38,7 +39,7 @@ void TestPatternDraw (CCanvas *pCanvas, unsigned nScreen,
 	{
 	case 0:		// accueil
 		C.DrawTextCentered (0, W, 2, "ORBITDMD", 255, 255, 255, 2);
-		C.DrawTextCentered (0, W, H - 9, "SANS LINUX", 0, 170, 255);
+		C.DrawTextCentered (0, W, H - 9, Tr (TxtNoLinux), 0, 170, 255);
 		break;
 
 	case 1:		// couleurs pleines : ordre des couleurs et alimentation
@@ -47,20 +48,20 @@ void TestPatternDraw (CCanvas *pCanvas, unsigned nScreen,
 	case 4: {
 		static const struct
 		{
-			const char *pName;
+			TText Name;
 			u8 r, g, b;
 		}
 		Colors[] =
 		{
-			{"ROUGE", 255,   0,   0},
-			{"VERT",    0, 255,   0},
-			{"BLEU",    0,   0, 255},
-			{"BLANC", 255, 255, 255}
+			{TxtRed,   255,   0,   0},
+			{TxtGreen,   0, 255,   0},
+			{TxtBlue,    0,   0, 255},
+			{TxtWhite, 255, 255, 255}
 		};
 
 		unsigned i = nScreen - 1;
 		C.Clear (Colors[i].r, Colors[i].g, Colors[i].b);
-		C.DrawTextCentered (0, W, (H - 7) / 2, Colors[i].pName, 0, 0, 0);
+		C.DrawTextCentered (0, W, (H - 7) / 2, Tr (Colors[i].Name), 0, 0, 0);
 		} break;
 
 	case 5:		// degrades rouge, vert, bleu, gris : finesse des nuances

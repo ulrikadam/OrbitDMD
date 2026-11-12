@@ -54,6 +54,9 @@ cp "$RACINE/circle/LICENSE" "$CARTE/LICENCES/Circle-GPL3.txt"
 
 # ressources : "carte/<chemin>" (toujours copie) et "gifs/<categorie>/<fichier>" (au choix) ;
 # plus de 600 fichiers : la liste passe par un fichier de reponses du compilateur
+# traductions : une ligne par texte, 12 langues (outils/traductions/installateur*.txt)
+py -3.12 -I ../langues.py --fusion ../traductions/installateur.txt "$B/langues.txt"
+
 RSP=$B/csc.rsp
 {
 	echo "/nologo"
@@ -74,6 +77,7 @@ RSP=$B/csc.rsp
 	done
 	echo "\"/resource:$(cygpath -w "$ICI/preparer.ps1"),preparer.ps1\""
 	echo "\"/resource:$(cygpath -w "$B/logo.png"),logo.png\""
+	echo "\"/resource:$(cygpath -w "$B/langues.txt"),langues.txt\""
 	echo "\"$(cygpath -w Installateur.cs)\""
 	echo "\"$(cygpath -w "$B/version.cs")\""
 } > "$RSP"

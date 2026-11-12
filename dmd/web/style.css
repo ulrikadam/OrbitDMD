@@ -52,6 +52,7 @@ svg.i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor;
 .tabs a:hover { background: var(--surface-2); color: var(--text); text-decoration: none; }
 .tabs a.on { background: var(--blue-soft); color: var(--blue); }
 .status { display: flex; align-items: center; gap: 10px; flex: none; }
+.lang-sel { height: 30px; width: auto; padding: 0 6px; font-size: 13px; border-radius: 8px; }
 .conn { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); }
 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--faint); }
 .dot.on { background: var(--ok); box-shadow: 0 0 0 3px var(--ok-soft); }
@@ -237,8 +238,8 @@ select.input { padding-right: 8px; cursor: pointer; }
 .card-foot .small { margin-right: auto; }
 details.adv > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; }
 details.adv > summary::-webkit-details-marker { display: none; }
-details.adv > summary::after { content: "Afficher"; margin-left: auto; font-size: 13px; font-weight: 600; color: var(--blue); }
-details.adv[open] > summary::after { content: "Masquer"; }
+details.adv > summary::after { content: var(--t-show, "Afficher"); margin-left: auto; font-size: 13px; font-weight: 600; color: var(--blue); }
+details.adv[open] > summary::after { content: var(--t-hide, "Masquer"); }
 details.adv[open] > summary { margin-bottom: 8px; }
 
 /* page Reglages : luminosite heure par heure */

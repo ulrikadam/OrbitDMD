@@ -17,7 +17,7 @@
 #include "weatherdata.h"
 #include "canvas.h"
 
-#define DEGREE_CHAR	0xB0		// signe degre (Latin-1) dans les textes a dessiner
+#define DEGREE_CHAR	0xB0		// signe degre (Unicode) ; les textes a dessiner sont en UTF-8
 
 struct stbtt_fontinfo;
 class CGifAnimation;
@@ -41,7 +41,7 @@ public:
 	void Render (const TClockStyle &rStyle, const TDateTime &rTime, unsigned nMillis,
 		     boolean bColonOn, boolean bDateScreen, CCanvas *pCanvas);
 
-	// texte defilant (page Messages) : texte en Latin-1 (TextToLatin1)
+	// texte defilant (page Messages) : texte en UTF-8 (TextForDisplay)
 	void PrepareText (const TTextStyle &rStyle);
 	int GetTextWidth (const TTextStyle &rStyle, const char *pText);	// pixels
 	void RenderScroll (const TTextStyle &rStyle, const char *pText, int x, unsigned nMillis,
@@ -125,6 +125,7 @@ private:
 	u8 *ReadAsset (const char *pName, unsigned *pSize);
 
 	const TDigits &GetDigits (const TFont &rFont, unsigned nSize);
+	boolean Covers (const TFont &rFont, const char *pText);
 	boolean Measure (const TFont &rFont, unsigned nSize, const char *pText, TMetrics *pMetrics);
 	void Draw (const TFont &rFont, unsigned nSize, const char *pText, int x, int yBaseline,
 		   boolean bColonOn, boolean bSmooth, u8 *pMask);

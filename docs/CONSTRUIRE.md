@@ -1,5 +1,7 @@
 # Construire OrbitDMD depuis les sources
 
+**Français** · [English](CONSTRUIRE.en.md) · [Nederlands](CONSTRUIRE.nl.md) · [Español](CONSTRUIRE.es.md) · [Русский](CONSTRUIRE.ru.md)
+
 Ce guide sert aux personnes qui veulent modifier le programme. Pour simplement installer OrbitDMD,
 utilisez l'installateur de la page [Releases](https://github.com/ulrikadam/OrbitDMD/releases/latest).
 
@@ -75,6 +77,17 @@ construit sans GIF fournies (les écrans de démarrage OrbitDMD sont toujours in
 - **Rendu des GIF, de l'horloge et de la météo** : `dmd/test/build.cmd` compile `dmd/test/out/hosttest.exe`,
   qui produit des images du panneau sur le PC.
 
+## Traductions
+
+| Fichier | Contenu |
+|---|---|
+| `outils/traductions/web.txt` | pages web : une ligne par texte français, `français \| anglais \| néerlandais \| espagnol \| russe` |
+| `outils/traductions/installateur.txt` | installateur Windows, même format |
+| `dmd/lang.cpp` | textes dessinés sur le panneau (jours, mois, météo, messages d'état) |
+
+`make -C dmd` transforme `web.txt` en `dmd/web/lang-xx.js` (par `outils/langues.py`). Un texte ajouté dans
+une page web doit aussi être ajouté dans `web.txt`, sinon il reste en français.
+
 ## Organisation du code
 
 | Dossier | Contenu |
@@ -83,5 +96,6 @@ construit sans GIF fournies (les écrans de démarrage OrbitDMD sont toujours in
 | `dmd/web/` | pages de l'interface web (intégrées au programme à la compilation) |
 | `dmd/test/` | banc de test PC et faux panneau pour la page web |
 | `outils/installateur/` | installateur Windows (C#), polices, fonds et motifs fournis |
+| `outils/traductions/` | traductions des pages web et de l'installateur |
 | `outils/circle/` | configuration de Circle utilisée par OrbitDMD |
 | `circle/` | Circle (sous-module, non modifié) |

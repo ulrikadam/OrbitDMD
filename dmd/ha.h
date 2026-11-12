@@ -54,6 +54,7 @@ private:
 
 	CString m_Last[16];			// dernieres valeurs publiees (publier seulement les changements)
 	unsigned m_nGeneration;			// version des listes de messages deja annoncee
+	unsigned m_nLanguage;			// langue des noms deja annonces (reglage Langue)
 
 	static THANotification s_Notification;
 	static volatile boolean s_bNotification;

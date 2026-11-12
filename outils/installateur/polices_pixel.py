@@ -6,7 +6,8 @@ Usage : py -3.12 -I polices_pixel.py <dmd/font5x7.cpp> <dossier de sortie>
   OrbitDMD-Gras.ttf      la police 5x7, traits doubles
   OrbitDMD-Segments.ttf  afficheur 7 segments (chiffres et la plupart des lettres)
 
-Les minuscules utilisent les dessins des majuscules. Licence : celle d'OrbitDMD.
+Les minuscules utilisent les dessins des majuscules ; latin accentue et cyrillique comme la
+police Pixel du panneau (FontGetGlyph). Licence : celle d'OrbitDMD.
 """
 import math
 import re
@@ -22,14 +23,35 @@ ASC, DESC = 800, 200
 # --- dessins 5x7 de dmd/font5x7.cpp ---
 
 def lire_5x7(chemin):
-    texte = open(chemin, encoding='ascii').read()
+    """dessins par caractere, alias cyrilliques (meme forme que le latin), accents retires"""
+    texte = open(chemin, encoding='utf-8').read()
     glyphes = {}
-    for m in re.finditer(r"\{'(\\xB0|\\'|.)', \{((?:\"[.#]{5}\",?\s*){7})\}\}", texte):
-        c = m.group(1)
-        c = '°' if c == '\\xB0' else ("'" if c == "\\'" else c)
-        lignes = re.findall(r'"([.#]{5})"', m.group(2))
-        glyphes[c] = lignes
-    return glyphes
+    for m in re.finditer(r'\{0x([0-9A-Fa-f]{4}), \{((?:"[.#]{5}",?\s*){7})\}\}', texte):
+        glyphes[chr(int(m.group(1), 16))] = re.findall(r'"([.#]{5})"', m.group(2))
+    alias = {chr(int(a, 16)): b for a, b in re.findall(r"\{0x([0-9A-Fa-f]+), '(.)'\}", texte)}
+    fold = re.search(r's_Fold\[\] = "([^"]+)"', texte).group(1)
+    fold_a = re.search(r's_FoldExtA\[\] = "([^"]+)"', texte).group(1)
+    return glyphes, alias, fold, fold_a
+
+
+def cle_5x7(c):
+    """meme regle que FontGetGlyph : minuscule -> majuscule, accents retires (sauf N tilde),
+    cyrillique de meme forme -> lettre latine"""
+    n = ord(c)
+    if ord('a') <= n <= ord('z') or 0xE0 <= n <= 0xFE and n != 0xF7 or 0x430 <= n <= 0x44F:
+        n -= 0x20
+    elif 0x450 <= n <= 0x45F:
+        n -= 0x50
+    elif n == 0x491:
+        n = 0x490
+    elif n == 0x1E9E:
+        n = 0xDF
+    if 0x100 <= n <= 0x17F:
+        n = ord(FOLD_A[n - 0x100])
+    if 0xC0 <= n <= 0xDE and n != 0xD1 and FOLD[n - 0xC0] != '*':
+        n = ord(FOLD[n - 0xC0])
+    c = chr(n)
+    return ALIAS.get(c, c)
 
 
 # --- contours ---
@@ -210,12 +232,13 @@ def ttf(nom_famille, glyphes, chemin):
 def construire(nom_famille, fichier, dessin):
     glyphes = [(None, [], 600)]		# .notdef vide : un caractere absent ne dessine rien
     vus = {}
-    for c in [chr(i) for i in range(32, 127)] + ['°']:
-        cle = c.upper() if c.islower() else c
+    # ASCII, Latin-1 (accents), cyrillique, euro
+    codes = list(range(32, 127)) + list(range(0xA0, 0x180)) + list(range(0x400, 0x460)) + [0x490, 0x491, 0x20AC]
+    for c in map(chr, codes):
+        cle = cle_5x7(c)
         if cle in vus:
             gid = vus[cle]
-            if c != cle:
-                glyphes.append((ord(c), glyphes[gid][1], glyphes[gid][2]))
+            glyphes.append((ord(c), glyphes[gid][1], glyphes[gid][2]))
             continue
         contours, avance = dessin(cle)
         if contours is None:
@@ -226,7 +249,7 @@ def construire(nom_famille, fichier, dessin):
     print(fichier, len(glyphes), 'glyphes')
 
 
-g5 = lire_5x7(SRC)
+g5, ALIAS, FOLD, FOLD_A = lire_5x7(SRC)
 g5[' '] = ['.....'] * 7
 
 

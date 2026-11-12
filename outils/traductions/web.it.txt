@@ -1,0 +1,759 @@
+# OrbitDMD - interfaccia web in italiano : "numero | traduzione" (numero del testo francese in web.txt)
+1 | Pannello di controllo
+2 | Orologio
+3 | Meteo
+4 | Messaggi
+5 | Impostazioni
+6 | Sistema
+7 | Connessione…
+8 | Online
+9 | Offline
+10 | Sviluppato da
+11 | OrbitDMD su GitHub
+12 | ☕ Sostieni su Ko-fi
+13 | Mostra
+14 | Nascondi
+15 | Annulla
+16 | OK
+17 | Salva
+18 | Chiudi
+19 | Elimina
+20 | Copia
+21 | Copiato
+22 | Vedi
+23 | Anteprima
+24 | Attiva
+25 | Sì
+26 | No
+27 | Auto
+28 | Automatico
+29 | Durata
+30 | Carattere
+31 | Dimensione
+32 | Colore
+33 | Motivo
+34 | Formato
+35 | Sfondo
+36 | Testo
+37 | Titolo
+38 | Velocità
+39 | Periodo
+40 | Frequenza
+41 | Pannello
+42 | Pausa
+43 | Riavvia
+44 | Invia
+45 | Invio…
+46 | Caricamento…
+47 | Modifiche non salvate
+48 | Pixel (integrato)
+49 | OrbitDMD Grassetto
+50 | OrbitDMD 7 segmenti
+51 | Halloween · {}
+52 | Motivo {}
+53 | {} KB
+54 | {} MB
+55 | {} GB
+56 | {} g {} h
+57 | da
+58 | a
+59 | h a
+60 | Bianco
+61 | Rosso
+62 | Arancione
+63 | Ambra
+64 | Giallo
+65 | Verde
+66 | Turchese
+67 | Blu
+68 | Viola
+69 | Rosa
+70 | Arcobaleno
+71 | Arcobaleno animato
+72 | Arcobaleno (animato)
+73 | Altro colore
+74 | Colore unico
+75 | Rosso Natale
+76 | A caso
+77 | Personalizzato…
+78 | Password del pannello
+79 | Necessaria per modificare il pannello. Si trova alla riga
+80 | di config.txt.
+81 | Verrà ricordata in questo browser.
+82 | Verifica…
+83 | Password accettata
+84 | Password rifiutata, riprova.
+85 | Password richiesta
+86 | Password dimenticata
+87 | Dimentica la password su questo dispositivo
+88 | Dimenticare la password su questo dispositivo?
+89 | Inserisci la password
+90 | Sbloccato
+91 | Bloccato
+92 | Pannello non raggiungibile
+93 | OrbitDMD {} è disponibile
+94 | è disponibile
+95 | (questo pannello ha la
+96 | Vedi le novità
+97 | Scarica kernel8.img
+98 | Poi installalo in
+99 | → Nuovo firmware. Le tue impostazioni e le tue GIF vengono conservate.
+100 | Più tardi
+101 | non ancora dall'avvio
+102 | proprio ora
+103 | {} min fa
+104 | {} h {} fa
+105 | Ora sincronizzata: era già esatta
+106 | Ora sincronizzata: il pannello era indietro di {}
+107 | Ora sincronizzata: il pannello era avanti di {}
+108 | Il pannello si riavvia; il router può impiegare qualche minuto per ridargli un indirizzo.
+109 | OrbitDMD · Pannello di controllo
+110 | Cosa succede sul pannello, in diretta.
+111 | Sul pannello
+112 | Comandi rapidi
+113 | Display
+114 | Display riacceso
+115 | Display spento
+116 | Display spento: il pannello resta raggiungibile
+117 | Spegni
+118 | Spegni il display: il pannello resta raggiungibile e si riaccende dopo un riavvio
+119 | Riaccendi
+120 | Blocca l'immagine mostrata
+121 | Immagine bloccata
+122 | Riprendi
+123 | Riproduzione ripresa
+124 | In pausa
+125 | Riavvia l'animazione
+126 | Riavvia il pannello (circa 20 secondi)
+127 | Riavviare il pannello adesso?
+128 | Riavvio richiesto
+129 | Pannello di nuovo online
+130 | Il pannello non risponde dopo 8 minuti: controlla il suo schermo
+131 | In attesa del pannello…
+132 | Indirizzo IP
+133 | Libreria
+134 | GIF in rotazione
+135 | Spazio libero SD
+136 | Compilato il
+137 | Connessione
+138 | Cavo di rete
+139 | Wi-Fi
+140 | Avvio
+141 | Acceso da
+142 | Solo ora (programma)
+143 | Spento (programma)
+144 | Fascia oraria impostata in Impostazioni → Programma orario
+145 | Luminosità
+146 | Messaggio
+147 | Schermata di test
+148 | Aggiornamenti e registro
+149 | Memoria libera
+150 | Normale
+151 | Caldo
+152 | Troppo caldo
+153 | Ancora nessun meteo
+154 | Per scegliere cosa mostrare, apri la pagina
+155 | Processore
+156 | Firmware
+157 | Reattività
+158 | Attesa Wi-Fi più lunga mentre il pannello calcola (ultimi 20 secondi, poi ultimi 5 minuti). Sotto i 50 ms: perfetto.
+159 | Rete
+160 | Sincronizzata
+161 | Sincronizzata {}
+162 | Versione
+163 | OrbitDMD · GIF
+164 | Scegli le categorie mostrate, aggiungi o rimuovi animazioni.
+165 | Categorie
+166 | Categoria
+167 | categoria
+168 | Nuova categoria
+169 | Nome della nuova categoria
+170 | Nome della categoria: lettere, cifre, _ o - (32 al massimo)
+171 | Crea
+172 | Scegli una categoria a sinistra.
+173 | Aggiungi GIF
+174 | : trascina qui GIF, un'intera cartella o un file .zip, oppure clicca (ideale 128×32)
+175 | Cerca
+176 | Cerca una GIF
+177 | Nessuna GIF.
+178 | Nessuna GIF trovata.
+179 | Mostra subito sul pannello
+180 | Mostrata sul pannello
+181 | Mostra {}
+182 | Elimina {}
+183 | Preferita: passa più spesso (clicca per togliere)
+184 | Metti tra i preferiti: passa più spesso
+185 | Fuori rotazione (clicca per rimetterla)
+186 | Togli dalla rotazione senza eliminarla
+187 | Elimina dalla scheda SD
+188 | {} passerà più spesso
+189 | {} non passerà più (resta sulla scheda)
+190 | {} passa normalmente
+191 | {} sta per essere mostrata
+192 | {} eliminata
+193 | {} preferita/e
+194 | {} fuori rotazione
+195 | {} mostrata/e
+196 | {} liberi sulla scheda
+197 | Elimina la categoria
+198 | Elimina questa categoria e tutte le sue GIF
+199 | Eliminare «{}»?
+200 | Le sue {} GIF verranno cancellate dalla scheda SD.
+201 | È definitivo. Scrivi la password per confermare.
+202 | Elimina definitivamente
+203 | Eliminazione in corso…
+204 | Categoria {} eliminata
+205 | È l'unica categoria mostrata: attivane prima un'altra
+206 | Lascia almeno una categoria mostrata
+207 | Mostrata
+208 | Mostrata solo: {}
+209 | Non mostrata
+210 | mostrata
+211 | Tutto l'anno
+212 | Periodo di «{}» salvato
+213 | Varie
+214 | Schermate di avvio.
+215 | Una GIF il cui nome contiene «demarrage» gira durante la connessione Wi-Fi; «noel» si usa solo a dicembre, «halloween» solo a ottobre; le altre sono scelte a caso. Lascia questa categoria disattivata perché non entrino nella rotazione.
+216 | OrbitDMD include il pacchetto base gratuito di GIF animate della
+217 | (progetto RPI2DMD), con il consenso di eLLuiGi. Grazie! Un pacchetto di
+218 | 11.000 animazioni
+219 | su Neo-Arcadia
+220 | o su
+221 | Molte GIF in sottocartelle?
+222 | Una cartella = una categoria
+223 | Tutto in
+224 | Riduci al formato del pannello (
+225 | ) le GIF più grandi
+226 | Scegli una cartella
+227 | Lettura dei file…
+228 | Questo browser non sa aprire i .zip: decomprimilo, poi trascina la cartella
+229 | {} non è un file .zip leggibile
+230 | {} è troppo grande per essere letto qui: decomprimilo, poi trascina la cartella
+231 | {} GIF ({}) da inviare in {} categoria
+232 | {} GIF ({}) da inviare in {} categorie
+233 | nuova categoria
+234 | … e altre {}
+235 | {} GIF dello .zip ignorata/e (protette da password o formato sconosciuto).
+236 | ⚠️ Spazio insufficiente sulla scheda SD: {} liberi.
+237 | Durata stimata: circa {} min in Wi-Fi. Lascia aperta questa pagina. Le GIF già presenti vengono saltate: potrai riprendere più tardi.
+238 | Le nuove categorie compaiono sul pannello solo dopo averle spuntate a sinistra.
+239 | Verifica di «{}»…
+240 | Invio
+241 | Invio in corso
+242 | Invio {} / {}: {} / {}
+243 | {} aggiunta/e · {} già presenti · {} errore/i
+244 | {} ridotta/e
+245 | mancano circa {} min
+246 | Finito: {} GIF aggiunta/e, {} già presente/i, {} errore/i
+247 | Invio interrotto: {} GIF aggiunta/e, {} già presente/i, {} errore/i
+248 | {} ridotta/e al formato del pannello
+249 | {} GIF aggiunta/e
+250 | {} errore/i
+251 | Ultimo errore: {}
+252 | Rilancia lo stesso invio più tardi: le GIF già inviate verranno saltate.
+253 | Ferma
+254 | Arresto dopo la GIF in corso…
+255 | Aggiungi GIF a «{}» per crearla sulla scheda
+256 | GIF senza immagine
+257 | GIF senza tavolozza
+258 | OrbitDMD · Orologio
+259 | Carattere, colori e data dell'ora mostrata tra le GIF. L'anteprima è disegnata dal pannello stesso.
+260 | Anteprima dell'orologio
+261 | Schermata dell'anteprima
+262 | Ora
+263 | Data
+264 | Caricamento dell'anteprima…
+265 | Anteprima non disponibile
+266 | Mostra l'ora
+267 | Tra due GIF
+268 | Fuso orario
+269 | Ora legale automatica
+270 | Carattere dell'ora
+271 | Colore dell'ora
+272 | Colore della data
+273 | Dimensione in pixel
+274 | Auto: la più grande che entra. Una dimensione scelta viene ridotta se il testo non entra
+275 | Motivo (riempie il testo)
+276 | Oppure un motivo
+277 | Riempimento
+278 | Sfondo (dietro l'ora)
+279 | Immagine o animazione dietro l'ora.
+280 | Nessuno (nero)
+281 | Uno sfondo scelto a caso a ogni visualizzazione dell'ora
+282 | Un colore, l'arcobaleno o un motivo, scelto a caso a ogni visualizzazione dell'ora
+283 | Due punti lampeggianti
+284 | Bordi smussati
+285 | Altrimenti pixel netti
+286 | Mostra la data
+287 | Solo la data, mostrata dopo l'ora
+288 | Dopo l'ora (schermata a parte)
+289 | Sotto l'ora
+290 | Durata della data
+291 | Salva e poi mostra l'ora per 15 secondi sul pannello
+292 | Vedi sul pannello
+293 | L'ora viene mostrata 15 secondi sul pannello
+294 | Orologio salvato
+295 | Ora del pannello
+296 | Internet
+297 | ora Internet
+298 | orologio a batteria
+299 | ora sconosciuta
+300 | {} · sincronizzata {}
+301 | Rimetti il pannello all'ora esatta di Internet
+302 | Sincronizza
+303 | Aggiungi caratteri, motivi o sfondi
+304 | Trascina qui i file
+305 | oppure clicca: caratteri TTF o OTF, immagini PNG o GIF da 128×32
+306 | Le immagini servono come
+307 | : formato non supportato
+308 | : troppo grande (4 MB al massimo)
+309 | OrbitDMD · Meteo
+310 | Il tempo che fa, mostrato tra le GIF. Aggiornato ogni 15 minuti.
+311 | Anteprima della schermata meteo
+312 | Adesso
+313 | Oggi
+314 | Domani
+315 | Umidità
+316 | Vento
+317 | Percepita
+318 | Aggiornato
+319 | Aggiornato {}
+320 | ultimo tentativo: {}
+321 | Aggiorna
+322 | Caricamento del meteo…
+323 | Nessun meteo: {}
+324 | Scegli prima un luogo
+325 | Dati meteo:
+326 | Mostra il meteo
+327 | Dopo ogni GIF
+328 | Ogni 2 GIF
+329 | Ogni 3 GIF
+330 | Ogni 5 GIF
+331 | Ogni 10 GIF
+332 | Ogni 20 GIF
+333 | Luogo
+334 | Luogo scelto
+335 | Luogo scelto: salva per usarlo
+336 | Non ancora scelto
+337 | Posizione scelta
+338 | Cerca la tua città qui sotto
+339 | Cerca una città
+340 | Città o CAP
+341 | Cerca
+342 | Ricerca…
+343 | Nessun luogo trovato.
+344 | Ricerca impossibile (nessun accesso a Internet da questo browser?)
+345 | La ricerca passa dal tuo browser; il pannello conserva solo la posizione scelta.
+346 | Carattere della temperatura
+347 | Colore della temperatura
+348 | Seconda riga
+349 | Colore della seconda riga
+350 | Niente
+351 | Descrizione (PIOGGIA…)
+352 | Minima / massima
+353 | Temperatura percepita
+354 | Icona
+355 | Icona animata
+356 | Pioggia che cade, sole che splende…
+357 | Vedi tutte le icone
+358 | Sole
+359 | Notte serena
+360 | Poco nuvoloso
+361 | Notte nuvolosa
+362 | Coperto
+363 | Nebbia
+364 | Pioviggine
+365 | Pioggia
+366 | Neve
+367 | Temporale
+368 | Salva e poi mostra il meteo per 15 secondi sul pannello
+369 | Il meteo viene mostrato 15 secondi sul pannello
+370 | Meteo salvato
+371 | OrbitDMD · Messaggi
+372 | Testi scorrevoli e conti alla rovescia, ognuno con il suo stile. Quelli attivati passano a turno tra le GIF.
+373 | Testi scorrevoli
+374 | Conti alla rovescia
+375 | Conto alla rovescia
+376 | Aggiungi un testo
+377 | Aggiungi un conto alla rovescia
+378 | Nessun testo: clicca su «Aggiungi un testo».
+379 | Nessun conto alla rovescia.
+380 | (testo vuoto)
+381 | Un testo è vuoto: scrivilo o eliminalo
+382 | Tra le GIF
+383 | Un testo attivato alla volta, a turno
+384 | Un conto attivato alla volta, a turno
+385 | ogni
+386 | Attivato: passa tra le GIF
+387 | Sposta su
+388 | Buon compleanno!
+389 | {} / 200 byte (una lettera accentata conta 2)
+390 | Entrata del testo
+391 | Scorre verso sinistra
+392 | Scorre verso destra
+393 | Sale (dal basso verso l'alto)
+394 | Scende (dall'alto verso il basso)
+395 | Lettera per lettera
+396 | Pioggia di lettere
+397 | Dissolvenza
+398 | Numero di passaggi
+399 | molto lenta
+400 | lenta
+401 | media
+402 | veloce
+403 | molto veloce
+404 | massima
+405 | Anteprima del testo
+406 | Anteprima dell'inizio del testo. Sul pannello scorre.
+407 | Anteprima della prima pagina, una volta arrivata. Un testo lungo viene diviso in pagine.
+408 | Anteprima del conto alla rovescia
+409 | Facoltativo: solo tra queste due date, ogni anno
+410 | dal
+411 | al
+412 | dal {} al {}
+413 | GG/MM
+414 | Fino a
+415 | Natale
+416 | Natale (25 dicembre)
+417 | Capodanno
+418 | Capodanno (1° gennaio)
+419 | Una data scelta
+420 | Prima
+421 | Il giorno stesso
+422 | Sopra il tempo rimanente
+423 | NATALE TRA
+424 | BUON NATALE!
+425 | COMPLEANNO TRA
+426 | BUON COMPLEANNO!
+427 | Messaggio del giorno stesso
+428 | Mostrato per 24 h dall'ora scelta
+429 | Colore del titolo
+430 | Colore del tempo rimanente
+431 | Salva, poi mostra subito sul pannello
+432 | Il testo viene mostrato sul pannello
+433 | Il conto alla rovescia viene mostrato 15 secondi
+434 | Messaggi salvati
+435 | OrbitDMD · Impostazioni
+436 | Ogni valore viene verificato dal pannello prima di essere salvato in config.txt.
+437 | Lingua del pannello
+438 | Giorni, mesi, meteo e messaggi mostrati sul pannello
+439 | Luminosità ora per ora
+440 | Trascina sulle barre per regolare ogni ora (passi del 5 %, 0 % = pannello spento). L'ora attuale è cerchiata in ambra. Applicato dalla GIF successiva.
+441 | Luminosità dalle 0 alle 23
+442 | Tutto il giorno
+443 | Di notte dalle
+444 | Applica
+445 | Mostra le GIF
+446 | Altrimenti solo l'ora
+447 | Durata minima di una GIF
+448 | Le GIF brevi girano in loop
+449 | Ordine delle GIF
+450 | Le preferite passano più spesso a caso
+451 | In ordine (categoria, poi nome)
+452 | Indirizzo IP sul pannello
+453 | All'avvio e se cambia · 0 = mai
+454 | Schermata di test all'avvio
+455 | Registro sullo schermo HDMI
+456 | Solo per la diagnosi: rallenta la rete
+457 | Spegni il pannello
+458 | La pagina web resta raggiungibile
+459 | Solo l'ora, senza GIF
+460 | Con il meteo e i messaggi
+461 | Fascia
+462 | Le categorie di GIF mostrate solo in certi mesi (Natale a dicembre…) si impostano nella pagina
+463 | . I periodi dei testi e dei conti alla rovescia, nella pagina
+464 | Ora e data
+465 | Pagina Orologio
+466 | Carattere, colori, fuso orario…
+468 | Collega a Home Assistant
+469 | Tramite MQTT: il pannello compare da solo in Home Assistant
+470 | Server MQTT
+471 | L'indirizzo IP di Home Assistant, per esempio 192.168.0.10
+472 | Porta
+473 | Utente MQTT
+474 | Un utente di Home Assistant (Impostazioni → Persone)
+475 | Password MQTT
+476 | Lascia vuoto per mantenerla
+477 | Serve il componente aggiuntivo
+478 | in Home Assistant (Impostazioni → Componenti aggiuntivi) e l'integrazione
+479 | . Il pannello si riavvia per connettersi. Poi, in Home Assistant: Impostazioni → Dispositivi →
+480 | . Tutti i comandi ed esempi da copiare: pagina
+481 | Aiuto Home Assistant
+482 | ✅ Connesso al server MQTT
+483 | Impostazioni salvate: riavvia il pannello per connetterlo
+484 | Rete Wi-Fi
+485 | Password Wi-Fi
+486 | Almeno 8 caratteri, senza spazi
+487 | Paese
+488 | Codice di 2 lettere (IT, CH, SM…)
+489 | Nome in rete
+490 | Indirizzo di questa pagina
+491 | Automatico: cavo se collegato, altrimenti Wi-Fi
+492 | · ora in Wi-Fi
+493 | · ora via cavo
+494 | Wi-Fi non connesso
+495 | Indirizzo del pannello
+496 | Automatico (router)
+497 | Fisso
+498 | Attualmente
+499 | (assegnato dal router)
+500 | Maschera
+501 | Gateway
+502 | L'indirizzo del router
+503 | Server DNS
+504 | Spesso anche il router
+505 | Consiglio: nel router, riserva questo indirizzo per il pannello (indirizzo MAC
+506 | ), così non verrà mai assegnato a un altro dispositivo.
+507 | Il cavo viene scelto all'avvio: dopo averlo collegato o scollegato, riavvia il pannello. Dopo un cambio di connessione, di Wi-Fi o di indirizzo, il pannello si riavvia. Se non è raggiungibile entro 2 min 30, torna da solo alle impostazioni precedenti.
+508 | Cambiare le impostazioni di rete? Il pannello si riavvierà e le proverà; se non è raggiungibile entro 2 min 30, tornerà alle precedenti.
+509 | Dopo il riavvio, l'indirizzo sarà http://{}
+510 | Password della pagina web
+511 | Nuova password
+512 | Conferma
+513 | Cambia la password
+514 | Le due password sono diverse
+515 | Password cambiata e ricordata
+516 | invariata
+517 | non definita
+518 | Pannelli (avanzato)
+519 | Riavvio necessario. Valori inadatti possono disturbare l'immagine: si correggono qui stesso.
+520 | Larghezza di un pannello
+521 | Altezza di un pannello
+522 | Pannelli in fila
+523 | Sulla stessa uscita
+524 | Uscite in parallelo
+525 | Rallentamento GPIO
+526 | Da aumentare se l'immagine è disturbata
+527 | 3 disattiva l'orologio a batteria
+528 | Ordine dei colori
+529 | Bit di colore
+530 | Meno = aggiornamento più veloce
+531 | Durata del gradino più piccolo
+532 | In nanosecondi
+533 | Annulla le modifiche
+534 | Riavvio necessario
+535 | per applicare alcune impostazioni salvate.
+536 | Riavvia adesso
+537 | Riavvio…
+538 | Il pannello non risponde
+539 | spento
+540 | OrbitDMD · Sistema
+541 | Registro del pannello, aggiornamenti e riavvio.
+542 | OrbitDMD {} · firmware del {}
+543 | Registro
+544 | Filtra
+545 | Filtra il registro
+546 | Segui in diretta
+547 | Registro copiato
+548 | Copia impossibile: seleziona il testo a mano
+549 | Nuovo firmware
+550 | File
+551 | . Il precedente viene conservato come kernel8.bak, poi il pannello si riavvia. Nuove versioni:
+552 | Scegli kernel8.img
+553 | o trascinalo qui
+554 | Installa
+555 | Firmware ricevuto, installazione…
+556 | Serve un file {}
+557 | Pannello di nuovo online (firmware del {})
+558 | Backup delle impostazioni
+559 | Tutte le impostazioni (Wi-Fi, pannelli, orologio, meteo…), i tuoi testi e conti alla rovescia e le tue GIF preferite ed escluse, in un solo file. Da tenere per sé: contiene le tue password.
+560 | Scarica il backup
+561 | Backup scaricato: tienilo per te (password)
+562 | Ripristina
+563 | : scegli il backup (o un config.txt) o trascinalo qui
+564 | Impostazioni ripristinate, riavvio…
+565 | Riavvia il pannello
+566 | Il pannello si spegne qualche secondo e poi riparte con la schermata di avvio.
+567 | Riavvio del pannello…
+568 | OrbitDMD · Aiuto Home Assistant
+569 | Tutti i comandi del pannello
+570 | , con esempi pronti da copiare. La connessione si imposta in
+571 | Impostazioni → Home Assistant
+572 | Home Assistant non attivato
+573 | Connesso a Home Assistant
+574 | Home Assistant:
+575 | In Home Assistant:
+576 | Impostazioni → Dispositivi e servizi → MQTT →
+577 | . Tutto si fa da quella pagina:
+578 | Elemento
+579 | Cosa fa
+580 | Accendere, spegnere (la pagina web resta raggiungibile), luminosità
+581 | Acceso: immagine bloccata; spento: riproduzione normale
+582 | Tornare alla luminosità delle impostazioni dopo una modifica da Home Assistant
+583 | Mostra l'ora, Mostra il meteo
+584 | Subito, per 15 secondi
+585 | Riavvia il pannello
+586 | Testo da mostrare
+587 | Scrivi un testo e conferma: scorre subito
+588 | Effetto, colore, passaggi, velocità dei messaggi
+589 | Lo stile dei testi inviati da Home Assistant
+590 | Attivare o no ogni elemento della pagina
+591 | Testo: …, Conto alla rovescia: …
+592 | GIF mostrata, Schermo, Temperatura, Indirizzo IP, Versione
+593 | Comandi MQTT
+594 | L'elenco qui sotto, negli attributi del sensore
+595 | Inviare un messaggio
+596 | Il modo più semplice, in un'automazione o in
+597 | Strumenti per sviluppatori → Azioni
+598 | (modalità YAML):
+599 | Con uno stile a parte (colore, effetto, GIF prima del testo):
+600 | Campo
+601 | Valori
+602 | Il testo (200 caratteri al massimo, accenti compresi)
+603 | A sinistra, A destra, Sale, Scende, Lettera per lettera, Pioggia di lettere, Dissolvenza (sono accettati i nomi in tutte le 12 lingue)
+604 | Bianco, Rosso, Arancione, Ambra, Giallo, Verde, Turchese, Blu, Viola, Rosa, Arcobaleno o RRGGBB (in tutte le 12 lingue)
+605 | o un carattere della pagina Orologio, per esempio
+606 | Dimensione in pixel,
+607 | = automatico
+608 | Una GIF da riprodurre prima del testo:
+609 | (come nella pagina GIF)
+610 | I campi assenti prendono lo stile impostato in Home Assistant (effetto, colore, passaggi, velocità). Se il pannello è spento o in pausa, il messaggio aspetta.
+611 | Esempio di automazione
+612 | Tutti i comandi MQTT
+613 | Per utenti esperti (MQTT Explorer, Node-RED…). Il pannello pubblica questo elenco anche su
+614 | Topic
+615 | Valore da inviare
+616 | Cosa fa il pannello
+617 | Senza scrivere nulla
+618 | Stati pubblicati dal pannello:
+619 | per ogni elemento; disponibilità:
+620 | ON (acceso) o OFF (spento)
+621 | ON (immagine bloccata) o OFF
+622 | ON: luminosità ora per ora delle impostazioni
+623 | ON / OFF: testo N della pagina Messaggi (0 = il primo)
+624 | ON / OFF: conto alla rovescia N della pagina Messaggi
+625 | PRESS: mostra l'ora
+626 | PRESS: mostra il meteo
+627 | PRESS: riavvia
+628 | un testo da mostrare subito
+629 | un testo, o JSON {message, effet, couleur…}
+630 | password errata (o Web_Password vuota in config.txt)
+631 | password accettata
+632 | {} contiene le schermate di avvio del pannello; elimina le sue GIF una alla volta se serve
+633 | {} è l'unica categoria mostrata, attivane prima un'altra
+634 | {} esiste già in {}
+635 | {} esiste già
+636 | {} non trovato
+637 | {} è stata eliminata solo in parte ({} file eliminato/i)
+638 | {} non è {}
+639 | {} non è un file GIF
+640 | GIF non valida
+641 | Wi-Fi non ancora connesso
+642 | indirizzo fisso: {}
+643 | nessun file ricevuto
+644 | categoria {} non trovata
+645 | categoria sconosciuta: {}
+646 | comando sconosciuto
+647 | config.txt deve contenere Web_Password e Wifi_ssid (o Reseau=ethernet)
+648 | impossibile creare la cartella {}
+649 | impossibile scrivere {}
+650 | scrittura di {} incompleta (scheda piena?)
+651 | impossibile scrivere config.txt
+652 | impossibile scrivere sulla scheda
+653 | salvataggio impossibile ({} GIF contrassegnate al massimo)
+654 | salva prima l'elenco
+655 | file config.txt assente o non valido
+656 | file kernel8.img assente o di dimensione anomala
+657 | lascia almeno una categoria attiva
+658 | impossibile leggere config.txt
+659 | elenco assente o troppo lungo
+660 | contrassegno sconosciuto (favori, exclue o aucune)
+661 | nome di categoria non valido (lettere, cifre, _ o -)
+662 | nome di categoria non valido
+663 | nome di categoria troppo lungo
+664 | nome non valido
+665 | impostazione sconosciuta: {}
+666 | server dell'ora Internet non raggiungibile, riprova
+667 | troppe categorie attive
+668 | troppe impostazioni alla volta
+669 | tipo di file sconosciuto
+670 | un'altra richiesta è già in corso
+671 | valore rifiutato per {}
+672 | {} aggiunto
+673 | {} aggiunta in {} (dimensione {}x{}: sarà centrata)
+674 | {} aggiunta in {}
+675 | {} GIF contrassegnata/e
+676 | {} categoria/e attiva/e
+677 | {} impostazione/i salvata/e; riavvio necessario per applicarle
+678 | {} impostazione/i salvata/e, effettiva/e al prossimo avvio
+679 | {} impostazione/i salvata/e
+680 | {} impostazione/i di rete salvata/e. Il pannello si riavvia; se non è raggiungibile entro {} s, torna alle impostazioni precedenti.
+681 | {} testo/i, {} conto/i alla rovescia
+682 | display spento, il pannello resta raggiungibile
+683 | display riacceso
+684 | nessuna modifica
+685 | categoria {} eliminata ({} file)
+686 | richiesta ricevuta, il pannello si riavvierà
+687 | immagine bloccata
+688 | l'ora viene mostrata sul pannello
+689 | il meteo viene mostrato sul pannello
+690 | il conto alla rovescia viene mostrato sul pannello
+691 | il testo viene mostrato sul pannello
+692 | riproduzione ripresa
+693 | meteo richiesto
+694 | GIF mostrate
+695 | Durata minima
+696 | Durata dell'orologio
+697 | Formato dell'ora
+698 | Dimensione dell'ora
+699 | Motivo dell'ora
+700 | Durata della data
+701 | Formato della data
+702 | Carattere della data
+703 | Dimensione della data
+704 | Motivo della data
+705 | Meteo
+706 | Durata del meteo
+707 | Frequenza del meteo
+708 | Latitudine
+709 | Longitudine
+710 | Carattere del meteo
+711 | Dimensione della temperatura
+712 | Motivo della temperatura
+713 | Colore della temperatura
+714 | Seconda riga
+715 | Colore della seconda riga
+716 | Icona meteo
+717 | Ordine di riproduzione
+718 | Pannello spento di notte
+719 | Spento a partire dalle
+720 | Riacceso alle
+721 | Solo l'ora
+722 | Solo ora a partire dalle
+723 | GIF di nuovo alle
+724 | Mesi delle categorie
+725 | Porta MQTT
+726 | Frequenza del testo
+727 | Frequenza del conto
+728 | Icona animata
+729 | Registro sullo schermo
+730 | Pannelli in fila
+731 | Uscite in parallelo
+732 | Durata LSB
+733 | Nome di rete
+734 | Rete Wi-Fi
+735 | Paese Wi-Fi
+736 | Password web
+737 | Indirizzo IP fisso
+738 | Luminosità
+739 | Attualmente {} (fisso)
+740 | Attualmente {} (assegnato dal router)
+741 | nessuno
+742 | , o
+743 | da 1 a 10
+744 | da 0 a 100 (%)
+745 | Programma orario
+746 | h:
+747 | di config.txt. Verrà ricordata in questo browser.
+748 | Home Assistant: {}
+749 | Connessione...
+750 | Disconnesso
+751 | Versione del protocollo rifiutata
+752 | Identificativo rifiutato
+753 | Server non disponibile
+754 | Utente o password errati
+755 | Non autorizzato
+756 | Indirizzo del server non trovato
+757 | Server non raggiungibile
+758 | Disconnesso dal server
+759 | Connessione persa

@@ -156,9 +156,9 @@ enum TCountdownState
 // heure locale -> etat et texte a afficher
 TCountdownState FormatCountdown (const char *pTarget, const TDateTime &rNow, char *pValue, unsigned nSize);
 
-// texte UTF-8 -> Latin-1 (un octet par caractere, comme les polices) ; bAscii : lettres
-// accentuees remplacees par la lettre simple (police Pixel), autres caracteres par '?'
-void TextToLatin1 (const char *pUTF8, char *pOut, unsigned nOutSize, boolean bAscii);
+// texte a dessiner : copie UTF-8 (sans couper un caractere), retours a la ligne -> espaces ;
+// les polices dessinent l'Unicode (police Pixel : latin, accents retires, cyrillique)
+void TextForDisplay (const char *pUTF8, char *pOut, unsigned nOutSize);
 
 // latitude ou longitude "49.9214" (4 decimales au plus) ; FALSE si invalide
 boolean NormalizeCoordinate (const char *pText, boolean bLatitude, char *pOut, unsigned nOutSize);

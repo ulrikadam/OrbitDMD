@@ -165,8 +165,9 @@ function thumbReset () {
 }
 
 /* --- mois ou chaque categorie est montree (cle Gif_Cat_Mois : "XMAS:12;Plage:6-8") --- */
-const MONTHS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
-const MONTH_NAMES = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+const MONTH_NAMES = Array.from({ length: 12 }, (_, m) =>	/* "janv.", "févr."... dans la langue de la page */
+	new Date(Date.UTC(2026, m, 15)).toLocaleDateString(I18N.lang, { month: "short", timeZone: "UTC" }));
+const MONTHS = MONTH_NAMES.map(n => n.charAt(0).toUpperCase());
 let catMonths = {}, catMonthsRaw = "", panelW = 128, panelH = 32;
 function parseMonths (raw) {
 	const out = {};
@@ -256,7 +257,7 @@ async function loadCats () {
 		const j = await (await fetch("/api/gif", { cache: "no-store" })).json();
 		const local = cats.filter(c => c.local && !j.categories.find(x => x.nom === c.nom));
 		cats = j.categories.concat(local).sort(byName);
-		$("#free").textContent = (j.libre_mo >= 1024 ? (j.libre_mo / 1024).toFixed(1).replace(".", ",") + " Go" : j.libre_mo + " Mo") + " libres sur la carte";
+		$("#free").textContent = T("{} libres sur la carte", j.libre_mo >= 1024 ? T("{} Go", (j.libre_mo / 1024).toFixed(1).replace(".", ",")) : T("{} Mo", j.libre_mo));
 		renderCats();
 	} catch (e) {
 		OD.toast("Panneau injoignable", false);
@@ -272,6 +273,7 @@ function renderCats () {
 		row.onclick = e => { if (!e.target.closest(".switch")) openCat(c.nom); };
 
 		const name = document.createElement("span");
+		name.setAttribute("translate", "no");		/* nom de dossier : pas traduit */
 		name.className = "name";
 		name.textContent = c.nom;
 		const count = document.createElement("span");
@@ -334,9 +336,9 @@ function askDeleteCat (c) {
 		document.body.appendChild(dlg);
 	}
 	const form = $("form", dlg), input = $("input", dlg), err = $(".err-line", dlg), go = $("button[value=ok]", dlg);
-	$("h2", dlg).textContent = "Supprimer « " + c.nom + " » ?";
-	$("p", dlg).textContent = (c.nb ? "Ses " + c.nb + " GIF seront effacées de la carte SD. " : "")
-		+ "C'est définitif. Tapez le mot de passe pour confirmer.";
+	$("h2", dlg).textContent = T("Supprimer « {} » ?", c.nom);
+	$("p", dlg).textContent = (c.nb ? T("Ses {} GIF seront effacées de la carte SD.", c.nb) + " " : "")
+		+ T("C'est définitif. Tapez le mot de passe pour confirmer.");
 	input.value = "";
 	err.textContent = "";
 	go.disabled = false;
@@ -349,7 +351,7 @@ function askDeleteCat (c) {
 		go.disabled = false;
 		if (!r.ok) { err.textContent = r.text; input.select(); return; }
 		dlg.close();
-		OD.toast("Catégorie " + c.nom + " supprimée");
+		OD.toast(T("Catégorie {} supprimée", c.nom));
 		cats = cats.filter(x => x !== c);
 		cur = null;
 		try { localStorage.removeItem("orbitdmd_cat"); } catch (e2) {}
@@ -407,8 +409,8 @@ function renderFiles () {
 	const q = $("#filter").value.toLowerCase();
 	const list = files.filter(x => x.nom.toLowerCase().includes(q));
 	const nFav = files.filter(x => x.marque === "favori").length, nOut = files.filter(x => x.marque === "exclue").length;
-	$("#dcount").textContent = files.length + " GIF" + (nFav ? " · " + nFav + " favorite(s)" : "") +
-		(nOut ? " · " + nOut + " hors rotation" : "") + (q ? " · " + list.length + " affichée(s)" : "");
+	$("#dcount").textContent = files.length + " GIF" + (nFav ? " · " + T("{} favorite(s)", nFav) : "") +
+		(nOut ? " · " + T("{} hors rotation", nOut) : "") + (q ? " · " + T("{} affichée(s)", list.length) : "");
 	$("#noresult").hidden = list.length > 0;
 	const g = $("#grid");
 	g.textContent = "";
@@ -426,6 +428,7 @@ function renderFiles () {
 		thumbObs.observe(img);
 
 		const name = document.createElement("div");
+		name.setAttribute("translate", "no");
 		name.className = "t-name";
 		name.textContent = OD.pretty(x.nom);
 		name.title = x.nom;
@@ -441,7 +444,7 @@ function renderFiles () {
 		play.title = "Afficher tout de suite sur le panneau";
 		play.onclick = async () => {
 			const r = await OD.action("/api/gif/jouer", { categorie: cur, nom: x.nom });
-			if (!r.cancelled) OD.toast(r.ok ? OD.pretty(x.nom) + " va s'afficher" : r.text, r.ok);
+			if (!r.cancelled) OD.toast(r.ok ? T("{} va s'afficher", OD.pretty(x.nom)) : r.text, r.ok);
 		};
 		const del = document.createElement("button");
 		del.className = "btn sm icon danger";
@@ -475,9 +478,9 @@ async function markGif (x, marque) {
 	if (r.cancelled) return;
 	if (!r.ok) { OD.toast(r.text, false); return; }
 	x.marque = marque === "aucune" ? "" : marque;
-	OD.toast(marque === "favori" ? OD.pretty(x.nom) + " passera plus souvent"
-		: marque === "exclue" ? OD.pretty(x.nom) + " ne passera plus (toujours sur la carte)"
-		: OD.pretty(x.nom) + " passe normalement", true);
+	OD.toast(T(marque === "favori" ? "{} passera plus souvent"
+		: marque === "exclue" ? "{} ne passera plus (toujours sur la carte)"
+		: "{} passe normalement", OD.pretty(x.nom)), true);
 	renderFiles();
 }
 
@@ -485,7 +488,7 @@ async function removeGif (x) {
 	if (!confirm("Supprimer « " + x.nom + " » de la carte SD ?")) return;
 	const r = await OD.action("/api/gif/supprimer", { categorie: cur, nom: x.nom });
 	if (r.cancelled) return;
-	OD.toast(r.ok ? OD.pretty(x.nom) + " supprimée" : r.text, r.ok);
+	OD.toast(r.ok ? T("{} supprimée", OD.pretty(x.nom)) : r.text, r.ok);
 	if (r.ok) { files = files.filter(y => y !== x); renderFiles(); loadCats(); }
 }
 
@@ -512,9 +515,9 @@ async function readZip (zip) {
 	const tail = new DataView(await zip.slice(zip.size - tailLen).arrayBuffer());
 	let e = -1;
 	for (let i = tailLen - 22; i >= 0; i--) if (tail.getUint32(i, true) === 0x06054b50) { e = i; break; }
-	if (e < 0) throw new Error(zip.name + " n'est pas un fichier .zip lisible");
+	if (e < 0) throw new Error(T("{} n'est pas un fichier .zip lisible", zip.name));
 	const count = tail.getUint16(e + 10, true), cdSize = tail.getUint32(e + 12, true), cdOff = tail.getUint32(e + 16, true);
-	if (count === 0xffff || cdOff === 0xffffffff) throw new Error(zip.name + " est trop gros pour être lu ici : décompressez-le, puis glissez le dossier");
+	if (count === 0xffff || cdOff === 0xffffffff) throw new Error(T("{} est trop gros pour être lu ici : décompressez-le, puis glissez le dossier", zip.name));
 	const cd = new DataView(await zip.slice(cdOff, cdOff + cdSize).arrayBuffer());
 	const utf8 = new TextDecoder("utf-8"), latin = new TextDecoder("windows-1252");
 	const out = [];
@@ -600,7 +603,7 @@ function renderPlan () {
 	bulk.mode = mode;
 	$("#bulk-mode-row").hidden = !bulk.items.some(x => x.path.includes("/"));
 	$("#bulk-cur").textContent = "« " + cur + " »";
-	$("#bulk-sum").textContent = bulk.items.length + " GIF (" + sizeText(bytes) + ") à envoyer dans " + by.size + " catégorie" + (by.size > 1 ? "s" : "");
+	$("#bulk-sum").textContent = T(by.size > 1 ? "{} GIF ({}) à envoyer dans {} catégories" : "{} GIF ({}) à envoyer dans {} catégorie", bulk.items.length, sizeText(bytes), by.size);
 	const list = $("#bulk-list");
 	list.innerHTML = "";
 	const sorted = [...by].sort((a, b) => a[0].localeCompare(b[0], "fr", { sensitivity: "base" }));
@@ -608,18 +611,18 @@ function renderPlan () {
 		const li = document.createElement("li");
 		const b = document.createElement("b");
 		b.textContent = c;
-		li.append(b, " : " + n + " GIF" + (knownCat(c) ? "" : " · nouvelle catégorie"));
+		li.append(b, " : " + n + " GIF" + (knownCat(c) ? "" : " · " + T("nouvelle catégorie")));
 		list.appendChild(li);
 	}
 	if (sorted.length > 40) {
 		const li = document.createElement("li");
-		li.textContent = "… et " + (sorted.length - 40) + " autres";
+		li.textContent = T("… et {} autres", sorted.length - 40);
 		list.appendChild(li);
 	}
 	const warn = [];
-	if (bulk.zipSkipped) warn.push(bulk.zipSkipped + " GIF du .zip ignorée(s) (protégées par mot de passe ou format inconnu).");
-	if (bulk.free !== null && bytes > bulk.free) warn.push("⚠️ Pas assez de place sur la carte SD : " + sizeText(bulk.free) + " libres.");
-	if (bulk.items.length > 50) warn.push("Durée estimée : environ " + Math.max(1, Math.round(bytes / 700000 / 60)) + " min en Wi-Fi. Laissez cette page ouverte. Les GIF déjà présentes sont sautées : vous pourrez reprendre plus tard.");
+	if (bulk.zipSkipped) warn.push(T("{} GIF du .zip ignorée(s) (protégées par mot de passe ou format inconnu).", bulk.zipSkipped));
+	if (bulk.free !== null && bytes > bulk.free) warn.push(T("⚠️ Pas assez de place sur la carte SD : {} libres.", sizeText(bulk.free)));
+	if (bulk.items.length > 50) warn.push(T("Durée estimée : environ {} min en Wi-Fi. Laissez cette page ouverte. Les GIF déjà présentes sont sautées : vous pourrez reprendre plus tard.", Math.max(1, Math.round(bytes / 700000 / 60))));
 	if (sorted.some(([c]) => !knownCat(c))) warn.push("Les nouvelles catégories ne s'affichent sur le panneau qu'une fois cochées à gauche.");
 	$("#bulk-warn").innerHTML = "";
 	for (const w of warn) { const d = document.createElement("div"); d.textContent = w; $("#bulk-warn").appendChild(d); }
@@ -676,7 +679,7 @@ async function runBulk () {
 		const name = cleanName(x.path);
 		done++;
 		if (seen.has(name.toLowerCase())) { skip++; continue; }
-		$("#bulk-state").textContent = "Envoi " + done + " / " + total + " : " + c + " / " + name;
+		$("#bulk-state").textContent = T("Envoi {} / {} : {} / {}", done, total, c, name);
 		let r;
 		try {
 			let file = await x.get();
@@ -695,20 +698,21 @@ async function runBulk () {
 		const rate = sent / Math.max((Date.now() - t0) / 1000, 1);
 		let left = 0;
 		if (rate > 0) for (let i = done; i < total; i++) left += bulk.items[i].size / rate;
-		$("#bulk-detail").textContent = ok + " ajoutée(s) · " + skip + " déjà là · " + err + " erreur(s)" +
-			(resized ? " · " + resized + " réduite(s)" : "") +
-			(left > 90 ? " · reste environ " + Math.round(left / 60) + " min" : "");
+		$("#bulk-detail").textContent = T("{} ajoutée(s) · {} déjà là · {} erreur(s)", ok, skip, err) +
+			(resized ? " · " + T("{} réduite(s)", resized) : "") +
+			(left > 90 ? " · " + T("reste environ {} min", Math.round(left / 60)) : "");
 	}
 	window.onbeforeunload = null;
 	bulk.running = false;
 	const finished = done >= total && !bulk.stop;
 	if (finished) $("#bulk-bar").style.width = "100%";
-	$("#bulk-state").textContent = (finished ? "Terminé : " : "Envoi arrêté : ") + ok + " GIF ajoutée(s), " + skip + " déjà présente(s), " + err + " erreur(s)" +
-		(resized ? ", " + resized + " réduite(s) au format du panneau" : "");
+	$("#bulk-state").textContent = T(finished ? "Terminé : {} GIF ajoutée(s), {} déjà présente(s), {} erreur(s)"
+		: "Envoi arrêté : {} GIF ajoutée(s), {} déjà présente(s), {} erreur(s)", ok, skip, err) +
+		(resized ? ", " + T("{} réduite(s) au format du panneau", resized) : "");
 	$("#bulk-detail").textContent = lastErr ? "Dernière erreur : " + lastErr : (finished ? "" : "Relancez le même envoi plus tard : les GIF déjà envoyées seront sautées.");
 	$("#bulk-stop").textContent = "Fermer";
 	$("#bulk-stop").onclick = closeBulk;
-	OD.toast(ok + " GIF ajoutée(s)" + (err ? ", " + err + " erreur(s)" : ""), err === 0);
+	OD.toast(T("{} GIF ajoutée(s)", ok) + (err ? ", " + T("{} erreur(s)", err) : ""), err === 0);
 	const k = cats.find(k => k.nom === cur);
 	if (k && ok > 0) delete k.local;
 	await loadCats();

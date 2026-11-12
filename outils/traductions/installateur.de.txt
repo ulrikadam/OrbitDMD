@@ -1,0 +1,171 @@
+# OrbitDMD-Installation auf Deutsch : "Nummer | Übersetzung" (siehe installateur.txt)
+1 | OrbitDMD-Installation {}
+2 | Willkommen
+3 | Die Panels
+4 | Die Verbindung
+5 | Zugang, Uhrzeit und Wetter
+6 | Die SD-Karte
+7 | Karte erstellen
+8 | Beenden
+9 | < Zurück
+10 | Weiter >
+11 | Entwickelt von Ulrik Adam · www.nexadam.be
+12 | Schritt {} von {}
+13 | Letzter Schritt
+14 | Test schreiben
+15 | Karte erstellen
+16 | Fertig
+17 | Willkommen!
+18 | Dieser Assistent bereitet eine micro-SD-Karte für einen Raspberry Pi 3 mit HUB75-LED-Panels vor. OrbitDMD zeigt Ihre GIFs, die Uhrzeit und das Wetter und wird über eine Webseite eingestellt, ohne Linux.
+19 | Sie brauchen:\n  •  eine micro-SD-Karte (32 GB oder weniger empfohlen) und einen Kartenleser;\n  •  Name und Passwort Ihres WLANs oder ein Netzwerkkabel;\n  •  einen Raspberry Pi 3 mit HUB75-Adapterplatine (Belegung „regular“).
+20 | Achtung: der gesamte Inhalt der gewählten Karte wird gelöscht.
+21 | Testmodus: nichts wird formatiert, die Karte wird geschrieben nach {}
+22 | Name des Panels
+23 | Adresse seiner Seite: {}
+24 | Panels
+25 | 2 Panels 64×32 nebeneinander (128×32)
+26 | 1 Panel 64×32
+27 | 4 Panels 64×32 nebeneinander (256×32)
+28 | 1 Panel 64×64
+29 | 2 Panels 64×64 nebeneinander (128×64)
+30 | 1 Panel 32×16
+31 | Andere (erweiterte Einstellungen)
+32 | Breite eines Panels
+33 | Höhe eines Panels
+34 | Panels hintereinander
+35 | Miteinander verbunden (Ausgang zu Eingang).
+36 | Parallele Ausgänge
+37 | 1, wenn alles am selben Ausgang des Adapters hängt.
+38 | Verlangsamung der Ausgänge
+39 | 2 passt für die meisten Panels. Erhöhen, wenn das Bild flimmert oder sich verschiebt.
+40 | Farbreihenfolge
+41 | Ändern, wenn Rot als Grün oder Blau erscheint.
+42 | Helligkeit am Tag
+43 | Helligkeit in der Nacht
+44 | %   von
+45 | Uhr bis
+46 | Später stundenweise auf der Webseite einstellbar.
+47 | Das Panel verbindet sich per Netzwerkkabel oder WLAN (2,4 GHz: der Raspberry Pi 3 sieht kein 5 GHz). Das WLAN-Passwort wird nur auf der Karte gespeichert.
+48 | Automatisch: Kabel, wenn beim Start eingesteckt, sonst WLAN — empfohlen
+49 | Nur WLAN (etwas schnellerer Start)
+50 | Nur Netzwerkkabel (WLAN optional)
+51 | Verbindung
+52 | WLAN-Netz
+53 | Aus der Liste wählen oder den Namen eingeben.
+54 | Geben Sie den genauen Netzwerknamen ein.
+55 | WLAN-Passwort
+56 | anzeigen
+57 | Land
+58 | Für die erlaubten WLAN-Kanäle.
+59 | IP-Adresse
+60 | Automatisch (vom Router) — empfohlen
+61 | Fest
+62 | Adresse des Panels
+63 | Zum Beispiel {} (frei in Ihrem Netzwerk).
+64 | Subnetzmaske
+65 | Gateway (Router)
+66 | DNS-Server
+67 | Frankreich
+68 | Belgien
+69 | Schweiz
+70 | Luxemburg
+71 | Kanada
+72 | Deutschland
+73 | Niederlande
+74 | Spanien
+75 | Italien
+76 | Portugal
+77 | Vereinigtes Königreich
+78 | Vereinigte Staaten
+79 | Marokko
+80 | Tunesien
+81 | Algerien
+82 | Dieses Passwort schützt Änderungen über die Webseite des Panels.
+83 | Passwort der Seite
+84 | Mindestens 8 Zeichen, ohne Leerzeichen.
+85 | Bestätigung
+86 | Zeitzone
+87 | Automatische Sommerzeit.
+88 | Ort für das Wetter
+89 | Optional: auch später auf der Seite Wetter wählbar.
+90 | Suchen
+91 | Suche…
+92 | Wählen Sie Ihren Ort aus der Liste.
+93 | Kein Ort gefunden.
+94 | Suche nicht möglich (kein Internet?). Der Ort kann auf der Seite Wetter gewählt werden.
+95 | Wetter für: {}
+96 | Stecken Sie die micro-SD-Karte in den Leser und wählen Sie sie. Nur Wechselkarten und -laufwerke werden angeboten.
+97 | Aktualisieren
+98 | Karte
+99 | {} GB
+100 | Datenträger {}
+101 | Kostenloses Basis-Paket animierter GIFs des RpiTeaM (Projekt RPI2DMD), mit Zustimmung von eLLuiGi, und OrbitDMD-Kreationen. Angehakte Kategorien werden kopiert und angezeigt. Paket mit 11.000 Animationen: rpiteam.carrd.co oder das Forum Neo-Arcadia.
+102 | Mitgelieferte GIFs
+103 | Wählen…
+104 | keins
+105 | Ihre GIFs (optional)
+106 | Die GIFs des Ordners kommen in „Mes_GIF“; jeder Unterordner wird eine Kategorie. Sie lassen sich auch später über die Webseite hinzufügen.
+107 | Entfernen Sie den Haken bei denen, die noch nicht gezeigt werden sollen: sie werden trotzdem kopiert und lassen sich auf der Seite GIFs aktivieren.
+108 | Angezeigte Kategorien
+109 | Ordner nicht lesbar: {}
+110 | {} GIF(s) in {} Ordner(n) gefunden
+111 | ; „Accueil“ kommt zu den Startbildschirmen.
+112 | Ordner mit Ihren GIFs (am besten 128×32)
+113 | Mir ist klar, dass der gesamte Inhalt dieser Karte gelöscht wird.
+114 | Die beiden Passwörter sind verschieden.
+115 | Das Panel zeigt höchstens 20 Kategorien: entfernen Sie {} Haken.
+116 | Wählen Sie die micro-SD-Karte (einstecken, dann auf Aktualisieren klicken).
+117 | Haken Sie das Kästchen an, um das Löschen der Karte zu bestätigen.
+118 | Der gesamte Inhalt dieses Datenträgers wird endgültig gelöscht:\n\n{}\n\nFortfahren?
+119 | Karte löschen?
+120 | Erstellen abgebrochen: nichts wurde geändert.
+121 | Datenträger können nicht aufgelistet werden: {}
+122 | Testmodus: keine Karte nötig.
+123 | Keine Karte gefunden: einstecken, dann auf Aktualisieren klicken.
+124 | Dieser Datenträger ist größer als 64 GB: prüfen Sie genau, dass es die SD-Karte ist und kein Sicherungslaufwerk!
+125 | Eine FAT32-Partition „ORBITDMD“ mit {} GB wird erstellt.
+126 | OrbitDMD-Installation {}.
+127 | Inhalt der Karte wird vorbereitet…
+128 | Der Testordner ist nicht leer: {}
+129 | Inhalt bereit ({} GIFs hinzugefügt).
+130 | Inhalt bereit.
+131 | Mitgelieferte GIFs: {} in {} Kategorie(n)
+132 | Startbildschirme: {} GIF(s) hinzugefügt
+133 | {} schon vorhanden
+134 | Kategorie {}: schon mitgeliefert ({} GIFs)
+135 | Kategorie {}: {} GIFs
+136 | {} schon mitgeliefert
+137 | kopiert, nicht angezeigt
+138 | FEHLER: {}
+139 | Die Karte konnte nicht erstellt werden
+140 | Die Karte ist fertig!
+141 | Test beendet: Inhalt geschrieben nach {}
+142 | 1. Werfen Sie die Karte aus (Knopf unten) und stecken Sie sie in den Raspberry Pi 3.
+143 | 2. Schließen Sie den Strom an: der Startbildschirm erscheint während der Netzwerkverbindung.
+144 | 3. Öffnen Sie nach etwa dreißig Sekunden {}
+145 | (sonst suchen Sie die Adresse des Panels auf der Seite Ihres Routers).
+146 | Windows fragt nach der Erlaubnis, die Karte zu ändern…
+147 | Erlaubnis verweigert: die Karte wurde nicht geändert.
+148 | Karte wird gelöscht…
+149 | Partition wird erstellt…
+150 | FAT32-Formatierung…
+151 | Dateien werden kopiert…
+152 | Kopie wird geprüft…
+153 | Karte geschrieben und geprüft ({} Dateien) auf {}:
+154 | Die Vorbereitung hat ohne Ergebnis aufgehört.
+155 | Karte auswerfen
+156 | Seite des Panels öffnen
+157 | Karte ausgeworfen: Sie können sie entnehmen.
+158 | Name: 1 bis 31 Buchstaben, Ziffern oder Bindestriche (keine Leerzeichen, keine Umlaute).
+159 | WLAN-Name: 1 bis 32 Zeichen, ohne Umlaute oder Anführungszeichen.
+160 | Verbindung: auto, wifi oder ethernet.
+161 | WLAN-Passwort: 8 bis 63 Zeichen, ohne Umlaute oder Anführungszeichen.
+162 | Passwort der Webseite: mindestens 8 Zeichen, ohne Leerzeichen oder Umlaute.
+163 | Ungültige IP-Adresse.
+164 | Ungültige Subnetzmaske.
+165 | Ungültiges Gateway (Router).
+166 | Ungültiger DNS-Server.
+167 | Ungültige Subnetzmaske (z. B. 255.255.255.0).
+168 | Ungültige IP-Adresse für dieses Netzwerk.
+169 | Das Gateway muss im selben Netzwerk liegen, unter einer anderen Adresse.
+170 | Uhr

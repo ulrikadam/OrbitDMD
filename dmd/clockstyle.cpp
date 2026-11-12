@@ -5,15 +5,7 @@
 #include <circle/util.h>
 #include <circle/string.h>
 #include "schedule.h"
-
-static const char *s_DayShort[7] = {"DIM", "LUN", "MAR", "MER", "JEU", "VEN", "SAM"};
-static const char *s_DayLong[7] =
-	{"DIMANCHE", "LUNDI", "MARDI", "MERCREDI", "JEUDI", "VENDREDI", "SAMEDI"};
-static const char *s_MonthShort[12] =
-	{"JAN", "FEV", "MARS", "AVR", "MAI", "JUIN", "JUIL", "AOUT", "SEPT", "OCT", "NOV", "DEC"};
-static const char *s_MonthLong[12] =
-	{"JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOUT",
-	 "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DECEMBRE"};
+#include "lang.h"
 
 static const char s_FormatLetters[] = "HIMSpdemygYaAbB%";
 
@@ -258,10 +250,10 @@ void FormatDateTime (const char *pFormat, const TDateTime &rTime, char *pOut, un
 				Part[4] = '\0';
 				break;
 			case 'p':	pPart = rTime.Hour < 12 ? "AM" : "PM";	break;
-			case 'a':	pPart = s_DayShort[WeekDay (rTime)];	break;
-			case 'A':	pPart = s_DayLong[WeekDay (rTime)];	break;
-			case 'b':	pPart = s_MonthShort[nMonth];		break;
-			case 'B':	pPart = s_MonthLong[nMonth];		break;
+			case 'a':	pPart = DayName (WeekDay (rTime), FALSE);	break;
+			case 'A':	pPart = DayName (WeekDay (rTime), TRUE);	break;
+			case 'b':	pPart = MonthName (nMonth, FALSE);	break;
+			case 'B':	pPart = MonthName (nMonth, TRUE);	break;
 			case '%':	Part[0] = '%'; Part[1] = '\0';		break;
 			default:	break;		// code inconnu : ignore
 			}
@@ -814,8 +806,8 @@ void CountdownStyleDefaults (TCountdownStyle *pStyle)
 	pStyle->nEvery = 3;
 	pStyle->nDisplayTime = 5000;
 	CopyText (pStyle->Target, COUNTDOWN_XMAS, sizeof pStyle->Target);
-	CopyText (pStyle->Title, "NOËL DANS", sizeof pStyle->Title);
-	CopyText (pStyle->Done, "JOYEUX NOËL !", sizeof pStyle->Done);
+	CopyText (pStyle->Title, Tr (TxtXmasIn), sizeof pStyle->Title);
+	CopyText (pStyle->Done, Tr (TxtMerryXmas), sizeof pStyle->Done);
 	CopyText (pStyle->Style.Font, CLOCK_FONT_PIXEL, CLOCK_NAME_LEN);
 	CopyText (pStyle->Style.Pattern, CLOCK_NONE, CLOCK_NAME_LEN);
 	CopyText (pStyle->Style.Format, "-", CLOCK_FORMAT_LEN);
@@ -968,11 +960,13 @@ TCountdownState FormatCountdown (const char *pTarget, const TDateTime &rNow, cha
 	CString Text;
 	if (nDays >= 10)
 	{
-		Text.Format ("%u JOURS", nDays);
+		char Days[40];
+		FormatDays (nDays, Days, sizeof Days);
+		Text = Days;
 	}
 	else if (nDays >= 1)
 	{
-		Text.Format ("%u J %u H", nDays, nHours);
+		Text.Format (Tr (TxtDayHourFormat), nDays, nHours);
 	}
 	else
 	{
@@ -983,59 +977,25 @@ TCountdownState FormatCountdown (const char *pTarget, const TDateTime &rNow, cha
 	return CountdownRunning;
 }
 
-// --- texte UTF-8 -> Latin-1 ---
+// --- texte a afficher : UTF-8 garde (les polices dessinent l'Unicode) ---
 
-// lettres accentuees de Latin-1 (0xC0 a 0xFF) -> lettre simple
-static const char s_Fold[] =
-	"AAAAAAACEEEEIIII"	// C0..CF (C6 AE -> A, C7 C)
-	"DNOOOOO*OUUUUYPs"	// D0..DF
-	"aaaaaaaceeeeiiii"	// E0..EF
-	"dnooooo/ouuuuypy";	// F0..FF
-
-void TextToLatin1 (const char *pUTF8, char *pOut, unsigned nOutSize, boolean bAscii)
+void TextForDisplay (const char *pUTF8, char *pOut, unsigned nOutSize)
 {
 	unsigned n = 0;
 	const unsigned char *p = (const unsigned char *) pUTF8;
-
 	while (*p != '\0' && n < nOutSize - 1)
 	{
-		unsigned nCode;
-		if (*p < 0x80)
+		// longueur du caractere : ne jamais couper un caractere en deux
+		unsigned nBytes = *p < 0x80 ? 1 : (*p & 0xE0) == 0xC0 ? 2 : (*p & 0xF0) == 0xE0 ? 3 : (*p & 0xF8) == 0xF0 ? 4 : 1;
+		if (n + nBytes > nOutSize - 1)
 		{
-			nCode = *p++;
+			break;
 		}
-		else if ((*p & 0xE0) == 0xC0 && (p[1] & 0xC0) == 0x80)
+		for (unsigned i = 0; i < nBytes && p[i] != '\0'; i++)
 		{
-			nCode = (p[0] & 0x1F) << 6 | (p[1] & 0x3F);
-			p += 2;
+			pOut[n++] = (char) (p[i] < ' ' ? ' ' : p[i]);		// retours a la ligne -> espace
 		}
-		else
-		{
-			// 3 octets ou plus (euro, emoji...) : remplace
-			p++;
-			while ((*p & 0xC0) == 0x80)
-			{
-				p++;
-			}
-			nCode = '?';
-		}
-
-		if (nCode >= 0x100)
-		{
-			nCode = '?';
-		}
-		if (bAscii && nCode >= 0x80)
-		{
-			if (nCode >= 0xC0)		nCode = (unsigned char) s_Fold[nCode - 0xC0];
-			else if (nCode != 0xB0)		nCode = nCode == 0xA0 ? ' ' : '?';	// signe degre garde
-		}
-		if (nCode < ' ')
-		{
-			nCode = ' ';
-		}
-
-		pOut[n++] = (char) nCode;
+		p += nBytes;
 	}
-
 	pOut[n] = '\0';
 }

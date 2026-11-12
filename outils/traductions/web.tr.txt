@@ -1,0 +1,759 @@
+# OrbitDMD - Türkçe web arayüzü : "numara | çeviri" (web.txt içindeki Fransızca metnin numarası)
+1 | Gösterge paneli
+2 | Saat
+3 | Hava durumu
+4 | Mesajlar
+5 | Ayarlar
+6 | Sistem
+7 | Bağlanıyor…
+8 | Çevrimiçi
+9 | Çevrimdışı
+10 | Geliştiren:
+11 | GitHub'da OrbitDMD
+12 | ☕ Ko-fi'de destek ol
+13 | Göster
+14 | Gizle
+15 | İptal
+16 | Tamam
+17 | Kaydet
+18 | Kapat
+19 | Sil
+20 | Kopyala
+21 | Kopyalandı
+22 | Gör
+23 | Önizleme
+24 | Etkinleştir
+25 | Evet
+26 | Hayır
+27 | Otomatik
+28 | Otomatik
+29 | Süre
+30 | Yazı tipi
+31 | Boyut
+32 | Renk
+33 | Desen
+34 | Biçim
+35 | Arka plan
+36 | Metin
+37 | Başlık
+38 | Hız
+39 | Dönem
+40 | Sıklık
+41 | Panel
+42 | Duraklat
+43 | Yeniden başlat
+44 | Gönder
+45 | Gönderiliyor…
+46 | Yükleniyor…
+47 | Kaydedilmemiş değişiklikler
+48 | Pixel (yerleşik)
+49 | OrbitDMD Kalın
+50 | OrbitDMD 7 segment
+51 | Cadılar Bayramı · {}
+52 | Desen {}
+53 | {} KB
+54 | {} MB
+55 | {} GB
+56 | {} g {} sa
+57 | saat
+58 | -
+59 | sa -
+60 | Beyaz
+61 | Kırmızı
+62 | Turuncu
+63 | Kehribar
+64 | Sarı
+65 | Yeşil
+66 | Turkuaz
+67 | Mavi
+68 | Mor
+69 | Pembe
+70 | Gökkuşağı
+71 | Hareketli gökkuşağı
+72 | Gökkuşağı (hareketli)
+73 | Başka renk
+74 | Düz renk
+75 | Noel kırmızısı
+76 | Rastgele
+77 | Özel…
+78 | Panel şifresi
+79 | Paneli değiştirmek için gerekir. Şu satırda bulunur:
+80 | (config.txt dosyası).
+81 | Bu tarayıcıda hatırlanacak.
+82 | Kontrol ediliyor…
+83 | Şifre kabul edildi
+84 | Şifre reddedildi, tekrar deneyin.
+85 | Şifre gerekli
+86 | Şifre unutuldu
+87 | Bu cihazda şifreyi unut
+88 | Bu cihazda şifre unutulsun mu?
+89 | Şifreyi gir
+90 | Kilit açık
+91 | Kilitli
+92 | Panele ulaşılamıyor
+93 | OrbitDMD {} mevcut
+94 | mevcut
+95 | (bu panelde sürüm
+96 | Yenilikleri gör
+97 | kernel8.img indir
+98 | Sonra şuradan kurun:
+99 | → Yeni yazılım. Ayarlarınız ve GIF'leriniz korunur.
+100 | Daha sonra
+101 | başlatmadan beri henüz yok
+102 | az önce
+103 | {} dk önce
+104 | {} sa {} önce
+105 | Saat eşitlendi: zaten doğruydu
+106 | Saat eşitlendi: panel {} geri kalıyordu
+107 | Saat eşitlendi: panel {} ileri gidiyordu
+108 | Panel yeniden başlıyor; modemin ona tekrar adres vermesi birkaç dakika sürebilir.
+109 | OrbitDMD · Gösterge paneli
+110 | Panelde olanlar, canlı.
+111 | Panelde
+112 | Hızlı komutlar
+113 | Ekran
+114 | Ekran yeniden açıldı
+115 | Ekran kapalı
+116 | Ekran kapalı: panele hâlâ erişilebilir
+117 | Kapat
+118 | Ekranı kapat: panele hâlâ erişilebilir ve yeniden başlatınca açılır
+119 | Aç
+120 | Gösterilen görüntüyü dondur
+121 | Görüntü donduruldu
+122 | Devam et
+123 | Oynatma sürdürüldü
+124 | Duraklatıldı
+125 | Animasyonu yeniden başlat
+126 | Paneli yeniden başlat (yaklaşık 20 saniye)
+127 | Panel şimdi yeniden başlatılsın mı?
+128 | Yeniden başlatma istendi
+129 | Panel geri döndü
+130 | Panel 8 dakikadır yanıt vermiyor: ekranını kontrol edin
+131 | Panel bekleniyor…
+132 | IP adresi
+133 | Kitaplık
+134 | Dönüşümdeki GIF'ler
+135 | SD kartta boş alan
+136 | Derleme tarihi
+137 | Bağlantı
+138 | Ağ kablosu
+139 | Wi-Fi
+140 | Başlatma
+141 | Çalışma süresi
+142 | Yalnızca saat (zamanlama)
+143 | Kapalı (zamanlama)
+144 | Saat aralığı Ayarlar → Zamanlama içinde belirlenir
+145 | Parlaklık
+146 | Mesaj
+147 | Test deseni
+148 | Güncellemeler ve günlük
+149 | Boş bellek
+150 | Normal
+151 | Sıcak
+152 | Çok sıcak
+153 | Henüz hava durumu yok
+154 | Neyin gösterileceğini seçmek için şu sayfayı açın:
+155 | İşlemci
+156 | Yazılım
+157 | Tepki süresi
+158 | Panel hesap yaparken en uzun Wi-Fi beklemesi (son 20 saniye, sonra son 5 dakika). 50 ms altı: mükemmel.
+159 | Ağ
+160 | Eşitlendi
+161 | Eşitlendi {}
+162 | Sürüm
+163 | OrbitDMD · GIF'ler
+164 | Gösterilen kategorileri seçin, animasyon ekleyin veya kaldırın.
+165 | Kategoriler
+166 | Kategori
+167 | kategori
+168 | Yeni kategori
+169 | Yeni kategorinin adı
+170 | Kategori adı: harf, rakam, _ veya - (en fazla 32)
+171 | Oluştur
+172 | Soldan bir kategori seçin.
+173 | GIF ekle
+174 | : GIF'leri, bütün bir klasörü veya bir .zip dosyasını buraya sürükleyin ya da tıklayın (ideal 128×32)
+175 | Ara
+176 | GIF ara
+177 | GIF yok.
+178 | GIF bulunamadı.
+179 | Hemen panelde göster
+180 | Panelde gösteriliyor
+181 | {} göster
+182 | {} sil
+183 | Favori: daha sık çıkar (kaldırmak için tıklayın)
+184 | Favorilere ekle: daha sık çıkar
+185 | Dönüşüm dışı (geri koymak için tıklayın)
+186 | Silmeden dönüşümden çıkar
+187 | SD karttan sil
+188 | {} daha sık çıkacak
+189 | {} artık çıkmayacak (kartta duruyor)
+190 | {} normal çıkıyor
+191 | {} gösterilecek
+192 | {} silindi
+193 | {} favori
+194 | {} dönüşüm dışı
+195 | {} gösteriliyor
+196 | Kartta {} boş
+197 | Kategoriyi sil
+198 | Bu kategoriyi ve tüm GIF'lerini sil
+199 | “{}” silinsin mi?
+200 | {} GIF'i SD karttan silinecek.
+201 | Bu geri alınamaz. Onaylamak için şifreyi yazın.
+202 | Kalıcı olarak sil
+203 | Siliniyor…
+204 | {} kategorisi silindi
+205 | Gösterilen tek kategori bu: önce başka birini etkinleştirin
+206 | En az bir kategoriyi gösterilir bırakın
+207 | Gösteriliyor
+208 | Yalnızca şu aylarda gösterilir: {}
+209 | Gösterilmiyor
+210 | gösteriliyor
+211 | Bütün yıl
+212 | “{}” dönemi kaydedildi
+213 | Çeşitli
+214 | Açılış ekranları.
+215 | Adında “demarrage” geçen bir GIF Wi-Fi bağlanırken oynar; “noel” yalnızca aralıkta, “halloween” yalnızca ekimde kullanılır; diğerleri rastgele seçilir. Dönüşüme girmemeleri için bu kategoriyi kapalı bırakın.
+216 | OrbitDMD, şu ekibin ücretsiz temel animasyonlu GIF paketini içerir:
+217 | (RPI2DMD projesi), eLLuiGi'nin izniyle. Teşekkürler! Bir paket:
+218 | 11.000 animasyon
+219 | Neo-Arcadia'da
+220 | veya
+221 | Alt klasörlerde çok GIF mi var?
+222 | Bir klasör = bir kategori
+223 | Hepsi şuraya:
+224 | Daha büyük GIF'leri panel boyutuna küçült (
+225 | )
+226 | Klasör seç
+227 | Dosyalar okunuyor…
+228 | Bu tarayıcı .zip açamıyor: arşivi açın, sonra klasörü sürükleyin
+229 | {} okunabilir bir .zip dosyası değil
+230 | {} burada okunamayacak kadar büyük: arşivi açın, sonra klasörü sürükleyin
+231 | {} GIF ({}) {} kategoriye gönderilecek
+232 | {} GIF ({}) {} kategoriye gönderilecek
+233 | yeni kategori
+234 | … ve {} tane daha
+235 | .zip içindeki {} GIF atlandı (şifreli veya bilinmeyen biçim).
+236 | ⚠️ SD kartta yeterli yer yok: {} boş.
+237 | Tahmini süre: Wi-Fi ile yaklaşık {} dk. Bu sayfayı açık bırakın. Zaten olan GIF'ler atlanır: daha sonra devam edebilirsiniz.
+238 | Yeni kategoriler ancak solda işaretlenince panelde görünür.
+239 | “{}” kontrol ediliyor…
+240 | Gönderim
+241 | Gönderiliyor
+242 | Gönderiliyor {} / {}: {} / {}
+243 | {} eklendi · {} zaten vardı · {} hata
+244 | {} küçültüldü
+245 | yaklaşık {} dk kaldı
+246 | Bitti: {} GIF eklendi, {} zaten vardı, {} hata
+247 | Gönderim durduruldu: {} GIF eklendi, {} zaten vardı, {} hata
+248 | {} panel boyutuna küçültüldü
+249 | {} GIF eklendi
+250 | {} hata
+251 | Son hata: {}
+252 | Aynı gönderimi daha sonra tekrar başlatın: gönderilmiş GIF'ler atlanır.
+253 | Durdur
+254 | Şu anki GIF'ten sonra duruluyor…
+255 | Kartta oluşturmak için “{}” içine GIF ekleyin
+256 | Görüntüsüz GIF
+257 | Paletsiz GIF
+258 | OrbitDMD · Saat
+259 | GIF'ler arasında gösterilen saatin yazı tipi, renkleri ve tarihi. Önizlemeyi panelin kendisi çizer.
+260 | Saat önizlemesi
+261 | Önizleme ekranı
+262 | Saat
+263 | Tarih
+264 | Önizleme yükleniyor…
+265 | Önizleme kullanılamıyor
+266 | Saati göster
+267 | İki GIF arasında
+268 | Saat dilimi
+269 | Otomatik yaz saati
+270 | Saatin yazı tipi
+271 | Saatin rengi
+272 | Tarihin rengi
+273 | Piksel cinsinden boyut
+274 | Otomatik: sığan en büyük boyut. Seçilen boyut, metin sığmazsa küçültülür
+275 | Desen (metni doldurur)
+276 | Ya da bir desen
+277 | Dolgu
+278 | Arka plan (saatin arkasında)
+279 | Saatin arkasında görüntü veya animasyon.
+280 | Yok (siyah)
+281 | Saatin her gösterilişinde rastgele bir arka plan
+282 | Saatin her gösterilişinde rastgele bir renk, gökkuşağı veya desen
+283 | Yanıp sönen iki nokta
+284 | Yumuşatılmış kenarlar
+285 | Değilse keskin pikseller
+286 | Tarihi göster
+287 | Yalnızca tarih, saatten sonra
+288 | Saatten sonra (ayrı ekran)
+289 | Saatin altında
+290 | Tarihin süresi
+291 | Kaydeder, sonra saati panelde 15 saniye gösterir
+292 | Panelde gör
+293 | Saat panelde 15 saniye gösteriliyor
+294 | Saat kaydedildi
+295 | Panelin saati
+296 | İnternet
+297 | İnternet saati
+298 | pilli saat
+299 | saat bilinmiyor
+300 | {} · eşitlendi {}
+301 | Paneli İnternet'in tam saatine ayarla
+302 | Eşitle
+303 | Yazı tipi, desen veya arka plan ekle
+304 | Dosyaları buraya sürükleyin
+305 | ya da tıklayın: TTF veya OTF yazı tipleri, 128×32 PNG veya GIF görüntüler
+306 | Görüntüler şu amaçla kullanılır:
+307 | : desteklenmeyen biçim
+308 | : çok büyük (en fazla 4 MB)
+309 | OrbitDMD · Hava durumu
+310 | GIF'ler arasında gösterilen güncel hava durumu. 15 dakikada bir güncellenir.
+311 | Hava durumu ekranı önizlemesi
+312 | Şu anda
+313 | Bugün
+314 | Yarın
+315 | Nem
+316 | Rüzgâr
+317 | Hissedilen
+318 | Güncelleme
+319 | Güncelleme {}
+320 | son deneme: {}
+321 | Yenile
+322 | Hava durumu yükleniyor…
+323 | Hava durumu yok: {}
+324 | Önce bir konum seçin
+325 | Hava durumu verileri:
+326 | Hava durumunu göster
+327 | Her GIF'ten sonra
+328 | Her 2 GIF'te bir
+329 | Her 3 GIF'te bir
+330 | Her 5 GIF'te bir
+331 | Her 10 GIF'te bir
+332 | Her 20 GIF'te bir
+333 | Konum
+334 | Seçilen konum
+335 | Konum seçildi: kullanmak için kaydedin
+336 | Henüz seçilmedi
+337 | Seçilen konum
+338 | Şehrinizi aşağıda arayın
+339 | Şehir ara
+340 | Şehir veya posta kodu
+341 | Ara
+342 | Aranıyor…
+343 | Konum bulunamadı.
+344 | Arama yapılamadı (bu tarayıcıdan İnternet erişimi yok mu?)
+345 | Arama tarayıcınız üzerinden yapılır; panel yalnızca seçilen konumu saklar.
+346 | Sıcaklığın yazı tipi
+347 | Sıcaklığın rengi
+348 | İkinci satır
+349 | İkinci satırın rengi
+350 | Hiçbiri
+351 | Açıklama (YAĞMUR…)
+352 | En düşük / en yüksek
+353 | Hissedilen sıcaklık
+354 | Simge
+355 | Hareketli simge
+356 | Yağan yağmur, parlayan güneş…
+357 | Tüm simgeleri gör
+358 | Güneş
+359 | Açık gece
+360 | Az bulutlu
+361 | Bulutlu gece
+362 | Kapalı
+363 | Sis
+364 | Çisenti
+365 | Yağmur
+366 | Kar
+367 | Fırtına
+368 | Kaydeder, sonra hava durumunu panelde 15 saniye gösterir
+369 | Hava durumu panelde 15 saniye gösteriliyor
+370 | Hava durumu kaydedildi
+371 | OrbitDMD · Mesajlar
+372 | Kayan yazılar ve geri sayımlar, her biri kendi stiliyle. Etkin olanlar GIF'ler arasında sırayla çıkar.
+373 | Kayan yazılar
+374 | Geri sayımlar
+375 | Geri sayım
+376 | Metin ekle
+377 | Geri sayım ekle
+378 | Metin yok: “Metin ekle”ye tıklayın.
+379 | Geri sayım yok.
+380 | (boş metin)
+381 | Bir metin boş: yazın ya da silin
+382 | GIF'ler arasında
+383 | Aynı anda tek etkin metin, sırayla
+384 | Aynı anda tek etkin geri sayım, sırayla
+385 | her
+386 | Etkin: GIF'ler arasında çıkar
+387 | Yukarı taşı
+388 | İyi ki doğdun!
+389 | {} / 200 bayt (Türkçe bir harf 2 sayılır)
+390 | Metnin girişi
+391 | Sola kayar
+392 | Sağa kayar
+393 | Yükselir (aşağıdan yukarı)
+394 | İner (yukarıdan aşağı)
+395 | Harf harf
+396 | Harf yağmuru
+397 | Solma
+398 | Geçiş sayısı
+399 | çok yavaş
+400 | yavaş
+401 | orta
+402 | hızlı
+403 | çok hızlı
+404 | en yüksek
+405 | Metin önizlemesi
+406 | Metnin başının önizlemesi. Panelde kayar.
+407 | Girişten sonra ilk sayfanın önizlemesi. Uzun metin sayfalara bölünür.
+408 | Geri sayım önizlemesi
+409 | İsteğe bağlı: her yıl yalnızca bu iki tarih arasında
+410 | başlangıç
+411 | bitiş
+412 | {} ile {} arası
+413 | GG/AA
+414 | Hedef
+415 | Noel
+416 | Noel (25 Aralık)
+417 | Yılbaşı
+418 | Yılbaşı (1 Ocak)
+419 | Seçilen bir tarih
+420 | Önce
+421 | O gün
+422 | Kalan sürenin üstünde
+423 | NOEL'E KALAN
+424 | MUTLU NOELLER!
+425 | DOĞUM GÜNÜNE KALAN
+426 | İYİ Kİ DOĞDUN!
+427 | O günün mesajı
+428 | Seçilen saatten itibaren 24 sa gösterilir
+429 | Başlığın rengi
+430 | Kalan sürenin rengi
+431 | Kaydeder, sonra hemen panelde gösterir
+432 | Metin panelde gösteriliyor
+433 | Geri sayım 15 saniye gösteriliyor
+434 | Mesajlar kaydedildi
+435 | OrbitDMD · Ayarlar
+436 | Her değer config.txt'ye kaydedilmeden önce panel tarafından kontrol edilir.
+437 | Panelin dili
+438 | Panelde gösterilen günler, aylar, hava durumu ve mesajlar
+439 | Saatlik parlaklık
+440 | Her saati ayarlamak için çubukları sürükleyin (%5 adım, %0 = panel kapalı). Şu anki saat kehribar renkle çevrilidir. Bir sonraki GIF'ten itibaren uygulanır.
+441 | 0 ile 23 arası parlaklık
+442 | Bütün gün
+443 | Gece, saat
+444 | Uygula
+445 | GIF'leri göster
+446 | Değilse yalnızca saat
+447 | Bir GIF'in en kısa süresi
+448 | Kısa GIF'ler döngüde oynar
+449 | GIF sırası
+450 | Favoriler rastgele seçimde daha sık çıkar
+451 | Sırayla (kategori, sonra ad)
+452 | Panelde IP adresi
+453 | Başlatmada ve değişince · 0 = hiç
+454 | Başlatmada test deseni
+455 | HDMI ekranında günlük
+456 | Yalnızca arıza giderme için: ağı yavaşlatır
+457 | Paneli kapat
+458 | Web sayfasına erişilmeye devam edilir
+459 | Yalnızca saat, GIF yok
+460 | Hava durumu ve mesajlarla
+461 | Aralık
+462 | Yalnızca belirli aylarda gösterilen GIF kategorileri (aralıkta Noel…) şu sayfada ayarlanır:
+463 | . Metinlerin ve geri sayımların dönemleri şu sayfada:
+464 | Saat ve tarih
+465 | Saat sayfası
+466 | Yazı tipi, renkler, saat dilimi…
+468 | Home Assistant'a bağla
+469 | MQTT ile: panel Home Assistant'ta kendiliğinden görünür
+470 | MQTT sunucusu
+471 | Home Assistant'ın IP adresi, örneğin 192.168.0.10
+472 | Bağlantı noktası
+473 | MQTT kullanıcısı
+474 | Bir Home Assistant kullanıcısı (Ayarlar → Kişiler)
+475 | MQTT şifresi
+476 | Korumak için boş bırakın
+477 | Gerekli eklenti:
+478 | Home Assistant'ta (Ayarlar → Eklentiler) ve şu entegrasyon:
+479 | . Panel bağlanmak için yeniden başlar. Sonra Home Assistant'ta: Ayarlar → Cihazlar →
+480 | . Tüm komutlar ve kopyalanacak örnekler: sayfa
+481 | Home Assistant yardımı
+482 | ✅ MQTT sunucusuna bağlandı
+483 | Ayarlar kaydedildi: bağlanması için paneli yeniden başlatın
+484 | Wi-Fi ağı
+485 | Wi-Fi şifresi
+486 | En az 8 karakter, boşluksuz
+487 | Ülke
+488 | 2 harfli kod (TR, DE, NL…)
+489 | Ağdaki ad
+490 | Bu sayfanın adresi
+491 | Otomatik: takılıysa kablo, değilse Wi-Fi
+492 | · şu anda Wi-Fi ile
+493 | · şu anda kablo ile
+494 | Wi-Fi bağlı değil
+495 | Panelin adresi
+496 | Otomatik (modem)
+497 | Sabit
+498 | Şu anda
+499 | (modemin verdiği)
+500 | Alt ağ maskesi
+501 | Ağ geçidi
+502 | Modemin adresi
+503 | DNS sunucusu
+504 | Çoğunlukla yine modem
+505 | İpucu: modeminizde bu adresi panele ayırın (MAC adresi
+506 | ), böylece başka bir cihaza asla verilmez.
+507 | Kablo başlatmada seçilir: taktıktan veya çıkardıktan sonra paneli yeniden başlatın. Bağlantı, Wi-Fi veya adres değişince panel yeniden başlar. 2 dk 30 sn içinde erişilemezse kendiliğinden eski ayarlara döner.
+508 | Ağ ayarları değiştirilsin mi? Panel yeniden başlayıp onları deneyecek; 2 dk 30 sn içinde erişilemezse eskilere dönecek.
+509 | Yeniden başlatmadan sonra adres http://{} olacak
+510 | Web sayfası şifresi
+511 | Yeni şifre
+512 | Onayla
+513 | Şifreyi değiştir
+514 | İki şifre farklı
+515 | Şifre değiştirildi ve hatırlandı
+516 | değişmedi
+517 | tanımlanmadı
+518 | Paneller (gelişmiş)
+519 | Yeniden başlatma gerekir. Uygun olmayan değerler görüntüyü bozabilir: burada düzeltilebilir.
+520 | Bir panelin genişliği
+521 | Bir panelin yüksekliği
+522 | Arka arkaya paneller
+523 | Aynı çıkışta
+524 | Paralel çıkışlar
+525 | GPIO yavaşlatma
+526 | Görüntü bozuksa artırın
+527 | 3, pilli saati devre dışı bırakır
+528 | Renk sırası
+529 | Renk bitleri
+530 | Daha az = daha hızlı yenileme
+531 | En küçük adımın süresi
+532 | Nanosaniye cinsinden
+533 | Değişiklikleri geri al
+534 | Yeniden başlatma gerekir
+535 | bazı kaydedilmiş ayarları uygulamak için.
+536 | Şimdi yeniden başlat
+537 | Yeniden başlatılıyor…
+538 | Panel yanıt vermiyor
+539 | kapalı
+540 | OrbitDMD · Sistem
+541 | Panel günlüğü, güncellemeler ve yeniden başlatma.
+542 | OrbitDMD {} · {} tarihli yazılım
+543 | Günlük
+544 | Süz
+545 | Günlüğü süz
+546 | Canlı izle
+547 | Günlük kopyalandı
+548 | Kopyalanamadı: metni elle seçin
+549 | Yeni yazılım
+550 | Dosya
+551 | . Eskisi kernel8.bak olarak saklanır, sonra panel yeniden başlar. Yeni sürümler:
+552 | kernel8.img seç
+553 | ya da buraya sürükleyin
+554 | Kur
+555 | Yazılım alındı, kuruluyor…
+556 | Bir {} dosyası gerekli
+557 | Panel geri döndü ({} tarihli yazılım)
+558 | Ayarların yedeği
+559 | Tüm ayarlar (Wi-Fi, paneller, saat, hava durumu…), metinleriniz ve geri sayımlarınız, favori ve hariç tutulan GIF'leriniz tek bir dosyada. Kendinize saklayın: şifrelerinizi içerir.
+560 | Yedeği indir
+561 | Yedek indirildi: kendinize saklayın (şifreler)
+562 | Geri yükle
+563 | : yedeği (veya bir config.txt) seçin ya da buraya sürükleyin
+564 | Ayarlar geri yüklendi, yeniden başlatılıyor…
+565 | Paneli yeniden başlat
+566 | Panel birkaç saniye kararır, sonra açılış ekranıyla devam eder.
+567 | Panel yeniden başlatılıyor…
+568 | OrbitDMD · Home Assistant yardımı
+569 | Panelin tüm komutları
+570 | , kopyalanmaya hazır örneklerle. Bağlantı şurada ayarlanır:
+571 | Ayarlar → Home Assistant
+572 | Home Assistant etkin değil
+573 | Home Assistant'a bağlandı
+574 | Home Assistant:
+575 | Home Assistant'ta:
+576 | Ayarlar → Cihazlar ve hizmetler → MQTT →
+577 | . Her şey bu sayfadan yapılır:
+578 | Öğe
+579 | Ne yapar
+580 | Açma, kapatma (web sayfasına erişilir), parlaklık
+581 | Açık: görüntü dondurulur; kapalı: normal oynatma
+582 | Home Assistant'tan yapılan değişiklikten sonra ayarlardaki parlaklığa dön
+583 | Saati göster, Havayı göster
+584 | Hemen, 15 saniye boyunca
+585 | Paneli yeniden başlatır
+586 | Gösterilecek metin
+587 | Bir metin yazıp onaylayın: hemen kayar
+588 | Mesaj efekti, rengi, geçişleri, hızı
+589 | Home Assistant'tan gönderilen metinlerin stili
+590 | Sayfadaki her öğeyi etkinleştirme veya kapatma
+591 | Metin: …, Geri sayım: …
+592 | Gösterilen GIF, Ekran, Sıcaklık, IP adresi, Sürüm
+593 | MQTT komutları
+594 | Aşağıdaki liste, sensörün özniteliklerinde
+595 | Mesaj gönder
+596 | En kolayı, bir otomasyonda veya şurada:
+597 | Geliştirici araçları → Eylemler
+598 | (YAML modu):
+599 | Ayrı bir stille (renk, efekt, metinden önce GIF):
+600 | Alan
+601 | Değerler
+602 | Metin (en fazla 200 karakter, Türkçe harfler dahil)
+603 | Sola, Sağa, Yukarı, Aşağı, Harf harf, Harf yağmuru, Solma (12 dilin herhangi birindeki adlar kabul edilir)
+604 | Beyaz, Kırmızı, Turuncu, Kehribar, Sarı, Yeşil, Turkuaz, Mavi, Mor, Pembe, Gökkuşağı veya RRGGBB (12 dilin herhangi birinde)
+605 | veya Saat sayfasındaki bir yazı tipi, örneğin
+606 | Piksel cinsinden boyut,
+607 | = otomatik
+608 | Metinden önce oynatılacak GIF:
+609 | (GIF sayfasındaki gibi)
+610 | Eksik alanlar Home Assistant'ta ayarlanan stili alır (efekt, renk, geçişler, hız). Panel kapalıysa veya duraklatılmışsa mesaj bekler.
+611 | Otomasyon örneği
+612 | Tüm MQTT komutları
+613 | İleri düzey kullanıcılar için (MQTT Explorer, Node-RED…). Panel bu listeyi şuraya da yayımlar:
+614 | Konu
+615 | Gönderilecek değer
+616 | Panelin yaptığı
+617 | Bir şey yazmadan
+618 | Panelin yayımladığı durumlar:
+619 | her öğe için; erişilebilirlik:
+620 | ON (açık) veya OFF (kapalı)
+621 | ON (donmuş görüntü) veya OFF
+622 | ON: ayarlardaki saatlik parlaklık
+623 | ON / OFF: Mesajlar sayfasındaki N. metin (0 = ilki)
+624 | ON / OFF: Mesajlar sayfasındaki N. geri sayım
+625 | PRESS: saati göster
+626 | PRESS: havayı göster
+627 | PRESS: yeniden başlat
+628 | hemen gösterilecek metin
+629 | metin veya JSON {message, effet, couleur…}
+630 | yanlış şifre (veya config.txt içinde Web_Password boş)
+631 | şifre kabul edildi
+632 | {} panelin açılış ekranlarını içeriyor; gerekirse GIF'lerini tek tek silin
+633 | {} gösterilen tek kategori, önce başka birini etkinleştirin
+634 | {} zaten {} içinde var
+635 | {} zaten var
+636 | {} bulunamadı
+637 | {} yalnızca kısmen silindi ({} dosya silindi)
+638 | {}, {} değil
+639 | {} bir GIF dosyası değil
+640 | Geçersiz GIF
+641 | Wi-Fi henüz bağlı değil
+642 | sabit adres: {}
+643 | dosya alınmadı
+644 | {} kategorisi bulunamadı
+645 | bilinmeyen kategori: {}
+646 | bilinmeyen komut
+647 | config.txt, Web_Password ve Wifi_ssid içermeli (veya Reseau=ethernet)
+648 | {} klasörü oluşturulamadı
+649 | {} yazılamadı
+650 | {} eksik yazıldı (kart dolu mu?)
+651 | config.txt yazılamadı
+652 | karta yazılamadı
+653 | kaydedilemedi (en fazla {} işaretli GIF)
+654 | önce listeyi kaydedin
+655 | config.txt dosyası yok veya geçersiz
+656 | kernel8.img dosyası yok veya boyutu anormal
+657 | en az bir kategoriyi etkin bırakın
+658 | config.txt okunamadı
+659 | liste yok veya çok uzun
+660 | bilinmeyen işaret (favori, exclue veya aucune)
+661 | geçersiz kategori adı (harf, rakam, _ veya -)
+662 | geçersiz kategori adı
+663 | kategori adı çok uzun
+664 | geçersiz ad
+665 | bilinmeyen ayar: {}
+666 | İnternet saat sunucusuna ulaşılamıyor, tekrar deneyin
+667 | çok fazla etkin kategori
+668 | aynı anda çok fazla ayar
+669 | bilinmeyen dosya türü
+670 | başka bir istek zaten sürüyor
+671 | {} için değer reddedildi
+672 | {} eklendi
+673 | {}, {} içine eklendi (boyut {}x{}: ortalanacak)
+674 | {}, {} içine eklendi
+675 | {} GIF işaretlendi
+676 | {} kategori etkin
+677 | {} ayar kaydedildi; uygulamak için yeniden başlatma gerekir
+678 | {} ayar kaydedildi, bir sonraki başlatmada geçerli olacak
+679 | {} ayar kaydedildi
+680 | {} ağ ayarı kaydedildi. Panel yeniden başlıyor; {} sn içinde erişilemezse eski ayarlara döner.
+681 | {} metin, {} geri sayım
+682 | ekran kapalı, panele hâlâ erişilebilir
+683 | ekran yeniden açıldı
+684 | değişiklik yok
+685 | {} kategorisi silindi ({} dosya)
+686 | istek alındı, panel yeniden başlayacak
+687 | görüntü donduruldu
+688 | saat panelde gösteriliyor
+689 | hava durumu panelde gösteriliyor
+690 | geri sayım panelde gösteriliyor
+691 | metin panelde gösteriliyor
+692 | oynatma sürdürüldü
+693 | hava durumu istendi
+694 | Gösterilen GIF'ler
+695 | En kısa süre
+696 | Saatin süresi
+697 | Saat biçimi
+698 | Saatin boyutu
+699 | Saatin deseni
+700 | Tarihin süresi
+701 | Tarih biçimi
+702 | Tarihin yazı tipi
+703 | Tarihin boyutu
+704 | Tarihin deseni
+705 | Hava durumu
+706 | Hava durumunun süresi
+707 | Hava durumunun sıklığı
+708 | Enlem
+709 | Boylam
+710 | Hava durumunun yazı tipi
+711 | Sıcaklığın boyutu
+712 | Sıcaklığın deseni
+713 | Sıcaklığın rengi
+714 | İkinci satır
+715 | İkinci satırın rengi
+716 | Hava durumu simgesi
+717 | Oynatma sırası
+718 | Panel gece kapalı
+719 | Şu saatten kapalı
+720 | Şu saatte yeniden açık
+721 | Yalnızca saat
+722 | Şu saatten yalnızca saat
+723 | Şu saatte yeniden GIF
+724 | Kategori ayları
+725 | MQTT bağlantı noktası
+726 | Metnin sıklığı
+727 | Geri sayımın sıklığı
+728 | Hareketli simge
+729 | Ekranda günlük
+730 | Arka arkaya paneller
+731 | Paralel çıkışlar
+732 | LSB süresi
+733 | Ağ adı
+734 | Wi-Fi ağı
+735 | Wi-Fi ülkesi
+736 | Web şifresi
+737 | Sabit IP adresi
+738 | Parlaklık
+739 | Şu anda {} (sabit)
+740 | Şu anda {} (modemin verdiği)
+741 | yok
+742 | veya
+743 | 1 ile 10 arası
+744 | 0 ile 100 arası (%)
+745 | Zamanlama
+746 | :
+747 | (config.txt dosyası). Bu tarayıcıda hatırlanacak.
+748 | Home Assistant: {}
+749 | Bağlanıyor...
+750 | Bağlantı kesildi
+751 | Protokol sürümü reddedildi
+752 | Kimlik reddedildi
+753 | Sunucu kullanılamıyor
+754 | Kullanıcı veya şifre yanlış
+755 | Yetki yok
+756 | Sunucu adresi bulunamadı
+757 | Sunucuya ulaşılamıyor
+758 | Sunucu bağlantıyı kesti
+759 | Bağlantı koptu
