@@ -70,6 +70,10 @@ Les GIF au nom de RPI2DMD ou de la RpiTe@m (logos du projet) ont ete retirees.
 Les ecrans de demarrage (gif/Accueil) et les GIF de Noel au nom en minuscules
 sont des creations OrbitDMD (Ulrik Adam, www.nexadam.be).
 
+La categorie Domotique (60 GIF de notification : sonnette, colis, lave-linge...)
+est une creation OrbitDMD, sous licence MIT. Elle n'entre pas dans la rotation :
+elle sert aux messages de Home Assistant ("gif": "Domotique/sonnette.gif").
+
 Ces animations reprennent des personnages et des scenes de jeux video : elles
 restent la propriete de leurs ayants droit, pour un usage personnel.
 

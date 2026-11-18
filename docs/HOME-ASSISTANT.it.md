@@ -2,6 +2,17 @@
 
 [Français](HOME-ASSISTANT.md) · [English](HOME-ASSISTANT.en.md) · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · [Deutsch](HOME-ASSISTANT.de.md) · **Italiano** · [Português](HOME-ASSISTANT.pt.md) · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · [Čeština](HOME-ASSISTANT.cs.md)
 
+## Due modi per collegare il pannello
+
+- **Integrazione OrbitDMD (consigliata, pannello 1.6.0 o successivo)**: installala con HACS dal repository
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant). Senza MQTT: il pannello viene trovato da solo (Impostazioni → Dispositivi e
+  servizi), basta inserire la password della sua pagina web. Una pagina **OrbitDMD** compare nella barra laterale per
+  creare gli avvisi passo dopo passo: GIF animate da scegliere, entità che attivano, testo (con il valore di un sensore),
+  ore di silenzio, anti-ripetizione e avviso prioritario lampeggiante.
+- **MQTT** (descritto sotto): per chi usa già MQTT, Node-RED o script.
+
+Usa l'uno **o** l'altro: con entrambi, il pannello compare due volte in Home Assistant.
+
 Dalla versione 1.4.0 il pannello si collega a Home Assistant tramite **MQTT** e vi compare da solo
 (rilevamento automatico). I nomi delle entità seguono la lingua del pannello (Impostazioni → Display →
 Lingua del pannello).

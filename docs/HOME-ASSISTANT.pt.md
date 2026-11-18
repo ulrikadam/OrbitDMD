@@ -2,6 +2,17 @@
 
 [Français](HOME-ASSISTANT.md) · [English](HOME-ASSISTANT.en.md) · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · [Deutsch](HOME-ASSISTANT.de.md) · [Italiano](HOME-ASSISTANT.it.md) · **Português** · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · [Čeština](HOME-ASSISTANT.cs.md)
 
+## Duas formas de ligar o painel
+
+- **Integração OrbitDMD (recomendada, painel 1.6.0 ou mais recente)**: instale-a com o HACS a partir do repositório
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant). Sem MQTT: o painel é encontrado sozinho (Definições → Dispositivos e serviços),
+  basta indicar a palavra-passe da sua página web. Uma página **OrbitDMD** aparece na barra lateral para criar os
+  alertas passo a passo: GIF animados para escolher, entidades que ativam, texto (com o valor de um sensor), horas de
+  silêncio, anti-repetição e alerta prioritário a piscar.
+- **MQTT** (descrito abaixo): para quem já usa MQTT, Node-RED ou scripts.
+
+Use um **ou** outro: com os dois, o painel aparece duas vezes no Home Assistant.
+
 Desde a versão 1.4.0, o painel se conecta ao Home Assistant por **MQTT** e aparece lá sozinho
 (descoberta automática). Os nomes das entidades seguem o idioma do painel (Configurações → Tela →
 Idioma do painel).

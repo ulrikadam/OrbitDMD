@@ -2,6 +2,17 @@
 
 [Français](HOME-ASSISTANT.md) · [English](HOME-ASSISTANT.en.md) · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · **Русский** · [Deutsch](HOME-ASSISTANT.de.md) · [Italiano](HOME-ASSISTANT.it.md) · [Português](HOME-ASSISTANT.pt.md) · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · [Čeština](HOME-ASSISTANT.cs.md)
 
+## Два способа подключить панель
+
+- **Интеграция OrbitDMD (рекомендуется, панель 1.6.0 или новее)**: установите её через HACS из репозитория
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant). MQTT не нужен: панель находится автоматически (Настройки → Устройства и службы),
+  достаточно ввести пароль её веб-страницы. В боковой панели появляется страница **OrbitDMD** для пошагового
+  создания оповещений: выбор анимированных GIF, объекты-триггеры, текст (со значением датчика), часы тишины,
+  защита от повторов и мигающие приоритетные оповещения.
+- **MQTT** (описано ниже): для тех, кто уже использует MQTT, Node-RED или скрипты.
+
+Используйте одно **или** другое: при обоих способах панель появится в Home Assistant дважды.
+
 Начиная с версии 1.4.0 панель подключается к Home Assistant по **MQTT** и появляется там сама
 (автоматическое обнаружение). Названия сущностей следуют языку панели (Настройки → Экран → Язык панели).
 

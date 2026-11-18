@@ -36,6 +36,7 @@ CDmdApp::CDmdApp (CMemorySystem *pMemorySystem, CMatrix *pMatrix, CConfig *pConf
 	m_pRandom (0),
 	m_pFileBuffer (0),
 	m_pBlack (0),
+	m_bBannerBlink (FALSE),
 	m_ppFiles (0),
 	m_nFiles (0),
 	m_bInRemoteRequest (FALSE),
@@ -994,6 +995,10 @@ void CDmdApp::ShowMessages (boolean bEveryTime)
 }
 
 // message de Home Assistant : une GIF (facultative), puis le texte
+// clignotement du texte des alertes prioritaires ("clignote" dans la notification)
+#define BLINK_PERIOD_MS	700
+#define BLINK_ON_MS	450
+
 void CDmdApp::ShowNotification (void)
 {
 	THANotification N;
@@ -1016,15 +1021,32 @@ void CDmdApp::ShowNotification (void)
 			{
 				CString Path;
 				Path.Format ("%s/%s/%s", GIF_DIR, Category, Name);
-				PlayGif (Path);
+				// "passages" de la notification : la GIF est rejouee autant de fois que le texte
+				for (unsigned nPass = 0; nPass < N.nGifPasses; nPass++)
+				{
+					if (   (nPass > 0 && CRemoteControl::Get ()->IsPlayRequested ())
+					    || !PlayGif (Path))
+					{
+						break;
+					}
+				}
 			}
 		}
 	}
 
 	if (N.Style.Text[0] != '\0' && !CRemoteControl::Get ()->IsPlayRequested ())
 	{
+		m_bBannerBlink = N.bBlink;
 		ShowBanner (N.Style);
+		m_bBannerBlink = FALSE;
 	}
+}
+
+// alerte prioritaire : le texte s'allume BLINK_ON_MS, s'eteint le reste de BLINK_PERIOD_MS
+void CDmdApp::ShowBannerFrame (unsigned nMillis)
+{
+	boolean bDark = m_bBannerBlink && nMillis % BLINK_PERIOD_MS >= BLINK_ON_MS;
+	m_pMatrix->Show (bDark ? m_pBlack : m_pCanvas->GetData ());
 }
 
 // "Afficher maintenant" de la page Messages : ":texte:N" ou ":compte:N"
@@ -1079,11 +1101,15 @@ boolean CDmdApp::RunPagePhase (const TBannerStyle &rItem, const char *pPage, uns
 		{
 			nKey = nKey * 4099 + nMillis / 30;
 		}
+		if (m_bBannerBlink)
+		{
+			nKey = nKey * 3 + (nMillis % BLINK_PERIOD_MS >= BLINK_ON_MS);	// redessiner a chaque clignement
+		}
 		if (nKey != nLastKey || nHeld != 0)
 		{
 			m_pClock->RenderPage (rItem.Style, pPage, rItem.Effect, nPhase,
 					      nProgress > 1000 ? 1000 : nProgress, nMillis, m_pCanvas);
-			m_pMatrix->Show (m_pCanvas->GetData ());
+			ShowBannerFrame (nMillis);
 			nLastKey = nKey;
 		}
 
@@ -1170,11 +1196,12 @@ void CDmdApp::ShowBanner (const TBannerStyle &rItem)
 		}
 
 		int nOffset = (int) (nTravel % nDistance);
-		if (nOffset != nLastOffset || (bAnimated && nMillis - nLastMillis >= 30))
+		if (   nOffset != nLastOffset || (bAnimated && nMillis - nLastMillis >= 30)
+		    || (m_bBannerBlink && nMillis - nLastMillis >= 30))
 		{
 			int x = bReverse ? nOffset - nTextWidth : W - nOffset;
 			m_pClock->RenderScroll (Banner.Style, Text, x, nMillis, m_pCanvas);
-			m_pMatrix->Show (m_pCanvas->GetData ());
+			ShowBannerFrame (nMillis);
 			nLastOffset = nOffset;
 			nLastMillis = nMillis;
 		}

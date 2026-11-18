@@ -29,8 +29,9 @@ tarzı bir “DMD” ekrana dönüştürür:
   tarih, İnternet üzerinden eşitleme;
 - 💬 **mesajlar**: kayan yazılar ve geri sayımlar (Noel, Yılbaşı, seçilen tarih), her biri kendi stili ve
   giriş efektiyle (kayma, yükselme, harf harf, harf yağmuru, solma…);
-- 🏠 **Home Assistant**: panel orada kendiliğinden görünür (MQTT); açma/kapatma, parlaklık ve otomasyonlarınızdan
-  mesajlar ([kılavuz](docs/HOME-ASSISTANT.tr.md));
+- 🏠 **Home Assistant**: [OrbitDMD entegrasyonu](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) (HACS) ile panel kendiliğinden bulunur ve bir OrbitDMD
+  sayfası uyarıları adım adım oluşturur (GIF, metin, sessiz saatler, öncelikli uyarı…); MQTT de kullanılabilir
+  ([kılavuz](docs/HOME-ASSISTANT.tr.md));
 - 🗓️ **zamanlama**: panel gece kapalı veya belirli saatlerde yalnızca saat, aylara göre GIF kategorileri
   (aralıkta Noel…), yalnızca iki tarih arasında etkin metinler ve geri sayımlar;
 - 📐 **çok büyük GIF'ler gönderilirken** panel boyutuna kendiliğinden küçültülür;

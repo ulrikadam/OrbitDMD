@@ -2,6 +2,17 @@
 
 [Français](HOME-ASSISTANT.md) · [English](HOME-ASSISTANT.en.md) · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · [Deutsch](HOME-ASSISTANT.de.md) · [Italiano](HOME-ASSISTANT.it.md) · [Português](HOME-ASSISTANT.pt.md) · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · **Türkçe** · [Čeština](HOME-ASSISTANT.cs.md)
 
+## Paneli bağlamanın iki yolu
+
+- **OrbitDMD entegrasyonu (önerilen, panel 1.6.0 veya daha yeni)**: HACS ile [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant)
+  deposundan yükleyin. MQTT gerekmez: panel kendiliğinden bulunur (Ayarlar → Cihazlar ve hizmetler), yalnızca web
+  sayfasının parolasını girersiniz. Kenar çubuğunda uyarıları adım adım oluşturmak için bir **OrbitDMD** sayfası
+  çıkar: seçilecek hareketli GIF'ler, tetikleyen varlıklar, metin (bir sensörün değeriyle), sessiz saatler, tekrar
+  sınırı ve yanıp sönen öncelikli uyarılar.
+- **MQTT** (aşağıda anlatılıyor): zaten MQTT, Node-RED veya betik kullananlar için.
+
+Birini **veya** diğerini kullanın: ikisiyle birden panel Home Assistant'ta iki kez görünür.
+
 1.4.0 sürümünden beri panel Home Assistant'a **MQTT** ile bağlanır ve orada kendiliğinden görünür
 (otomatik keşif). Varlık adları panelin dilini izler (Ayarlar → Ekran → Panelin dili).
 

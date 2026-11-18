@@ -29,8 +29,9 @@ OrbitDMD verwandelt einen **Raspberry Pi 3** und **HUB75-LED-Panels** (zum Beisp
   Datum, Zeitabgleich über das Internet;
 - 💬 **Nachrichten**: Lauftexte und Countdowns (Weihnachten, Neujahr, beliebiges Datum), jeweils mit eigenem
   Stil und Einstiegseffekt (Laufen, Steigen, Buchstabe für Buchstabe, Buchstabenregen, Einblenden…);
-- 🏠 **Home Assistant**: das Panel erscheint dort von selbst (MQTT); Ein/Aus, Helligkeit und Nachrichten aus
-  Ihren Automatisierungen ([Anleitung](docs/HOME-ASSISTANT.de.md));
+- 🏠 **Home Assistant**: mit der [OrbitDMD-Integration](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) (HACS) wird das Panel automatisch gefunden, und eine
+  OrbitDMD-Seite erstellt Meldungen Schritt für Schritt (GIF, Text, Ruhezeiten, prioritäre Meldung…); MQTT bleibt möglich
+  ([Anleitung](docs/HOME-ASSISTANT.de.md));
 - 🗓️ **Zeitplan**: Panel nachts aus oder zu bestimmten Stunden nur die Uhrzeit, GIF-Kategorien nach Monaten
   (Weihnachten im Dezember…), Texte und Countdowns nur zwischen zwei Daten aktiv;
 - 📐 **zu große GIFs werden beim Hochladen automatisch** auf das Panelformat verkleinert;

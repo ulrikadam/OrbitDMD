@@ -47,6 +47,7 @@ private:
 	void ShowAddress (void);
 	void ShowMessages (boolean bEveryTime);
 	void ShowBanner (const TBannerStyle &rItem);
+	void ShowBannerFrame (unsigned nMillis);	// image du texte (noire par moments si clignotant)
 	boolean ShowCountdown (const TCountdownStyle &rItem, unsigned nDuration);
 	void ShowMessageNow (const char *pRequest);
 	void ShowNotification (void);
@@ -106,6 +107,7 @@ private:
 
 	u8 *m_pFileBuffer;
 	u8 *m_pBlack;			// image noire (affichage eteint)
+	boolean m_bBannerBlink;		// texte en cours : alerte prioritaire qui clignote
 	CString **m_ppFiles;
 	unsigned m_nFiles;
 

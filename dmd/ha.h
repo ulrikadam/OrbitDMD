@@ -25,6 +25,8 @@ public:
 
 	// notification en attente (boucle d'affichage) ; FALSE s'il n'y en a pas
 	static boolean TakeNotification (THANotification *pNotification);
+	// texte simple ou JSON (MQTT, page web /api/notification) -> notification affichee ; FALSE si vide
+	static boolean QueueNotification (const char *pPayload);
 
 	// "connecte", "connexion..." ou "erreur : ..." (page web) ; 0 si Home Assistant est inactif
 	static const char *GetStatus (void);

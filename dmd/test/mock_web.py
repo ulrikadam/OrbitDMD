@@ -154,7 +154,7 @@ class Handler(BaseHTTPRequestHandler):
                     'heure': time.strftime('%Y-%m-%d %H:%M:%S'), 'source_heure': 'Internet',
                     'rafraichissement_hz': random.choice([172, 173, 175]), 'luminosite': 60,
                     'nb_gif': len(GIFS), 'memoire_libre_mo': 852, 'carte_libre_mo': 15071,
-                    'version': open(os.path.join(ROOT, 'VERSION')).read().strip(), 'temperature_c': 52, 'latence_ms': 6, 'latence_max_ms': 31, 'nom': 'OrbitDMD', 'ha': os.environ.get('ORBITDMD_HA', ''), 'reseau': os.environ.get('ORBITDMD_RESEAU', 'wifi'), 'wifi': 'Box-Maison', 'gif': gif,
+                    'version': open(os.path.join(ROOT, 'VERSION')).read().strip(), 'temperature_c': 52, 'latence_ms': 6, 'latence_max_ms': 31, 'id': '00000000c0ffee01', 'mac': 'b8:27:eb:00:00:01', 'nom': 'OrbitDMD', 'ha': os.environ.get('ORBITDMD_HA', ''), 'reseau': os.environ.get('ORBITDMD_RESEAU', 'wifi'), 'wifi': 'Box-Maison', 'gif': gif,
                     'pause': STATE['pause'], 'ecran_eteint': STATE['ecran_eteint'],
                     'synchro_s': int(time.time() - STATE['synchro']),
                     'meteo_temp': int(WEATHER['temp'] * 10), 'meteo_code': WEATHER['code'], 'meteo_jour': WEATHER['jour'],

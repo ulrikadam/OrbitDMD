@@ -41,6 +41,8 @@ struct THANotification
 {
 	TBannerStyle Style;
 	char Gif[HA_NOTIFY_GIF_LEN];	// "Categorie/nom.gif" a jouer avant, ou vide
+	unsigned nGifPasses;		// nombre de fois que la GIF est jouee ("passages" donne : comme le texte)
+	boolean bBlink;			// "clignote" : texte clignotant (alerte prioritaire)
 };
 
 // texte simple ou JSON -> notification (style de depart : rDefault, reglable depuis Home

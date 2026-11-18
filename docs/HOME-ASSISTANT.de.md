@@ -2,6 +2,17 @@
 
 [Français](HOME-ASSISTANT.md) · [English](HOME-ASSISTANT.en.md) · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · **Deutsch** · [Italiano](HOME-ASSISTANT.it.md) · [Português](HOME-ASSISTANT.pt.md) · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · [Čeština](HOME-ASSISTANT.cs.md)
 
+## Zwei Wege, das Panel zu verbinden
+
+- **OrbitDMD-Integration (empfohlen, Panel 1.6.0 oder neuer)**: Installieren Sie sie mit HACS aus dem Repository
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant). Kein MQTT nötig: Das Panel wird automatisch gefunden (Einstellungen → Geräte
+  & Dienste), Sie geben nur das Passwort seiner Webseite ein. Eine **OrbitDMD**-Seite in der Seitenleiste erstellt
+  Meldungen Schritt für Schritt: animierte GIFs zur Auswahl, auslösende Entitäten, Text (mit dem Wert eines Sensors),
+  Ruhezeiten, Wiederholungssperre und blinkende prioritäre Meldungen.
+- **MQTT** (unten beschrieben): für alle, die schon MQTT, Node-RED oder Skripte nutzen.
+
+Verwenden Sie das eine **oder** das andere: mit beiden erscheint das Panel doppelt in Home Assistant.
+
 Seit Version 1.4.0 verbindet sich das Panel per **MQTT** mit Home Assistant und erscheint dort von selbst
 (automatische Erkennung). Die Namen der Entitäten folgen der Sprache des Panels (Einstellungen → Anzeige →
 Sprache des Panels).

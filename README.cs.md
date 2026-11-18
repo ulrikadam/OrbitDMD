@@ -29,7 +29,8 @@ jako u pinballu nebo arkádového automatu:
   synchronizace přes internet;
 - 💬 **zprávy**: běžící texty a odpočty (Vánoce, Nový rok, zvolené datum), každý s vlastním stylem a efektem
   příchodu (posun, stoupání, písmeno po písmenu, déšť písmen, prolínání…);
-- 🏠 **Home Assistant**: panel se tam objeví sám (MQTT); zapnutí, jas a zprávy z vašich automatizací
+- 🏠 **Home Assistant**: s [integrací OrbitDMD](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) (HACS) se panel najde sám a stránka OrbitDMD vytváří
+  upozornění krok za krokem (GIF, text, hodiny klidu, prioritní upozornění…); MQTT zůstává možné
   ([návod](docs/HOME-ASSISTANT.cs.md));
 - 🗓️ **časový plán**: panel v noci vypnutý nebo jen čas v určených hodinách, kategorie GIFů podle měsíců
   (Vánoce v prosinci…), texty a odpočty aktivní jen mezi dvěma daty;

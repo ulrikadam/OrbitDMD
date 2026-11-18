@@ -29,8 +29,9 @@ pantalla «DMD» como la de un pinball o una máquina arcade:
   fecha, sincronización por Internet;
 - 💬 **mensajes**: textos que se desplazan y cuentas atrás (Navidad, Año Nuevo, fecha elegida), cada uno
   con su estilo y su efecto de entrada (desplazamiento, subida, letra a letra, lluvia de letras, fundido…);
-- 🏠 **Home Assistant**: el panel aparece solo (MQTT); encendido, brillo y mensajes desde sus
-  automatizaciones ([guía](docs/HOME-ASSISTANT.es.md));
+- 🏠 **Home Assistant**: con la [integración OrbitDMD](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) (HACS), el panel se encuentra solo y una página
+  OrbitDMD crea las alertas paso a paso (GIF, texto, horas de silencio, alerta prioritaria…); MQTT sigue siendo posible
+  ([guía](docs/HOME-ASSISTANT.es.md));
 - 🗓️ **programa horario**: panel apagado de noche o solo la hora a ciertas horas, categorías de GIF por mes
   (Navidad en diciembre…), textos y cuentas atrás activos solo entre dos fechas;
 - 📐 **GIF demasiado grandes reducidos solos** al tamaño del panel al enviarlos;

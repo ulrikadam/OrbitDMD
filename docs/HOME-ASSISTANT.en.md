@@ -2,6 +2,17 @@
 
 [Français](HOME-ASSISTANT.md) · **English** · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · [Deutsch](HOME-ASSISTANT.de.md) · [Italiano](HOME-ASSISTANT.it.md) · [Português](HOME-ASSISTANT.pt.md) · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · [Čeština](HOME-ASSISTANT.cs.md)
 
+## Two ways to connect the panel
+
+- **OrbitDMD integration (recommended, panel 1.6.0 or later)**: install it with HACS from the
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) repository. No MQTT needed: the panel is found automatically (Settings → Devices
+  & services), you only enter the password of its web page. An **OrbitDMD** page appears in the sidebar to create
+  alerts step by step: animated GIF picker, triggering entities, text (with a sensor value), quiet hours, cooldown
+  and blinking priority alerts.
+- **MQTT** (described below): for those already using MQTT, Node-RED or scripts.
+
+Use one **or** the other: with both, the panel appears twice in Home Assistant.
+
 Since version 1.4.0, the panel connects to Home Assistant through **MQTT** and shows up there by itself
 (automatic discovery). The entity names follow the panel language (Settings → Display → Panel language).
 

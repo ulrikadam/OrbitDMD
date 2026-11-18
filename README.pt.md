@@ -29,8 +29,9 @@ O OrbitDMD transforma um **Raspberry Pi 3** e **painéis de LED HUB75** (por exe
   sincronização pela Internet;
 - 💬 **mensagens**: textos rolando e contagens regressivas (Natal, Ano-Novo, data escolhida), cada um com seu
   estilo e efeito de entrada (rolagem, subida, letra por letra, chuva de letras, esmaecer…);
-- 🏠 **Home Assistant**: o painel aparece sozinho (MQTT); liga/desliga, brilho e mensagens pelas suas
-  automações ([guia](docs/HOME-ASSISTANT.pt.md));
+- 🏠 **Home Assistant**: com a [integração OrbitDMD](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) (HACS), o painel é encontrado sozinho e uma página
+  OrbitDMD cria os alertas passo a passo (GIF, texto, horas de silêncio, alerta prioritário…); o MQTT continua possível
+  ([guia](docs/HOME-ASSISTANT.pt.md));
 - 🗓️ **programação**: painel desligado à noite ou só a hora em certos horários, categorias de GIF por mês
   (Natal em dezembro…), textos e contagens regressivas ativos só entre duas datas;
 - 📐 **GIFs grandes demais reduzidos sozinhos** ao formato do painel no envio;

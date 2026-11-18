@@ -29,8 +29,9 @@ de type « DMD » de flipper ou de borne d'arcade :
   synchronisation Internet ;
 - 💬 **messages** : textes défilants et comptes à rebours (Noël, Nouvel an, date choisie), chacun avec son
   style et son effet d'arrivée (défilement, montée, lettre par lettre, pluie de lettres, fondu…) ;
-- 🏠 **Home Assistant** : le panneau y apparaît tout seul (MQTT) ; allumage, luminosité et messages depuis
-  vos automatisations ([guide](docs/HOME-ASSISTANT.md)) ;
+- 🏠 **Home Assistant** : avec l'[intégration OrbitDMD](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) (HACS), le panneau est trouvé tout seul et une page
+  OrbitDMD crée les alertes pas à pas (GIF, texte, heures de silence, alerte prioritaire…) ; MQTT reste possible
+  ([guide](docs/HOME-ASSISTANT.md)) ;
 - 🗓️ **programme horaire** : panneau éteint la nuit ou l'heure seule à certaines heures, catégories de GIF
   selon les mois (Noël en décembre…), textes et comptes à rebours actifs seulement entre deux dates ;
 - 📐 **GIF trop grandes mises au format du panneau** toutes seules à l'envoi ;

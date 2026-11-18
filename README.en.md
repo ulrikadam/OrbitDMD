@@ -29,8 +29,9 @@ arcade-style "DMD" display:
   Internet time sync;
 - 💬 **messages**: scrolling texts and countdowns (Christmas, New Year, any date), each with its own style
   and entrance effect (scroll, rise, letter by letter, raining letters, fade…);
-- 🏠 **Home Assistant**: the panel shows up by itself (MQTT); power, brightness and messages from your
-  automations ([guide](docs/HOME-ASSISTANT.en.md));
+- 🏠 **Home Assistant**: with the [OrbitDMD integration](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) (HACS), the panel is found automatically and an
+  OrbitDMD page creates alerts step by step (GIF, text, quiet hours, priority alert…); MQTT is still possible
+  ([guide](docs/HOME-ASSISTANT.en.md));
 - 🗓️ **schedule**: panel off at night or time only at certain hours, GIF categories by month (Christmas in
   December…), texts and countdowns active only between two dates;
 - 📐 **oversized GIFs automatically resized** to the panel when uploaded;

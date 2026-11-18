@@ -18,6 +18,7 @@
 #include "matrix.h"
 #include "network.h"
 #include <circle/net/netsubsystem.h>
+#include <circle/bcmpropertytags.h>
 #include <circle/sched/scheduler.h>
 #include <circle/cputhrottle.h>
 #include <circle/memory.h>
@@ -664,6 +665,75 @@ THTTPStatus CWebServer::HandlePost (const char *pPath, const TForm &rForm,
 			}
 		}
 		AddClockAsset (pType, rForm.FileName, rForm.pFile, rForm.nFileLength, pReply);
+	}
+	// notification (integration Home Assistant, scripts) : champs message, effet, couleur, police,
+	// taille, vitesse, passages, gif, clignote ; ou champ "json" (meme texte que le sujet MQTT notification)
+	else if (strcmp (pPath, "/api/notification") == 0)
+	{
+		static const char *Keys[] = {"message", "effet", "couleur", "police", "taille", "vitesse", "passages", "gif",
+					     "clignote"};
+		CString Json ("{");
+		const char *pJson = 0;
+		for (unsigned i = 0; i < rForm.nFields; i++)
+		{
+			if (strcmp (rForm.FieldName[i], "json") == 0)
+			{
+				pJson = rForm.FieldValue[i];
+				continue;
+			}
+			for (unsigned k = 0; k < sizeof Keys / sizeof Keys[0]; k++)
+			{
+				if (strcmp (rForm.FieldName[i], Keys[k]) != 0 || rForm.FieldValue[i][0] == '\0')
+				{
+					continue;
+				}
+				Json.Append (Json.GetLength () > 1 ? ",\"" : "\"");
+				Json.Append (Keys[k]);
+				Json.Append ("\":\"");
+				for (const char *p = rForm.FieldValue[i]; *p != '\0'; p++)
+				{
+					if (*p == '"' || *p == '\\')	Json.Append ('\\');
+					if ((unsigned char) *p >= ' ')	Json.Append (*p);
+				}
+				Json.Append ("\"");
+			}
+		}
+		Json.Append ("}");
+		if (CHomeAssistant::QueueNotification (pJson != 0 ? pJson : (const char *) Json))
+		{
+			*pReply = "OK : notification affichee\n";
+		}
+		else
+		{
+			*pReply = "ERREUR : ni message ni GIF\n";
+		}
+	}
+	// luminosite imposee : valeur 0 a 100, ou "auto" (heure par heure des reglages)
+	else if (strcmp (pPath, "/api/luminosite") == 0)
+	{
+		const char *pValue = "";
+		for (unsigned i = 0; i < rForm.nFields; i++)
+		{
+			if (strcmp (rForm.FieldName[i], "valeur") == 0)
+			{
+				pValue = rForm.FieldValue[i];
+			}
+		}
+		CRemoteControl *pRemote = CRemoteControl::Get ();
+		if (strcasecmp (pValue, "auto") == 0)
+		{
+			pRemote->SetBrightnessOverride (-1);
+			*pReply = "OK : luminosite heure par heure\n";
+		}
+		else if (pValue[0] >= '0' && pValue[0] <= '9' && atoi (pValue) <= 100)
+		{
+			pRemote->SetBrightnessOverride (atoi (pValue));
+			pReply->Format ("OK : luminosite %d %%\n", atoi (pValue));
+		}
+		else
+		{
+			*pReply = "ERREUR : valeur refusee pour luminosite\n";
+		}
 	}
 	else if (strcmp (pPath, "/api/commande") == 0)
 	{
@@ -1398,7 +1468,7 @@ void CWebServer::BuildStatusJSON (CString *pJSON)
 	Part.Format ("{\"version\":\"%s\",\"programme\":\"%s\",\"uptime_s\":%u,\"ip\":\"%s\",\"heure\":\"%s\","
 		     "\"source_heure\":\"%s\",\"rafraichissement_hz\":%u,\"luminosite\":%u,"
 		     "\"nb_gif\":%u,\"memoire_libre_mo\":%u,\"carte_libre_mo\":%u,\"temperature_c\":%u,"
-		     "\"latence_ms\":%u,\"latence_max_ms\":%u,\"synchro_s\":%d,",
+		     "\"latence_ms\":%u,\"latence_max_ms\":%u,\"synchro_s\":%d,\"luminosite_forcee\":%d,",
 		     GetVersion (), GetBuildDate (), nUptime, (const char *) IP,
 		     (const char *) Time, pClock->GetSourceName (),
 		     pRemote->Status.nRefreshRate, pRemote->Status.nBrightness,
@@ -1406,7 +1476,7 @@ void CWebServer::BuildStatusJSON (CString *pJSON)
 		     (unsigned) (CMemorySystem::Get ()->GetHeapFreeSpace (HEAP_ANY) >> 20),
 		     nFreeMB, nTemperature,
 		     CLatencyProbe::GetRecentMs (), CLatencyProbe::GetMaxMs (),
-		     pClock->GetSecondsSinceSync ());
+		     pClock->GetSecondsSinceSync (), pRemote->GetBrightnessOverride ());	// -1 : heure par heure
 	pJSON->Append (Part);
 
 	// meteo (tableau de bord)
@@ -1420,14 +1490,36 @@ void CWebServer::BuildStatusJSON (CString *pJSON)
 		pJSON->Append (Part);
 	}
 
+	// identifiant du panneau pour Home Assistant : numero de serie du Raspberry Pi (ne change pas
+	// entre Wi-Fi et Ethernet, contrairement a l'adresse MAC, donnee aussi)
+	static CString s_Serial;
+	if (s_Serial.GetLength () == 0)
+	{
+		CBcmPropertyTags Tags;
+		TPropertyTagSerial Serial;
+		if (Tags.GetTag (PROPTAG_GET_BOARD_SERIAL, &Serial, sizeof Serial))
+		{
+			s_Serial.Format ("%08x%08x", Serial.Serial[1], Serial.Serial[0]);
+		}
+	}
+	CString NetIP, Mask, Gateway, DNS, MAC;
+	CNetwork *pNetwork = CNetwork::Get ();
+	if (pNetwork != 0)
+	{
+		pNetwork->GetCurrentConfig (&NetIP, &Mask, &Gateway, &DNS, &MAC);
+	}
+	Part.Format ("\"id\":\"%s\",\"mac\":\"%s\",", (const char *) s_Serial, (const char *) MAC);
+	pJSON->Append (Part);
+
 	pJSON->Append ("\"nom\":\"");
 	AppendEscaped (pJSON, m_pConfig->NetworkName, TRUE);
-	CNetwork *pNetwork = CNetwork::Get ();
 	pJSON->Append (pNetwork != 0 && pNetwork->IsEthernet () ? "\",\"reseau\":\"ethernet" : "\",\"reseau\":\"wifi");
 	pJSON->Append ("\",\"wifi\":\"");
 	AppendEscaped (pJSON, m_pConfig->WifiSSID, TRUE);
 	pJSON->Append ("\",\"gif\":\"");
 	AppendEscaped (pJSON, pRemote->Status.CurrentGif, TRUE);
+	pJSON->Append ("\",\"ecran\":\"");
+	pJSON->Append (pRemote->Status.pScreen != 0 ? pRemote->Status.pScreen : "");
 	pJSON->Append ("\",\"ha\":\"");
 	pJSON->Append (CHomeAssistant::GetStatus () != 0 ? CHomeAssistant::GetStatus () : "");
 	pJSON->Append ("\",\"prog_actif\":\"");

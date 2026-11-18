@@ -8,6 +8,7 @@
 #include "weather.h"
 #include "ha.h"
 #include "clock.h"
+#include "webserver.h"	// GetVersion
 #include <circle/net/ntpdaemon.h>
 #include <circle/net/ntpclient.h>
 #include <circle/net/dnsclient.h>
@@ -257,6 +258,12 @@ void CNetwork::Process (void)
 
 	m_pPublisher = new CmDNSPublisher (m_pNet);	// repond a <nom>.local
 	m_pPublisher->PublishService (m_pConfig->NetworkName, "_http._tcp", 80);
+	// service propre a OrbitDMD : Home Assistant (integration OrbitDMD) trouve le panneau tout seul
+	// (version lue a l'execution : version.cpp est recompile a chaque changement du fichier VERSION)
+	static CString s_VersionText;
+	s_VersionText.Format ("version=%s", GetVersion ());
+	const char *Text[] = {s_VersionText, "api=/api/etat", nullptr};
+	m_pPublisher->PublishService (m_pConfig->NetworkName, "_orbitdmd._tcp", 80, Text);
 
 	m_pWebServer = new CWebServer (m_pNet, m_pConfig);
 

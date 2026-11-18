@@ -29,8 +29,9 @@ OrbitDMD maakt van een **Raspberry Pi 3** en **HUB75-ledpanelen** (bijvoorbeeld 
   willekeurige keuze, datum, tijd via internet;
 - 💬 **berichten**: lopende teksten en aftellers (Kerstmis, Nieuwjaar, gekozen datum), elk met een eigen
   stijl en binnenkomsteffect (lopen, omhoog, letter voor letter, regen van letters, vervagen…);
-- 🏠 **Home Assistant**: het paneel verschijnt er vanzelf (MQTT); aan/uit, helderheid en berichten vanuit
-  je automatiseringen ([handleiding](docs/HOME-ASSISTANT.nl.md));
+- 🏠 **Home Assistant**: met de [OrbitDMD-integratie](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) (HACS) wordt het paneel vanzelf gevonden en maakt een
+  OrbitDMD-pagina stap voor stap meldingen (GIF, tekst, stille uren, prioritaire melding…); MQTT blijft mogelijk
+  ([handleiding](docs/HOME-ASSISTANT.nl.md));
 - 🗓️ **schema**: paneel 's nachts uit of alleen de tijd op bepaalde uren, GIF-categorieën per maand
   (Kerstmis in december…), teksten en aftellers alleen actief tussen twee datums;
 - 📐 **te grote GIF's automatisch verkleind** tot het paneelformaat bij het uploaden;

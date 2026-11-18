@@ -405,7 +405,13 @@ int main (int argc, char **argv)
 					    "\"couleur\": \"arc-en-ciel\", \"passages\": 3, \"gif\": \"XMAS/sapin.gif\"}", Def, &N));
 		CHECK (strcmp (N.Style.Text, "Lave-linge termin\xC3\xA9") == 0 && N.Style.Effect == EffectRain);
 		CHECK (strcmp (N.Style.Style.Pattern, CLOCK_RAINBOW) == 0 && N.Style.nPasses == 3);
-		CHECK (strcmp (N.Gif, "XMAS/sapin.gif") == 0);
+		CHECK (strcmp (N.Gif, "XMAS/sapin.gif") == 0 && N.nGifPasses == 3);
+		CHECK (HAParseNotification ("{\"gif\":\"XMAS/sapin.gif\"}", Def, &N) && N.nGifPasses == 1 && !N.bBlink);
+		CHECK (HAParseNotification ("{\"message\":\"Alarme\",\"clignote\":\"1\"}", Def, &N) && N.bBlink);
+		CHECK (HAParseNotification ("{\"message\":\"Alarme\",\"clignote\":true}", Def, &N) && N.bBlink);
+		CHECK (HAParseNotification ("{\"message\":\"Alarme\",\"clignote\":\"0\"}", Def, &N) && !N.bBlink);
+		CHECK (HAParseNotification ("{\"gif\":\"XMAS/sapin.gif\",\"passages\":40}", Def, &N)
+		       && N.nGifPasses == N.Style.nPasses && N.nGifPasses <= 10);	// valeur refusee : passages par defaut
 		CHECK (HAParseNotification ("{\"message\":\"Colis\",\"couleur\":\"#FF8000\",\"gif\":\"../../Config/config.txt\"}", Def, &N)
 		       && N.Style.Style.Color[0] == 0xFF && N.Style.Style.Color[1] == 0x80 && N.Gif[0] == '\0');
 		CHECK (!HAParseNotification ("{\"effet\":\"pluie\"}", Def, &N));		// ni message ni GIF

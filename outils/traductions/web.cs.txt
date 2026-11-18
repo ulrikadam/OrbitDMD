@@ -757,3 +757,7 @@
 757 | Server je nedostupný
 758 | Odpojeno serverem
 759 | Spojení ztraceno
+760 | Integrace OrbitDMD (doporučeno)
+761 | Integrace OrbitDMD pro Home Assistant funguje bez MQTT: panel se najde sám a stránka OrbitDMD umožňuje vytvářet upozornění krok za krokem (GIF, text, hodiny klidu…).
+762 | Nainstalovat integraci (HACS)
+763 | Používejte integraci, nebo MQTT, ne obojí: panel by se zobrazil dvakrát. Zbytek této stránky se týká MQTT.

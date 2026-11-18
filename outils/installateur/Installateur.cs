@@ -332,7 +332,7 @@ namespace OrbitDMD
 					}
 					nbGif++;
 				}
-				categories.AddRange (choisies.Take (20));
+				categories.AddRange (choisies.Where (c => !EstNotification (c)).Take (20));	// Domotique : copiee, pas affichee
 				journal (Langue.F ("GIF fournies : {} dans {} catégorie(s)", nbGif, choisies.Count));
 			}
 
@@ -353,6 +353,8 @@ namespace OrbitDMD
 		}
 
 		public static bool EstAccueil (string categorie) => string.Equals (categorie, "Accueil", StringComparison.OrdinalIgnoreCase);
+		// GIF de notification (Home Assistant : "gif": "Domotique/sonnette.gif") : copiees, hors rotation
+		public static bool EstNotification (string categorie) => string.Equals (categorie, "Domotique", StringComparison.OrdinalIgnoreCase);
 
 		// categories de GIF integrees a l'installateur, avec leur nombre de GIF
 		public static List<KeyValuePair<string, int>> CategoriesFournies ()

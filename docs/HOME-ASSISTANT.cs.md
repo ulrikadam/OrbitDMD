@@ -2,6 +2,17 @@
 
 [Français](HOME-ASSISTANT.md) · [English](HOME-ASSISTANT.en.md) · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · [Deutsch](HOME-ASSISTANT.de.md) · [Italiano](HOME-ASSISTANT.it.md) · [Português](HOME-ASSISTANT.pt.md) · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · **Čeština**
 
+## Dva způsoby připojení panelu
+
+- **Integrace OrbitDMD (doporučeno, panel 1.6.0 nebo novější)**: nainstalujte ji přes HACS z repozitáře
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant). MQTT není potřeba: panel se najde sám (Nastavení → Zařízení a služby), stačí
+  zadat heslo jeho webové stránky. V postranním panelu se objeví stránka **OrbitDMD** pro vytváření upozornění krok
+  za krokem: výběr animovaných GIFů, spouštějící entity, text (s hodnotou senzoru), hodiny klidu, omezení opakování
+  a blikající prioritní upozornění.
+- **MQTT** (popsáno níže): pro ty, kdo už používají MQTT, Node-RED nebo skripty.
+
+Používejte jedno **nebo** druhé: s oběma se panel v Home Assistant objeví dvakrát.
+
 Od verze 1.4.0 se panel připojuje k Home Assistant přes **MQTT** a objeví se tam sám (automatické
 zjišťování). Názvy entit odpovídají jazyku panelu (Nastavení → Displej → Jazyk panelu).
 

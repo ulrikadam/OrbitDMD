@@ -2,6 +2,17 @@
 
 [Français](HOME-ASSISTANT.md) · [English](HOME-ASSISTANT.en.md) · **Nederlands** · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · [Deutsch](HOME-ASSISTANT.de.md) · [Italiano](HOME-ASSISTANT.it.md) · [Português](HOME-ASSISTANT.pt.md) · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · [Čeština](HOME-ASSISTANT.cs.md)
 
+## Twee manieren om het paneel te koppelen
+
+- **OrbitDMD-integratie (aanbevolen, paneel 1.6.0 of nieuwer)**: installeer ze met HACS vanuit de repository
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant). Geen MQTT nodig: het paneel wordt vanzelf gevonden (Instellingen → Apparaten
+  en diensten), je geeft alleen het wachtwoord van de webpagina. Een **OrbitDMD**-pagina in de zijbalk maakt
+  stap voor stap meldingen: geanimeerde GIF's kiezen, activerende entiteiten, tekst (met de waarde van een sensor),
+  stille uren, herhaalbeperking en knipperende prioritaire meldingen.
+- **MQTT** (hieronder beschreven): voor wie al MQTT, Node-RED of scripts gebruikt.
+
+Gebruik het een **of** het ander: met beide verschijnt het paneel twee keer in Home Assistant.
+
 Vanaf versie 1.4.0 verbindt het paneel met Home Assistant via **MQTT** en verschijnt het daar vanzelf
 (automatische detectie). De namen van de entiteiten volgen de taal van het paneel (Instellingen → Weergave →
 Taal van het paneel).

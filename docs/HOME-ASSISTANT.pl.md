@@ -2,6 +2,17 @@
 
 [Français](HOME-ASSISTANT.md) · [English](HOME-ASSISTANT.en.md) · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · [Deutsch](HOME-ASSISTANT.de.md) · [Italiano](HOME-ASSISTANT.it.md) · [Português](HOME-ASSISTANT.pt.md) · **Polski** · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · [Čeština](HOME-ASSISTANT.cs.md)
 
+## Dwa sposoby połączenia panelu
+
+- **Integracja OrbitDMD (zalecana, panel 1.6.0 lub nowszy)**: zainstaluj ją przez HACS z repozytorium
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant). Bez MQTT: panel jest wykrywany automatycznie (Ustawienia → Urządzenia i usługi),
+  wystarczy podać hasło jego strony WWW. Na pasku bocznym pojawia się strona **OrbitDMD** do tworzenia powiadomień
+  krok po kroku: wybór animowanych GIF-ów, encje wyzwalające, tekst (z wartością czujnika), godziny ciszy,
+  ograniczenie powtórzeń i migające powiadomienia priorytetowe.
+- **MQTT** (opisane poniżej): dla osób, które już używają MQTT, Node-RED lub skryptów.
+
+Używaj jednego **albo** drugiego: przy obu panel pojawi się w Home Assistant dwa razy.
+
 Od wersji 1.4.0 panel łączy się z Home Assistant przez **MQTT** i sam się tam pojawia (automatyczne
 wykrywanie). Nazwy encji są w języku panelu (Ustawienia → Wyświetlacz → Język panelu).
 

@@ -574,6 +574,8 @@ boolean HAParseNotification (const char *pPayload, const TBannerStyle &rDefault,
 	S.bActive = TRUE;
 	S.Text[0] = '\0';
 	pNotification->Gif[0] = '\0';
+	pNotification->nGifPasses = 1;
+	pNotification->bBlink = FALSE;
 
 	const char *p = pPayload;
 	while (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n')
@@ -611,10 +613,20 @@ boolean HAParseNotification (const char *pPayload, const TBannerStyle &rDefault,
 	if (HAGetJSONValue (p, "police", Value, sizeof Value))		SetBannerStyleValue (&S, "Texte_Font", Value);
 	if (HAGetJSONValue (p, "taille", Value, sizeof Value))		SetBannerStyleValue (&S, "Texte_Font_Size", Value);
 	if (HAGetJSONValue (p, "vitesse", Value, sizeof Value))		SetBannerStyleValue (&S, "Texte_Vitesse", Value);
-	if (HAGetJSONValue (p, "passages", Value, sizeof Value))	SetBannerStyleValue (&S, "Texte_Passages", Value);
+	if (HAGetJSONValue (p, "passages", Value, sizeof Value))
+	{
+		SetBannerStyleValue (&S, "Texte_Passages", Value);
+		// demande explicite : la GIF aussi (10 fois au plus)
+		pNotification->nGifPasses = S.nPasses < 1 ? 1 : (S.nPasses > 10 ? 10 : S.nPasses);
+	}
 	if (HAGetJSONValue (p, "couleur", Value, sizeof Value))
 	{
 		HASetColorFromLabel (Value, &S.Style);		// "Rouge", "arc-en-ciel", "FF8000"
+	}
+	if (HAGetJSONValue (p, "clignote", Value, sizeof Value))
+	{
+		pNotification->bBlink =    strcmp (Value, "1") == 0 || strcasecmp (Value, "true") == 0
+					|| strcasecmp (Value, "oui") == 0 || strcasecmp (Value, "on") == 0;
 	}
 	if (HAGetJSONValue (p, "gif", Value, sizeof Value))
 	{

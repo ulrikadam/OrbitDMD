@@ -29,8 +29,9 @@ jak we flipperze lub automacie arcade:
   synchronizacja przez Internet;
 - 💬 **wiadomości**: przewijane teksty i odliczania (Boże Narodzenie, Nowy Rok, dowolna data), każde z własnym
   stylem i efektem wejścia (przewijanie, wjazd w górę, litera po literze, deszcz liter, przenikanie…);
-- 🏠 **Home Assistant**: panel sam się tam pojawia (MQTT); włączanie, jasność i wiadomości z twoich
-  automatyzacji ([poradnik](docs/HOME-ASSISTANT.pl.md));
+- 🏠 **Home Assistant**: dzięki [integracji OrbitDMD](https://github.com/ulrikadam/OrbitDMD-HomeAssistant) (HACS) panel jest wykrywany automatycznie, a strona
+  OrbitDMD krok po kroku tworzy powiadomienia (GIF, tekst, godziny ciszy, powiadomienie priorytetowe…); MQTT nadal działa
+  ([poradnik](docs/HOME-ASSISTANT.pl.md));
 - 🗓️ **harmonogram**: panel wyłączony w nocy lub tylko godzina w wybranych godzinach, kategorie GIF-ów według
   miesięcy (Boże Narodzenie w grudniu…), teksty i odliczania aktywne tylko między dwiema datami;
 - 📐 **za duże GIF-y same zmniejszane** do formatu panelu przy wysyłaniu;

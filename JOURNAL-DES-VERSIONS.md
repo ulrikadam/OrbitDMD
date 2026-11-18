@@ -15,6 +15,24 @@ programme (`dmd/`), puis reconstruire l'installateur (`bash outils/installateur/
 
 ---
 
+## 1.6.0 — 18 novembre 2026
+
+**Nouveautés**
+- **Intégration OrbitDMD pour Home Assistant** (installée avec HACS, dépôt
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant)) : sans MQTT, le panneau
+  est **trouvé tout seul** sur le réseau, et une page **OrbitDMD** dans Home Assistant crée les alertes pas à pas :
+  choisir une GIF parmi les vignettes animées, la ou les entités qui déclenchent (sonnette, portes…), le texte
+  (avec la valeur d'un capteur), puis les options : heures de silence, pas plus d'une fois toutes les X minutes,
+  **alerte prioritaire** qui clignote et se répète. En 12 langues. MQTT reste possible (utilisez l'un ou l'autre).
+- Notifications : **Passages** s'applique aussi à la GIF (2 passages = la GIF 2 fois, puis le texte 2 fois).
+- Notifications : texte **clignotant** pour les alertes prioritaires (champ `clignote`).
+- Nouvelles adresses pour les scripts : `POST /api/notification` (message, GIF, effet, couleur, passages,
+  vitesse, clignote) et `POST /api/luminosite` (0 à 100, ou `auto`).
+- Le panneau s'annonce sur le réseau comme service `_orbitdmd._tcp` (détection par Home Assistant), et
+  `/api/etat` donne son identifiant (numéro de série du Raspberry Pi) et son adresse MAC.
+- Page **Aide Home Assistant** : présentation de l'intégration.
+- Catégorie de GIF **Domotique** (60 GIF pour les alertes : sonnette, portes, lave-linge, chauffage…).
+
 ## 1.5.0 — 11 novembre 2026
 
 **Nouveautés**

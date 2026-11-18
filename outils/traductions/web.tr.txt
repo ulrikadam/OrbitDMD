@@ -757,3 +757,7 @@
 757 | Sunucuya ulaşılamıyor
 758 | Sunucu bağlantıyı kesti
 759 | Bağlantı koptu
+760 | OrbitDMD entegrasyonu (önerilen)
+761 | Home Assistant için OrbitDMD entegrasyonu MQTT olmadan çalışır: panel kendiliğinden bulunur ve bir OrbitDMD sayfası uyarıları adım adım oluşturmanızı sağlar (GIF, metin, sessiz saatler…).
+762 | Entegrasyonu yükle (HACS)
+763 | Entegrasyonu veya MQTT'yi kullanın, ikisini birden değil: panel iki kez görünür. Bu sayfanın geri kalanı MQTT ile ilgilidir.

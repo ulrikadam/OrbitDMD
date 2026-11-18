@@ -757,3 +757,7 @@
 757 | Server non raggiungibile
 758 | Disconnesso dal server
 759 | Connessione persa
+760 | Integrazione OrbitDMD (consigliata)
+761 | L'integrazione OrbitDMD per Home Assistant funziona senza MQTT: il pannello viene trovato da solo e una pagina OrbitDMD permette di creare gli avvisi passo dopo passo (GIF, testo, ore di silenzio…).
+762 | Installa l'integrazione (HACS)
+763 | Usa l'integrazione o MQTT, non entrambi: il pannello apparirebbe due volte. Il resto di questa pagina riguarda MQTT.

@@ -2,6 +2,17 @@
 
 **Français** · [English](HOME-ASSISTANT.en.md) · [Nederlands](HOME-ASSISTANT.nl.md) · [Español](HOME-ASSISTANT.es.md) · [Русский](HOME-ASSISTANT.ru.md) · [Deutsch](HOME-ASSISTANT.de.md) · [Italiano](HOME-ASSISTANT.it.md) · [Português](HOME-ASSISTANT.pt.md) · [Polski](HOME-ASSISTANT.pl.md) · [Українська](HOME-ASSISTANT.uk.md) · [Türkçe](HOME-ASSISTANT.tr.md) · [Čeština](HOME-ASSISTANT.cs.md)
 
+## Deux façons de relier le panneau
+
+- **Intégration OrbitDMD (conseillé, panneau 1.6.0 ou plus récent)** : installez-la avec HACS depuis le dépôt
+  [OrbitDMD-HomeAssistant](https://github.com/ulrikadam/OrbitDMD-HomeAssistant). Pas besoin de MQTT : le panneau est trouvé tout seul (Paramètres → Appareils
+  et services), il suffit d'indiquer le mot de passe de sa page web. Une page **OrbitDMD** apparaît dans la barre
+  latérale pour créer les alertes pas à pas : GIF animées à choisir, entités qui déclenchent, texte (avec la valeur
+  d'un capteur), heures de silence, anti-répétition et alerte prioritaire qui clignote.
+- **MQTT** (décrit ci-dessous) : pour ceux qui utilisent déjà MQTT, Node-RED ou des scripts.
+
+Utilisez l'une **ou** l'autre : avec les deux, le panneau apparaît deux fois dans Home Assistant.
+
 À partir de la version 1.4.0, le panneau se relie à Home Assistant par **MQTT** et y apparaît tout seul
 (découverte automatique). Les noms des éléments suivent la langue du panneau (Réglages → Affichage →
 Langue du panneau).

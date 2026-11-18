@@ -125,7 +125,6 @@ void CHomeAssistant::OnMessage (const char *pTopic, const u8 *pPayload, size_t n
 
 	if (strcmp (pObject, "notification") == 0 || strcmp (pObject, "texte/set") == 0)
 	{
-		THANotification Notification;
 		boolean bText = strcmp (pObject, "texte/set") == 0;
 		if (bText)
 		{
@@ -138,11 +137,8 @@ void CHomeAssistant::OnMessage (const char *pTopic, const u8 *pPayload, size_t n
 			Topic.Format ("%s/texte/etat", (const char *) m_Base);
 			Publish (Topic, (const u8 *) Payload, strlen (Payload), MQTT_QOS1, TRUE);
 		}
-		if (HAParseNotification (Payload, CMessages::s_Notify, &Notification))
+		if (QueueNotification (Payload))
 		{
-			s_Notification = Notification;
-			s_bNotification = TRUE;
-			pRemote->RequestPlay (NOTIFY_PLAY_REQUEST);
 			CLogger::Get ()->Write (From, LogNotice, "Message de Home Assistant");
 		}
 		return;
@@ -379,6 +375,20 @@ void CHomeAssistant::PublishState (boolean bAll)
 		PublishValue ("temperature", Value, &m_Last[LastTemperature], bAll);
 		PublishValue ("ip", m_IPAddress, &m_Last[LastIP], bAll);
 	}
+}
+
+boolean CHomeAssistant::QueueNotification (const char *pPayload)
+{
+	THANotification Notification;
+	if (!HAParseNotification (pPayload, CMessages::s_Notify, &Notification))
+	{
+		return FALSE;
+	}
+	s_Notification = Notification;
+	s_bNotification = TRUE;
+	CRemoteControl::Get ()->RequestPlay (NOTIFY_PLAY_REQUEST);
+
+	return TRUE;
 }
 
 boolean CHomeAssistant::TakeNotification (THANotification *pNotification)
