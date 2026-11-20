@@ -9,6 +9,7 @@
   wystarczy podać hasło jego strony WWW. Na pasku bocznym pojawia się strona **OrbitDMD** do tworzenia powiadomień
   krok po kroku: wybór animowanych GIF-ów, encje wyzwalające, tekst (z wartością czujnika), godziny ciszy,
   ograniczenie powtórzeń i migające powiadomienia priorytetowe.
+  **Jest w oficjalnym sklepie HACS: wystarczy wyszukać „OrbitDMD” w HACS.**
 - **MQTT** (opisane poniżej): dla osób, które już używają MQTT, Node-RED lub skryptów.
 
 Używaj jednego **albo** drugiego: przy obu panel pojawi się w Home Assistant dwa razy.

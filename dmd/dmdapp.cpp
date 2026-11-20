@@ -37,6 +37,9 @@ CDmdApp::CDmdApp (CMemorySystem *pMemorySystem, CMatrix *pMatrix, CConfig *pConf
 	m_pFileBuffer (0),
 	m_pBlack (0),
 	m_bBannerBlink (FALSE),
+	m_pIcon (0),
+	m_nIconX0 (0),
+	m_nIconWidth (0),
 	m_ppFiles (0),
 	m_nFiles (0),
 	m_bInRemoteRequest (FALSE),
@@ -998,6 +1001,32 @@ void CDmdApp::ShowMessages (boolean bEveryTime)
 // clignotement du texte des alertes prioritaires ("clignote" dans la notification)
 #define BLINK_PERIOD_MS	700
 #define BLINK_ON_MS	450
+#define ICON_GAP	3		// colonnes noires entre l'icone et le texte
+
+// "Categorie/nom.gif" d'une notification -> chemin sur la carte (FALSE si le nom est refuse)
+static boolean NotificationPath (const char *pGif, CString *pPath)
+{
+	char Category[64], Name[CGifManager::MaxNameLength + 1];
+	const char *pSlash = strchr (pGif, '/');
+	if (pSlash == 0)
+	{
+		return FALSE;
+	}
+	size_t nCategory = pSlash - pGif;
+	if (nCategory >= sizeof Category || strlen (pSlash + 1) >= sizeof Name)
+	{
+		return FALSE;
+	}
+	memcpy (Category, pGif, nCategory);
+	Category[nCategory] = '\0';
+	strcpy (Name, pSlash + 1);
+	if (!CGifManager::IsValidCategory (Category) || !CGifManager::IsValidFileName (Name))
+	{
+		return FALSE;
+	}
+	pPath->Format ("%s/%s/%s", GIF_DIR, Category, Name);
+	return TRUE;
+}
 
 void CDmdApp::ShowNotification (void)
 {
@@ -1007,46 +1036,163 @@ void CDmdApp::ShowNotification (void)
 		return;
 	}
 
-	if (N.Gif[0] != '\0')
+	CString Path;
+	if (N.Gif[0] != '\0' && NotificationPath (N.Gif, &Path))
 	{
-		char Category[64], Name[CGifManager::MaxNameLength + 1];
-		const char *pSlash = strchr (N.Gif, '/');
-		size_t nCategory = pSlash - N.Gif;
-		if (nCategory < sizeof Category && strlen (pSlash + 1) < sizeof Name)
+		// "passages" de la notification : la GIF est rejouee autant de fois que le texte
+		for (unsigned nPass = 0; nPass < N.nGifPasses; nPass++)
 		{
-			memcpy (Category, N.Gif, nCategory);
-			Category[nCategory] = '\0';
-			strcpy (Name, pSlash + 1);
-			if (CGifManager::IsValidCategory (Category) && CGifManager::IsValidFileName (Name))
+			if (   (nPass > 0 && CRemoteControl::Get ()->IsPlayRequested ())
+			    || !PlayGif (Path))
 			{
-				CString Path;
-				Path.Format ("%s/%s/%s", GIF_DIR, Category, Name);
-				// "passages" de la notification : la GIF est rejouee autant de fois que le texte
-				for (unsigned nPass = 0; nPass < N.nGifPasses; nPass++)
-				{
-					if (   (nPass > 0 && CRemoteControl::Get ()->IsPlayRequested ())
-					    || !PlayGif (Path))
-					{
-						break;
-					}
-				}
+				break;
 			}
 		}
 	}
 
 	if (N.Style.Text[0] != '\0' && !CRemoteControl::Get ()->IsPlayRequested ())
 	{
+		// "icone" : petite GIF animee a gauche, le texte defile a cote
+		if (N.Icon[0] != '\0' && NotificationPath (N.Icon, &Path) && LoadIcon (Path))
+		{
+			m_pClock->SetTextWidth (m_pCanvas->GetWidth () - IconArea ());
+		}
 		m_bBannerBlink = N.bBlink;
 		ShowBanner (N.Style);
 		m_bBannerBlink = FALSE;
+		m_pClock->SetTextWidth (0);
+		m_nIconWidth = 0;
 	}
 }
 
-// alerte prioritaire : le texte s'allume BLINK_ON_MS, s'eteint le reste de BLINK_PERIOD_MS
+// icone d'une notification : le decodeur centre l'image sur le panneau ; on repere les colonnes
+// dessinees (sur toutes les images) pour la placer a gauche. Plus large que la moitie du panneau
+// (une GIF de notification complete, par exemple) : refusee, le texte prend toute la largeur.
+boolean CDmdApp::LoadIcon (const char *pPath)
+{
+	m_nIconWidth = 0;
+
+	FIL File;
+	if (f_open (&File, pPath, FA_READ | FA_OPEN_EXISTING) != FR_OK)
+	{
+		CLogger::Get ()->Write (From, LogWarning, "Icone introuvable : %s", pPath);
+		return FALSE;
+	}
+	FSIZE_t nSize = f_size (&File);
+	boolean bRead = nSize > 0 && nSize <= FileBufferSize
+			&& ReadChunked (&File, m_pFileBuffer, (unsigned) nSize);
+	f_close (&File);
+
+	const unsigned W = m_pCanvas->GetWidth ();
+	const unsigned H = m_pCanvas->GetHeight ();
+	if (m_pIcon == 0)
+	{
+		m_pIcon = new CGifAnimation (W, H);
+	}
+	m_pIcon->Clear ();
+	if (!bRead || !m_pIcon->Decode (m_pFileBuffer, (unsigned) nSize) || m_pIcon->GetFrameCount () == 0)
+	{
+		CLogger::Get ()->Write (From, LogWarning, "Icone illisible : %s", pPath);
+		return FALSE;
+	}
+
+	int x0 = (int) W, x1 = -1;
+	for (unsigned i = 0; i < m_pIcon->GetFrameCount (); i++)
+	{
+		const u8 *pFrame = m_pIcon->GetFrame (i);
+		for (unsigned y = 0; y < H; y++)
+		{
+			for (unsigned x = 0; x < W; x++)
+			{
+				const u8 *p = pFrame + (y * W + x) * 3;
+				if (p[0] > 24 || p[1] > 24 || p[2] > 24)
+				{
+					if ((int) x < x0)	x0 = (int) x;
+					if ((int) x > x1)	x1 = (int) x;
+				}
+			}
+		}
+	}
+	if (x1 < x0 || (unsigned) (x1 - x0 + 1) > W / 2)
+	{
+		CLogger::Get ()->Write (From, LogWarning, "Icone trop large ou vide : %s", pPath);
+		return FALSE;
+	}
+
+	m_nIconX0 = (unsigned) x0;
+	m_nIconWidth = (unsigned) (x1 - x0 + 1);
+	return TRUE;
+}
+
+// largeur reservee a l'icone (avec un petit espace), 0 sans icone
+unsigned CDmdApp::IconArea (void) const
+{
+	return m_nIconWidth != 0 ? m_nIconWidth + ICON_GAP : 0;
+}
+
+// image de l'icone a l'instant nMillis (l'animation tourne en boucle pendant le texte)
+const u8 *CDmdApp::IconFrame (unsigned nMillis) const
+{
+	unsigned nTotal = m_pIcon->GetTotalDuration ();
+	unsigned t = nTotal != 0 ? nMillis % nTotal : 0;
+	for (unsigned i = 0; i < m_pIcon->GetFrameCount (); i++)
+	{
+		unsigned nDelay = m_pIcon->GetDelay (i);
+		if (t < nDelay)
+		{
+			return m_pIcon->GetFrame (i);
+		}
+		t -= nDelay;
+	}
+	return m_pIcon->GetFrame (0);
+}
+
+// texte en page avec icone : la page, centree sur tout le panneau, est decalee a droite de l'icone
+void CDmdApp::ShiftTextForIcon (void)
+{
+	if (m_nIconWidth == 0)
+	{
+		return;
+	}
+	const unsigned W = m_pCanvas->GetWidth ();
+	const unsigned H = m_pCanvas->GetHeight ();
+	const unsigned nShift = IconArea () / 2;
+	u8 *pPixels = m_pCanvas->GetPixels ();
+	for (unsigned y = 0; y < H; y++)
+	{
+		u8 *pRow = pPixels + y * W * 3;
+		memmove (pRow + nShift * 3, pRow, (W - nShift) * 3);
+		memset (pRow, 0, nShift * 3);
+	}
+}
+
+// alerte prioritaire : le texte s'allume BLINK_ON_MS, s'eteint le reste de BLINK_PERIOD_MS ;
+// icone : dessinee a gauche, par-dessus le texte (qui passe derriere elle)
 void CDmdApp::ShowBannerFrame (unsigned nMillis)
 {
 	boolean bDark = m_bBannerBlink && nMillis % BLINK_PERIOD_MS >= BLINK_ON_MS;
-	m_pMatrix->Show (bDark ? m_pBlack : m_pCanvas->GetData ());
+	if (m_nIconWidth == 0)
+	{
+		m_pMatrix->Show (bDark ? m_pBlack : m_pCanvas->GetData ());
+		return;
+	}
+
+	const unsigned W = m_pCanvas->GetWidth ();
+	const unsigned H = m_pCanvas->GetHeight ();
+	const unsigned A = IconArea ();
+	const u8 *pIcon = IconFrame (nMillis);
+	u8 *pPixels = m_pCanvas->GetPixels ();
+	for (unsigned y = 0; y < H; y++)
+	{
+		u8 *pRow = pPixels + y * W * 3;
+		memset (pRow, 0, A * 3);
+		memcpy (pRow, pIcon + (y * W + m_nIconX0) * 3, m_nIconWidth * 3);
+		if (bDark)
+		{
+			memset (pRow + A * 3, 0, (W - A) * 3);	// l'icone reste visible
+		}
+	}
+	m_pMatrix->Show (pPixels);
 }
 
 // "Afficher maintenant" de la page Messages : ":texte:N" ou ":compte:N"
@@ -1097,7 +1243,7 @@ boolean CDmdApp::RunPagePhase (const TBannerStyle &rItem, const char *pPage, uns
 
 		// redessiner quand l'image change : avancement, ou arc-en-ciel / motif anime
 		unsigned nKey = nPhase == CClockRenderer::PageHold ? 0 : nProgress;
-		if (bRainbow || strcmp (rItem.Style.Pattern, CLOCK_NONE) != 0)
+		if (bRainbow || strcmp (rItem.Style.Pattern, CLOCK_NONE) != 0 || m_nIconWidth != 0)
 		{
 			nKey = nKey * 4099 + nMillis / 30;
 		}
@@ -1109,6 +1255,7 @@ boolean CDmdApp::RunPagePhase (const TBannerStyle &rItem, const char *pPage, uns
 		{
 			m_pClock->RenderPage (rItem.Style, pPage, rItem.Effect, nPhase,
 					      nProgress > 1000 ? 1000 : nProgress, nMillis, m_pCanvas);
+			ShiftTextForIcon ();
 			ShowBannerFrame (nMillis);
 			nLastKey = nKey;
 		}
@@ -1170,9 +1317,11 @@ void CDmdApp::ShowBanner (const TBannerStyle &rItem)
 		return;
 	}
 
-	// defilement : de droite a gauche, ou de gauche a droite (inverse)
+	// defilement : de droite a gauche, ou de gauche a droite (inverse) ; toujours sur une ligne
+	Banner.Style.nLines = 0;
 	int nTextWidth = m_pClock->GetTextWidth (Banner.Style, Text);
-	int nDistance = W + nTextWidth;		// un passage complet
+	const int A = (int) IconArea ();	// icone a gauche : le texte disparait derriere elle
+	int nDistance = W - A + nTextWidth;	// un passage complet
 	unsigned nSpeed = BannerPixelsPerSecond (Banner.nSpeed);
 	boolean bReverse = Banner.Effect == EffectReverse;
 	boolean bAnimated = strcmp (Banner.Style.Pattern, CLOCK_NONE) != 0;
@@ -1197,9 +1346,9 @@ void CDmdApp::ShowBanner (const TBannerStyle &rItem)
 
 		int nOffset = (int) (nTravel % nDistance);
 		if (   nOffset != nLastOffset || (bAnimated && nMillis - nLastMillis >= 30)
-		    || (m_bBannerBlink && nMillis - nLastMillis >= 30))
+		    || ((m_bBannerBlink || m_nIconWidth != 0) && nMillis - nLastMillis >= 30))
 		{
-			int x = bReverse ? nOffset - nTextWidth : W - nOffset;
+			int x = bReverse ? A + nOffset - nTextWidth : W - nOffset;
 			m_pClock->RenderScroll (Banner.Style, Text, x, nMillis, m_pCanvas);
 			ShowBannerFrame (nMillis);
 			nLastOffset = nOffset;

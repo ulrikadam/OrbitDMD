@@ -15,6 +15,22 @@ programme (`dmd/`), puis reconstruire l'installateur (`bash outils/installateur/
 
 ---
 
+## 1.7.0 — 20 novembre 2026
+
+**Nouveautés**
+- **Icône + texte** : une notification peut montrer une petite GIF animée à gauche et le texte à côté
+  (champ `icone`, par exemple `Icones/temperature.gif`). En défilement, le texte passe derrière l'icône ;
+  avec les effets en pages, il est centré dans la place qui reste. Le texte clignote, l'icône reste visible.
+- Nouvelle catégorie de GIF **Icones** (101 icônes : le dessin de chaque GIF Domotique, même nom), et
+  **40 nouvelles GIF Domotique** (100 au total).
+- **Texte sur deux lignes** (champ `lignes` = 2) avec les effets en pages (monte, descend, lettre par
+  lettre, pluie, fondu) : la taille automatique s'adapte à la moitié de l'écran, la pluie tombe ligne par ligne.
+- Le panneau donne ses **polices** à Home Assistant (`/fonts/voir?f=Orbitron.ttf`) : l'aperçu des alertes
+  dans la page OrbitDMD montre la vraie police.
+- Intégration Home Assistant **1.1.0** : choix de l'effet, de la police, de la taille et des lignes avec un
+  aperçu animé fidèle au panneau, icône + texte, et de nouveaux déclencheurs (jour et heure, seuil d'une
+  valeur, lever ou coucher du soleil, événement d'agenda, à intervalle régulier).
+
 ## 1.6.0 — 18 novembre 2026
 
 **Nouveautés**

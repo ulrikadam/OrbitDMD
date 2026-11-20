@@ -662,6 +662,10 @@ static boolean SetTextStyleKey (TTextStyle *pText, const char *pName, const char
 	{
 		if (ParseNumber (pValue, CLOCK_MAX_SIZE, &nValue))	pText->nSize = nValue;
 	}
+	else if (strcasecmp (pName, "Lignes") == 0)
+	{
+		if (ParseNumber (pValue, 2, &nValue))			pText->nLines = nValue;
+	}
 	else if (strcasecmp (pName, "Font_Pattern") == 0)
 	{
 		if (IsNone (pValue))					CopyText (pText->Pattern, CLOCK_NONE, CLOCK_NAME_LEN);

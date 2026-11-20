@@ -9,6 +9,7 @@
   zadat heslo jeho webové stránky. V postranním panelu se objeví stránka **OrbitDMD** pro vytváření upozornění krok
   za krokem: výběr animovaných GIFů, spouštějící entity, text (s hodnotou senzoru), hodiny klidu, omezení opakování
   a blikající prioritní upozornění.
+  **Je v oficiálním obchodě HACS: stačí v HACS vyhledat „OrbitDMD“.**
 - **MQTT** (popsáno níže): pro ty, kdo už používají MQTT, Node-RED nebo skripty.
 
 Používejte jedno **nebo** druhé: s oběma se panel v Home Assistant objeví dvakrát.

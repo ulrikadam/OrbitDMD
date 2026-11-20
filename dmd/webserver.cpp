@@ -252,7 +252,7 @@ THTTPStatus CWebServer::GetContent (const char  *pPath,
 	{
 		char Name[CLOCK_NAME_LEN];
 		if (   !GetParam (pParams, "f", Name, sizeof Name)
-		    || !IsValidAssetName (Name, "png,gif"))
+		    || !IsValidAssetName (Name, "png,gif,ttf,otf"))
 		{
 			return HTTPNotFound;
 		}
@@ -262,7 +262,12 @@ THTTPStatus CWebServer::GetContent (const char  *pPath,
 		{
 			return HTTPNotFound;
 		}
-		*ppContentType = (*pLength >= 4 && memcmp (pBuffer, "GIF8", 4) == 0)
+		// polices : pour l'apercu des messages dans Home Assistant (meme rendu que le panneau)
+		size_t nName = strlen (Name);
+		boolean bFont = nName > 4 && (   strcasecmp (Name + nName - 4, ".ttf") == 0
+					      || strcasecmp (Name + nName - 4, ".otf") == 0);
+		*ppContentType = bFont ? "font/ttf\r\nCache-Control: private, max-age=86400"
+				 : (*pLength >= 4 && memcmp (pBuffer, "GIF8", 4) == 0)
 				 ? GIF_TYPE_CACHED : "image/png\r\nCache-Control: private, max-age=86400";
 		return HTTPOK;
 	}
@@ -667,11 +672,11 @@ THTTPStatus CWebServer::HandlePost (const char *pPath, const TForm &rForm,
 		AddClockAsset (pType, rForm.FileName, rForm.pFile, rForm.nFileLength, pReply);
 	}
 	// notification (integration Home Assistant, scripts) : champs message, effet, couleur, police,
-	// taille, vitesse, passages, gif, clignote ; ou champ "json" (meme texte que le sujet MQTT notification)
+	// taille, lignes, vitesse, passages, gif, clignote, icone ; ou champ "json" (meme texte que le sujet MQTT notification)
 	else if (strcmp (pPath, "/api/notification") == 0)
 	{
-		static const char *Keys[] = {"message", "effet", "couleur", "police", "taille", "vitesse", "passages", "gif",
-					     "clignote"};
+		static const char *Keys[] = {"message", "effet", "couleur", "police", "taille", "lignes", "vitesse", "passages",
+					     "gif", "clignote", "icone"};
 		CString Json ("{");
 		const char *pJson = 0;
 		for (unsigned i = 0; i < rForm.nFields; i++)

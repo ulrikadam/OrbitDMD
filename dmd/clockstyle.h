@@ -30,6 +30,7 @@ struct TTextStyle
 	char	 Pattern[CLOCK_NAME_LEN];	// "None" : couleur unie ; sinon image PNG ou GIF
 	u8	 Color[3];
 	char	 Format[CLOCK_FORMAT_LEN];	// %H %M %S %d %b ... (voir FormatDateTime)
+	unsigned nLines;			// textes en pages : 2 = deux lignes par page (0 ou 1 : une)
 };
 
 enum TDateMode

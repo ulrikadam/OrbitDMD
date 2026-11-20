@@ -58,6 +58,10 @@ public:
 	// taille automatique pour les effets de page : la plus grande qui donne au plus 3 pages
 	// sans mot coupe (sinon la plus grande sans mot coupe) ; une taille choisie est gardee
 	void FitPages (TTextStyle *pStyle, const char *pText);
+	// largeur de la ligne la plus large d'une page (lignes separees par un saut de ligne)
+	int PageWidth (const TTextStyle &rStyle, const char *pPage);
+	// largeur disponible pour les pages (icone de notification a gauche) ; 0 = tout le panneau
+	void SetTextWidth (unsigned nWidth)	{ m_nTextWidth = nWidth; }
 
 	// compte a rebours : titre en police Pixel au-dessus (peut etre vide), valeur dessous
 	void RenderCountdown (const TCountdownStyle &rStyle, const char *pTitle, const char *pValue,
@@ -140,6 +144,8 @@ private:
 			unsigned nMillis, u8 *pOut);
 
 	unsigned LineSize (const TTextStyle &rStyle, int nMaxHeight, TMetrics *pMetrics);
+	unsigned SplitLines (const TTextStyle &rStyle, const char *pText, char (*pLines)[BANNER_TEXT_LEN],
+			     unsigned nMaxLines);
 
 	static unsigned FrameAt (const CGifAnimation *pAnim, unsigned nMillis);
 	static void HueToRGB (unsigned nHue, u8 *pRGB);
@@ -148,6 +154,7 @@ private:
 private:
 	unsigned m_nWidth;
 	unsigned m_nHeight;
+	unsigned m_nTextWidth;		// 0 : m_nWidth (SetTextWidth)
 
 	TFont m_Font[SlotCount];
 	TImage m_Pattern[SlotCount];

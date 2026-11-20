@@ -43,6 +43,7 @@ struct THANotification
 	char Gif[HA_NOTIFY_GIF_LEN];	// "Categorie/nom.gif" a jouer avant, ou vide
 	unsigned nGifPasses;		// nombre de fois que la GIF est jouee ("passages" donne : comme le texte)
 	boolean bBlink;			// "clignote" : texte clignotant (alerte prioritaire)
+	char Icon[HA_NOTIFY_GIF_LEN];	// "icone" : petite GIF a gauche du texte, ou vide
 };
 
 // texte simple ou JSON -> notification (style de depart : rDefault, reglable depuis Home

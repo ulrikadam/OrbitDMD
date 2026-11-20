@@ -9,6 +9,7 @@
   & Dienste), Sie geben nur das Passwort seiner Webseite ein. Eine **OrbitDMD**-Seite in der Seitenleiste erstellt
   Meldungen Schritt für Schritt: animierte GIFs zur Auswahl, auslösende Entitäten, Text (mit dem Wert eines Sensors),
   Ruhezeiten, Wiederholungssperre und blinkende prioritäre Meldungen.
+  **Sie ist im offiziellen HACS-Store: einfach in HACS nach „OrbitDMD“ suchen.**
 - **MQTT** (unten beschrieben): für alle, die schon MQTT, Node-RED oder Skripte nutzen.
 
 Verwenden Sie das eine **oder** das andere: mit beiden erscheint das Panel doppelt in Home Assistant.

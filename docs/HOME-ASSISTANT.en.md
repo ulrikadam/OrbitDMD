@@ -9,6 +9,7 @@
   & services), you only enter the password of its web page. An **OrbitDMD** page appears in the sidebar to create
   alerts step by step: animated GIF picker, triggering entities, text (with a sensor value), quiet hours, cooldown
   and blinking priority alerts.
+  **It is in the official HACS store: simply search for “OrbitDMD” in HACS.**
 - **MQTT** (described below): for those already using MQTT, Node-RED or scripts.
 
 Use one **or** the other: with both, the panel appears twice in Home Assistant.

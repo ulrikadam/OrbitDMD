@@ -9,6 +9,7 @@
   basta con indicar la contraseña de su página web. Una página **OrbitDMD** aparece en la barra lateral para crear
   las alertas paso a paso: GIF animados para elegir, entidades que activan, texto (con el valor de un sensor),
   horas de silencio, antirrepetición y alerta prioritaria que parpadea.
+  **Está en la tienda oficial de HACS: basta con buscar «OrbitDMD» en HACS.**
 - **MQTT** (descrito abajo): para quien ya usa MQTT, Node-RED o scripts.
 
 Use uno **u** otro: con los dos, el panel aparece dos veces en Home Assistant.

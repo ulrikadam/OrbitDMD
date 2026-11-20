@@ -410,6 +410,11 @@ int main (int argc, char **argv)
 		CHECK (HAParseNotification ("{\"message\":\"Alarme\",\"clignote\":\"1\"}", Def, &N) && N.bBlink);
 		CHECK (HAParseNotification ("{\"message\":\"Alarme\",\"clignote\":true}", Def, &N) && N.bBlink);
 		CHECK (HAParseNotification ("{\"message\":\"Alarme\",\"clignote\":\"0\"}", Def, &N) && !N.bBlink);
+		// icone a gauche du texte : meme controle du nom que la GIF
+		CHECK (HAParseNotification ("{\"message\":\"21,5 C\",\"icone\":\"Icones/temperature.gif\"}", Def, &N)
+		       && strcmp (N.Icon, "Icones/temperature.gif") == 0 && N.Gif[0] == '\0');
+		CHECK (HAParseNotification ("{\"message\":\"x\",\"icone\":\"../Config/config.txt\"}", Def, &N) && N.Icon[0] == '\0');
+		CHECK (HAParseNotification ("{\"message\":\"x\"}", Def, &N) && N.Icon[0] == '\0');
 		CHECK (HAParseNotification ("{\"gif\":\"XMAS/sapin.gif\",\"passages\":40}", Def, &N)
 		       && N.nGifPasses == N.Style.nPasses && N.nGifPasses <= 10);	// valeur refusee : passages par defaut
 		CHECK (HAParseNotification ("{\"message\":\"Colis\",\"couleur\":\"#FF8000\",\"gif\":\"../../Config/config.txt\"}", Def, &N)

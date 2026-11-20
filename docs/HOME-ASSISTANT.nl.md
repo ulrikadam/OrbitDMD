@@ -9,6 +9,7 @@
   en diensten), je geeft alleen het wachtwoord van de webpagina. Een **OrbitDMD**-pagina in de zijbalk maakt
   stap voor stap meldingen: geanimeerde GIF's kiezen, activerende entiteiten, tekst (met de waarde van een sensor),
   stille uren, herhaalbeperking en knipperende prioritaire meldingen.
+  **Ze staat in de officiële HACS-winkel: zoek gewoon naar „OrbitDMD” in HACS.**
 - **MQTT** (hieronder beschreven): voor wie al MQTT, Node-RED of scripts gebruikt.
 
 Gebruik het een **of** het ander: met beide verschijnt het paneel twee keer in Home Assistant.

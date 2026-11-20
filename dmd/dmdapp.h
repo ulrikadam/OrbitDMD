@@ -47,7 +47,11 @@ private:
 	void ShowAddress (void);
 	void ShowMessages (boolean bEveryTime);
 	void ShowBanner (const TBannerStyle &rItem);
-	void ShowBannerFrame (unsigned nMillis);	// image du texte (noire par moments si clignotant)
+	void ShowBannerFrame (unsigned nMillis);
+	boolean LoadIcon (const char *pPath);		// icone de notification (m_pIcon)
+	unsigned IconArea (void) const;
+	const u8 *IconFrame (unsigned nMillis) const;
+	void ShiftTextForIcon (void);	// image du texte (noire par moments si clignotant)
 	boolean ShowCountdown (const TCountdownStyle &rItem, unsigned nDuration);
 	void ShowMessageNow (const char *pRequest);
 	void ShowNotification (void);
@@ -108,6 +112,9 @@ private:
 	u8 *m_pFileBuffer;
 	u8 *m_pBlack;			// image noire (affichage eteint)
 	boolean m_bBannerBlink;		// texte en cours : alerte prioritaire qui clignote
+	CGifAnimation *m_pIcon;		// icone de la notification en cours (gauche du texte)
+	unsigned m_nIconX0;		// premiere colonne dessinee de l'icone (image centree)
+	unsigned m_nIconWidth;		// 0 : pas d'icone
 	CString **m_ppFiles;
 	unsigned m_nFiles;
 

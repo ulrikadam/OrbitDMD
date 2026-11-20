@@ -567,6 +567,8 @@ boolean HAGetJSONValue (const char *pJSON, const char *pKey, char *pValue, unsig
 	return FALSE;
 }
 
+static void CopyGifName (const char *pValue, char (&Dest)[HA_NOTIFY_GIF_LEN]);
+
 boolean HAParseNotification (const char *pPayload, const TBannerStyle &rDefault, THANotification *pNotification)
 {
 	TBannerStyle &S = pNotification->Style;
@@ -574,6 +576,7 @@ boolean HAParseNotification (const char *pPayload, const TBannerStyle &rDefault,
 	S.bActive = TRUE;
 	S.Text[0] = '\0';
 	pNotification->Gif[0] = '\0';
+	pNotification->Icon[0] = '\0';
 	pNotification->nGifPasses = 1;
 	pNotification->bBlink = FALSE;
 
@@ -612,6 +615,7 @@ boolean HAParseNotification (const char *pPayload, const TBannerStyle &rDefault,
 	    && !HASetEffectFromLabel (Value, &S))				SetBannerStyleValue (&S, "Texte_Effet", Value);
 	if (HAGetJSONValue (p, "police", Value, sizeof Value))		SetBannerStyleValue (&S, "Texte_Font", Value);
 	if (HAGetJSONValue (p, "taille", Value, sizeof Value))		SetBannerStyleValue (&S, "Texte_Font_Size", Value);
+	if (HAGetJSONValue (p, "lignes", Value, sizeof Value))		SetBannerStyleValue (&S, "Texte_Lignes", Value);
 	if (HAGetJSONValue (p, "vitesse", Value, sizeof Value))		SetBannerStyleValue (&S, "Texte_Vitesse", Value);
 	if (HAGetJSONValue (p, "passages", Value, sizeof Value))
 	{
@@ -630,14 +634,25 @@ boolean HAParseNotification (const char *pPayload, const TBannerStyle &rDefault,
 	}
 	if (HAGetJSONValue (p, "gif", Value, sizeof Value))
 	{
-		size_t nLength = strlen (Value);
-		const char *pSlash = strchr (Value, '/');
-		if (   nLength < sizeof pNotification->Gif && pSlash != 0 && strchr (pSlash + 1, '/') == 0
-		    && strstr (Value, "..") == 0 && strchr (Value, '\\') == 0 && strchr (Value, ':') == 0)
-		{
-			strcpy (pNotification->Gif, Value);	// verifie encore a l'affichage (gifmanager)
-		}
+		CopyGifName (Value, pNotification->Gif);
+	}
+	if (HAGetJSONValue (p, "icone", Value, sizeof Value))
+	{
+		CopyGifName (Value, pNotification->Icon);
 	}
 
 	return S.Text[0] != '\0' || pNotification->Gif[0] != '\0';
+}
+
+// "Categorie/nom.gif" d'une notification (GIF ou icone) : un seul "/", rien qui sorte du dossier
+// des GIF ; verifie encore a l'affichage (gifmanager)
+static void CopyGifName (const char *pValue, char (&Dest)[HA_NOTIFY_GIF_LEN])
+{
+	size_t nLength = strlen (pValue);
+	const char *pSlash = strchr (pValue, '/');
+	if (   nLength < sizeof Dest && pSlash != 0 && strchr (pSlash + 1, '/') == 0
+	    && strstr (pValue, "..") == 0 && strchr (pValue, '\\') == 0 && strchr (pValue, ':') == 0)
+	{
+		strcpy (Dest, pValue);
+	}
 }

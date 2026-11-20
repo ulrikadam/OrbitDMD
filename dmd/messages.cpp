@@ -164,6 +164,7 @@ void CMessages::Export (CString *pText)
 		AppendNumber (pText, "Texte_Passages", T.nPasses);
 		AppendLine (pText, "Texte_Font", T.Style.Font);
 		AppendNumber (pText, "Texte_Font_Size", T.Style.nSize);
+		AppendNumber (pText, "Texte_Lignes", T.Style.nLines);
 		AppendColor (pText, "Texte_Color", T.Style.Color);
 		AppendLine (pText, "Texte_Font_Pattern", T.Style.Pattern);
 		AppendLine (pText, "Texte_Du", T.From);
@@ -176,6 +177,7 @@ void CMessages::Export (CString *pText)
 	AppendNumber (pText, "Texte_Passages", s_Notify.nPasses);
 	AppendLine (pText, "Texte_Font", s_Notify.Style.Font);
 	AppendNumber (pText, "Texte_Font_Size", s_Notify.Style.nSize);
+	AppendNumber (pText, "Texte_Lignes", s_Notify.Style.nLines);
 	AppendColor (pText, "Texte_Color", s_Notify.Style.Color);
 	AppendLine (pText, "Texte_Font_Pattern", s_Notify.Style.Pattern);
 
@@ -246,6 +248,7 @@ void CMessages::BuildJSON (CString *pJSON)
 		AppendJSONNumber (pJSON, "Texte_Passages", T.nPasses);
 		AppendJSON (pJSON, "Texte_Font", T.Style.Font, FALSE);
 		AppendJSONNumber (pJSON, "Texte_Font_Size", T.Style.nSize);
+		AppendJSONNumber (pJSON, "Texte_Lignes", T.Style.nLines);
 		AppendJSONColor (pJSON, "Texte_Color", T.Style.Color);
 		AppendJSON (pJSON, "Texte_Font_Pattern", T.Style.Pattern, FALSE);
 		AppendJSON (pJSON, "Texte_Du", T.From, FALSE);
@@ -279,6 +282,7 @@ void CMessages::BuildJSON (CString *pJSON)
 	AppendJSONNumber (pJSON, "Texte_Passages", s_Notify.nPasses);
 	AppendJSON (pJSON, "Texte_Font", s_Notify.Style.Font, FALSE);
 	AppendJSONNumber (pJSON, "Texte_Font_Size", s_Notify.Style.nSize);
+	AppendJSONNumber (pJSON, "Texte_Lignes", s_Notify.Style.nLines);
 	AppendJSONColor (pJSON, "Texte_Color", s_Notify.Style.Color);
 	AppendJSON (pJSON, "Texte_Font_Pattern", s_Notify.Style.Pattern, FALSE);
 	pJSON->Append ("}");

@@ -23,6 +23,7 @@ static const char From[] = "horloge";
 
 #define MAX_ASSET_SIZE		(4 * 1024 * 1024)
 #define MIN_FONT_SIZE		6
+#define LINE_GAP		2	// pixels entre les deux lignes d'une page
 #define DATE_SHARE_PERCENT	38	// date sous l'heure : 38 % de la hauteur au plus (taille auto)
 #define LINE_GAP		1
 
@@ -34,6 +35,7 @@ static inline boolean IsDigit (unsigned c)
 CClockRenderer::CClockRenderer (unsigned nWidth, unsigned nHeight)
 :	m_nWidth (nWidth),
 	m_nHeight (nHeight),
+	m_nTextWidth (0),
 	m_pGlyph (new u8[GlyphMax * GlyphMax])
 {
 	for (unsigned i = 0; i < SlotCount; i++)
@@ -957,6 +959,10 @@ unsigned CClockRenderer::LineSize (const TTextStyle &rStyle, int nMaxHeight, TMe
 {
 	const TFont &Font = m_Font[SlotText];
 	static const char Sample[] = "H\xC9gy";		// "HÉgy"
+	if (rStyle.nLines >= 2)
+	{
+		nMaxHeight = (nMaxHeight - LINE_GAP) / 2;	// deux lignes l'une sous l'autre
+	}
 
 	unsigned nSize = ChooseSize (Font, Sample, rStyle.nSize, 100000, nMaxHeight, &m_Fit[SlotText]);
 	if (!Measure (Font, nSize, Sample, pMetrics))
@@ -1006,23 +1012,46 @@ void CClockRenderer::RenderPage (const TTextStyle &rStyle, const char *pText, un
 
 	TMetrics Line;
 	unsigned nSize = LineSize (rStyle, H, &Line);
-	int yBaseline = (H - (Line.nBottom - Line.nTop)) / 2 - Line.nTop;
+	const int nLineHeight = Line.nBottom - Line.nTop;
 
-	TMetrics M;
-	boolean bInk = Measure (Font, nSize, pText, &M);
-	int x = bInk ? (W - (M.nRight - M.nLeft)) / 2 - M.nLeft : 0;
-
-	unsigned p = nProgress > 1000 ? 1000 : nProgress;
-	unsigned nLength = Utf8Length (pText);		// en caracteres
-	if (nLength >= BANNER_TEXT_LEN)
+	// lignes de la page (separees par '\n' ; deux au plus)
+	char Lines[2][BANNER_TEXT_LEN];
+	unsigned nLines = 0;
+	for (const char *p = pText; nLines < 2; )
 	{
-		nLength = BANNER_TEXT_LEN - 1;
+		const char *pEnd = strchr (p, '\n');
+		size_t n = pEnd != 0 ? (size_t) (pEnd - p) : strlen (p);
+		if (n >= BANNER_TEXT_LEN)
+		{
+			n = BANNER_TEXT_LEN - 1;
+		}
+		memcpy (Lines[nLines], p, n);
+		Lines[nLines++][n] = '\0';
+		if (pEnd == 0)
+		{
+			break;
+		}
+		p = pEnd + 1;
 	}
 
+	int nTotalHeight = (int) nLines * nLineHeight + ((int) nLines - 1) * LINE_GAP;
+	int yTop = (H - nTotalHeight) / 2;
+
+	unsigned Length[2], nTotal = 0;		// en caracteres
+	for (unsigned i = 0; i < nLines; i++)
+	{
+		Length[i] = Utf8Length (Lines[i]);
+		if (Length[i] >= BANNER_TEXT_LEN)
+		{
+			Length[i] = BANNER_TEXT_LEN - 1;
+		}
+		nTotal += Length[i];
+	}
+
+	unsigned p = nProgress > 1000 ? 1000 : nProgress;
 	int dy = 0;
 	unsigned nAlpha = 1000;
-	char Part[BANNER_TEXT_LEN];
-	TextForDisplay (pText, Part, sizeof Part);
+	unsigned nVisible = nTotal;		// lettre par lettre : lettres montrees (toutes lignes)
 
 	switch (nEffect)
 	{
@@ -1036,11 +1065,10 @@ void CClockRenderer::RenderPage (const TTextStyle &rStyle, const char *pText, un
 		}
 		break;
 
-	case EffectTyping: {
-		unsigned n =   nPhase == PageIn  ? (p * nLength + 999) / 1000
-			     : nPhase == PageOut ? nLength - p * nLength / 1000 : nLength;
-		Part[Utf8Skip (Part, n) - Part] = '\0';	// lettre par lettre (et effacement a la fin)
-		break; }
+	case EffectTyping:
+		nVisible =   nPhase == PageIn  ? (p * nTotal + 999) / 1000
+			   : nPhase == PageOut ? nTotal - p * nTotal / 1000 : nTotal;
+		break;
 
 	case EffectFade:
 		nAlpha = nPhase == PageIn ? p : nPhase == PageOut ? 1000 - p : 1000;
@@ -1052,56 +1080,101 @@ void CClockRenderer::RenderPage (const TTextStyle &rStyle, const char *pText, un
 
 	u8 *pMask = m_pMask[SlotText];
 	memset (pMask, 0, W * H);
-	Draw (Font, nSize, Part, x, yBaseline + dy, TRUE, TRUE, pMask);
+	boolean bRain = nEffect == EffectRain && nPhase != PageHold && nTotal > 0;
+	unsigned nOffset = 0;			// lettres des lignes precedentes
 
-	// pluie : chaque lettre tombe a son tour (colonnes de la lettre decalees vers le haut)
-	if (nEffect == EffectRain && nPhase != PageHold && nLength > 0)
+	for (unsigned l = 0; l < nLines; l++)
 	{
-		int Bound[BANNER_TEXT_LEN];		// bord droit de chaque lettre
-		int nLast = x;
-		for (unsigned i = 0; i < nLength; i++)
+		const char *pLine = Lines[l];
+		unsigned nLength = Length[l];
+		int yBaseline = yTop + (int) l * (nLineHeight + LINE_GAP) - Line.nTop;
+
+		TMetrics M;
+		boolean bInk = Measure (Font, nSize, pLine, &M);
+		int x = bInk ? (W - (M.nRight - M.nLeft)) / 2 - M.nLeft : 0;
+
+		char Part[BANNER_TEXT_LEN];
+		TextForDisplay (pLine, Part, sizeof Part);
+		if (nEffect == EffectTyping)
 		{
-			char Prefix[BANNER_TEXT_LEN];
-			size_t nBytes = Utf8Skip (pText, i + 1) - pText;
-			memcpy (Prefix, pText, nBytes);
-			Prefix[nBytes] = '\0';
-			TMetrics P;
-			if (Measure (Font, nSize, Prefix, &P) && x + P.nRight > nLast)
+			unsigned n = nVisible > nOffset ? nVisible - nOffset : 0;
+			if (n < nLength)
 			{
-				nLast = x + P.nRight;
+				Part[Utf8Skip (Part, n) - Part] = '\0';	// lettre par lettre (et effacement a la fin)
 			}
-			Bound[i] = nLast;
 		}
 
-		u8 *pOut = m_pMask[SlotDate];
-		memset (pOut, 0, W * H);
-		unsigned nLetter = 0;
-		for (int c = 0; c < W; c++)
+		// chaque ligne est dessinee a part, puis ajoutee au masque de la page
+		u8 *pDraw = nLines > 1 || bRain ? m_pMask[SlotTime] : pMask;
+		if (pDraw != pMask)
 		{
-			while (nLetter + 1 < nLength && c >= Bound[nLetter])
+			memset (pDraw, 0, W * H);
+		}
+		Draw (Font, nSize, Part, x, yBaseline + dy, TRUE, TRUE, pDraw);
+
+		if (bRain && nLength > 0)
+		{
+			// pluie : chaque lettre tombe a son tour (colonnes de la lettre decalees vers le haut)
+			int Bound[BANNER_TEXT_LEN];		// bord droit de chaque lettre
+			int nLast = x;
+			for (unsigned i = 0; i < nLength; i++)
 			{
-				nLetter++;
+				char Prefix[BANNER_TEXT_LEN];
+				size_t nBytes = Utf8Skip (pLine, i + 1) - pLine;
+				memcpy (Prefix, pLine, nBytes);
+				Prefix[nBytes] = '\0';
+				TMetrics P;
+				if (Measure (Font, nSize, Prefix, &P) && x + P.nRight > nLast)
+				{
+					nLast = x + P.nRight;
+				}
+				Bound[i] = nLast;
 			}
 
-			// depart de chaque lettre etale sur 60 % de la phase, chute en 40 %
-			int nStart = (int) (nLetter * 600 / nLength);
-			int t = ((int) p - nStart) * 1000 / 400;
-			if (t < 0)	t = 0;
-			if (t > 1000)	t = 1000;
-			int nShift = nPhase == PageIn
-				   ? -(int) ((long long) H * (1000000 - t * t) / 1000000)	// tombe d'en haut
-				   :  (int) ((long long) H * t * t / 1000000);			// tombe en bas
+			// deux lignes : chaque ligne tombe dans sa moitie (sans traverser l'autre)
+			int nMiddle = yTop + nLineHeight + LINE_GAP / 2;
+			int nBandTop = nLines > 1 && l > 0 ? nMiddle : 0;
+			int nBandBottom = nLines > 1 && l == 0 ? nMiddle : H;
 
-			for (int y = 0; y < H; y++)
+			unsigned nLetter = 0;
+			for (int c = 0; c < W; c++)
 			{
-				int ySource = y - nShift;
-				if (0 <= ySource && ySource < H)
+				while (nLetter + 1 < nLength && c >= Bound[nLetter])
 				{
-					pOut[y * W + c] = pMask[ySource * W + c];
+					nLetter++;
+				}
+
+				// depart de chaque lettre etale sur 60 % de la phase, chute en 40 %
+				int nStart = (int) ((nOffset + nLetter) * 600 / nTotal);
+				int t = ((int) p - nStart) * 1000 / 400;
+				if (t < 0)	t = 0;
+				if (t > 1000)	t = 1000;
+				int nShift = nPhase == PageIn
+					   ? -(int) ((long long) H * (1000000 - t * t) / 1000000)	// tombe d'en haut
+					   :  (int) ((long long) H * t * t / 1000000);			// tombe en bas
+
+				for (int y = nBandTop; y < nBandBottom; y++)
+				{
+					int ySource = y - nShift;
+					if (0 <= ySource && ySource < H && pDraw[ySource * W + c] > pMask[y * W + c])
+					{
+						pMask[y * W + c] = pDraw[ySource * W + c];
+					}
 				}
 			}
 		}
-		pMask = pOut;
+		else if (pDraw != pMask)
+		{
+			for (int i = 0; i < W * H; i++)
+			{
+				if (pDraw[i] > pMask[i])
+				{
+					pMask[i] = pDraw[i];
+				}
+			}
+		}
+
+		nOffset += nLength;
 	}
 
 	if (nAlpha < 1000)
@@ -1119,7 +1192,65 @@ void CClockRenderer::RenderPage (const TTextStyle &rStyle, const char *pText, un
 unsigned CClockRenderer::SplitPages (const TTextStyle &rStyle, const char *pText,
 				     char (*pPages)[BANNER_TEXT_LEN], unsigned nMaxPages)
 {
-	const int nMaxWidth = (int) m_nWidth - 4;
+	if (rStyle.nLines < 2)
+	{
+		return SplitLines (rStyle, pText, pPages, nMaxPages);
+	}
+
+	// deux lignes par page : "ligne 1\nligne 2"
+	static char Lines[40][BANNER_TEXT_LEN];
+	unsigned nLines = SplitLines (rStyle, pText, Lines, nMaxPages * 2 < 40 ? nMaxPages * 2 : 40);
+	unsigned nPages = 0;
+	for (unsigned i = 0; i < nLines && nPages < nMaxPages; i += 2)
+	{
+		char *pPage = pPages[nPages++];
+		strcpy (pPage, Lines[i]);
+		if (i + 1 < nLines)
+		{
+			size_t n = strlen (pPage);
+			size_t nSecond = strlen (Lines[i + 1]);
+			if (n + 1 + nSecond < BANNER_TEXT_LEN)
+			{
+				pPage[n] = '\n';
+				strcpy (pPage + n + 1, Lines[i + 1]);
+			}
+		}
+	}
+
+	return nPages;
+}
+
+int CClockRenderer::PageWidth (const TTextStyle &rStyle, const char *pPage)
+{
+	int nMax = 0;
+	char Line[BANNER_TEXT_LEN];
+	for (const char *p = pPage; ; )
+	{
+		const char *pEnd = strchr (p, '\n');
+		size_t n = pEnd != 0 ? (size_t) (pEnd - p) : strlen (p);
+		if (n >= sizeof Line)
+		{
+			n = sizeof Line - 1;
+		}
+		memcpy (Line, p, n);
+		Line[n] = '\0';
+		int nWidth = GetTextWidth (rStyle, Line);
+		if (nWidth > nMax)
+		{
+			nMax = nWidth;
+		}
+		if (pEnd == 0)
+		{
+			return nMax;
+		}
+		p = pEnd + 1;
+	}
+}
+
+unsigned CClockRenderer::SplitLines (const TTextStyle &rStyle, const char *pText,
+				     char (*pPages)[BANNER_TEXT_LEN], unsigned nMaxPages)
+{
+	const int nMaxWidth = (int) (m_nTextWidth != 0 ? m_nTextWidth : m_nWidth) - 4;
 	unsigned nPages = 0;
 	char Line[BANNER_TEXT_LEN] = "";
 
@@ -1196,7 +1327,7 @@ void CClockRenderer::FitPages (TTextStyle *pStyle, const char *pText)
 		boolean bFits = TRUE;
 		for (unsigned i = 0; i < nPages && bFits; i++)
 		{
-			bFits = GetTextWidth (*pStyle, Pages[i]) <= (int) m_nWidth - 2;
+			bFits = PageWidth (*pStyle, Pages[i]) <= (int) (m_nTextWidth != 0 ? m_nTextWidth : m_nWidth) - 2;
 		}
 
 		if (bFits && nPages <= 3)

@@ -9,6 +9,7 @@
   sayfasının parolasını girersiniz. Kenar çubuğunda uyarıları adım adım oluşturmak için bir **OrbitDMD** sayfası
   çıkar: seçilecek hareketli GIF'ler, tetikleyen varlıklar, metin (bir sensörün değeriyle), sessiz saatler, tekrar
   sınırı ve yanıp sönen öncelikli uyarılar.
+  **Resmî HACS mağazasında: HACS'te «OrbitDMD» araması yapmanız yeterli.**
 - **MQTT** (aşağıda anlatılıyor): zaten MQTT, Node-RED veya betik kullananlar için.
 
 Birini **veya** diğerini kullanın: ikisiyle birden panel Home Assistant'ta iki kez görünür.

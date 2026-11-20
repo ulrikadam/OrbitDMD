@@ -353,8 +353,11 @@ namespace OrbitDMD
 		}
 
 		public static bool EstAccueil (string categorie) => string.Equals (categorie, "Accueil", StringComparison.OrdinalIgnoreCase);
-		// GIF de notification (Home Assistant : "gif": "Domotique/sonnette.gif") : copiees, hors rotation
-		public static bool EstNotification (string categorie) => string.Equals (categorie, "Domotique", StringComparison.OrdinalIgnoreCase);
+		// GIF de notification (Home Assistant : "gif": "Domotique/sonnette.gif") et icones a gauche du texte
+		// ("icone": "Icones/temperature.gif") : copiees, hors rotation
+		public static bool EstNotification (string categorie) =>
+			string.Equals (categorie, "Domotique", StringComparison.OrdinalIgnoreCase)
+			|| string.Equals (categorie, "Icones", StringComparison.OrdinalIgnoreCase);
 
 		// categories de GIF integrees a l'installateur, avec leur nombre de GIF
 		public static List<KeyValuePair<string, int>> CategoriesFournies ()
