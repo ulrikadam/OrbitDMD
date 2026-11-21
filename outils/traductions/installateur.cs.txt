@@ -169,3 +169,9 @@
 168 | Neplatná IP adresa pro tuto síť.
 169 | Brána musí být ve stejné síti, na jiné adrese.
 170 | h
+171 | Adaptérová deska
+172 | RPI2DMD, Electrodragon (3 výstupy)
+173 | Adafruit Bonnet nebo HAT (1 výstup)
+174 | Upravená Adafruit, drát mezi GPIO 4 a 18
+175 | Deska mezi Raspberry Pi a panely. Adafruit: jediný výstup, panely zapojené za sebou.
+176 | Deska Adafruit: jediný výstup, nastavte „Paralelní výstupy“ na 1.

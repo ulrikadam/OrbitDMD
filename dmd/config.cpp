@@ -3,6 +3,7 @@
 //
 #include "config.h"
 #include "lang.h"
+#include "pinout.h"
 #include <fatfs/ff.h>
 #include <circle/logger.h>
 #include <circle/util.h>
@@ -52,6 +53,7 @@ CConfig::CConfig (void)
 	LogToScreen (FALSE)
 {
 	CopyString (RGBOrder, "RGB", sizeof RGBOrder);
+	Pinout = MatrixPinoutRegular;
 	CopyString (TimeZone, "Europe/Paris", sizeof TimeZone);
 	CopyString (NetMode, "auto", sizeof NetMode);
 	WifiSSID[0] = '\0';
@@ -172,6 +174,11 @@ void CConfig::SetValue (const char *pKey, const char *pValue)
 	else if (strcasecmp (pKey, "PWM_Bits") == 0)		PWMBits = nValue;
 	else if (strcasecmp (pKey, "PWM_LSB_Nanoseconds") == 0)	PWMLSBNanos = nValue;
 	else if (strcasecmp (pKey, "RGB_Order") == 0)		CopyString (RGBOrder, pValue, sizeof RGBOrder);
+	else if (strcasecmp (pKey, "Brochage") == 0)
+	{
+		int n = MatrixPinoutFromName (pValue);			// rpi2dmd, adafruit, adafruit-pwm
+		if (n >= 0)	Pinout = (unsigned) n;
+	}
 	else if (strcasecmp (pKey, "Langue") == 0)
 	{
 		unsigned nLanguage;
@@ -259,8 +266,8 @@ void CConfig::Log (void) const
 
 	pLogger->Write (From, LogNotice, "Panneaux %ux%u, chaine %u, parallele %u, slowdown %u",
 			PanelCols, PanelRows, Chain, Parallel, Slowdown);
-	pLogger->Write (From, LogNotice, "PWM %u bits, LSB %u ns, ordre %s",
-			PWMBits, PWMLSBNanos, RGBOrder);
+	pLogger->Write (From, LogNotice, "PWM %u bits, LSB %u ns, ordre %s, carte %s",
+			PWMBits, PWMLSBNanos, RGBOrder, MatrixPinoutName (Pinout));
 	pLogger->Write (From, LogNotice, "GIF %s, %u categorie(s), duree mini %u ms",
 			GifActive ? "oui" : "non", nCategories, GifMinDuration);
 	for (unsigned i = 0; i < nCategories; i++)

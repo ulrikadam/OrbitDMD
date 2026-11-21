@@ -169,3 +169,9 @@
 168 | Ungültige IP-Adresse für dieses Netzwerk.
 169 | Das Gateway muss im selben Netzwerk liegen, unter einer anderen Adresse.
 170 | Uhr
+171 | Adapterplatine
+172 | RPI2DMD, Electrodragon (3 Ausgänge)
+173 | Adafruit Bonnet oder HAT (1 Ausgang)
+174 | Modifizierte Adafruit, Draht zwischen GPIO 4 und 18
+175 | Die Platine zwischen Raspberry Pi und Panels. Adafruit: nur ein Ausgang, Panels hintereinander verkettet.
+176 | Adafruit-Platine: nur ein Ausgang, „Parallele Ausgänge“ auf 1 stellen.

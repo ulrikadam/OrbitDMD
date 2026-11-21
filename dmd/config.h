@@ -41,6 +41,7 @@ public:
 	unsigned Parallel;		// Panel_YNumber (chaines en parallele)
 	unsigned Slowdown;		// GPIO_Slowdown
 	char	 RGBOrder[4];		// RGB_Order
+	unsigned Pinout;		// Brochage : carte adaptatrice (TMatrixPinout)
 	unsigned PWMBits;		// PWM_Bits
 	unsigned PWMLSBNanos;		// PWM_LSB_Nanoseconds (nouveau)
 	unsigned Brightness[24];	// Panel_Brightness_0..23

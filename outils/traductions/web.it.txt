@@ -761,3 +761,8 @@
 761 | L'integrazione OrbitDMD per Home Assistant funziona senza MQTT: il pannello viene trovato da solo e una pagina OrbitDMD permette di creare gli avvisi passo dopo passo (GIF, testo, ore di silenzio…).
 762 | Installa l'integrazione (HACS)
 763 | Usa l'integrazione o MQTT, non entrambi: il pannello apparirebbe due volte. Il resto di questa pagina riguarda MQTT.
+764 | Scheda adattatrice
+765 | Scheda tra il Raspberry Pi e i pannelli
+766 | RPI2DMD, Electrodragon (3 uscite)
+767 | Adafruit Bonnet o HAT (1 uscita)
+768 | Adafruit modificata, filo tra GPIO 4 e 18

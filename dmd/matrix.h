@@ -10,6 +10,7 @@
 #define _matrix_h
 
 #include <circle/types.h>
+#include "pinout.h"
 
 struct TMatrixOptions
 {
@@ -21,7 +22,11 @@ struct TMatrixOptions
 	unsigned nPWMBits;	// 1 a 11
 	unsigned nPWMLSBNanos;	// duree du plan de bits le plus faible
 	char	 RGBOrder[4];	// "RGB", "RBG", "GRB", ...
+	unsigned nPinout;	// brochage de la carte adaptatrice (MatrixPinout...)
 };
+
+
+struct TPinout;
 
 class CMatrix
 {
@@ -63,6 +68,7 @@ private:
 
 private:
 	TMatrixOptions m_Options;
+	const TPinout *m_pPinout;	// broches de la carte adaptatrice choisie
 	unsigned m_nWidth;
 	unsigned m_nHeight;
 	unsigned m_nDoubleRows;

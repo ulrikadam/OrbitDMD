@@ -18,18 +18,29 @@ static const char From[] = "matrix";
 
 #define GPIO_BIT(n)	(1U << (n))
 
-// Brochage "regular" (hzeller/rpi-rgb-led-matrix, lib/hardware-mapping.c)
-#define PIN_OE		18
-#define PIN_CLOCK	17
-#define PIN_STROBE	4
-
-static const unsigned s_AddressPins[5] = {22, 23, 24, 25, 15};	// A B C D E
-
-static const unsigned s_ColorPins[3][6] =	// R1 G1 B1 R2 G2 B2
+// Brochages des cartes adaptatrices (hzeller/rpi-rgb-led-matrix, lib/hardware-mapping.c)
+struct TPinout
 {
-	{11, 27,  7,  8,  9, 10},	// sortie TOP-P0
-	{12,  5,  6, 19, 13, 20},	// sortie Middle-P1
-	{14,  2,  3, 26, 16, 21}	// sortie BOTTOM-P3 (masque I2C et UART)
+	const char	*pName;
+	unsigned	nOE, nClock, nStrobe;
+	unsigned	Address[5];		// A B C D E
+	unsigned	nOutputs;		// sorties HUB75 (chaines en parallele)
+	unsigned	Color[3][6];		// R1 G1 B1 R2 G2 B2 par sortie
+};
+
+static const TPinout s_Pinouts[MatrixPinoutCount] =
+{
+	// "regular" : carte RPI2DMD, Electrodragon...
+	{"rpi2dmd", 18, 17, 4, {22, 23, 24, 25, 15}, 3,
+	 {{11, 27,  7,  8,  9, 10},		// sortie TOP-P0
+	  {12,  5,  6, 19, 13, 20},		// sortie Middle-P1
+	  {14,  2,  3, 26, 16, 21}}},		// sortie BOTTOM-P3 (masque I2C et UART)
+	// "adafruit-hat" : Adafruit RGB Matrix Bonnet / HAT (E : pont a souder, GPIO 24)
+	{"adafruit", 4, 17, 21, {22, 26, 27, 20, 24}, 1,
+	 {{ 5, 13,  6, 12, 16, 23}}},
+	// "adafruit-hat-pwm" : la meme, OE deplace sur GPIO 18 (fil entre 4 et 18)
+	{"adafruit-pwm", 18, 17, 21, {22, 26, 27, 20, 24}, 1,
+	 {{ 5, 13,  6, 12, 16, 23}}},
 };
 
 static inline u64 ReadCounter (void)
@@ -75,6 +86,19 @@ boolean CMatrix::Initialize (const TMatrixOptions &rOptions)
 	m_Options = rOptions;
 	CLogger *pLogger = CLogger::Get ();
 
+	if (m_Options.nPinout >= MatrixPinoutCount)
+	{
+		m_Options.nPinout = MatrixPinoutRegular;
+	}
+	m_pPinout = &s_Pinouts[m_Options.nPinout];
+	if (m_Options.nParallel > m_pPinout->nOutputs)
+	{
+		// carte a une seule sortie (Adafruit) : les autres sorties n'existent pas
+		pLogger->Write (From, LogWarning, "Carte %s : %u sortie(s) seulement (%u demandees)",
+				m_pPinout->pName, m_pPinout->nOutputs, m_Options.nParallel);
+		m_Options.nParallel = m_pPinout->nOutputs;
+	}
+
 	if (   (m_Options.nRows != 16 && m_Options.nRows != 32 && m_Options.nRows != 64)
 	    || m_Options.nCols == 0 || m_Options.nCols > 256
 	    || m_Options.nChain == 0 || m_Options.nChain > 8
@@ -106,13 +130,13 @@ boolean CMatrix::Initialize (const TMatrixOptions &rOptions)
 	{
 		for (unsigned i = 0; i < 6; i++)
 		{
-			m_nColorMask |= GPIO_BIT (s_ColorPins[nChain][i]);
+			m_nColorMask |= GPIO_BIT (m_pPinout->Color[nChain][i]);
 		}
 	}
 
-	m_nClock = GPIO_BIT (PIN_CLOCK);
-	m_nStrobe = GPIO_BIT (PIN_STROBE);
-	m_nOutputEnable = GPIO_BIT (PIN_OE);
+	m_nClock = GPIO_BIT (m_pPinout->nClock);
+	m_nStrobe = GPIO_BIT (m_pPinout->nStrobe);
+	m_nOutputEnable = GPIO_BIT (m_pPinout->nOE);
 
 	unsigned nAddressBits = 0;
 	while ((1U << nAddressBits) < m_nDoubleRows)
@@ -123,7 +147,7 @@ boolean CMatrix::Initialize (const TMatrixOptions &rOptions)
 	m_nRowMask = 0;
 	for (unsigned i = 0; i < nAddressBits; i++)
 	{
-		m_nRowMask |= GPIO_BIT (s_AddressPins[i]);
+		m_nRowMask |= GPIO_BIT (m_pPinout->Address[i]);
 	}
 
 	for (unsigned nRow = 0; nRow < m_nDoubleRows; nRow++)
@@ -133,7 +157,7 @@ boolean CMatrix::Initialize (const TMatrixOptions &rOptions)
 		{
 			if (nRow & (1U << i))
 			{
-				nBits |= GPIO_BIT (s_AddressPins[i]);
+				nBits |= GPIO_BIT (m_pPinout->Address[i]);
 			}
 		}
 		m_RowBits[nRow] = nBits;
@@ -197,6 +221,7 @@ boolean CMatrix::Initialize (const TMatrixOptions &rOptions)
 	write32 (ARM_GPIO_GPCLR0, nOutputs & ~m_nOutputEnable);
 	write32 (ARM_GPIO_GPSET0, m_nOutputEnable);
 
+	pLogger->Write (From, LogNotice, "Carte adaptatrice : %s", m_pPinout->pName);
 	pLogger->Write (From, LogNotice, "%ux%u pixels, %u plans de bits, compteur %lu Hz",
 			m_nWidth, m_nHeight, m_Options.nPWMBits, (unsigned long) nFrequency);
 
@@ -258,7 +283,7 @@ void CMatrix::Show (const u8 *pRGB)
 		boolean bBottom = yy >= m_nDoubleRows;
 		unsigned nRow = yy % m_nDoubleRows;
 
-		const unsigned *pPins = s_ColorPins[nChain] + (bBottom ? 3 : 0);
+		const unsigned *pPins = m_pPinout->Color[nChain] + (bBottom ? 3 : 0);
 		const u32 PinBit[3] = {GPIO_BIT (pPins[0]), GPIO_BIT (pPins[1]), GPIO_BIT (pPins[2])};
 
 		u32 *pRow = pBuffer + nRow * BitPlanes * m_nWidth;

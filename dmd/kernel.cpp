@@ -74,6 +74,15 @@ boolean CKernel::Initialize (void)
 		m_Logger.SetNewTarget (&m_NullDevice);
 	}
 
+	// carte adaptatrice a une seule sortie (Adafruit) : une seule chaine de panneaux
+	if (m_Config.Parallel > MatrixPinoutOutputs (m_Config.Pinout))
+	{
+		m_Logger.Write (FromKernel, LogWarning, "Carte %s : %u sortie(s), Panel_YNumber ramene a %u",
+				MatrixPinoutName (m_Config.Pinout), MatrixPinoutOutputs (m_Config.Pinout),
+				MatrixPinoutOutputs (m_Config.Pinout));
+		m_Config.Parallel = MatrixPinoutOutputs (m_Config.Pinout);
+	}
+
 	// horloge a pile sur I2C1 (GPIO 2/3), inutilisable si 3 sorties en parallele
 	if (m_Config.Parallel < 3 && m_I2CMaster.Initialize ())
 	{
@@ -98,6 +107,7 @@ boolean CKernel::Initialize (void)
 	Options.nPWMLSBNanos = m_Config.PWMLSBNanos;
 	strncpy (Options.RGBOrder, m_Config.RGBOrder, sizeof Options.RGBOrder - 1);
 	Options.RGBOrder[sizeof Options.RGBOrder - 1] = '\0';
+	Options.nPinout = m_Config.Pinout;
 
 	if (!m_Matrix.Initialize (Options))
 	{

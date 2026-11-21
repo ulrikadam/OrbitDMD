@@ -113,6 +113,7 @@ namespace OrbitDMD
 		public string Nom = "OrbitDMD";
 		public int Largeur = 64, Hauteur = 32, Chaine = 2, Parallele = 1, Ralentissement = 2;
 		public string OrdreCouleurs = "RGB";
+		public string Brochage = "rpi2dmd";		// carte adaptatrice : rpi2dmd, adafruit ou adafruit-pwm
 		public int LumJour = 60, LumNuit = 20, NuitDebut = 23, NuitFin = 7;
 		public string Connexion = "auto";		// auto (cable s'il est branche, sinon Wi-Fi), wifi ou ethernet
 		public string Ssid = "", Psk = "", Pays = "FR";
@@ -241,6 +242,7 @@ namespace OrbitDMD
 			L ("Panel_YNumber=" + r.Parallele);
 			L ("GPIO_Slowdown=" + r.Ralentissement);
 			L ("RGB_Order=" + r.OrdreCouleurs);
+			L ("Brochage=" + r.Brochage);
 			L ("PWM_Bits=11");
 			L ("Test_Pattern=0");
 			L ("Journal_Ecran=0");
@@ -632,7 +634,7 @@ namespace OrbitDMD
 
 		// controles lus a la validation
 		TextBox tNom, tPsk, tMdp1, tMdp2, tIp, tMasque, tPasserelle, tDns, tVille, tDossierGif;
-		ComboBox cPreset, cLargeur, cHauteur, cOrdre, cSsid, cPays, cFuseau, cDisque;
+		ComboBox cPreset, cLargeur, cHauteur, cOrdre, cCarte, cSsid, cPays, cFuseau, cDisque;
 		NumericUpDown nChaine, nParallele, nRalenti, nLumJour, nLumNuit, nNuitDebut, nNuitFin;
 		RadioButton rAuto, rFixe, rConnAuto, rConnWifi, rConnCable;
 		ListBox lVilles;
@@ -815,6 +817,11 @@ namespace OrbitDMD
 			"1 panneau 64×64", "2 panneaux 64×64 côte à côte (128×64)", "1 panneau 32×16", "Autre (réglages avancés)"
 		};
 
+		static readonly string[] Brochages = { "rpi2dmd", "adafruit", "adafruit-pwm" };
+		static readonly string[] NomsBrochages = {
+			"RPI2DMD, Electrodragon (3 sorties)", "Adafruit Bonnet ou HAT (1 sortie)", "Adafruit modifiée, fil entre GPIO 4 et 18"
+		};
+
 		Panel PagePanneaux ()
 		{
 			var t = Grille ();
@@ -826,6 +833,11 @@ namespace OrbitDMD
 			fNom.Controls.Add (lAdresse);
 			Ligne (t, "Nom du panneau", fNom);
 			tNom.Text = R.Nom;
+
+			cCarte = Liste (330);
+			cCarte.Items.AddRange (NomsBrochages.Select (Langue.T).ToArray ());
+			cCarte.SelectedIndex = Math.Max (0, Array.IndexOf (Brochages, R.Brochage));
+			Ligne (t, "Carte adaptatrice", cCarte, "La carte branchée entre le Raspberry Pi et les panneaux. Adafruit : une seule sortie, panneaux reliés les uns aux autres.");
 
 			cPreset = Liste (330);
 			cPreset.Items.AddRange (NomsPresets.Select (Langue.T).ToArray ());
@@ -1147,6 +1159,8 @@ namespace OrbitDMD
 				R.Parallele = (int) nParallele.Value;
 				R.Ralentissement = (int) nRalenti.Value;
 				R.OrdreCouleurs = (string) cOrdre.SelectedItem;
+				R.Brochage = Brochages[Math.Max (0, cCarte.SelectedIndex)];
+				if (R.Brochage != "rpi2dmd" && R.Parallele > 1) return Langue.T ("Carte Adafruit : une seule sortie, mettez « Sorties en parallèle » à 1.");
 				R.LumJour = (int) nLumJour.Value;
 				R.LumNuit = (int) nLumNuit.Value;
 				R.NuitDebut = (int) nNuitDebut.Value;

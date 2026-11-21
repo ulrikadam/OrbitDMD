@@ -761,3 +761,8 @@
 761 | Integrace OrbitDMD pro Home Assistant funguje bez MQTT: panel se najde sám a stránka OrbitDMD umožňuje vytvářet upozornění krok za krokem (GIF, text, hodiny klidu…).
 762 | Nainstalovat integraci (HACS)
 763 | Používejte integraci, nebo MQTT, ne obojí: panel by se zobrazil dvakrát. Zbytek této stránky se týká MQTT.
+764 | Adaptérová deska
+765 | Deska mezi Raspberry Pi a panely
+766 | RPI2DMD, Electrodragon (3 výstupy)
+767 | Adafruit Bonnet nebo HAT (1 výstup)
+768 | Upravená Adafruit, drát mezi GPIO 4 a 18

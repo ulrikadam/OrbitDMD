@@ -15,6 +15,14 @@ programme (`dmd/`), puis reconstruire l'installateur (`bash outils/installateur/
 
 ---
 
+## 1.8.0 — version de test (non publiée)
+
+**Nouveautés**
+- **Carte adaptatrice au choix** (réglage `Brochage`, page Réglages → Panneaux, et dans l'installateur) :
+  `rpi2dmd` (carte RPI2DMD, Electrodragon… : brochage « regular », 3 sorties, par défaut),
+  `adafruit` (Adafruit RGB Matrix Bonnet ou HAT, 1 sortie) et `adafruit-pwm` (Adafruit modifiée,
+  fil entre GPIO 4 et 18). Avec une carte Adafruit, « Sorties en parallèle » est ramené à 1.
+
 ## 1.7.0 — 20 novembre 2026
 
 **Nouveautés**

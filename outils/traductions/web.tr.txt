@@ -761,3 +761,8 @@
 761 | Home Assistant için OrbitDMD entegrasyonu MQTT olmadan çalışır: panel kendiliğinden bulunur ve bir OrbitDMD sayfası uyarıları adım adım oluşturmanızı sağlar (GIF, metin, sessiz saatler…).
 762 | Entegrasyonu yükle (HACS)
 763 | Entegrasyonu veya MQTT'yi kullanın, ikisini birden değil: panel iki kez görünür. Bu sayfanın geri kalanı MQTT ile ilgilidir.
+764 | Adaptör kartı
+765 | Raspberry Pi ile paneller arasındaki kart
+766 | RPI2DMD, Electrodragon (3 çıkış)
+767 | Adafruit Bonnet veya HAT (1 çıkış)
+768 | Değiştirilmiş Adafruit, GPIO 4 ile 18 arasında kablo

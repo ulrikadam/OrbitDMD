@@ -3,6 +3,7 @@
 //
 #include "settings.h"
 #include "lang.h"
+#include "pinout.h"
 #include "common.h"
 #include "configedit.h"
 #include "netutil.h"
@@ -125,6 +126,7 @@ static const TSetting s_Settings[] =
 	{"Panel_YNumber",	"Sorties en parallele",	KindNumber,	1, 3,	  0,			ApplyReboot},
 	{"GPIO_Slowdown",	"Ralentissement GPIO",	KindNumber,	0, 4,	  0,			ApplyReboot},
 	{"RGB_Order",		"Ordre des couleurs",	KindChoice,	0, 0,	  "RGB,RBG,GRB,GBR,BRG,BGR", ApplyReboot},
+	{"Brochage",		"Carte adaptatrice",	KindChoice,	0, 0,	  "rpi2dmd,adafruit,adafruit-pwm", ApplyReboot},
 	{"PWM_Bits",		"Bits de couleur",	KindNumber,	1, 11,	  0,			ApplyReboot},
 	{"PWM_LSB_Nanoseconds",	"Duree LSB",		KindNumber,	50, 3000, 0,			ApplyReboot},
 	{"Network_name",	"Nom reseau",		KindHostname,	0, 0,	  0,			ApplyReboot},
@@ -370,6 +372,7 @@ static void GetCurrent (CConfig *pConfig, const char *pKey, CString *pValue)
 	else if (strcasecmp (pKey, "Panel_YNumber") == 0)	n = pConfig->Parallel;
 	else if (strcasecmp (pKey, "GPIO_Slowdown") == 0)	n = pConfig->Slowdown;
 	else if (strcasecmp (pKey, "RGB_Order") == 0)		pText = pConfig->RGBOrder;
+	else if (strcasecmp (pKey, "Brochage") == 0)		pText = MatrixPinoutName (pConfig->Pinout);
 	else if (strcasecmp (pKey, "PWM_Bits") == 0)		n = pConfig->PWMBits;
 	else if (strcasecmp (pKey, "PWM_LSB_Nanoseconds") == 0)	n = pConfig->PWMLSBNanos;
 	else if (strcasecmp (pKey, "Network_name") == 0)	pText = pConfig->NetworkName;

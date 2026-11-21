@@ -169,3 +169,9 @@
 168 | Bu ağ için geçersiz IP adresi.
 169 | Ağ geçidi aynı ağda, başka bir adreste olmalı.
 170 | sa
+171 | Adaptör kartı
+172 | RPI2DMD, Electrodragon (3 çıkış)
+173 | Adafruit Bonnet veya HAT (1 çıkış)
+174 | Değiştirilmiş Adafruit, GPIO 4 ile 18 arasında kablo
+175 | Raspberry Pi ile paneller arasındaki kart. Adafruit: tek çıkış, paneller art arda bağlı.
+176 | Adafruit kartı: tek çıkış, «Paralel çıkışlar» değerini 1 yapın.

@@ -169,3 +169,9 @@
 168 | Endereço IP inválido para esta rede.
 169 | O gateway deve estar na mesma rede, em outro endereço.
 170 | h
+171 | Placa adaptadora
+172 | RPI2DMD, Electrodragon (3 saídas)
+173 | Adafruit Bonnet ou HAT (1 saída)
+174 | Adafruit modificada, fio entre GPIO 4 e 18
+175 | A placa entre o Raspberry Pi e os painéis. Adafruit: uma só saída, painéis ligados uns aos outros.
+176 | Placa Adafruit: uma só saída, defina «Saídas em paralelo» como 1.

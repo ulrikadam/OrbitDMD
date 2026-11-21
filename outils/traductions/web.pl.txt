@@ -761,3 +761,8 @@
 761 | Integracja OrbitDMD dla Home Assistant działa bez MQTT: panel jest wykrywany automatycznie, a strona OrbitDMD pozwala krok po kroku tworzyć powiadomienia (GIF, tekst, godziny ciszy…).
 762 | Zainstaluj integrację (HACS)
 763 | Używaj integracji albo MQTT, nie obu naraz: panel pojawiłby się dwa razy. Dalsza część tej strony dotyczy MQTT.
+764 | Płytka adaptera
+765 | Płytka między Raspberry Pi a panelami
+766 | RPI2DMD, Electrodragon (3 wyjścia)
+767 | Adafruit Bonnet lub HAT (1 wyjście)
+768 | Zmodyfikowana Adafruit, przewód między GPIO 4 i 18
